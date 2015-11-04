@@ -1,0 +1,66 @@
+Example 1 (Java):
+-----------------
+int plus (int x, int y) {
+  return (x+y);
+}
+
+* Java function with types.
+* Function plus expect arguments of type int and promises to return a value of type int.
+* Type errors raise violations at compile time (if possible) otherwise at run time.
+
+
+Example 2 (JavaScript):
+-----------------------
+function plus (x, y) {
+  return (x+y);
+}
+
+* JavaScript function (with types).
+* Developers need to check the arguments types by hand.
+
+Example 3 (JavaScript with checks):
+-----------------------------------
+function plus (x, y) {
+  if(typeof x !== 'number') throw TypeError("[..]");
+  if(typeof y !== 'number') throw TypeError("[..]");
+  return (x+y);
+}
+// [..]
+var result = plus(a,b);
+if(typeof result !== 'number') throw TypeError("[..]");
+
+* Checks by hand impractical:
+** Increases the maintenance.
+** Causes a code blow-up
+** Causes a lot of additional thinks to do for a programmer
+
+Example 4 (JavaScript with type definitions):
+-----------------------
+function::number plus (x::number, y::number) {
+  return (x+y);
+}
+
+
+Example 5 (JavaScript with type definitions):
+---------------------------------------------
+define plus :: [number, number] -> number
+function plus (x y) {
+  return (x+y);
+}
+
+* Examples 4/5 show an extension of JavaScript with types.
+
+1) Types can be compiled to dynamic checks. For example by using TreatJS, a contract system for JavaScript.
+
+
+Example 5 (JavaScript with contracts):
+-----------------------
+var plus = Contract assert(function (x y) {
+  return (x+y);
+}, Contract.AFunction([typeOfNumber, typeOfNumber], typeOfNumber));
+
+* Contract definitions are long and bulky.
+
+to 1) A shorter definition of types/predicates can be compiled to a runtime code that contains contracts.
+
+2) A static type analyser can be used to evaluate types/contracts at compile time (gradual checking). 

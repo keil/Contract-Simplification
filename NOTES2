@@ -1,0 +1,17 @@
+JavaScript supports Rapid Prototyping.
+
+This means, hat A) is will write types if needed, not in general.
+B) If a have a function call i will check the presence  of a specific field, not a type of an object.
+
+Example:
+
+function doSth (arg) {
+ print (arg.value);
+}
+
+So, I will test the presence of the value field in arg, and I will that doSth works for all types. Therefore,
+
+doSth :: {value:NotUndef} -> Undefined
+function doSth (arg) {
+ print (arg.value);
+}

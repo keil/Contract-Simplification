@@ -1,0 +1,1356 @@
+===========  Loading files ===========
+Loading richards.js
+===========  Data flow analysis ===========
+richards.js:1:1 (node transfers: 1, worklist size: 1)
+richards.js:74:13 (node transfers: 47, worklist size: 1)
+richards.js:605:1 (node transfers: 269, worklist size: 1)
+richards.js:41:1 (node transfers: 270, worklist size: 1)
+richards.js:42:23 (node transfers: 274, worklist size: 1)
+richards.js:42:19 (node transfers: 275, worklist size: 1)
+richards.js:93:1 (node transfers: 276, worklist size: 1)
+richards.js:94:3 (node transfers: 277, worklist size: 1)
+richards.js:96:17 (node transfers: 286, worklist size: 1)
+richards.js:96:3 (node transfers: 287, worklist size: 1)
+richards.js:100:1 (node transfers: 297, worklist size: 1)
+richards.js:42:19 (node transfers: 298, worklist size: 1)
+richards.js:43:3 (node transfers: 306, worklist size: 1)
+richards.js:149:35 (node transfers: 307, worklist size: 1)
+richards.js:157:35 (node transfers: 308, worklist size: 1)
+richards.js:167:44 (node transfers: 341, worklist size: 1)
+richards.js:428:1 (node transfers: 342, worklist size: 1)
+richards.js:429:3 (node transfers: 343, worklist size: 1)
+richards.js:432:1 (node transfers: 352, worklist size: 1)
+richards.js:167:3 (node transfers: 353, worklist size: 1)
+richards.js:227:38 (node transfers: 354, worklist size: 1)
+richards.js:228:3 (node transfers: 355, worklist size: 1)
+richards.js:228:3 (node transfers: 361, worklist size: 1)
+richards.js:239:31 (node transfers: 362, worklist size: 1)
+richards.js:240:3 (node transfers: 363, worklist size: 1)
+richards.js:240:21 (node transfers: 371, worklist size: 1)
+richards.js:320:1 (node transfers: 372, worklist size: 1)
+richards.js:321:3 (node transfers: 373, worklist size: 1)
+richards.js:327:5 (node transfers: 392, worklist size: 1)
+richards.js:331:1 (node transfers: 395, worklist size: 1)
+richards.js:240:3 (node transfers: 396, worklist size: 1)
+richards.js:243:1 (node transfers: 408, worklist size: 1)
+richards.js:229:3 (node transfers: 409, worklist size: 1)
+richards.js:229:3 (node transfers: 413, worklist size: 1)
+richards.js:357:41 (node transfers: 414, worklist size: 1)
+richards.js:358:3 (node transfers: 415, worklist size: 1)
+richards.js:359:1 (node transfers: 418, worklist size: 1)
+richards.js:230:1 (node transfers: 419, worklist size: 1)
+richards.js:168:1 (node transfers: 420, worklist size: 1)
+richards.js:45:19 (node transfers: 421, worklist size: 1)
+richards.js:45:15 (node transfers: 425, worklist size: 1)
+richards.js:575:1 (node transfers: 426, worklist size: 1)
+richards.js:576:3 (node transfers: 427, worklist size: 1)
+richards.js:580:13 (node transfers: 442, worklist size: 1)
+richards.js:580:3 (node transfers: 443, worklist size: 1)
+richards.js:581:1 (node transfers: 444, worklist size: 1)
+richards.js:45:15 (node transfers: 445, worklist size: 1)
+richards.js:46:11 (node transfers: 450, worklist size: 1)
+richards.js:575:1 (node transfers: 451, worklist size: 1)
+richards.js:576:3 (node transfers: 452, worklist size: 1)
+richards.js:580:13 (node transfers: 467, worklist size: 1)
+richards.js:580:3 (node transfers: 468, worklist size: 1)
+richards.js:581:1 (node transfers: 469, worklist size: 1)
+richards.js:46:3 (node transfers: 470, worklist size: 1)
+richards.js:47:3 (node transfers: 477, worklist size: 1)
+richards.js:176:37 (node transfers: 478, worklist size: 1)
+richards.js:177:3 (node transfers: 479, worklist size: 1)
+richards.js:177:37 (node transfers: 488, worklist size: 1)
+richards.js:484:1 (node transfers: 489, worklist size: 1)
+richards.js:485:3 (node transfers: 490, worklist size: 1)
+richards.js:488:1 (node transfers: 499, worklist size: 1)
+richards.js:177:3 (node transfers: 500, worklist size: 1)
+richards.js:178:1 (node transfers: 501, worklist size: 2)
+richards.js:239:31 (node transfers: 502, worklist size: 2)
+richards.js:240:3 (node transfers: 503, worklist size: 2)
+richards.js:240:21 (node transfers: 511, worklist size: 2)
+richards.js:320:1 (node transfers: 512, worklist size: 3)
+richards.js:321:3 (node transfers: 513, worklist size: 3)
+richards.js:327:5 (node transfers: 532, worklist size: 4)
+richards.js:329:5 (node transfers: 535, worklist size: 4)
+richards.js:331:1 (node transfers: 538, worklist size: 3)
+richards.js:240:3 (node transfers: 539, worklist size: 2)
+richards.js:243:1 (node transfers: 551, worklist size: 2)
+richards.js:178:1 (node transfers: 552, worklist size: 2)
+richards.js:49:15 (node transfers: 553, worklist size: 1)
+richards.js:49:11 (node transfers: 557, worklist size: 1)
+richards.js:575:1 (node transfers: 558, worklist size: 1)
+richards.js:576:3 (node transfers: 559, worklist size: 1)
+richards.js:580:13 (node transfers: 574, worklist size: 1)
+richards.js:580:3 (node transfers: 575, worklist size: 1)
+richards.js:581:1 (node transfers: 576, worklist size: 1)
+richards.js:49:3 (node transfers: 577, worklist size: 1)
+richards.js:50:11 (node transfers: 582, worklist size: 1)
+richards.js:575:1 (node transfers: 583, worklist size: 1)
+richards.js:576:3 (node transfers: 584, worklist size: 1)
+richards.js:580:13 (node transfers: 599, worklist size: 1)
+richards.js:580:3 (node transfers: 600, worklist size: 1)
+richards.js:581:1 (node transfers: 601, worklist size: 1)
+richards.js:50:3 (node transfers: 602, worklist size: 1)
+richards.js:51:11 (node transfers: 607, worklist size: 1)
+richards.js:575:1 (node transfers: 608, worklist size: 1)
+richards.js:576:3 (node transfers: 609, worklist size: 1)
+richards.js:580:13 (node transfers: 624, worklist size: 1)
+richards.js:580:3 (node transfers: 625, worklist size: 1)
+richards.js:581:1 (node transfers: 626, worklist size: 1)
+richards.js:51:3 (node transfers: 627, worklist size: 1)
+richards.js:52:3 (node transfers: 634, worklist size: 1)
+richards.js:186:38 (node transfers: 635, worklist size: 1)
+richards.js:194:38 (node transfers: 636, worklist size: 1)
+richards.js:207:37 (node transfers: 677, worklist size: 1)
+richards.js:519:1 (node transfers: 678, worklist size: 1)
+richards.js:520:3 (node transfers: 679, worklist size: 1)
+richards.js:523:1 (node transfers: 688, worklist size: 1)
+richards.js:207:3 (node transfers: 689, worklist size: 1)
+richards.js:208:1 (node transfers: 690, worklist size: 2)
+richards.js:239:31 (node transfers: 691, worklist size: 2)
+richards.js:240:3 (node transfers: 692, worklist size: 2)
+richards.js:240:21 (node transfers: 700, worklist size: 2)
+richards.js:320:1 (node transfers: 701, worklist size: 3)
+richards.js:321:3 (node transfers: 702, worklist size: 3)
+richards.js:327:5 (node transfers: 721, worklist size: 4)
+richards.js:329:5 (node transfers: 724, worklist size: 4)
+richards.js:331:1 (node transfers: 727, worklist size: 3)
+richards.js:240:3 (node transfers: 728, worklist size: 2)
+richards.js:243:1 (node transfers: 740, worklist size: 2)
+richards.js:208:1 (node transfers: 741, worklist size: 2)
+richards.js:54:15 (node transfers: 742, worklist size: 1)
+richards.js:54:11 (node transfers: 746, worklist size: 1)
+richards.js:575:1 (node transfers: 747, worklist size: 1)
+richards.js:576:3 (node transfers: 748, worklist size: 1)
+richards.js:580:13 (node transfers: 763, worklist size: 1)
+richards.js:580:3 (node transfers: 764, worklist size: 1)
+richards.js:581:1 (node transfers: 765, worklist size: 1)
+richards.js:54:3 (node transfers: 766, worklist size: 1)
+richards.js:55:11 (node transfers: 771, worklist size: 1)
+richards.js:575:1 (node transfers: 772, worklist size: 1)
+richards.js:576:3 (node transfers: 773, worklist size: 1)
+richards.js:580:13 (node transfers: 788, worklist size: 1)
+richards.js:580:3 (node transfers: 789, worklist size: 1)
+richards.js:581:1 (node transfers: 790, worklist size: 1)
+richards.js:55:3 (node transfers: 791, worklist size: 1)
+richards.js:56:11 (node transfers: 796, worklist size: 1)
+richards.js:575:1 (node transfers: 797, worklist size: 1)
+richards.js:576:3 (node transfers: 798, worklist size: 1)
+richards.js:580:13 (node transfers: 813, worklist size: 1)
+richards.js:580:3 (node transfers: 814, worklist size: 1)
+richards.js:581:1 (node transfers: 815, worklist size: 1)
+richards.js:56:3 (node transfers: 816, worklist size: 1)
+richards.js:57:3 (node transfers: 823, worklist size: 1)
+richards.js:186:38 (node transfers: 824, worklist size: 2)
+richards.js:194:38 (node transfers: 825, worklist size: 2)
+richards.js:207:37 (node transfers: 866, worklist size: 2)
+richards.js:207:3 (node transfers: 867, worklist size: 2)
+richards.js:208:1 (node transfers: 868, worklist size: 3)
+richards.js:239:31 (node transfers: 869, worklist size: 2)
+richards.js:240:3 (node transfers: 870, worklist size: 2)
+richards.js:240:21 (node transfers: 878, worklist size: 2)
+richards.js:320:1 (node transfers: 879, worklist size: 3)
+richards.js:321:3 (node transfers: 880, worklist size: 3)
+richards.js:327:5 (node transfers: 899, worklist size: 4)
+richards.js:329:5 (node transfers: 902, worklist size: 4)
+richards.js:331:1 (node transfers: 905, worklist size: 3)
+richards.js:240:3 (node transfers: 906, worklist size: 2)
+richards.js:243:1 (node transfers: 918, worklist size: 2)
+richards.js:208:1 (node transfers: 919, worklist size: 2)
+richards.js:59:3 (node transfers: 920, worklist size: 1)
+richards.js:59:3 (node transfers: 926, worklist size: 1)
+richards.js:216:37 (node transfers: 927, worklist size: 1)
+richards.js:217:3 (node transfers: 928, worklist size: 1)
+richards.js:217:37 (node transfers: 935, worklist size: 1)
+richards.js:456:1 (node transfers: 936, worklist size: 1)
+richards.js:457:3 (node transfers: 937, worklist size: 1)
+richards.js:459:1 (node transfers: 943, worklist size: 1)
+richards.js:217:3 (node transfers: 944, worklist size: 1)
+richards.js:218:1 (node transfers: 945, worklist size: 1)
+richards.js:61:3 (node transfers: 946, worklist size: 1)
+richards.js:61:3 (node transfers: 952, worklist size: 1)
+richards.js:216:37 (node transfers: 953, worklist size: 2)
+richards.js:217:3 (node transfers: 954, worklist size: 2)
+richards.js:217:37 (node transfers: 961, worklist size: 2)
+richards.js:217:3 (node transfers: 962, worklist size: 2)
+richards.js:218:1 (node transfers: 963, worklist size: 2)
+richards.js:63:3 (node transfers: 964, worklist size: 1)
+richards.js:63:3 (node transfers: 967, worklist size: 1)
+richards.js:248:32 (node transfers: 968, worklist size: 1)
+richards.js:249:3 (node transfers: 969, worklist size: 1)
+richards.js:250:10 (node transfers: 973, worklist size: 1)
+richards.js:251:9 (node transfers: 978, worklist size: 1)
+richards.js:251:9 (node transfers: 982, worklist size: 1)
+richards.js:369:48 (node transfers: 983, worklist size: 1)
+richards.js:370:11 (node transfers: 984, worklist size: 1)
+richards.js:370:45 (node transfers: 991, worklist size: 2)
+richards.js:371:1 (node transfers: 995, worklist size: 1)
+richards.js:251:5 (node transfers: 996, worklist size: 1)
+richards.js:252:7 (node transfers: 997, worklist size: 2)
+richards.js:250:10 (node transfers: 1003, worklist size: 2)
+richards.js:251:9 (node transfers: 1008, worklist size: 2)
+richards.js:251:9 (node transfers: 1012, worklist size: 2)
+richards.js:369:48 (node transfers: 1013, worklist size: 2)
+richards.js:370:11 (node transfers: 1014, worklist size: 2)
+richards.js:370:45 (node transfers: 1021, worklist size: 3)
+richards.js:371:1 (node transfers: 1025, worklist size: 2)
+richards.js:251:5 (node transfers: 1026, worklist size: 2)
+richards.js:252:7 (node transfers: 1027, worklist size: 2)
+richards.js:250:10 (node transfers: 1033, worklist size: 2)
+richards.js:251:9 (node transfers: 1038, worklist size: 3)
+richards.js:251:9 (node transfers: 1042, worklist size: 4)
+richards.js:251:5 (node transfers: 1043, worklist size: 4)
+richards.js:252:7 (node transfers: 1044, worklist size: 4)
+richards.js:254:7 (node transfers: 1050, worklist size: 3)
+richards.js:255:25 (node transfers: 1061, worklist size: 3)
+richards.js:384:34 (node transfers: 1062, worklist size: 3)
+richards.js:386:7 (node transfers: 1064, worklist size: 3)
+richards.js:387:14 (node transfers: 1069, worklist size: 4)
+richards.js:392:7 (node transfers: 1082, worklist size: 6)
+richards.js:395:14 (node transfers: 1085, worklist size: 6)
+richards.js:390:7 (node transfers: 1087, worklist size: 5)
+richards.js:397:10 (node transfers: 1090, worklist size: 4)
+richards.js:397:10 (node transfers: 1095, worklist size: 4)
+richards.js:525:29 (node transfers: 1096, worklist size: 7)
+richards.js:526:7 (node transfers: 1099, worklist size: 7)
+richards.js:527:9 (node transfers: 1103, worklist size: 8)
+richards.js:528:7 (node transfers: 1109, worklist size: 10)
+richards.js:528:17 (node transfers: 1115, worklist size: 10)
+richards.js:587:26 (node transfers: 1116, worklist size: 10)
+richards.js:588:3 (node transfers: 1119, worklist size: 10)
+richards.js:589:29 (node transfers: 1126, worklist size: 10)
+richards.js:595:1 (node transfers: 1127, worklist size: 10)
+richards.js:528:7 (node transfers: 1128, worklist size: 10)
+richards.js:530:7 (node transfers: 1129, worklist size: 9)
+richards.js:530:17 (node transfers: 1135, worklist size: 9)
+richards.js:530:7 (node transfers: 1136, worklist size: 9)
+richards.js:533:7 (node transfers: 1137, worklist size: 8)
+richards.js:534:17 (node transfers: 1142, worklist size: 9)
+richards.js:537:11 (node transfers: 1151, worklist size: 9)
+richards.js:538:13 (node transfers: 1156, worklist size: 9)
+richards.js:542:16 (node transfers: 1187, worklist size: 9)
+richards.js:301:29 (node transfers: 1188, worklist size: 9)
+richards.js:302:11 (node transfers: 1190, worklist size: 9)
+richards.js:303:25 (node transfers: 1202, worklist size: 10)
+richards.js:304:3 (node transfers: 1203, worklist size: 10)
+richards.js:307:10 (node transfers: 1224, worklist size: 11)
+richards.js:405:47 (node transfers: 1225, worklist size: 11)
+richards.js:406:7 (node transfers: 1226, worklist size: 11)
+richards.js:407:5 (node transfers: 1231, worklist size: 12)
+richards.js:408:5 (node transfers: 1236, worklist size: 12)
+richards.js:377:45 (node transfers: 1237, worklist size: 12)
+richards.js:378:3 (node transfers: 1238, worklist size: 12)
+richards.js:379:1 (node transfers: 1244, worklist size: 12)
+richards.js:409:9 (node transfers: 1245, worklist size: 12)
+richards.js:409:47 (node transfers: 1252, worklist size: 13)
+richards.js:411:5 (node transfers: 1253, worklist size: 13)
+richards.js:411:18 (node transfers: 1259, worklist size: 13)
+richards.js:411:5 (node transfers: 1260, worklist size: 14)
+richards.js:413:10 (node transfers: 1261, worklist size: 13)
+richards.js:414:1 (node transfers: 1262, worklist size: 12)
+richards.js:308:1 (node transfers: 1263, worklist size: 11)
+richards.js:308:1 (node transfers: 1264, worklist size: 11)
+richards.js:587:26 (node transfers: 1265, worklist size: 10)
+richards.js:588:3 (node transfers: 1268, worklist size: 10)
+richards.js:589:29 (node transfers: 1275, worklist size: 11)
+richards.js:590:20 (node transfers: 1276, worklist size: 11)
+richards.js:591:18 (node transfers: 1278, worklist size: 11)
+richards.js:592:12 (node transfers: 1285, worklist size: 13)
+richards.js:591:18 (node transfers: 1287, worklist size: 13)
+richards.js:592:12 (node transfers: 1294, worklist size: 13)
+richards.js:591:18 (node transfers: 1296, worklist size: 13)
+richards.js:593:3 (node transfers: 1303, worklist size: 12)
+richards.js:595:1 (node transfers: 1308, worklist size: 11)
+richards.js:411:5 (node transfers: 1309, worklist size: 12)
+richards.js:413:10 (node transfers: 1310, worklist size: 12)
+richards.js:414:1 (node transfers: 1311, worklist size: 12)
+richards.js:308:1 (node transfers: 1312, worklist size: 12)
+richards.js:595:1 (node transfers: 1313, worklist size: 11)
+richards.js:414:1 (node transfers: 1314, worklist size: 11)
+richards.js:308:1 (node transfers: 1315, worklist size: 11)
+richards.js:530:7 (node transfers: 1316, worklist size: 10)
+richards.js:533:7 (node transfers: 1317, worklist size: 10)
+richards.js:534:17 (node transfers: 1322, worklist size: 10)
+richards.js:537:11 (node transfers: 1331, worklist size: 10)
+richards.js:538:13 (node transfers: 1336, worklist size: 10)
+richards.js:542:16 (node transfers: 1367, worklist size: 10)
+richards.js:301:29 (node transfers: 1368, worklist size: 10)
+richards.js:302:11 (node transfers: 1370, worklist size: 10)
+richards.js:303:25 (node transfers: 1382, worklist size: 11)
+richards.js:304:3 (node transfers: 1383, worklist size: 11)
+richards.js:307:10 (node transfers: 1404, worklist size: 12)
+richards.js:405:47 (node transfers: 1405, worklist size: 12)
+richards.js:406:7 (node transfers: 1406, worklist size: 12)
+richards.js:407:5 (node transfers: 1411, worklist size: 13)
+richards.js:408:5 (node transfers: 1416, worklist size: 13)
+richards.js:409:9 (node transfers: 1417, worklist size: 13)
+richards.js:409:47 (node transfers: 1424, worklist size: 14)
+richards.js:411:5 (node transfers: 1425, worklist size: 14)
+richards.js:411:18 (node transfers: 1431, worklist size: 14)
+richards.js:587:26 (node transfers: 1432, worklist size: 14)
+richards.js:588:3 (node transfers: 1435, worklist size: 14)
+richards.js:589:29 (node transfers: 1442, worklist size: 15)
+richards.js:590:20 (node transfers: 1443, worklist size: 15)
+richards.js:591:18 (node transfers: 1445, worklist size: 15)
+richards.js:592:12 (node transfers: 1452, worklist size: 17)
+richards.js:591:18 (node transfers: 1454, worklist size: 17)
+richards.js:592:12 (node transfers: 1461, worklist size: 17)
+richards.js:591:18 (node transfers: 1463, worklist size: 17)
+richards.js:593:3 (node transfers: 1470, worklist size: 16)
+richards.js:595:1 (node transfers: 1475, worklist size: 15)
+richards.js:595:1 (node transfers: 1476, worklist size: 15)
+richards.js:411:5 (node transfers: 1477, worklist size: 15)
+richards.js:413:10 (node transfers: 1478, worklist size: 14)
+richards.js:414:1 (node transfers: 1479, worklist size: 13)
+richards.js:414:1 (node transfers: 1480, worklist size: 12)
+richards.js:308:1 (node transfers: 1481, worklist size: 11)
+richards.js:308:1 (node transfers: 1482, worklist size: 10)
+richards.js:550:10 (node transfers: 1483, worklist size: 9)
+richards.js:550:10 (node transfers: 1487, worklist size: 9)
+richards.js:290:38 (node transfers: 1488, worklist size: 9)
+richards.js:291:3 (node transfers: 1489, worklist size: 9)
+richards.js:291:3 (node transfers: 1493, worklist size: 9)
+richards.js:373:46 (node transfers: 1494, worklist size: 9)
+richards.js:374:3 (node transfers: 1495, worklist size: 9)
+richards.js:375:1 (node transfers: 1501, worklist size: 9)
+richards.js:292:10 (node transfers: 1502, worklist size: 9)
+richards.js:293:1 (node transfers: 1504, worklist size: 9)
+richards.js:551:1 (node transfers: 1505, worklist size: 8)
+richards.js:551:1 (node transfers: 1506, worklist size: 8)
+richards.js:490:28 (node transfers: 1507, worklist size: 7)
+richards.js:491:7 (node transfers: 1509, worklist size: 7)
+richards.js:492:12 (node transfers: 1513, worklist size: 8)
+richards.js:494:9 (node transfers: 1517, worklist size: 8)
+richards.js:495:7 (node transfers: 1522, worklist size: 8)
+richards.js:492:12 (node transfers: 1525, worklist size: 8)
+richards.js:499:5 (node transfers: 1526, worklist size: 8)
+richards.js:501:21 (node transfers: 1537, worklist size: 9)
+richards.js:502:7 (node transfers: 1541, worklist size: 9)
+richards.js:504:7 (node transfers: 1552, worklist size: 9)
+richards.js:501:21 (node transfers: 1565, worklist size: 9)
+richards.js:502:7 (node transfers: 1569, worklist size: 10)
+richards.js:503:25 (node transfers: 1580, worklist size: 11)
+richards.js:504:7 (node transfers: 1583, worklist size: 10)
+richards.js:501:21 (node transfers: 1596, worklist size: 10)
+richards.js:502:7 (node transfers: 1600, worklist size: 10)
+richards.js:503:25 (node transfers: 1611, worklist size: 11)
+richards.js:504:7 (node transfers: 1614, worklist size: 10)
+richards.js:506:12 (node transfers: 1627, worklist size: 9)
+richards.js:506:12 (node transfers: 1632, worklist size: 9)
+richards.js:301:29 (node transfers: 1633, worklist size: 9)
+richards.js:302:11 (node transfers: 1635, worklist size: 9)
+richards.js:303:25 (node transfers: 1647, worklist size: 10)
+richards.js:304:3 (node transfers: 1648, worklist size: 9)
+richards.js:307:10 (node transfers: 1669, worklist size: 9)
+richards.js:508:1 (node transfers: 1670, worklist size: 8)
+richards.js:508:1 (node transfers: 1671, worklist size: 7)
+richards.js:434:26 (node transfers: 1672, worklist size: 6)
+richards.js:435:3 (node transfers: 1673, worklist size: 6)
+richards.js:437:8 (node transfers: 1684, worklist size: 6)
+richards.js:441:5 (node transfers: 1691, worklist size: 6)
+richards.js:442:12 (node transfers: 1704, worklist size: 6)
+richards.js:264:31 (node transfers: 1705, worklist size: 6)
+richards.js:265:13 (node transfers: 1707, worklist size: 6)
+richards.js:267:3 (node transfers: 1717, worklist size: 7)
+richards.js:266:27 (node transfers: 1720, worklist size: 8)
+richards.js:267:3 (node transfers: 1721, worklist size: 8)
+richards.js:361:44 (node transfers: 1722, worklist size: 8)
+richards.js:362:3 (node transfers: 1723, worklist size: 8)
+richards.js:363:1 (node transfers: 1729, worklist size: 8)
+richards.js:268:7 (node transfers: 1730, worklist size: 8)
+richards.js:269:12 (node transfers: 1739, worklist size: 9)
+richards.js:271:12 (node transfers: 1740, worklist size: 8)
+richards.js:273:1 (node transfers: 1742, worklist size: 7)
+richards.js:273:1 (node transfers: 1743, worklist size: 7)
+richards.js:444:1 (node transfers: 1744, worklist size: 7)
+richards.js:444:1 (node transfers: 1745, worklist size: 6)
+richards.js:461:28 (node transfers: 1746, worklist size: 5)
+richards.js:462:7 (node transfers: 1748, worklist size: 5)
+richards.js:463:9 (node transfers: 1752, worklist size: 6)
+richards.js:463:33 (node transfers: 1757, worklist size: 6)
+richards.js:463:33 (node transfers: 1761, worklist size: 6)
+richards.js:468:5 (node transfers: 1762, worklist size: 6)
+richards.js:469:12 (node transfers: 1769, worklist size: 6)
+richards.js:280:35 (node transfers: 1770, worklist size: 6)
+richards.js:281:3 (node transfers: 1771, worklist size: 6)
+richards.js:282:3 (node transfers: 1781, worklist size: 6)
+richards.js:365:41 (node transfers: 1782, worklist size: 6)
+richards.js:366:3 (node transfers: 1783, worklist size: 6)
+richards.js:367:1 (node transfers: 1789, worklist size: 6)
+richards.js:283:10 (node transfers: 1790, worklist size: 6)
+richards.js:284:1 (node transfers: 1794, worklist size: 6)
+richards.js:471:1 (node transfers: 1795, worklist size: 5)
+richards.js:398:1 (node transfers: 1796, worklist size: 4)
+richards.js:398:1 (node transfers: 1797, worklist size: 4)
+richards.js:255:7 (node transfers: 1798, worklist size: 3)
+richards.js:250:10 (node transfers: 1799, worklist size: 3)
+richards.js:251:9 (node transfers: 1804, worklist size: 3)
+richards.js:251:9 (node transfers: 1808, worklist size: 3)
+richards.js:251:5 (node transfers: 1809, worklist size: 3)
+richards.js:252:7 (node transfers: 1810, worklist size: 4)
+richards.js:254:7 (node transfers: 1816, worklist size: 3)
+richards.js:255:25 (node transfers: 1827, worklist size: 3)
+richards.js:384:34 (node transfers: 1828, worklist size: 3)
+richards.js:386:7 (node transfers: 1830, worklist size: 3)
+richards.js:387:14 (node transfers: 1835, worklist size: 4)
+richards.js:392:7 (node transfers: 1848, worklist size: 6)
+richards.js:395:14 (node transfers: 1851, worklist size: 6)
+richards.js:390:7 (node transfers: 1853, worklist size: 5)
+richards.js:397:10 (node transfers: 1856, worklist size: 4)
+richards.js:397:10 (node transfers: 1861, worklist size: 4)
+richards.js:525:29 (node transfers: 1862, worklist size: 8)
+richards.js:526:7 (node transfers: 1865, worklist size: 8)
+richards.js:527:9 (node transfers: 1869, worklist size: 9)
+richards.js:528:7 (node transfers: 1875, worklist size: 11)
+richards.js:528:17 (node transfers: 1881, worklist size: 11)
+richards.js:587:26 (node transfers: 1882, worklist size: 12)
+richards.js:588:3 (node transfers: 1885, worklist size: 12)
+richards.js:589:29 (node transfers: 1892, worklist size: 13)
+richards.js:590:20 (node transfers: 1893, worklist size: 13)
+richards.js:591:18 (node transfers: 1895, worklist size: 13)
+richards.js:592:12 (node transfers: 1902, worklist size: 15)
+richards.js:593:3 (node transfers: 1904, worklist size: 14)
+richards.js:595:1 (node transfers: 1909, worklist size: 13)
+richards.js:595:1 (node transfers: 1910, worklist size: 12)
+richards.js:528:7 (node transfers: 1911, worklist size: 11)
+richards.js:530:7 (node transfers: 1912, worklist size: 10)
+richards.js:530:17 (node transfers: 1918, worklist size: 10)
+richards.js:587:26 (node transfers: 1919, worklist size: 11)
+richards.js:588:3 (node transfers: 1922, worklist size: 11)
+richards.js:589:29 (node transfers: 1929, worklist size: 12)
+richards.js:590:20 (node transfers: 1930, worklist size: 12)
+richards.js:591:18 (node transfers: 1932, worklist size: 12)
+richards.js:592:12 (node transfers: 1939, worklist size: 14)
+richards.js:593:3 (node transfers: 1941, worklist size: 13)
+richards.js:595:1 (node transfers: 1946, worklist size: 12)
+richards.js:595:1 (node transfers: 1947, worklist size: 11)
+richards.js:530:7 (node transfers: 1948, worklist size: 10)
+richards.js:533:7 (node transfers: 1949, worklist size: 9)
+richards.js:534:17 (node transfers: 1954, worklist size: 10)
+richards.js:537:11 (node transfers: 1963, worklist size: 11)
+richards.js:538:13 (node transfers: 1968, worklist size: 11)
+richards.js:542:16 (node transfers: 1999, worklist size: 11)
+richards.js:301:29 (node transfers: 2000, worklist size: 12)
+richards.js:302:11 (node transfers: 2002, worklist size: 12)
+richards.js:303:25 (node transfers: 2014, worklist size: 13)
+richards.js:304:3 (node transfers: 2015, worklist size: 13)
+richards.js:307:10 (node transfers: 2036, worklist size: 14)
+richards.js:405:47 (node transfers: 2037, worklist size: 14)
+richards.js:406:7 (node transfers: 2038, worklist size: 14)
+richards.js:407:5 (node transfers: 2043, worklist size: 15)
+richards.js:408:5 (node transfers: 2048, worklist size: 15)
+richards.js:409:9 (node transfers: 2049, worklist size: 15)
+richards.js:409:47 (node transfers: 2056, worklist size: 16)
+richards.js:411:5 (node transfers: 2057, worklist size: 16)
+richards.js:411:18 (node transfers: 2063, worklist size: 16)
+richards.js:587:26 (node transfers: 2064, worklist size: 16)
+richards.js:588:3 (node transfers: 2067, worklist size: 16)
+richards.js:589:29 (node transfers: 2074, worklist size: 17)
+richards.js:590:20 (node transfers: 2075, worklist size: 17)
+richards.js:591:18 (node transfers: 2077, worklist size: 17)
+richards.js:592:12 (node transfers: 2084, worklist size: 19)
+richards.js:591:18 (node transfers: 2086, worklist size: 19)
+richards.js:593:3 (node transfers: 2093, worklist size: 18)
+richards.js:595:1 (node transfers: 2098, worklist size: 17)
+richards.js:595:1 (node transfers: 2099, worklist size: 17)
+richards.js:411:5 (node transfers: 2100, worklist size: 17)
+richards.js:413:10 (node transfers: 2101, worklist size: 16)
+richards.js:414:1 (node transfers: 2102, worklist size: 15)
+richards.js:414:1 (node transfers: 2103, worklist size: 14)
+richards.js:308:1 (node transfers: 2104, worklist size: 13)
+richards.js:308:1 (node transfers: 2105, worklist size: 12)
+richards.js:550:10 (node transfers: 2106, worklist size: 11)
+richards.js:550:10 (node transfers: 2110, worklist size: 11)
+richards.js:545:11 (node transfers: 2111, worklist size: 10)
+richards.js:547:14 (node transfers: 2125, worklist size: 10)
+richards.js:301:29 (node transfers: 2126, worklist size: 10)
+richards.js:302:11 (node transfers: 2128, worklist size: 10)
+richards.js:303:25 (node transfers: 2140, worklist size: 12)
+richards.js:304:3 (node transfers: 2141, worklist size: 11)
+richards.js:307:10 (node transfers: 2162, worklist size: 11)
+richards.js:308:1 (node transfers: 2163, worklist size: 10)
+richards.js:551:1 (node transfers: 2164, worklist size: 9)
+richards.js:551:1 (node transfers: 2165, worklist size: 8)
+richards.js:490:28 (node transfers: 2166, worklist size: 7)
+richards.js:491:7 (node transfers: 2168, worklist size: 7)
+richards.js:492:12 (node transfers: 2172, worklist size: 8)
+richards.js:494:9 (node transfers: 2176, worklist size: 8)
+richards.js:495:7 (node transfers: 2181, worklist size: 9)
+richards.js:497:7 (node transfers: 2184, worklist size: 9)
+richards.js:492:12 (node transfers: 2187, worklist size: 8)
+richards.js:499:5 (node transfers: 2188, worklist size: 8)
+richards.js:501:21 (node transfers: 2199, worklist size: 9)
+richards.js:502:7 (node transfers: 2203, worklist size: 10)
+richards.js:503:25 (node transfers: 2214, worklist size: 11)
+richards.js:504:7 (node transfers: 2217, worklist size: 10)
+richards.js:501:21 (node transfers: 2230, worklist size: 10)
+richards.js:502:7 (node transfers: 2234, worklist size: 10)
+richards.js:503:25 (node transfers: 2245, worklist size: 11)
+richards.js:504:7 (node transfers: 2248, worklist size: 10)
+richards.js:506:12 (node transfers: 2261, worklist size: 9)
+richards.js:506:12 (node transfers: 2266, worklist size: 9)
+richards.js:508:1 (node transfers: 2267, worklist size: 8)
+richards.js:508:1 (node transfers: 2268, worklist size: 7)
+richards.js:434:26 (node transfers: 2269, worklist size: 6)
+richards.js:435:3 (node transfers: 2270, worklist size: 6)
+richards.js:436:31 (node transfers: 2281, worklist size: 7)
+richards.js:437:8 (node transfers: 2285, worklist size: 7)
+richards.js:438:5 (node transfers: 2292, worklist size: 8)
+richards.js:439:12 (node transfers: 2303, worklist size: 8)
+richards.js:264:31 (node transfers: 2304, worklist size: 10)
+richards.js:265:13 (node transfers: 2306, worklist size: 10)
+richards.js:267:3 (node transfers: 2316, worklist size: 11)
+richards.js:266:27 (node transfers: 2319, worklist size: 12)
+richards.js:267:3 (node transfers: 2320, worklist size: 12)
+richards.js:268:7 (node transfers: 2321, worklist size: 12)
+richards.js:269:12 (node transfers: 2330, worklist size: 13)
+richards.js:271:12 (node transfers: 2331, worklist size: 12)
+richards.js:273:1 (node transfers: 2333, worklist size: 11)
+richards.js:273:1 (node transfers: 2334, worklist size: 10)
+richards.js:441:5 (node transfers: 2335, worklist size: 9)
+richards.js:442:12 (node transfers: 2348, worklist size: 9)
+richards.js:436:31 (node transfers: 2349, worklist size: 8)
+richards.js:280:35 (node transfers: 2350, worklist size: 8)
+richards.js:281:3 (node transfers: 2351, worklist size: 8)
+richards.js:282:3 (node transfers: 2361, worklist size: 8)
+richards.js:283:10 (node transfers: 2362, worklist size: 8)
+richards.js:284:1 (node transfers: 2366, worklist size: 8)
+richards.js:444:1 (node transfers: 2367, worklist size: 7)
+richards.js:444:1 (node transfers: 2368, worklist size: 6)
+richards.js:461:28 (node transfers: 2369, worklist size: 5)
+richards.js:462:7 (node transfers: 2371, worklist size: 5)
+richards.js:463:9 (node transfers: 2375, worklist size: 6)
+richards.js:463:33 (node transfers: 2380, worklist size: 7)
+richards.js:463:33 (node transfers: 2384, worklist size: 7)
+richards.js:464:13 (node transfers: 2385, worklist size: 7)
+richards.js:468:5 (node transfers: 2396, worklist size: 7)
+richards.js:469:12 (node transfers: 2403, worklist size: 7)
+richards.js:466:12 (node transfers: 2404, worklist size: 6)
+richards.js:471:1 (node transfers: 2405, worklist size: 6)
+richards.js:471:1 (node transfers: 2406, worklist size: 5)
+richards.js:398:1 (node transfers: 2407, worklist size: 4)
+richards.js:398:1 (node transfers: 2408, worklist size: 4)
+richards.js:255:7 (node transfers: 2409, worklist size: 3)
+richards.js:250:10 (node transfers: 2410, worklist size: 3)
+richards.js:251:9 (node transfers: 2415, worklist size: 3)
+richards.js:251:9 (node transfers: 2419, worklist size: 3)
+richards.js:251:5 (node transfers: 2420, worklist size: 3)
+richards.js:252:7 (node transfers: 2421, worklist size: 4)
+richards.js:254:7 (node transfers: 2427, worklist size: 3)
+richards.js:255:25 (node transfers: 2438, worklist size: 3)
+richards.js:384:34 (node transfers: 2439, worklist size: 3)
+richards.js:386:7 (node transfers: 2441, worklist size: 3)
+richards.js:387:14 (node transfers: 2446, worklist size: 4)
+richards.js:392:7 (node transfers: 2459, worklist size: 6)
+richards.js:395:14 (node transfers: 2462, worklist size: 6)
+richards.js:390:7 (node transfers: 2464, worklist size: 5)
+richards.js:397:10 (node transfers: 2467, worklist size: 4)
+richards.js:397:10 (node transfers: 2472, worklist size: 4)
+richards.js:525:29 (node transfers: 2473, worklist size: 7)
+richards.js:526:7 (node transfers: 2476, worklist size: 7)
+richards.js:527:9 (node transfers: 2480, worklist size: 8)
+richards.js:528:7 (node transfers: 2486, worklist size: 10)
+richards.js:528:17 (node transfers: 2492, worklist size: 10)
+richards.js:587:26 (node transfers: 2493, worklist size: 11)
+richards.js:588:3 (node transfers: 2496, worklist size: 11)
+richards.js:589:29 (node transfers: 2503, worklist size: 12)
+richards.js:590:20 (node transfers: 2504, worklist size: 12)
+richards.js:591:18 (node transfers: 2506, worklist size: 12)
+richards.js:592:12 (node transfers: 2513, worklist size: 14)
+richards.js:593:3 (node transfers: 2515, worklist size: 13)
+richards.js:595:1 (node transfers: 2520, worklist size: 12)
+richards.js:595:1 (node transfers: 2521, worklist size: 11)
+richards.js:528:7 (node transfers: 2522, worklist size: 10)
+richards.js:530:7 (node transfers: 2523, worklist size: 9)
+richards.js:530:17 (node transfers: 2529, worklist size: 9)
+richards.js:530:7 (node transfers: 2530, worklist size: 9)
+richards.js:533:7 (node transfers: 2531, worklist size: 8)
+richards.js:534:17 (node transfers: 2536, worklist size: 9)
+richards.js:537:11 (node transfers: 2545, worklist size: 10)
+richards.js:538:13 (node transfers: 2550, worklist size: 10)
+richards.js:542:16 (node transfers: 2581, worklist size: 10)
+richards.js:301:29 (node transfers: 2582, worklist size: 11)
+richards.js:302:11 (node transfers: 2584, worklist size: 11)
+richards.js:303:25 (node transfers: 2596, worklist size: 13)
+richards.js:304:3 (node transfers: 2597, worklist size: 12)
+richards.js:307:10 (node transfers: 2618, worklist size: 12)
+richards.js:405:47 (node transfers: 2619, worklist size: 12)
+richards.js:406:7 (node transfers: 2620, worklist size: 12)
+richards.js:407:5 (node transfers: 2625, worklist size: 13)
+richards.js:408:5 (node transfers: 2630, worklist size: 13)
+richards.js:409:9 (node transfers: 2631, worklist size: 13)
+richards.js:409:47 (node transfers: 2638, worklist size: 13)
+richards.js:411:5 (node transfers: 2639, worklist size: 12)
+richards.js:411:18 (node transfers: 2645, worklist size: 12)
+richards.js:414:1 (node transfers: 2646, worklist size: 12)
+richards.js:308:1 (node transfers: 2647, worklist size: 11)
+richards.js:550:10 (node transfers: 2648, worklist size: 12)
+richards.js:550:10 (node transfers: 2652, worklist size: 12)
+richards.js:545:11 (node transfers: 2653, worklist size: 11)
+richards.js:547:14 (node transfers: 2667, worklist size: 11)
+richards.js:551:1 (node transfers: 2668, worklist size: 10)
+richards.js:551:1 (node transfers: 2669, worklist size: 9)
+richards.js:490:28 (node transfers: 2670, worklist size: 8)
+richards.js:491:7 (node transfers: 2672, worklist size: 8)
+richards.js:492:12 (node transfers: 2676, worklist size: 9)
+richards.js:494:9 (node transfers: 2680, worklist size: 9)
+richards.js:495:7 (node transfers: 2685, worklist size: 10)
+richards.js:497:7 (node transfers: 2688, worklist size: 10)
+richards.js:492:12 (node transfers: 2691, worklist size: 9)
+richards.js:499:5 (node transfers: 2692, worklist size: 9)
+richards.js:501:21 (node transfers: 2703, worklist size: 9)
+richards.js:502:7 (node transfers: 2707, worklist size: 10)
+richards.js:503:25 (node transfers: 2718, worklist size: 11)
+richards.js:504:7 (node transfers: 2721, worklist size: 10)
+richards.js:501:21 (node transfers: 2734, worklist size: 10)
+richards.js:502:7 (node transfers: 2738, worklist size: 10)
+richards.js:503:25 (node transfers: 2749, worklist size: 11)
+richards.js:504:7 (node transfers: 2752, worklist size: 10)
+richards.js:506:12 (node transfers: 2765, worklist size: 9)
+richards.js:506:12 (node transfers: 2770, worklist size: 9)
+richards.js:508:1 (node transfers: 2771, worklist size: 8)
+richards.js:508:1 (node transfers: 2772, worklist size: 7)
+richards.js:461:28 (node transfers: 2773, worklist size: 6)
+richards.js:462:7 (node transfers: 2775, worklist size: 6)
+richards.js:463:9 (node transfers: 2779, worklist size: 7)
+richards.js:463:33 (node transfers: 2784, worklist size: 8)
+richards.js:463:33 (node transfers: 2788, worklist size: 8)
+richards.js:464:13 (node transfers: 2789, worklist size: 8)
+richards.js:468:5 (node transfers: 2800, worklist size: 8)
+richards.js:469:12 (node transfers: 2807, worklist size: 8)
+richards.js:466:12 (node transfers: 2808, worklist size: 7)
+richards.js:471:1 (node transfers: 2809, worklist size: 6)
+richards.js:471:1 (node transfers: 2810, worklist size: 5)
+richards.js:398:1 (node transfers: 2811, worklist size: 4)
+richards.js:398:1 (node transfers: 2812, worklist size: 4)
+richards.js:255:7 (node transfers: 2813, worklist size: 3)
+richards.js:250:10 (node transfers: 2814, worklist size: 3)
+richards.js:251:9 (node transfers: 2819, worklist size: 3)
+richards.js:251:9 (node transfers: 2823, worklist size: 3)
+richards.js:251:5 (node transfers: 2824, worklist size: 3)
+richards.js:252:7 (node transfers: 2825, worklist size: 4)
+richards.js:254:7 (node transfers: 2831, worklist size: 3)
+richards.js:255:25 (node transfers: 2842, worklist size: 3)
+richards.js:384:34 (node transfers: 2843, worklist size: 3)
+richards.js:386:7 (node transfers: 2845, worklist size: 3)
+richards.js:387:14 (node transfers: 2850, worklist size: 4)
+richards.js:392:7 (node transfers: 2863, worklist size: 6)
+richards.js:395:14 (node transfers: 2866, worklist size: 6)
+richards.js:390:7 (node transfers: 2868, worklist size: 5)
+richards.js:397:10 (node transfers: 2871, worklist size: 4)
+richards.js:397:10 (node transfers: 2876, worklist size: 4)
+richards.js:525:29 (node transfers: 2877, worklist size: 6)
+richards.js:526:7 (node transfers: 2880, worklist size: 6)
+richards.js:527:9 (node transfers: 2884, worklist size: 7)
+richards.js:528:7 (node transfers: 2890, worklist size: 9)
+richards.js:528:17 (node transfers: 2896, worklist size: 9)
+richards.js:528:7 (node transfers: 2897, worklist size: 9)
+richards.js:530:7 (node transfers: 2898, worklist size: 8)
+richards.js:530:17 (node transfers: 2904, worklist size: 8)
+richards.js:530:7 (node transfers: 2905, worklist size: 8)
+richards.js:533:7 (node transfers: 2906, worklist size: 7)
+richards.js:534:17 (node transfers: 2911, worklist size: 8)
+richards.js:537:11 (node transfers: 2920, worklist size: 9)
+richards.js:538:13 (node transfers: 2925, worklist size: 9)
+richards.js:542:16 (node transfers: 2956, worklist size: 9)
+richards.js:550:10 (node transfers: 2957, worklist size: 9)
+richards.js:550:10 (node transfers: 2961, worklist size: 9)
+richards.js:545:11 (node transfers: 2962, worklist size: 8)
+richards.js:547:14 (node transfers: 2976, worklist size: 8)
+richards.js:551:1 (node transfers: 2977, worklist size: 7)
+richards.js:551:1 (node transfers: 2978, worklist size: 6)
+richards.js:490:28 (node transfers: 2979, worklist size: 5)
+richards.js:491:7 (node transfers: 2981, worklist size: 5)
+richards.js:492:12 (node transfers: 2985, worklist size: 6)
+richards.js:494:9 (node transfers: 2989, worklist size: 6)
+richards.js:495:7 (node transfers: 2994, worklist size: 7)
+richards.js:497:7 (node transfers: 2997, worklist size: 7)
+richards.js:492:12 (node transfers: 3000, worklist size: 6)
+richards.js:499:5 (node transfers: 3001, worklist size: 6)
+richards.js:501:21 (node transfers: 3012, worklist size: 7)
+richards.js:502:7 (node transfers: 3016, worklist size: 8)
+richards.js:503:25 (node transfers: 3027, worklist size: 9)
+richards.js:504:7 (node transfers: 3030, worklist size: 8)
+richards.js:506:12 (node transfers: 3043, worklist size: 7)
+richards.js:506:12 (node transfers: 3048, worklist size: 7)
+richards.js:508:1 (node transfers: 3049, worklist size: 6)
+richards.js:508:1 (node transfers: 3050, worklist size: 5)
+richards.js:461:28 (node transfers: 3051, worklist size: 4)
+richards.js:462:7 (node transfers: 3053, worklist size: 4)
+richards.js:463:9 (node transfers: 3057, worklist size: 5)
+richards.js:463:33 (node transfers: 3062, worklist size: 6)
+richards.js:463:33 (node transfers: 3066, worklist size: 6)
+richards.js:464:13 (node transfers: 3067, worklist size: 5)
+richards.js:468:5 (node transfers: 3078, worklist size: 5)
+richards.js:466:12 (node transfers: 3085, worklist size: 4)
+richards.js:471:1 (node transfers: 3086, worklist size: 5)
+richards.js:471:1 (node transfers: 3087, worklist size: 4)
+richards.js:398:1 (node transfers: 3088, worklist size: 3)
+richards.js:258:1 (node transfers: 3089, worklist size: 2)
+richards.js:258:1 (node transfers: 3090, worklist size: 2)
+richards.js:65:7 (node transfers: 3091, worklist size: 2)
+richards.js:66:7 (node transfers: 3097, worklist size: 3)
+richards.js:65:3 (node transfers: 3102, worklist size: 2)
+richards.js:68:9 (node transfers: 3103, worklist size: 3)
+richards.js:70:11 (node transfers: 3119, worklist size: 3)
+richards.js:70:5 (node transfers: 3120, worklist size: 3)
+richards.js:72:1 (node transfers: 3121, worklist size: 2)
+richards.js:72:1 (node transfers: 3122, worklist size: 2)
+richards.js:1:1 (node transfers: 3123, worklist size: 2)
+richards.js:1:1 (node transfers: 3124, worklist size: 1)
+===========  Messages ===========
+COUNT:	richards.js:74:13	->	1000.0
+EXPECTED_QUEUE_COUNT:	richards.js:83:28	->	2322.0
+EXPECTED_HOLD_COUNT:	richards.js:84:27	->	928.0
+ID_IDLE:	richards.js:102:21	->	0.0
+ID_WORKER:	richards.js:103:21	->	1.0
+ID_HANDLER_A:	richards.js:104:21	->	2.0
+ID_HANDLER_B:	richards.js:105:21	->	3.0
+ID_DEVICE_A:	richards.js:106:21	->	4.0
+ID_DEVICE_B:	richards.js:107:21	->	5.0
+NUMBER_OF_IDS:	richards.js:108:21	->	6.0
+KIND_DEVICE:	richards.js:110:21	->	0.0
+KIND_WORK:	richards.js:111:21	->	1.0
+Scheduler:	richards.js:149:1	->	[@Scheduler#fun2]
+prototype:	richards.js:149:1	->	[@Object#node5]
+addIdleTask:	richards.js:149:1	->	[@<anonymous>#fun3]
+Scheduler:	richards.js:176:1	->	[@Scheduler#fun2]
+prototype:	richards.js:176:1	->	[@Object#node5]
+addWorkerTask:	richards.js:176:1	->	[@<anonymous>#fun4]
+Scheduler:	richards.js:186:1	->	[@Scheduler#fun2]
+prototype:	richards.js:186:1	->	[@Object#node5]
+addHandlerTask:	richards.js:186:1	->	[@<anonymous>#fun5]
+Scheduler:	richards.js:216:1	->	[@Scheduler#fun2]
+prototype:	richards.js:216:1	->	[@Object#node5]
+addDeviceTask:	richards.js:216:1	->	[@<anonymous>#fun6]
+Scheduler:	richards.js:227:1	->	[@Scheduler#fun2]
+prototype:	richards.js:227:1	->	[@Object#node5]
+addRunningTask:	richards.js:227:1	->	[@<anonymous>#fun7]
+Scheduler:	richards.js:239:1	->	[@Scheduler#fun2]
+prototype:	richards.js:239:1	->	[@Object#node5]
+addTask:	richards.js:239:1	->	[@<anonymous>#fun8]
+Scheduler:	richards.js:248:1	->	[@Scheduler#fun2]
+prototype:	richards.js:248:1	->	[@Object#node5]
+schedule:	richards.js:248:1	->	[@<anonymous>#fun9]
+Scheduler:	richards.js:264:1	->	[@Scheduler#fun2]
+prototype:	richards.js:264:1	->	[@Object#node5]
+release:	richards.js:264:1	->	[@<anonymous>#fun10]
+Scheduler:	richards.js:280:1	->	[@Scheduler#fun2]
+prototype:	richards.js:280:1	->	[@Object#node5]
+holdCurrent:	richards.js:280:1	->	[@<anonymous>#fun11]
+Scheduler:	richards.js:290:1	->	[@Scheduler#fun2]
+prototype:	richards.js:290:1	->	[@Object#node5]
+suspendCurrent:	richards.js:290:1	->	[@<anonymous>#fun12]
+Scheduler:	richards.js:301:1	->	[@Scheduler#fun2]
+prototype:	richards.js:301:1	->	[@Object#node5]
+queue:	richards.js:301:1	->	[@<anonymous>#fun13]
+STATE_RUNNING:	richards.js:336:21	->	0.0
+STATE_RUNNABLE:	richards.js:341:22	->	1.0
+STATE_SUSPENDED:	richards.js:347:23	->	2.0
+STATE_HELD:	richards.js:352:18	->	4.0
+STATE_SUSPENDED:	richards.js:354:32	->	2.0
+STATE_RUNNABLE:	richards.js:354:50	->	1.0
+STATE_SUSPENDED_RUNNABLE:	richards.js:354:32	->	3.0
+STATE_HELD:	richards.js:355:23	->	4.0
+STATE_NOT_HELD:	richards.js:355:22	->	-5.0
+TaskControlBlock:	richards.js:357:1	->	[@TaskControlBlock#fun14]
+prototype:	richards.js:357:1	->	[@Object#node33]
+setRunning:	richards.js:357:1	->	[@<anonymous>#fun15]
+TaskControlBlock:	richards.js:361:1	->	[@TaskControlBlock#fun14]
+prototype:	richards.js:361:1	->	[@Object#node33]
+markAsNotHeld:	richards.js:361:1	->	[@<anonymous>#fun16]
+TaskControlBlock:	richards.js:365:1	->	[@TaskControlBlock#fun14]
+prototype:	richards.js:365:1	->	[@Object#node33]
+markAsHeld:	richards.js:365:1	->	[@<anonymous>#fun17]
+TaskControlBlock:	richards.js:369:1	->	[@TaskControlBlock#fun14]
+prototype:	richards.js:369:1	->	[@Object#node33]
+isHeldOrSuspended:	richards.js:369:1	->	[@<anonymous>#fun18]
+TaskControlBlock:	richards.js:373:1	->	[@TaskControlBlock#fun14]
+prototype:	richards.js:373:1	->	[@Object#node33]
+markAsSuspended:	richards.js:373:1	->	[@<anonymous>#fun19]
+TaskControlBlock:	richards.js:377:1	->	[@TaskControlBlock#fun14]
+prototype:	richards.js:377:1	->	[@Object#node33]
+markAsRunnable:	richards.js:377:1	->	[@<anonymous>#fun20]
+TaskControlBlock:	richards.js:384:1	->	[@TaskControlBlock#fun14]
+prototype:	richards.js:384:1	->	[@Object#node33]
+run:	richards.js:384:1	->	[@<anonymous>#fun21]
+TaskControlBlock:	richards.js:405:1	->	[@TaskControlBlock#fun14]
+prototype:	richards.js:405:1	->	[@Object#node33]
+checkPriorityAdd:	richards.js:405:1	->	[@<anonymous>#fun22]
+TaskControlBlock:	richards.js:416:1	->	[@TaskControlBlock#fun14]
+prototype:	richards.js:416:1	->	[@Object#node33]
+toString:	richards.js:416:1	->	[@<anonymous>#fun23]
+IdleTask:	richards.js:434:1	->	[@IdleTask#fun24]
+prototype:	richards.js:434:1	->	[@Object#node40]
+run:	richards.js:434:1	->	[@<anonymous>#fun25]
+IdleTask:	richards.js:446:1	->	[@IdleTask#fun24]
+prototype:	richards.js:446:1	->	[@Object#node40]
+toString:	richards.js:446:1	->	[@<anonymous>#fun26]
+DeviceTask:	richards.js:461:1	->	[@DeviceTask#fun27]
+prototype:	richards.js:461:1	->	[@Object#node41]
+run:	richards.js:461:1	->	[@<anonymous>#fun28]
+DeviceTask:	richards.js:473:1	->	[@DeviceTask#fun27]
+prototype:	richards.js:473:1	->	[@Object#node41]
+toString:	richards.js:473:1	->	[@<anonymous>#fun29]
+WorkerTask:	richards.js:490:1	->	[@WorkerTask#fun30]
+prototype:	richards.js:490:1	->	[@Object#node42]
+run:	richards.js:490:1	->	[@<anonymous>#fun31]
+WorkerTask:	richards.js:510:1	->	[@WorkerTask#fun30]
+prototype:	richards.js:510:1	->	[@Object#node42]
+toString:	richards.js:510:1	->	[@<anonymous>#fun32]
+HandlerTask:	richards.js:525:1	->	[@HandlerTask#fun33]
+prototype:	richards.js:525:1	->	[@Object#node43]
+run:	richards.js:525:1	->	[@<anonymous>#fun34]
+HandlerTask:	richards.js:553:1	->	[@HandlerTask#fun33]
+prototype:	richards.js:553:1	->	[@Object#node43]
+toString:	richards.js:553:1	->	[@<anonymous>#fun35]
+DATA_SIZE:	richards.js:561:17	->	4.0
+Packet:	richards.js:587:1	->	[@Packet#fun36]
+prototype:	richards.js:587:1	->	[@Object#node45]
+addTo:	richards.js:587:1	->	[@<anonymous>#fun37]
+Packet:	richards.js:597:1	->	[@Packet#fun36]
+prototype:	richards.js:597:1	->	[@Object#node45]
+toString:	richards.js:597:1	->	[@<anonymous>#fun38]
+runRichards:	richards.js:605:1	->	[@runRichards#fun1]
+Scheduler:	richards.js:42:23	->	[@Scheduler#fun2]
+scheduler:	richards.js:42:19	->	[@Object#node276]
+scheduler:	richards.js:43:3	->	[@Object#node276]
+addIdleTask:	richards.js:43:3	->	[@<anonymous>#fun3]
+ID_IDLE:	richards.js:43:25	->	0.0
+COUNT:	richards.js:43:43	->	1000.0
+Packet:	richards.js:45:19	->	[@Packet#fun36]
+ID_WORKER:	richards.js:45:32	->	1.0
+KIND_WORK:	richards.js:45:43	->	1.0
+queue:	richards.js:45:15	->	[@Object#node290]
+Packet:	richards.js:46:15	->	[@Packet#fun36]
+queue:	richards.js:46:22	->	[@Object#node290]
+ID_WORKER:	richards.js:46:30	->	1.0
+KIND_WORK:	richards.js:46:41	->	1.0
+queue:	richards.js:46:3	->	[@Object#node296]
+scheduler:	richards.js:47:3	->	[@Object#node276]
+addWorkerTask:	richards.js:47:3	->	[@<anonymous>#fun4]
+ID_WORKER:	richards.js:47:27	->	1.0
+queue:	richards.js:47:44	->	[@Object#node296]
+Packet:	richards.js:49:15	->	[@Packet#fun36]
+ID_DEVICE_A:	richards.js:49:28	->	4.0
+KIND_DEVICE:	richards.js:49:41	->	0.0
+queue:	richards.js:49:3	->	[@Object#node309]
+Packet:	richards.js:50:15	->	[@Packet#fun36]
+queue:	richards.js:50:22	->	[@Object#node309]
+ID_DEVICE_A:	richards.js:50:30	->	4.0
+KIND_DEVICE:	richards.js:50:43	->	0.0
+queue:	richards.js:50:3	->	[@Object#node315]
+Packet:	richards.js:51:15	->	[@Packet#fun36]
+queue:	richards.js:51:22	->	[@Object#node315]
+ID_DEVICE_A:	richards.js:51:30	->	4.0
+KIND_DEVICE:	richards.js:51:43	->	0.0
+queue:	richards.js:51:3	->	[@Object#node321]
+scheduler:	richards.js:52:3	->	[@Object#node276]
+addHandlerTask:	richards.js:52:3	->	[@<anonymous>#fun5]
+ID_HANDLER_A:	richards.js:52:28	->	2.0
+queue:	richards.js:52:48	->	[@Object#node321]
+Packet:	richards.js:54:15	->	[@Packet#fun36]
+ID_DEVICE_B:	richards.js:54:28	->	5.0
+KIND_DEVICE:	richards.js:54:41	->	0.0
+queue:	richards.js:54:3	->	[@Object#node334]
+Packet:	richards.js:55:15	->	[@Packet#fun36]
+queue:	richards.js:55:22	->	[@Object#node334]
+ID_DEVICE_B:	richards.js:55:30	->	5.0
+KIND_DEVICE:	richards.js:55:43	->	0.0
+queue:	richards.js:55:3	->	[@Object#node340]
+Packet:	richards.js:56:15	->	[@Packet#fun36]
+queue:	richards.js:56:22	->	[@Object#node340]
+ID_DEVICE_B:	richards.js:56:30	->	5.0
+KIND_DEVICE:	richards.js:56:43	->	0.0
+queue:	richards.js:56:3	->	[@Object#node346]
+scheduler:	richards.js:57:3	->	[@Object#node276]
+addHandlerTask:	richards.js:57:3	->	[@<anonymous>#fun5]
+ID_HANDLER_B:	richards.js:57:28	->	3.0
+queue:	richards.js:57:48	->	[@Object#node346]
+scheduler:	richards.js:59:3	->	[@Object#node276]
+addDeviceTask:	richards.js:59:3	->	[@<anonymous>#fun6]
+ID_DEVICE_A:	richards.js:59:27	->	4.0
+scheduler:	richards.js:61:3	->	[@Object#node276]
+addDeviceTask:	richards.js:61:3	->	[@<anonymous>#fun6]
+ID_DEVICE_B:	richards.js:61:27	->	5.0
+scheduler:	richards.js:63:3	->	[@Object#node276]
+schedule:	richards.js:63:3	->	[@<anonymous>#fun9]
+scheduler:	richards.js:65:7	->	[@Object#node276]
+queueCount:	richards.js:65:7	->	UInt
+EXPECTED_QUEUE_COUNT:	richards.js:65:31	->	2322.0
+scheduler:	richards.js:66:7	->	[@Object#node276]
+holdCount:	richards.js:66:7	->	UInt
+EXPECTED_HOLD_COUNT:	richards.js:66:30	->	928.0
+scheduler:	richards.js:68:51	->	[@Object#node276]
+queueCount:	richards.js:68:51	->	UInt
+scheduler:	richards.js:69:28	->	[@Object#node276]
+holdCount:	richards.js:69:28	->	UInt
+msg:	richards.js:68:9	->	Str
+Error:	richards.js:70:15	->	[@Error[native]]
+msg:	richards.js:70:21	->	Str
+queueCount:	richards.js:94:3	->	0.0
+holdCount:	richards.js:95:3	->	0.0
+Array:	richards.js:96:21	->	[@Array[native]]
+NUMBER_OF_IDS:	richards.js:96:27	->	6.0
+blocks:	richards.js:96:3	->	[@Array#node415]
+list:	richards.js:97:3	->	Null
+currentTcb:	richards.js:98:3	->	Null
+currentId:	richards.js:99:3	->	Null
+id:	richards.js:157:35	->	0.0
+contract_addIdleTask_id_value:	richards.js:157:3	->	0.0
+priority:	richards.js:158:41	->	0.0
+contract_addIdleTask_priority_value:	richards.js:158:3	->	0.0
+queue:	richards.js:159:38	->	Null
+contract_addIdleTask_queue_value:	richards.js:159:3	->	Null
+count:	richards.js:160:38	->	1000.0
+contract_addIdleTask_count_value:	richards.js:160:3	->	1000.0
+id:	richards.js:162:45	->	0.0
+contract_addIdleTask_id_reault:	richards.js:162:3	->	true
+priority:	richards.js:163:51	->	0.0
+contract_addIdleTask_priority_result:	richards.js:163:3	->	true
+queue:	richards.js:164:48	->	Null
+contract_addIdleTask_queue_result:	richards.js:164:3	->	true
+count:	richards.js:165:48	->	1000.0
+contract_addIdleTask_count_result:	richards.js:165:3	->	true
+addRunningTask:	richards.js:167:3	->	[@<anonymous>#fun7]
+id:	richards.js:167:23	->	0.0
+priority:	richards.js:167:27	->	0.0
+queue:	richards.js:167:37	->	Null
+IdleTask:	richards.js:167:48	->	[@IdleTask#fun24]
+count:	richards.js:167:66	->	1000.0
+addTask:	richards.js:177:3	->	[@<anonymous>#fun8]
+id:	richards.js:177:16	->	1.0
+priority:	richards.js:177:20	->	1000.0
+queue:	richards.js:177:30	->	[@Object#node296]
+WorkerTask:	richards.js:177:41	->	[@WorkerTask#fun30]
+ID_HANDLER_A:	richards.js:177:58	->	2.0
+id:	richards.js:194:38	->	UInt
+contract_addHandlerTask_id_value:	richards.js:194:3	->	UInt
+priority:	richards.js:195:44	->	UInt
+contract_addHandlerTask_priority_value:	richards.js:195:3	->	UInt
+queue:	richards.js:196:41	->	[@Object#node321, @Object#node346]
+contract_addHandlerTask_queue_value:	richards.js:196:3	->	[@Object#node321, @Object#node346]
+id:	richards.js:198:48	->	UInt
+contract_addHandlerTask_id_reault:	richards.js:198:3	->	true
+priority:	richards.js:199:54	->	UInt
+contract_addHandlerTask_priority_result:	richards.js:199:3	->	true
+queue:	richards.js:200:51	->	[@Object#node321, @Object#node346]
+contract_addHandlerTask_queue_result:	richards.js:200:3	->	true
+id:	richards.js:202:33	->	UInt
+contract_special_id_reault:	richards.js:202:3	->	Bool
+priority:	richards.js:203:39	->	UInt
+contract_special_priority_reault:	richards.js:203:3	->	Bool
+id:	richards.js:204:34	->	UInt
+contract_special_id_reault2:	richards.js:204:3	->	Bool
+priority:	richards.js:205:40	->	UInt
+contract_special_priority_reault2:	richards.js:205:3	->	Bool
+addTask:	richards.js:207:3	->	[@<anonymous>#fun8]
+id:	richards.js:207:16	->	UInt
+priority:	richards.js:207:20	->	UInt
+queue:	richards.js:207:30	->	[@Object#node321, @Object#node346]
+HandlerTask:	richards.js:207:41	->	[@HandlerTask#fun33]
+addTask:	richards.js:217:3	->	[@<anonymous>#fun8]
+id:	richards.js:217:16	->	UInt
+priority:	richards.js:217:20	->	UInt
+queue:	richards.js:217:30	->	Null
+DeviceTask:	richards.js:217:41	->	[@DeviceTask#fun27]
+addTask:	richards.js:228:3	->	[@<anonymous>#fun8]
+id:	richards.js:228:16	->	0.0
+priority:	richards.js:228:20	->	0.0
+queue:	richards.js:228:30	->	Null
+task:	richards.js:228:37	->	[@Object#node462]
+currentTcb:	richards.js:229:3	->	[@Object#node562]
+setRunning:	richards.js:229:3	->	[@<anonymous>#fun15]
+TaskControlBlock:	richards.js:240:25	->	[@TaskControlBlock#fun14]
+list:	richards.js:240:42	->	Null|[@Object#node562]
+id:	richards.js:240:53	->	UInt
+priority:	richards.js:240:57	->	UInt
+queue:	richards.js:240:67	->	Null|[@Object#node296, @Object#node321, @Object#node346]
+task:	richards.js:240:74	->	[@Object#node534, @Object#node522, @Object#node462, @Object#node476]
+currentTcb:	richards.js:240:3	->	[@Object#node562]
+currentTcb:	richards.js:241:15	->	[@Object#node562]
+list:	richards.js:241:3	->	[@Object#node562]
+blocks:	richards.js:242:3	->	[@Array#node415]
+id:	richards.js:242:15	->	UInt
+currentTcb:	richards.js:242:21	->	[@Object#node562]
+null:	richards.js:242:3	->	[@Object#node562]
+list:	richards.js:249:21	->	[@Object#node562]
+currentTcb:	richards.js:249:3	->	[@Object#node562]
+currentTcb:	richards.js:250:10	->	Undef|Null|[@Object#node562, *Object#node562]
+currentTcb:	richards.js:251:9	->	Undef|Null|[@Object#node562, *Object#node562]
+isHeldOrSuspended:	richards.js:251:9	->	[@<anonymous>#fun18]
+currentTcb:	richards.js:252:25	->	[@Object#node562, *Object#node562]
+link:	richards.js:252:25	->	Null|[*Object#node562]
+currentTcb:	richards.js:252:7	->	Null|[*Object#node562]
+currentTcb:	richards.js:254:24	->	[@Object#node562, *Object#node562]
+id:	richards.js:254:24	->	UInt
+currentId:	richards.js:254:7	->	UInt
+currentTcb:	richards.js:255:25	->	[@Object#node562, *Object#node562]
+run:	richards.js:255:25	->	[@<anonymous>#fun21]
+currentTcb:	richards.js:255:7	->	Undef|Null|[@Object#node562, *Object#node562]
+blocks:	richards.js:265:13	->	[@Array#node415]
+id:	richards.js:265:25	->	UInt
+null:	richards.js:265:13	->	Undef|[@Object#node562, *Object#node562]
+tcb:	richards.js:265:13	->	Undef|[@Object#node562, *Object#node562]
+tcb:	richards.js:266:7	->	Undef|[@Object#node562, *Object#node562]
+tcb:	richards.js:266:27	->	Undef|[@Object#node562, *Object#node562]
+tcb:	richards.js:267:3	->	Undef|[@Object#node562, *Object#node562]
+markAsNotHeld:	richards.js:267:3	->	[@<anonymous>#fun16]
+tcb:	richards.js:268:7	->	[@Object#node562, *Object#node562]
+priority:	richards.js:268:7	->	UInt
+currentTcb:	richards.js:268:22	->	[@Object#node562, *Object#node562]
+priority:	richards.js:268:22	->	UInt
+tcb:	richards.js:269:12	->	[@Object#node562, *Object#node562]
+currentTcb:	richards.js:271:12	->	[@Object#node562, *Object#node562]
+holdCount:	richards.js:281:3	->	UInt
+currentTcb:	richards.js:282:3	->	[@Object#node562, *Object#node562]
+markAsHeld:	richards.js:282:3	->	[@<anonymous>#fun17]
+currentTcb:	richards.js:283:10	->	[@Object#node562, *Object#node562]
+link:	richards.js:283:10	->	Null|[*Object#node562]
+currentTcb:	richards.js:291:3	->	[@Object#node562, *Object#node562]
+markAsSuspended:	richards.js:291:3	->	[@<anonymous>#fun19]
+currentTcb:	richards.js:292:10	->	[@Object#node562, *Object#node562]
+blocks:	richards.js:302:11	->	[@Array#node415]
+packet:	richards.js:302:23	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+id:	richards.js:302:23	->	UInt
+null:	richards.js:302:11	->	Undef|[@Object#node562, *Object#node562]
+t:	richards.js:302:11	->	Undef|[@Object#node562, *Object#node562]
+t:	richards.js:303:7	->	Undef|[@Object#node562, *Object#node562]
+t:	richards.js:303:25	->	Undef|[@Object#node562, *Object#node562]
+queueCount:	richards.js:304:3	->	UInt
+packet:	richards.js:305:3	->	[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+link:	richards.js:305:3	->	Null
+packet:	richards.js:306:3	->	[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+currentId:	richards.js:306:15	->	UInt
+id:	richards.js:306:3	->	UInt
+t:	richards.js:307:10	->	Undef|[@Object#node562, *Object#node562]
+checkPriorityAdd:	richards.js:307:10	->	[@<anonymous>#fun22]
+currentTcb:	richards.js:307:29	->	[@Object#node562, *Object#node562]
+packet:	richards.js:307:46	->	[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+link:	richards.js:321:15	->	Null|[*Object#node562]
+link:	richards.js:321:3	->	Null|[*Object#node562]
+id:	richards.js:322:13	->	UInt
+id:	richards.js:322:3	->	UInt
+priority:	richards.js:323:19	->	UInt
+priority:	richards.js:323:3	->	UInt
+queue:	richards.js:324:16	->	Null|[@Object#node296, @Object#node321, @Object#node346]
+queue:	richards.js:324:3	->	Null|[@Object#node296, @Object#node321, @Object#node346]
+task:	richards.js:325:15	->	[@Object#node534, @Object#node522, @Object#node462, @Object#node476]
+task:	richards.js:325:3	->	[@Object#node534, @Object#node522, @Object#node462, @Object#node476]
+queue:	richards.js:326:7	->	Null|[@Object#node296, @Object#node321, @Object#node346]
+STATE_SUSPENDED:	richards.js:327:18	->	2.0
+state:	richards.js:327:5	->	2.0
+STATE_SUSPENDED_RUNNABLE:	richards.js:329:18	->	3.0
+state:	richards.js:329:5	->	3.0
+STATE_RUNNING:	richards.js:358:16	->	0.0
+state:	richards.js:358:3	->	0.0
+state:	richards.js:362:16	->	UInt
+STATE_NOT_HELD:	richards.js:362:29	->	-5.0
+state:	richards.js:362:3	->	UInt
+state:	richards.js:366:16	->	UInt
+STATE_HELD:	richards.js:366:29	->	4.0
+state:	richards.js:366:3	->	UInt
+state:	richards.js:370:11	->	UInt
+STATE_HELD:	richards.js:370:24	->	4.0
+state:	richards.js:370:11	->	UInt
+STATE_HELD:	richards.js:370:24	->	4.0
+state:	richards.js:370:45	->	UInt
+STATE_SUSPENDED:	richards.js:370:59	->	2.0
+state:	richards.js:370:45	->	UInt
+STATE_SUSPENDED:	richards.js:370:59	->	2.0
+state:	richards.js:374:16	->	UInt
+STATE_SUSPENDED:	richards.js:374:29	->	2.0
+state:	richards.js:374:3	->	UInt
+state:	richards.js:378:16	->	UInt
+STATE_RUNNABLE:	richards.js:378:29	->	1.0
+state:	richards.js:378:3	->	UInt
+state:	richards.js:386:7	->	UInt
+STATE_SUSPENDED_RUNNABLE:	richards.js:386:21	->	3.0
+queue:	richards.js:387:14	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+packet:	richards.js:387:5	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+packet:	richards.js:388:18	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+link:	richards.js:388:18	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+queue:	richards.js:388:5	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+queue:	richards.js:389:9	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+packet:	richards.js:395:5	->	Null
+STATE_RUNNING:	richards.js:390:20	->	0.0
+state:	richards.js:390:7	->	0.0
+STATE_RUNNABLE:	richards.js:392:20	->	1.0
+state:	richards.js:392:7	->	1.0
+task:	richards.js:397:10	->	[@Object#node534, @Object#node462, @Object#node476, *Object#node522, @Object#node522, *Object#node534]
+run:	richards.js:397:10	->	[@<anonymous>#fun28, @<anonymous>#fun25, @<anonymous>#fun31, @<anonymous>#fun34]
+packet:	richards.js:397:24	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+queue:	richards.js:406:7	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+packet:	richards.js:407:18	->	[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+queue:	richards.js:407:5	->	[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+markAsRunnable:	richards.js:408:5	->	[@<anonymous>#fun20]
+packet:	richards.js:411:18	->	[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+addTo:	richards.js:411:18	->	[@<anonymous>#fun37]
+queue:	richards.js:411:31	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+priority:	richards.js:409:9	->	UInt
+task:	richards.js:409:25	->	[@Object#node562, *Object#node562]
+priority:	richards.js:409:25	->	UInt
+queue:	richards.js:411:5	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+task:	richards.js:413:10	->	[@Object#node562, *Object#node562]
+scheduler:	richards.js:429:20	->	[@Object#node276]
+scheduler:	richards.js:429:3	->	[@Object#node276]
+v1:	richards.js:430:13	->	1.0
+v1:	richards.js:430:3	->	1.0
+count:	richards.js:431:16	->	1000.0
+count:	richards.js:431:3	->	1000.0
+count:	richards.js:435:3	->	UInt
+count:	richards.js:436:7	->	UInt
+scheduler:	richards.js:436:31	->	[@Object#node276]
+holdCurrent:	richards.js:436:31	->	[@<anonymous>#fun11]
+v1:	richards.js:437:8	->	UInt
+v1:	richards.js:438:15	->	UInt
+v1:	richards.js:438:5	->	UInt
+scheduler:	richards.js:439:12	->	[@Object#node276]
+release:	richards.js:439:12	->	[@<anonymous>#fun10]
+ID_DEVICE_A:	richards.js:439:35	->	4.0
+v1:	richards.js:441:16	->	UInt
+v1:	richards.js:441:5	->	UInt
+scheduler:	richards.js:442:12	->	[@Object#node276]
+release:	richards.js:442:12	->	[@<anonymous>#fun10]
+ID_DEVICE_B:	richards.js:442:35	->	5.0
+scheduler:	richards.js:457:20	->	[@Object#node276]
+scheduler:	richards.js:457:3	->	[@Object#node276]
+v1:	richards.js:458:3	->	Null
+packet:	richards.js:462:7	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+v1:	richards.js:463:9	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+packet:	richards.js:468:15	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+v1:	richards.js:468:5	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+scheduler:	richards.js:469:12	->	[@Object#node276]
+holdCurrent:	richards.js:469:12	->	[@<anonymous>#fun11]
+scheduler:	richards.js:463:33	->	[@Object#node276]
+suspendCurrent:	richards.js:463:33	->	[@<anonymous>#fun12]
+v1:	richards.js:464:13	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+v:	richards.js:464:13	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+v1:	richards.js:465:5	->	Null
+scheduler:	richards.js:466:12	->	[@Object#node276]
+queue:	richards.js:466:12	->	[@<anonymous>#fun13]
+v:	richards.js:466:33	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+scheduler:	richards.js:485:20	->	[@Object#node276]
+scheduler:	richards.js:485:3	->	[@Object#node276]
+v1:	richards.js:486:13	->	2.0
+v1:	richards.js:486:3	->	2.0
+v2:	richards.js:487:13	->	0.0
+v2:	richards.js:487:3	->	0.0
+packet:	richards.js:491:7	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+scheduler:	richards.js:492:12	->	[@Object#node276]
+suspendCurrent:	richards.js:492:12	->	[@<anonymous>#fun12]
+v1:	richards.js:494:9	->	UInt
+ID_HANDLER_A:	richards.js:494:20	->	2.0
+ID_HANDLER_B:	richards.js:495:17	->	3.0
+v1:	richards.js:495:7	->	3.0
+ID_HANDLER_A:	richards.js:497:17	->	2.0
+v1:	richards.js:497:7	->	2.0
+packet:	richards.js:499:5	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+v1:	richards.js:499:17	->	UInt
+id:	richards.js:499:5	->	UInt
+packet:	richards.js:500:5	->	[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+a1:	richards.js:500:5	->	0.0
+i:	richards.js:501:18	->	0.0
+i:	richards.js:501:21	->	UInt
+DATA_SIZE:	richards.js:501:25	->	4.0
+v2:	richards.js:502:7	->	UInt
+v2:	richards.js:503:11	->	UInt
+scheduler:	richards.js:506:12	->	[@Object#node276]
+queue:	richards.js:506:12	->	[@<anonymous>#fun13]
+packet:	richards.js:506:33	->	[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+v2:	richards.js:503:25	->	1.0
+packet:	richards.js:504:7	->	[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+a2:	richards.js:504:7	->	[*Array#node1218, @Array#node1218]
+i:	richards.js:504:17	->	UInt
+v2:	richards.js:504:22	->	UInt
+null:	richards.js:504:7	->	UInt
+i:	richards.js:501:36	->	UInt
+scheduler:	richards.js:520:20	->	[@Object#node276]
+scheduler:	richards.js:520:3	->	[@Object#node276]
+v1:	richards.js:521:3	->	Null
+v2:	richards.js:522:3	->	Null
+packet:	richards.js:526:7	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+packet:	richards.js:527:9	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+kind:	richards.js:527:9	->	UInt
+KIND_WORK:	richards.js:527:24	->	1.0
+packet:	richards.js:528:17	->	[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+addTo:	richards.js:528:17	->	[@<anonymous>#fun37]
+v1:	richards.js:528:30	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+packet:	richards.js:530:17	->	[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+addTo:	richards.js:530:17	->	[@<anonymous>#fun37]
+v2:	richards.js:530:30	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+v1:	richards.js:528:7	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+v2:	richards.js:530:7	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+v1:	richards.js:533:7	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+v1:	richards.js:534:17	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+a1:	richards.js:534:17	->	Undef|UInt|NaN
+count:	richards.js:534:17	->	Undef|UInt|NaN
+count:	richards.js:536:9	->	Undef|UInt|NaN
+DATA_SIZE:	richards.js:536:17	->	4.0
+v2:	richards.js:537:11	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+v1:	richards.js:545:11	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+v:	richards.js:545:7	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+v1:	richards.js:546:17	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+link:	richards.js:546:17	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+v1:	richards.js:546:7	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+scheduler:	richards.js:547:14	->	[@Object#node276]
+queue:	richards.js:547:14	->	[@<anonymous>#fun13]
+v:	richards.js:547:35	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+v2:	richards.js:538:13	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+v:	richards.js:538:9	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+v2:	richards.js:539:19	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+link:	richards.js:539:19	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+v2:	richards.js:539:9	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+v:	richards.js:540:9	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+v1:	richards.js:540:16	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+a2:	richards.js:540:16	->	[*Array#node1218, @Array#node1218]
+count:	richards.js:540:27	->	Undef|UInt|NaN
+null:	richards.js:540:16	->	Undef|UInt
+a1:	richards.js:540:9	->	Undef|UInt
+v1:	richards.js:541:9	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+count:	richards.js:541:22	->	Undef|UInt|NaN
+a1:	richards.js:541:9	->	UInt|NaN
+scheduler:	richards.js:542:16	->	[@Object#node276]
+queue:	richards.js:542:16	->	[@<anonymous>#fun13]
+v:	richards.js:542:37	->	[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+scheduler:	richards.js:550:10	->	[@Object#node276]
+suspendCurrent:	richards.js:550:10	->	[@<anonymous>#fun12]
+link:	richards.js:576:15	->	Null
+link:	richards.js:576:3	->	Null
+id:	richards.js:577:13	->	1.0
+id:	richards.js:577:3	->	1.0
+kind:	richards.js:578:15	->	1.0
+kind:	richards.js:578:3	->	1.0
+a1:	richards.js:579:3	->	0.0
+Array:	richards.js:580:17	->	[@Array[native]]
+DATA_SIZE:	richards.js:580:23	->	4.0
+link:	richards.js:576:15	->	[@Object#node290]
+link:	richards.js:576:3	->	[@Object#node290]
+id:	richards.js:577:13	->	1.0
+id:	richards.js:577:3	->	1.0
+kind:	richards.js:578:15	->	1.0
+kind:	richards.js:578:3	->	1.0
+a1:	richards.js:579:3	->	0.0
+Array:	richards.js:580:17	->	[@Array[native]]
+DATA_SIZE:	richards.js:580:23	->	4.0
+link:	richards.js:576:15	->	Null
+link:	richards.js:576:3	->	Null
+id:	richards.js:577:13	->	4.0
+id:	richards.js:577:3	->	4.0
+kind:	richards.js:578:15	->	0.0
+kind:	richards.js:578:3	->	0.0
+a1:	richards.js:579:3	->	0.0
+Array:	richards.js:580:17	->	[@Array[native]]
+DATA_SIZE:	richards.js:580:23	->	4.0
+link:	richards.js:576:15	->	[@Object#node309]
+link:	richards.js:576:3	->	[@Object#node309]
+id:	richards.js:577:13	->	4.0
+id:	richards.js:577:3	->	4.0
+kind:	richards.js:578:15	->	0.0
+kind:	richards.js:578:3	->	0.0
+a1:	richards.js:579:3	->	0.0
+Array:	richards.js:580:17	->	[@Array[native]]
+DATA_SIZE:	richards.js:580:23	->	4.0
+link:	richards.js:576:15	->	[@Object#node315]
+link:	richards.js:576:3	->	[@Object#node315]
+id:	richards.js:577:13	->	4.0
+id:	richards.js:577:3	->	4.0
+kind:	richards.js:578:15	->	0.0
+kind:	richards.js:578:3	->	0.0
+a1:	richards.js:579:3	->	0.0
+Array:	richards.js:580:17	->	[@Array[native]]
+DATA_SIZE:	richards.js:580:23	->	4.0
+link:	richards.js:576:15	->	Null
+link:	richards.js:576:3	->	Null
+id:	richards.js:577:13	->	5.0
+id:	richards.js:577:3	->	5.0
+kind:	richards.js:578:15	->	0.0
+kind:	richards.js:578:3	->	0.0
+a1:	richards.js:579:3	->	0.0
+Array:	richards.js:580:17	->	[@Array[native]]
+DATA_SIZE:	richards.js:580:23	->	4.0
+link:	richards.js:576:15	->	[@Object#node334]
+link:	richards.js:576:3	->	[@Object#node334]
+id:	richards.js:577:13	->	5.0
+id:	richards.js:577:3	->	5.0
+kind:	richards.js:578:15	->	0.0
+kind:	richards.js:578:3	->	0.0
+a1:	richards.js:579:3	->	0.0
+Array:	richards.js:580:17	->	[@Array[native]]
+DATA_SIZE:	richards.js:580:23	->	4.0
+link:	richards.js:576:15	->	[@Object#node340]
+link:	richards.js:576:3	->	[@Object#node340]
+id:	richards.js:577:13	->	5.0
+id:	richards.js:577:3	->	5.0
+kind:	richards.js:578:15	->	0.0
+kind:	richards.js:578:3	->	0.0
+a1:	richards.js:579:3	->	0.0
+Array:	richards.js:580:17	->	[@Array[native]]
+DATA_SIZE:	richards.js:580:23	->	4.0
+a2:	richards.js:580:3	->	[@Array#node1218]
+a2:	richards.js:580:3	->	[@Array#node1218]
+a2:	richards.js:580:3	->	[@Array#node1218]
+a2:	richards.js:580:3	->	[@Array#node1218]
+a2:	richards.js:580:3	->	[@Array#node1218]
+a2:	richards.js:580:3	->	[@Array#node1218]
+a2:	richards.js:580:3	->	[@Array#node1218]
+a2:	richards.js:580:3	->	[@Array#node1218]
+link:	richards.js:588:3	->	Null
+queue:	richards.js:589:7	->	Null|[@Object#node290, @Object#node315, @Object#node340, @Object#node296, @Object#node321, @Object#node346]
+link:	richards.js:588:3	->	Null
+queue:	richards.js:589:7	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+link:	richards.js:588:3	->	Null
+queue:	richards.js:589:7	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+queue:	richards.js:590:20	->	Null|[@Object#node290, @Object#node315, @Object#node340, @Object#node296, @Object#node321, @Object#node346]
+next:	richards.js:590:20	->	Null|[@Object#node290, @Object#node315, @Object#node340, @Object#node296, @Object#node321, @Object#node346]
+queue:	richards.js:590:20	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+next:	richards.js:590:20	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+queue:	richards.js:590:20	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+next:	richards.js:590:20	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+next:	richards.js:591:18	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+link:	richards.js:591:18	->	Null|[@Object#node309, @Object#node334, @Object#node290, @Object#node315, @Object#node340]
+peek:	richards.js:591:11	->	Null|[@Object#node309, @Object#node334, @Object#node290, @Object#node315, @Object#node340]
+next:	richards.js:591:18	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+link:	richards.js:591:18	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+peek:	richards.js:591:11	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+next:	richards.js:591:18	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+link:	richards.js:591:18	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+peek:	richards.js:591:11	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+peek:	richards.js:592:12	->	Null|[@Object#node309, @Object#node334, @Object#node290, @Object#node315, @Object#node340]
+next:	richards.js:592:5	->	Null|[@Object#node309, @Object#node334, @Object#node290, @Object#node315, @Object#node340]
+peek:	richards.js:592:12	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+next:	richards.js:592:5	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+peek:	richards.js:592:12	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+next:	richards.js:592:5	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+next:	richards.js:593:3	->	[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+link:	richards.js:593:3	->	[@Object#node296, @Object#node321, @Object#node346]
+queue:	richards.js:594:10	->	Null|[@Object#node290, @Object#node315, @Object#node340, @Object#node296, @Object#node321, @Object#node346]
+next:	richards.js:593:3	->	[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+link:	richards.js:593:3	->	[@Object#node290, @Object#node315, @Object#node340, @Object#node296, @Object#node321, @Object#node346]
+queue:	richards.js:594:10	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+next:	richards.js:593:3	->	[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+link:	richards.js:593:3	->	[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+queue:	richards.js:594:10	->	Null|[@Object#node309, @Object#node296, @Object#node346, @Object#node315, @Object#node334, @Object#node321, @Object#node290, @Object#node340]
+richards.js:159:38: [definite] Variable queue is null/undefined
+richards.js:167:37: [definite] Variable queue is null/undefined
+richards.js:217:30: [definite] Variable queue is null/undefined
+richards.js:228:30: [definite] Variable queue is null/undefined
+richards.js:416:1: [definite] Dead assignment, property toString is never read
+richards.js:446:1: [definite] Dead assignment, property toString is never read
+richards.js:473:1: [definite] Dead assignment, property toString is never read
+richards.js:510:1: [definite] Dead assignment, property toString is never read
+richards.js:553:1: [definite] Dead assignment, property toString is never read
+richards.js:597:1: [definite] Dead assignment, property toString is never read
+richards.js:251:9: [maybe] TypeError, accessing property of null/undefined
+richards.js:267:3: [maybe] TypeError, accessing property of null/undefined
+richards.js:302:23: [maybe] TypeError, accessing property of null/undefined
+richards.js:307:10: [maybe] TypeError, accessing property of null/undefined
+richards.js:388:18: [maybe] TypeError, accessing property of null/undefined
+richards.js:499:5: [maybe] TypeError, accessing property of null/undefined
+richards.js:527:9: [maybe] TypeError, accessing property of null/undefined
+richards.js:534:17: [maybe] TypeError, accessing property of null/undefined
+richards.js:539:19: [maybe] TypeError, accessing property of null/undefined
+richards.js:540:9: [maybe] TypeError, accessing property of null/undefined
+richards.js:540:16: [maybe] TypeError, accessing property of null/undefined
+richards.js:541:9: [maybe] TypeError, accessing property of null/undefined
+richards.js:546:17: [maybe] TypeError, accessing property of null/undefined
+richards.js:591:18: [maybe] TypeError, accessing property of null/undefined
