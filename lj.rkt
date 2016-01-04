@@ -27,17 +27,16 @@
   ;; Operations
   (op + * - / < > =)
   
-  ;; Expressions
-  ((e f g)
-   c
-   x
-   (op e f)
-   (λ x e)
-   (e f)
-  )
- 
   ;; Values
   ((u v w) c (λ x e))
+  
+  ;; Expressions
+  ((e f g)
+   v
+   x
+   (op e f)
+   (e f)
+  )
       
   ;; Evaluation Context
   ((E F G)
@@ -57,14 +56,14 @@
 ;;|_|  \_\___|\__,_|\__,_|\___|\__|_|\___/|_| |_|
 
 (define-metafunction λ_J
-  subst : x v e -> e
-  [(subst x v x) v]
-  [(subst x v y) y]
-  [(subst x v c) c]
-  [(subst x v (op e f)) (op (subst x v e) (subst x v f))]
-  [(subst x v (λ x e)) (λ x e)]
-  [(subst x v (λ y e)) (λ y (subst x v e))]
-  [(subst x v (e f)) ((subst x v e) (subst x v f))]
+  subst : x any any -> any
+  [(subst x any x) any]
+  [(subst x any y) y]
+  [(subst x any c) c]
+  [(subst x any (op e f)) (op (subst x any e) (subst x any f))]
+  [(subst x any (λ x e)) (λ x e)]
+  [(subst x any (λ y e)) (λ y (subst x any e))]
+  [(subst x any (e f)) ((subst x any e) (subst x any f))]
 )
 
 (define-metafunction λ_J
@@ -92,6 +91,4 @@
 ))
 
 (provide λ_J)
-(provide δ)
-(provide subst)
 (provide λ_J-reduction)
