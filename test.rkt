@@ -1,6 +1,7 @@
 #lang racket
 (require redex)
 (require "lj.rkt")
+(require "lcon.rkt")
 
 #|
  _____       _      
@@ -62,7 +63,7 @@
 (test-->> λ_Con-reduction (term ((assert (λ x (+ x 1)) (,Nat → ,Nat)) 1)) (term 2))
 
 (test-->> λ_Con-reduction (term ((assert (λ x (+ x 1)) (,Pos → ,Pos)) 0)) (term blame)) 
-(test-->> λ_onC-reduction (term ((assert (λ x (- x 1)) (,Pos → ,Pos)) 1)) (term blame))
+(test-->> λ_Con-reduction (term ((assert (λ x (- x 1)) (,Pos → ,Pos)) 1)) (term blame))
 
 (test-->> λ_Con-reduction (term (((assert (λ x (λ y (+ x y))) (,Pos → (,Pos → ,Pos))) 1) 1)) (term 2))
 

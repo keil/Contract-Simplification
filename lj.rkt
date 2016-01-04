@@ -1,6 +1,8 @@
 #lang racket
 (require redex)
 
+(provide (all-defined-out))
+
 #|
  ___          _                           _ 
 / __|_  _ _ _| |_ __ ___ __  __ _ _ _  __| |
@@ -56,10 +58,11 @@
 
 (define-metafunction λ_J
   subst : x any any -> any
-  [(subst x any_1 (λ x any_2)) (λ x any_2)]
-  [(subst x any_1 (λ y any_2))  (λ y (subst x any_1 any_2))]
+  [(subst x any (λ x e)) (λ x e)]
+  [(subst x any (λ y e))  (λ y (subst x any e))]
   [(subst x any x) any]
   [(subst x any y) y]
+  ;; all other expressions
   [(subst x any_1 (any_2 ...)) ((subst x any_1 any_2) ...)]
   [(subst x any_1 any_2) any_2])
 
@@ -86,6 +89,3 @@
         "App"
    )
 ))
-
-(provide λ_J)
-(provide λ_J-reduction)
