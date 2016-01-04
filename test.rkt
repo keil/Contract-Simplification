@@ -20,6 +20,13 @@
 ;(traces λ_J-reduction (term (+ 1 1)))
 ;(traces λ_J-reduction (term (* 1 1)))
 
+;(traces λ_J-reduction (term (- 1 1)))
+;(traces λ_J-reduction (term (/ 1 1)))
+;(traces λ_J-reduction (term (> 1 2)))
+;(traces λ_J-reduction (term (< 1 2)))
+;(traces λ_J-reduction (term (= 1 2)))
+;(traces λ_J-reduction (term (= 1 1)))
+
 ;(traces λ_J-reduction (term (λ x 1)))
 ;(traces λ_J-reduction (term ((λ x 1) 1)))
 

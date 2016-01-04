@@ -32,21 +32,21 @@
   ((u v w) .... blame ((λ x e) @ C))
   
   ;; expressions
-  ((e f g) .... (e @ C))
+  ((e f g) .... (assert e C))
   
   ;; evaluation context
-  ((E F G) .... (E @ C) (v @ (eval E)))
+  ((E F G) .... (assert E C) (v @ (eval E)))
 )
 
 ;; test 
-(redex-match λ_C e (term (1 @ (flat 1))))
-(redex-match λ_C e (term ((+ 1 2) @ (flat 1))))
+(redex-match λ_C e (term (assert 1 (flat 1))))
+(redex-match λ_C e (term (assert (+ 1 2) (flat 1))))
 
-(redex-match λ_C e (term (1 @ (flat (+ 1 1)))))
-(redex-match λ_C e (term ((+ 1 2) @ (flat (+ 1 1)))))
+(redex-match λ_C e (term (assert 1 (flat (+ 1 1)))))
+(redex-match λ_C e (term (assert (+ 1 2) (flat (+ 1 1)))))
 
-(redex-match λ_C e (term ((λ x (+ x 1)) @ ((flat 1) → (flat 1)))))
-(redex-match λ_C e (term (((λ x (+ x 1)) @ ((flat 1) → (flat 1))) 1)))
+(redex-match λ_C e (term (assert (λ x (+ x 1)) ((flat 1) → (flat 1)))))
+(redex-match λ_C e (term ((assert (λ x (+ x 1)) ((flat 1) → (flat 1))) 1)))
 
 ;; _____          _            _   _             
 ;;|  __ \        | |          | | (_)            
@@ -57,7 +57,12 @@
 
 (define λ_C-reduction
   (extend-reduction-relation λ_J-reduction
-   λ_C   (--> (in-hole E (v @ (flat e)))
+   λ_C
+   (--> (in-hole E (assert v C))
+        (in-hole E (v @ C))
+        "Assert"
+   )
+   (--> (in-hole E (v @ (flat e)))
         (in-hole E (v @ (eval (e v))))
         "Flat"
    )
@@ -79,8 +84,11 @@
 ;;; extebd dubst
 
 ; contracts
-(define true (term (flat (λ x 1))))
-(define false (term (flat (λ x 0))))
+(define True (term (flat (λ x 1))))
+(define False (term (flat (λ x 0))))
+
+(define Pos (term (flat (λ x (> x 0)))))
+(define Nat (term (flat (λ x 0))))
 
 ;; test 
 ;(traces λ_C-reduction (term ((+ 1 2) @ (flat (λ x 1)))))

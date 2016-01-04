@@ -17,7 +17,7 @@
 ;;|_____/ \___|_| |_| |_|\__,_|_| |_|\__|_|\___|  \__,_|\___/|_| |_| |_|\__,_|_|_| |_|___/
 
 (define-language λ_J
-  
+    
   ;; Constrants 
   (c natural)
     
@@ -25,7 +25,7 @@
   ((x y z) variable-not-otherwise-mentioned this proto)
   
   ;; Operations
-  (op + *)
+  (op + * - / < > =)
   
   ;; Expressions
   ((e f g)
@@ -71,6 +71,11 @@
   δ : e -> u
   [(δ (+ v w)) ,(+ (term v) (term w))]
   [(δ (* v w)) ,(* (term w) (term v))]
+  [(δ (- v w)) ,(- (term w) (term v))]
+  [(δ (/ v w)) ,(/ (term w) (term v))]
+  [(δ (< v w)) ,(if (< (term v) (term w)) (term 1) (term 0))]
+  [(δ (> v w)) ,(if (> (term v) (term w)) (term 1) (term 0))]
+  [(δ (= v w)) ,(if (= (term v) (term w)) (term 1) (term 0))]
 )
 
 (define λ_J-reduction
@@ -87,4 +92,6 @@
 ))
 
 (provide λ_J)
+(provide δ)
+(provide subst)
 (provide λ_J-reduction)
