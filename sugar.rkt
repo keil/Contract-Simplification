@@ -29,7 +29,7 @@
   ((C D) I Q)
   
   ;; values
-  ((u v w) .... ((λ x e) @ C) blame)
+  ((u v w) .... ((λ x e) @ Q) blame)
   
   ;; expressions
   ((e f g) .... (assert e C))
@@ -39,16 +39,16 @@
 )
 
 ;; test 
-(redex-match λ_C e (term (assert 1 (flat 1))))
-(redex-match λ_C e (term (assert (+ 1 2) (flat 1))))
+;(redex-match λ_C e (term (assert 1 (flat 1))))
+;(redex-match λ_C e (term (assert (+ 1 2) (flat 1))))
 
-(redex-match λ_C e (term (assert 1 (flat (+ 1 1)))))
-(redex-match λ_C e (term (assert (+ 1 2) (flat (+ 1 1)))))
+;(redex-match λ_C e (term (assert 1 (flat (+ 1 1)))))
+;(redex-match λ_C e (term (assert (+ 1 2) (flat (+ 1 1)))))
 
-(redex-match λ_C e (term (assert (λ x (+ x 1)) ((flat 1) → (flat 1)))))
-(redex-match λ_C e (term ((assert (λ x (+ x 1)) ((flat 1) → (flat 1))) 1)))
+;(redex-match λ_C e (term (assert (λ x (+ x 1)) ((flat 1) → (flat 1)))))
+;(redex-match λ_C e (term ((assert (λ x (+ x 1)) ((flat 1) → (flat 1))) 1)))
 
-(redex-match λ_C e (term ((λ x 1) blame)))
+;(redex-match λ_C e (term ((λ x 1) blame)))
 
 ;; _____          _            _   _             
 ;;|  __ \        | |          | | (_)            
@@ -80,13 +80,14 @@
    (--> (in-hole E ((v @ (C → D)) w))
         (in-hole E ((v (w @ C)) @ D))
         "Function"
-   )  
+   )
 ))
 
 ;;; extebd dubst
 
 ; contracts
 (define Any (term (flat (λ x 1))))
+(define Blame (term (flat (λ x 0))))
 
 (define Pos (term (flat (λ x (> x 0)))))
 (define Nat (term (flat (λ x (+ (> x 0) (= x 0))))))
@@ -104,28 +105,12 @@
 
 ;(traces λ_C-reduction (term ((λ f (f 1)) (assert (λ x (+ x 1)) (,Pos → ,Pos)))))
 
-
-
-
 (traces λ_C-reduction (term (
                              (
                               (assert 
                                (λ plus (λ x ((plus x) 1)))
-;                               ((,Pos → (,Pos → ,Pos)) → (,Pos → ,Pos))
-                               Any
+                               ((,Pos → (,Pos → ,Pos)) → (,Pos → ,Pos))
                               )                            
                              (λ x (λ y (+ x y)))
                              ) 1)
                              ))
-
-
-
-;(traces λ_C-reduction (term (
-;                             (
-;                              (assert (λ f (λ x (f x 1))) ((,Pos → (,Pos → ,Pos)) → (,Pos → ,Pos)))
-;                              (λ x (λ y (+ x y)))
-;                              ) 1
-;                             )))
-                             
-
-

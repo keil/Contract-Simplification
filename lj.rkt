@@ -55,16 +55,25 @@
 ;;| | \ \  __/ (_| | |_| | (__| |_| | (_) | | | |
 ;;|_|  \_\___|\__,_|\__,_|\___|\__|_|\___/|_| |_|
 
+;(define-metafunction λ_J
+;  subst : x any any -> any
+;  [(subst x any x) any]
+;  [(subst x any y) y]
+;  [(subst x any c) c]
+;  [(subst x any (op e f)) (op (subst x any e) (subst x any f))]
+;  [(subst x any (λ x e)) (λ x e)]
+;  [(subst x any (λ y e)) (λ y (subst x any e))]
+;  [(subst x any (e f)) ((subst x any e) (subst x any f))]
+;)
+
 (define-metafunction λ_J
   subst : x any any -> any
+  [(subst x any_1 (λ x any_2)) (λ x any_2)]
+  [(subst x any_1 (λ y any_2))  (λ y (subst x any_1 any_2))]
   [(subst x any x) any]
   [(subst x any y) y]
-  [(subst x any c) c]
-  [(subst x any (op e f)) (op (subst x any e) (subst x any f))]
-  [(subst x any (λ x e)) (λ x e)]
-  [(subst x any (λ y e)) (λ y (subst x any e))]
-  [(subst x any (e f)) ((subst x any e) (subst x any f))]
-)
+  [(subst x any_1 (any_2 ...)) ((subst x any_1 any_2) ...)]
+  [(subst x any_1 any_2) any_2])
 
 (define-metafunction λ_J
   δ : e -> u
