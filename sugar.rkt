@@ -29,7 +29,7 @@
   ((C D) I Q)
   
   ;; values
-  ((u v w) .... ((λ x e) @ C))
+  ((u v w) .... blame ((λ x e) @ C))
   
   ;; expressions
   ((e f g) .... (e @ C))
@@ -67,17 +67,27 @@
    )
    (--> (in-hole E (v @ (eval 0)))
         (in-hole E blame)
-        "Blmae"
+        "Blame"
+   )
+   
+   (--> (in-hole E ((v @ (C → D)) w))
+        (in-hole E ((v (w @ C)) @ D))
+        "Function"
    )
 ))
+
+;;; extebd dubst
 
 ; contracts
 (define true (term (flat (λ x 1))))
 (define false (term (flat (λ x 0))))
 
 ;; test 
-(traces λ_C-reduction (term ((+ 1 2) @ (flat (λ x 1)))))
-(traces λ_C-reduction (term ((+ 1 2) @ ,false)))
+;(traces λ_C-reduction (term ((+ 1 2) @ (flat (λ x 1)))))
+;(traces λ_C-reduction (term ((+ 1 2) @ ,false)))
+
+(traces λ_C-reduction (term (((λ x 1) @ (,true → ,true)) 1)))
+
 
 ;(traces let-reduction (term xx))
 ;(traces let-reduction (term (1 + 2)))
