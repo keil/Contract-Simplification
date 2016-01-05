@@ -1,0 +1,22 @@
+Baseline Optimization
+=====================
+
+Reduces Flat Contracts
+----------------------
+
+Reduces all flat contracts that can be checked at compile time. In particular
+this are all:
+
+i) c @ (flat e) 
+ii) \ x e @ (flat e)
+
+Only c @ (flat e) expressions remain.
+
+Reduce Function Contracts
+-------------------------
+
+Reduces all function contracts on non-function objects.
+
+c @ (C -> D)
+
+Only function contracts on function (contracted functions) remain.

@@ -1,0 +1,20 @@
+\J
+==
+
+- Extend Syntax with bololean and string values
+- More native operators
+- Overload + operator 
+
+\Con
+====
+
+- Implement blame semantics/ callbacks
+- Implement Intersection and Union Contracts
+- (Implement Contract Abstraction/ Dependent Contract)
+
+
+Test
+====
+
+- Implement a simulation relation that checks if the unmodified 
+  and the modified code lead to the same outcome

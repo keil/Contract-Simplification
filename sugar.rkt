@@ -80,6 +80,11 @@
 ;(apply-reduction-relation* λCon-reduction (term (1 @ (flat (λ x 1)))))
 ;(apply-reduction-relation* λCon-reduction (term (assert 1 (flat (λ x 1)))))  
 
+(test-->> Baseline-reduction (term (assert (assert 1 ,Nat) ,Nat)) (term 1))
+(test-->> Baseline-reduction (term (assert (assert 0 ,Nat) ,Nat)) (term 0))
+;(test-->> Baseline-reduction (term (assert (assert 0 ,Pos) ,Nat)) (term blmae))
+(test-->> Baseline-reduction (term (assert (assert 0 ,Nat) ,Pos)) (term blame))
+
 (test-->> Baseline-reduction (term ((λ x (+ x 1)) (assert 1 ,Nat))) (term ((λ x (+ x 1)) 1)))
 (test-->> Baseline-reduction (term ((λ x (+ x (assert 1 ,Nat))) 1)) (term ((λ x (+ x 1)) 1)))
 
@@ -88,5 +93,6 @@
 (test-->> Baseline-reduction (term (assert 1 (,Nat → ,Nat))) (term 1)) 
 (test-->> Baseline-reduction (term (assert x (,Nat → ,Nat))) (term (assert x (,Nat → ,Nat))))
 
+(traces Baseline-reduction (term (assert (assert 0 ,Pos) ,Nat)))
 ;(traces Baseline-reduction (term ((λ x (+ x 1)) (assert 1 ,Nat))))
 ;(traces Baseline-reduction (term ((λ x (+ x (assert 1 ,Nat))) 1)))
