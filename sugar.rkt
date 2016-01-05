@@ -18,7 +18,7 @@
                                                                   
 |#
 
-(define-extended-language λ_Con2 λ_Con
+(define-extended-language λCon2 λCon
   
   ;; terms (final terms)
   ((r s t) 
@@ -41,7 +41,7 @@
 )
 
 ;; predicates
-(define done? (redex-match? λ_Con2 r))
+(define done? (redex-match? λCon2 r))
 
 (done? (term (+ 1 2)))
 (done? (term ((λ x (+ x 1)) 1)))
@@ -51,8 +51,6 @@
 (done? (term ((λ x (+ x (assert 1 ,Nat))) 1)))
 (done? (term ((λ x (+ (assert x ,Nat) 1)) 1)))
 
-
-
 #|
  ___        _         _   _          
 | _ \___ __| |_  _ __| |_(_)___ _ _  
@@ -60,30 +58,20 @@
 |_|_\___\__,_|\_,_\__|\__|_\___/_||_|
                                      
 |#
-#|
-(define λ_Con-reduction
-  (extend-reduction-relation λ_J-reduction
-   λ_Con
-   (--> (in-hole E (assert v C))
-        (in-hole E (v @ C))
-        "Assert"
+
+(define Flat-reduction
+  (reduction-relation
+   λCon2
+   (--> (in-hole R (v @ (flat e)))
+        (in-hole R (apply-reduction-relation λCon-reduction (v @ (flat e))))
+        "Red-Flat"
    )
-   (--> (in-hole E (v @ (flat e)))
-        (in-hole E (v @ (eval (e v))))
-        "Flat"
+   (--> (in-hole R (assert v (flat e)))
+        (in-hole R (apply-reduction-relation λCon-reduction (v @ (flat e))))
+        "Red-2-Flat"
    )
-   (--> (in-hole E (v @ (eval w)))
-        (in-hole E v)
-        "Unit"
-        (side-condition (> (term w) 0))
-   )
-   (--> (in-hole E (v @ (eval 0)))
-        blame
-        "Blame"
-   )
-   (--> (in-hole E ((v @ (C → D)) w))
-        (in-hole E ((v (w @ C)) @ D))
-        "Function"
+   (--> (in-hole R (assert c (C → D)))
+        (in-hole R (c))
+        "Red-Function"
    )
 ))
-|#

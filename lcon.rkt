@@ -17,7 +17,7 @@
                                                                   
 |#
 
-(define-extended-language λ_Con λ_J
+(define-extended-language λCon λ_J
   
   ;; Immediate Contracts
   ((I J) (flat e)) 
@@ -46,9 +46,9 @@
                                      
 |#
 
-(define λ_Con-reduction
+(define λCon-reduction
   (extend-reduction-relation λ_J-reduction
-   λ_Con
+   λCon
    (--> (in-hole E (assert v C))
         (in-hole E (v @ C))
         "Assert"
