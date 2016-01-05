@@ -22,20 +22,21 @@
 (define Pos
   (term (flat (λ x (> x 0)))))
 
+(define Neg
+  (term (flat (λ x (< x 0)))))
+
 (define Nat
   (term (flat (λ x (or (> x 0) (= x 0))))))
 
-;; examples 
-;(traces λ_C-reduction (term ((+ 1 2) @ (flat (λ x 1)))))
-;(traces λ_C-reduction (term ((+ 1 2) @ ,Any)))
 
-;(traces λ_C-reduction (term ((assert (λ x (+ x 1)) (,Nat → ,Nat)) 1)))
+(define Num
+  (term (flat (λ x (number?)))))
 
-;(traces λ_C-reduction (term ((assert (λ x (+ x 1)) (,Pos → ,Pos)) 0)))
-;(traces λ_C-reduction (term ((assert (λ x (- x 1)) (,Pos → ,Pos)) 1)))
+(define Str
+  (term (flat (λ x (string?)))))
 
-;(traces λ_C-reduction (term (((assert (λ x (λ y (+ x y))) (,Pos → (,Pos → ,Pos))) 1) 1)))
+(define Bool
+  (term (flat (λ x (boolean?)))))
 
-;(traces λ_C-reduction (term ((λ f (f 1)) (assert (λ x (+ x 1)) (,Pos → ,Pos)))))
-
-;(traces λ_C-reduction (term (((assert (λ plus (λ x ((plus x) 1))) ((,Pos → (,Pos → ,Pos)) → (,Pos → ,Pos))) (λ x (λ y (+ x y)))) 1)))
+;; TODO, write nore contracts in the stzle of
+;; http://docs.racket-lang.org/reference/number-types.html

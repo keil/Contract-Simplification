@@ -28,7 +28,7 @@
   ((x y z) variable-not-otherwise-mentioned)
   
   ;; Operations
-  (op + * - / < > = and or not)
+  (op + * - / < > = and or not number? string? boolean?)
   
   ;; Values
   ((U V W) K (λ x M))
