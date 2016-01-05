@@ -70,3 +70,5 @@
 (test-->> λ_Con-reduction (term ((λ f (f 1)) (assert (λ x (+ x 1)) (,Pos → ,Pos)))) (term 2))
 
 (test-->> λ_Con-reduction (term (((assert (λ plus (λ x ((plus x) 1))) ((,Pos → (,Pos → ,Pos)) → (,Pos → ,Pos))) (λ x (λ y (+ x y)))) 1)) (term 2))
+
+(test-results)

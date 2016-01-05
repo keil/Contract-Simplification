@@ -18,7 +18,7 @@
 
 (define-language λ_J
     
-  ;; Comstants 
+  ;; Constants 
   (c natural)
     
   ;; Variables
