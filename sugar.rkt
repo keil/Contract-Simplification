@@ -31,6 +31,7 @@
   ;; reduction context
   ((R S T) 
    hole
+   (λ x R)
    (op R e)
    (op r R)
    (R e)
@@ -59,19 +60,33 @@
                                      
 |#
 
-(define Flat-reduction
+(define Baseline-reduction
   (reduction-relation
    λCon2
    (--> (in-hole R (v @ (flat e)))
-        (in-hole R (apply-reduction-relation λCon-reduction (v @ (flat e))))
+        (in-hole R ,(car (apply-reduction-relation* λCon-reduction (term (v @ (flat e))))))
         "Red-Flat"
    )
-   (--> (in-hole R (assert v (flat e)))
-        (in-hole R (apply-reduction-relation λCon-reduction (v @ (flat e))))
+   (--> (in-hole R (assert v I))
+        (in-hole R ,(car (apply-reduction-relation* λCon-reduction (term (assert v I)))))
         "Red-2-Flat"
    )
    (--> (in-hole R (assert c (C → D)))
-        (in-hole R (c))
+        (in-hole R c)
         "Red-Function"
    )
 ))
+
+;(apply-reduction-relation* λCon-reduction (term (1 @ (flat (λ x 1)))))
+;(apply-reduction-relation* λCon-reduction (term (assert 1 (flat (λ x 1)))))  
+
+(test-->> Baseline-reduction (term ((λ x (+ x 1)) (assert 1 ,Nat))) (term ((λ x (+ x 1)) 1)))
+(test-->> Baseline-reduction (term ((λ x (+ x (assert 1 ,Nat))) 1)) (term ((λ x (+ x 1)) 1)))
+
+(test-->> Baseline-reduction (term ((λ x (+ (assert x ,Nat) 1)) 1)) (term ((λ x (+ (assert x ,Nat) 1)) 1)))
+ 
+(test-->> Baseline-reduction (term (assert 1 (,Nat → ,Nat))) (term 1)) 
+(test-->> Baseline-reduction (term (assert x (,Nat → ,Nat))) (term (assert x (,Nat → ,Nat))))
+
+;(traces Baseline-reduction (term ((λ x (+ x 1)) (assert 1 ,Nat))))
+;(traces Baseline-reduction (term ((λ x (+ x (assert 1 ,Nat))) 1)))
