@@ -16,36 +16,25 @@
                                                                   
 |#
 
-(define-language λ_J
-    
+(define-language λJ
+
+  ;; Terms
+  ((L M N) K x (λ x M) (M N) (op M ...))
+
   ;; Constants 
-  (c natural)
+  (K number boolean string)
     
   ;; Variables
-  ((x y z) variable-not-otherwise-mentioned this proto)
+  ((x y z) variable-not-otherwise-mentioned)
   
   ;; Operations
   (op + * - / < > =)
   
   ;; Values
-  ((u v w) c (λ x e))
-  
-  ;; Expressions
-  ((e f g)
-   v
-   x
-   (op e f)
-   (e f)
-  )
+  ((U V W) K (λ x M))
       
-  ;; Evaluation Contexts
-  ((E F G)
-   hole
-   (op E f)
-   (op v F)
-   (E f)
-   (v F)
-  )
+  ;; Contexts
+  ((E F) hole (E N) (V E) (op V ... E M ...))
 )
 
 #|
@@ -56,36 +45,50 @@
                                      
 |#
 
-(define-metafunction λ_J
+(define-metafunction λJ
   subst : x any any -> any
-  [(subst x any (λ x e)) (λ x e)]
-  [(subst x any (λ y e))  (λ y (subst x any e))]
+  ;; stop substitution if x is bound
+  [(subst x any (λ x M)) (λ x M)]
+  ;; unroll substitution
+  [(subst x any (λ y e)) (λ y (subst x any e))]
+  ;; replatex x
   [(subst x any x) any]
+  ;; don't replace x if x and y are different
   [(subst x any y) y]
-  ;; all other expressions
+  ;; all other terms
   [(subst x any_1 (any_2 ...)) ((subst x any_1 any_2) ...)]
   [(subst x any_1 any_2) any_2])
 
-(define-metafunction λ_J
-  δ : e -> u
-  [(δ (+ v w)) ,(+ (term v) (term w))]
-  [(δ (* v w)) ,(* (term w) (term v))]
-  [(δ (- v w)) ,(- (term w) (term v))]
-  [(δ (/ v w)) ,(/ (term w) (term v))]
-  [(δ (< v w)) ,(if (< (term v) (term w)) (term 1) (term 0))]
-  [(δ (> v w)) ,(if (> (term v) (term w)) (term 1) (term 0))]
-  [(δ (= v w)) ,(if (= (term v) (term w)) (term 1) (term 0))]
+;(define-metafunction λJ
+;  δ : (op V ...) -> W
+;  [(δ (+ V ...)) ,(+ (term V) ...)]
+;  [(δ (* v w)) ,(* (term w) (term v))]
+;  [(δ (- v w)) ,(- (term w) (term v))]
+;  [(δ (/ v w)) ,(/ (term w) (term v))]
+;  [(δ (< v w)) ,(if (< (term v) (term w)) (term 1) (term 0))]
+;  [(δ (> v w)) ,(if (> (term v) (term w)) (term 1) (term 0))]
+;  [(δ (= v w)) ,(if (= (term v) (term w)) (term 1) (term 0))]
+;)
+
+(define-metafunction λJ
+  δ : (op K ...) -> K
+  [(δ (+ K ...)) (term (+ K ...))]
+;    [(δ (+ K ...)) ,(eval (term (op K ...)))]
 )
 
-(define λ_J-reduction
+(define λJ-reduction
   (reduction-relation
-   λ_J
-   (--> (in-hole E (op v w))
-        (in-hole E (δ (op v w)))
+   λJ
+   (--> (in-hole E (op V ...))
+        (in-hole E (δ (op V ...)))
         "δ"
    )
-   (--> (in-hole E ((λ x e) v))
-        (in-hole E (subst x v e))
-        "App"
+   (--> (in-hole E ((λ x M) V))
+        (in-hole E (subst x V M))
+        "β"
    )
 ))
+(string 1)
+(string-append 1 "1")
+(redex-match λJ M (term (+ 1 1)))
+(traces  λJ-reduction (term (+ 1 1)))
