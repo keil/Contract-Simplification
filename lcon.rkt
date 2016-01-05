@@ -20,23 +20,22 @@
 (define-extended-language λCon λJ
   
   ;; Contracts
-  ((C D) I Q (C ∪ D) (I ∩ Q))
+  ((C D) I Q (C ∪ D) (I ∩ C))
   
   ; Immediate Contracts
-  ((I J) (flat M) (I ∩ J)) 
+  ((I J) (flat M)) 
 
   ; Delayed Contracts
   ((Q R) (C → D) (x → C) (Q ∩ R))
+
+  ;; Values
+  ((U V W) .... ((λ x M) @ Q))
   
-  
-  ;; values
-  ((u v w) .... ((λ x e) @ Q) blame)
-  
-  ;; expressions
-  ((e f g) .... (assert e C))
+  ;; Terms
+  ((L M N) .... (e @ C))
   
   ;; evaluation context
-  ((E F G) .... (assert E C) (E @ C) (v @ (eval E)))
+  ((E F) .... (E @ C) (v @ (eval E)))
 )
 
 #|
@@ -48,57 +47,60 @@
 |#
 
 (define λCon-reduction
-  (extend-reduction-relation λ_J-reduction
+  (extend-reduction-relation λJ-reduction
    λCon
-   (--> (in-hole E (assert v C))
-        (in-hole E (v @ C))
-        "Assert"
-   )
-   (--> (in-hole E (v @ (flat e)))
-        (in-hole E (v @ (eval (e v))))
+;   (--> (in-hole E (assert v C))
+;        (in-hole E (v @ C))
+;        "Assert"
+;   )
+   ;; Immediate Contarcts
+   (--> (in-hole E (V @ (flat M)))
+        (in-hole E (V @ (eval (M V))))
         "Flat"
    )
-   (--> (in-hole E (v @ (eval w)))
-        (in-hole E v)
+    (--> (in-hole E (V @ (eval W)))
+        (in-hole E V)
         "Unit"
-        (side-condition (> (term w) 0))
+        (side-condition (not (equal? (term W) #f)))
    )
-   (--> (in-hole E (v @ (eval 0)))
-        blame
+   (--> (in-hole E (V @ (eval #f)))
+        blame ;; TODO, Change to V and introduce top-level blame
         "Blame"
    )
-   (--> (in-hole E ((v @ (C → D)) w))
-        (in-hole E ((v (w @ C)) @ D))
-        "Function"
+   (--> (in-hole E (V @ (C ∪ D)))
+        (in-hole E ((V @ C) @ D))
+        "Union"
+   )
+   (--> (in-hole E (V @ (I ∩ C)))
+        (in-hole E ((V @ I) @ C))
+        "Intersection"
+   )
+   ;; Delayed Contarcts
+   (--> (in-hole E ((V @ (C → D)) W))
+        (in-hole E ((V (W @ C)) @ D))
+        "D-Function"
+   )
+   (--> (in-hole E ((V @ (x → C)) W)) ;; TODO
+        (in-hole E ((V W) @ C))
+        "D-Dependent"
+   )
+   (--> (in-hole E ((V @ (Q ∩ R)) W))
+        (in-hole E (((V @ Q) @ R) W))
+        "D-Intersection"
    )
 ))
 
 #|
-  ___         _               _      
- / __|___ _ _| |_ _ _ __ _ __| |_ ___
-| (__/ _ \ ' \  _| '_/ _` / _|  _(_-<
- \___\___/_||_\__|_| \__,_\__|\__/__/
-                                     
+ ___            _ _         _                         _ 
+| _ \_ _ ___ __| (_)__ __ _| |_ ___ ___  __ _ _ _  __| |
+|  _/ '_/ -_) _` | / _/ _` |  _/ -_|_-< / _` | ' \/ _` |
+|_| |_| \___\__,_|_\__\__,_|\__\___/__/ \__,_|_||_\__,_|
+                                                        
+ ___             _   _             
+| __|  _ _ _  __| |_(_)___ _ _  ___
+| _| || | ' \/ _|  _| / _ \ ' \(_-<
+|_| \_,_|_||_\__|\__|_\___/_||_/__/
+                                   
 |#
 
-; contracts
-(define Any (term (flat (λ x 1))))
-(define Blame (term (flat (λ x 0))))
-
-(define Pos (term (flat (λ x (> x 0)))))
-(define Nat (term (flat (λ x (+ (> x 0) (= x 0))))))
-
-;; examples 
-;(traces λ_C-reduction (term ((+ 1 2) @ (flat (λ x 1)))))
-;(traces λ_C-reduction (term ((+ 1 2) @ ,Any)))
-
-;(traces λ_C-reduction (term ((assert (λ x (+ x 1)) (,Nat → ,Nat)) 1)))
-
-;(traces λ_C-reduction (term ((assert (λ x (+ x 1)) (,Pos → ,Pos)) 0)))
-;(traces λ_C-reduction (term ((assert (λ x (- x 1)) (,Pos → ,Pos)) 1)))
-
-;(traces λ_C-reduction (term (((assert (λ x (λ y (+ x y))) (,Pos → (,Pos → ,Pos))) 1) 1)))
-
-;(traces λ_C-reduction (term ((λ f (f 1)) (assert (λ x (+ x 1)) (,Pos → ,Pos)))))
-
-;(traces λ_C-reduction (term (((assert (λ plus (λ x ((plus x) 1))) ((,Pos → (,Pos → ,Pos)) → (,Pos → ,Pos))) (λ x (λ y (+ x y)))) 1)))
+(define λCon-value? (redex-match? λCon V))
