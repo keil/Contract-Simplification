@@ -79,7 +79,7 @@
 ;(traces Baseline-reduction (term ((λ x (+ x (assert 1 ,Nat))) 1)))
 
 
-
+(stepper Baseline-reduction (term (assert (assert 0 ,Pos) ,Nat)))
 
 (define done? (redex-match? λCon-Baseline S))
 
