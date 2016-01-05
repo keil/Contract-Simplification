@@ -23,7 +23,7 @@
   (term (flat (λ x (> x 0)))))
 
 (define Nat
-  (term (flat (λ x (& (> x 0) (= x 0))))))
+  (term (flat (λ x (or (> x 0) (= x 0))))))
 
 ;; examples 
 ;(traces λ_C-reduction (term ((+ 1 2) @ (flat (λ x 1)))))
