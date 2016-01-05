@@ -1,5 +1,6 @@
 #lang racket
 (require redex)
+
 (require "lj.rkt")
 
 (provide (all-defined-out))
@@ -23,7 +24,7 @@
   ((C D) I Q (C ∪ D) (I ∩ C))
   
   ; Immediate Contracts
-  ((I J) (flat M)) 
+  ((I J) (flat M))
 
   ; Delayed Contracts
   ((Q R) (C → D) (x → C) (Q ∩ R))
@@ -32,11 +33,16 @@
   ((U V W) .... ((λ x M) @ Q))
   
   ;; Terms
-  ((L M N) .... (e @ C))
+  ((L M N) .... (M @ C))
   
-  ;; evaluation context
-  ((E F) .... (E @ C) (v @ (eval E)))
+  ;; Contexts
+  ((E F) .... (E @ C) (V @ (eval E)))
+  
+  ;; False Value
+  (false #f 0 "")
 )
+
+(define false? (redex-match? λCon false))
 
 #|
  ___        _         _   _          
@@ -58,14 +64,16 @@
         (in-hole E (V @ (eval (M V))))
         "Flat"
    )
-    (--> (in-hole E (V @ (eval W)))
+   (--> (in-hole E (V @ (eval W)))
         (in-hole E V)
         "Unit"
-        (side-condition (not (equal? (term W) #f)))
+        (side-condition (not (false? (term W))))
+        ;(side-condition (not (equal? (term W) #f)))
    )
-   (--> (in-hole E (V @ (eval #f)))
+   (--> (in-hole E (V @ (eval W)))
         blame ;; TODO, Change to V and introduce top-level blame
         "Blame"
+        (side-condition (false? (term W)))
    )
    (--> (in-hole E (V @ (C ∪ D)))
         (in-hole E ((V @ C) @ D))

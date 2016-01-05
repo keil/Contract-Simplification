@@ -1,6 +1,5 @@
 #lang racket
 (require redex)
-(require racket/format)
 
 (provide (all-defined-out))
 
