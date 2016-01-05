@@ -17,16 +17,17 @@
                                                                   
 |#
 
-(define-extended-language λCon λ_J
-  
-  ;; Immediate Contracts
-  ((I J) (flat e)) 
-  
-  ; Delayed Contracts
-  ((Q R) (C → D))
+(define-extended-language λCon λJ
   
   ;; Contracts
-  ((C D) I Q)
+  ((C D) I Q (C ∪ D) (I ∩ Q))
+  
+  ; Immediate Contracts
+  ((I J) (flat M) (I ∩ J)) 
+
+  ; Delayed Contracts
+  ((Q R) (C → D) (x → C) (Q ∩ R))
+  
   
   ;; values
   ((u v w) .... ((λ x e) @ Q) blame)
