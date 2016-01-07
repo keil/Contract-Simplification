@@ -3,8 +3,10 @@
 
 (require "lj.rkt")
 (require "lcon.rkt")
-(require "baseline.rkt")
+
 (require "contracts.rkt")
+
+(provide (all-defined-out))
 
 #|
  ___               _ _            ___        _         _   _          
@@ -19,14 +21,14 @@
 ;; Test Cases
 
 (define 
-  (example-0)
+  example-0
   (term ((λ x (+ x (1 @ ,Nat?))) 1)))
 
 ;;(compare example-0)
 
 
 (define 
-  (example-1)
+  example-1
   (term ((λ f (f 1)) ((λ x (+ x 1)) @ (,Num? → ,Num?)))))
 
 ;; Contract at different prosiitions
@@ -34,12 +36,15 @@
 ;; and with or without concrete top-level application
 
 (define 
-  (example-addOne1)
+  example-addOne1
   (term 
    ((λ plus (λ x ((plus 1) x))) ((λ x (λ y (+ x y))) @ (,Num? → (,Num? → ,Num?))))))
 
 (define 
-  (example-addOne2)
+  example-addOne2
   (term 
-   (((λ plus (λ x ((plus 1) x))) @ ((,Num? → (,Num? → ,Num?)) → (,Num? → ,Num?)) (λ x (λ y (+ x y)))))))
+   (((λ plus (λ x ((plus 1) x))) @ ((,Num? → (,Num? → ,Num?)) → (,Num? → ,Num?))) (λ x (λ y (+ x y))))))
+
+
+
 

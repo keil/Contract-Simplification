@@ -40,8 +40,21 @@
 
 
 
+; Test  λCon-Baseline2/ Reduction
 
+(test-->
+ Baseline-reduction2
+ (term
+  ((λ f (f 1)) ((λ x (+ x 1)) @ (,Num? → ,Num?))))
+ (term
+  ((λ f ((f @ (,Num? → ,Num?)) 1)) (λ x (+ x 1)))))
 
+(test-->>
+ Baseline-reduction2
+ (term
+  ((λ f (f 1)) ((λ x (+ x 1)) @ (,Num? → ,Num?))))
+ (term
+  (((λ f (f 1)) (λ x (+ x 1))) @ ,Num?)))
 
 
 

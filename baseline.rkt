@@ -3,7 +3,9 @@
 
 (require "lj.rkt")
 (require "lcon.rkt")
+
 (require "contracts.rkt")
+(require "examples.rkt")
 
 (provide (all-defined-out))
 
@@ -110,79 +112,42 @@
    )
    
    ;; Unfold
-   (--> (in-hole H ((M @ (C → D)) N))
-        (in-hole H ((M (N @ C)) @ D))
+   (--> (in-hole H ((S @ (C → D)) N)) ;; Shoidl the arg also be sumplified ?
+        (in-hole H ((S (N @ C)) @ D))
         "Unfold-Function"
    )
-   (--> (in-hole H ((M @ (Q ∩ R)) N))
-        (in-hole H (((M @ Q) @ R) N))
+   (--> (in-hole H ((S @ (Q ∩ R)) N))
+        (in-hole H (((S @ Q) @ R) N))
         "Unfold-Intersection"
    )
    
    ;; TODO
    ;; collaps argument contarcts, because teh arg may be used several times
    ;; Move/ Propagate
-   
+   ;; Lift Domain
+
    ;; Lift
    (--> (in-hole H (λ x (S @ C)))
         (in-hole H ((λ x S) @ (,Any? → C)))
         "Lift-Range?"
    )
+   
+   ;; Collapse
+   (--> (in-hole H ((S @ C) @ D)) ;; Only delayed contarcts?
+        (in-hole H (S @ (C • D))) ;; Did not work for more than two contract, right?
+        "Collaps"
+   )
+   
+   ;; TODO, implement predicate refinement
+   ;; and merge contracts
+   
+   
+   
 ))
 
 
 
-
-
-(traces 
- Baseline-reduction2
- (term
-  ((λ f (f 1)) ((λ x (+ x 1)) @ (,Num? → ,Num?)))))
-
-
-(test-->
- Baseline-reduction2
- (term
-  ((λ f (f 1)) ((λ x (+ x 1)) @ (,Num? → ,Num?))))
- (term
-  ((λ f ((f @ (,Num? → ,Num?)) 1)) (λ x (+ x 1)))))
-
-;(test-->>
-; Sugar-reduction
-; (term
-;  ((λ f (f 1)) ((λ x (+ x 1)) @ (,Num → ,Num))))
-; (term
-;  ((λ f ((f 1) @ ,Num)) (λ x (+ x 1)))))
-
-(test-->>
- Baseline-reduction2
- (term
-  ((λ f (f 1)) ((λ x (+ x 1)) @ (,Num? → ,Num?))))
- (term
-  (((λ f (f 1)) (λ x (+ x 1))) @ ,Num?)))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-;; TODO
-;; write a test that checks if all terms from S are also M
-;; every  is also an λCon-term
-
-
-
-
-
-
-
-
+;(traces Baseline-reduction2 example-1)
+(traces Baseline-reduction2 example-addOne1)
+(traces Baseline-reduction2 example-addOne2)
+;(traces Baseline-reduction2 
