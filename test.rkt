@@ -31,7 +31,7 @@
 
 (define 
   (example-0)
-  (term ((λ x (+ x (1 @ ,Nat))) 1)))
+  (term ((λ x (+ x (1 @ ,Nat?))) 1)))
 
 
 

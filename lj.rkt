@@ -51,7 +51,7 @@
 (define-metafunction λJ
   subst : x any any -> any
   [(subst x any (λ x M)) (λ x M)]
-  [(subst x any (λ y e)) (λ y (subst x any e))]
+  [(subst x any (λ y M)) (λ y (subst x any M))]
   [(subst x any x) any]
   [(subst x any y) y]
   [(subst x any_1 (any_2 ...)) ((subst x any_1 any_2) ...)]

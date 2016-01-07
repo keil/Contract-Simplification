@@ -12,30 +12,29 @@
                                      
 |#
 
-
-(define Any
+(define Any?
   (term (flat (λ x #t))))
 
-(define Blame
+(define None?
   (term (flat (λ x #f))))
 
-(define Pos
+(define Pos?
   (term (flat (λ x (> x 0)))))
 
-(define Neg
+(define Neg?
   (term (flat (λ x (< x 0)))))
 
-(define Nat
+(define Nat?
   (term (flat (λ x (or (> x 0) (= x 0))))))
 
 
-(define Num
+(define Num?
   (term (flat (λ x (number? x)))))
 
-(define Str
+(define Str?
   (term (flat (λ x (string? x)))))
 
-(define Bool
+(define Bool?
   (term (flat (λ x (boolean? x)))))
 
 ;; TODO, write nore contracts in the style of
