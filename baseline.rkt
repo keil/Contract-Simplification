@@ -29,13 +29,13 @@
    ;; All term from λJ
    K x (λ x T) (S T) (op T ...)
    ;; Non-reducible contract assertions
-   (x @ C) ((λ x M) @ Q))
- 
+   (x @ I))
+
   ;; TODO
-  ;; why not using x@I in the definition?
-  ;; Restrict Application in final terms to λJ exressions
-  ;; thus uncontracted or x@C
-  ;; (λ x M) @ Q) might be further redusable
+  ;; One top-level function-contract might remain
+  ;; because it cannot be reduced
+  ;; (as it is the final interface description)
+  ;;((λ x M) @ Q))
   
   ;; Baseline Reduction Context
   ((G H) hole (λ x H) (op S ... H M ...) (H M) (S H) (H @ C))
@@ -56,6 +56,9 @@
 ;; Baseline Reduction
 ;; Verifies all (immediate) contracts 
 ;; that can be check at compile time
+
+;; TODO
+;; implement top-level blame rule
 
 (define Baseline-reduction
   (reduction-relation

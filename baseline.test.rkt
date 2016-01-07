@@ -38,4 +38,15 @@
 (test-->> Baseline-reduction (term (1 @ (,Nat? → ,Nat?))) (term 1)) 
 (test-->> Baseline-reduction (term (x @ (,Nat? → ,Nat?))) (term (x @ (,Nat? → ,Nat?))))
 
+
+
+
+
+
+
+
+
+
+
+
 (test-results)
