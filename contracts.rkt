@@ -18,14 +18,7 @@
 (define None?
   (term (flat (λ x #f))))
 
-(define Pos?
-  (term (flat (λ x (> x 0)))))
 
-(define Neg?
-  (term (flat (λ x (< x 0)))))
-
-(define Nat?
-  (term (flat (λ x (or (> x 0) (= x 0))))))
 
 
 (define Num?
@@ -36,6 +29,21 @@
 
 (define Bool?
   (term (flat (λ x (boolean? x)))))
+
+
+
+
+(define Pos?
+  (term (flat (λ x (> x 0)))))
+
+(define Neg?
+  (term (flat (λ x (< x 0)))))
+
+(define Nat?
+  (term (flat (λ x (or (> x 0) (= x 0))))))
+
+
+
 
 ;; TODO, write nore contracts in the style of
 ;; http://docs.racket-lang.org/reference/number-types.html
