@@ -53,7 +53,24 @@
                                      
 |#
 
+;; Baseline Reduction
+;; Verifies all (immediate) contracts 
+;; that can be check at compile time
 
+(define Baseline-reduction
+  (reduction-relation
+   λCon-Baseline
+   
+   (--> (in-hole H (V @ I))
+        (in-hole H ,(car (apply-reduction-relation* λCon-reduction (term (V @ I)))))
+        "Verify"
+   )
+   
+   (--> (in-hole H (K @ Q))
+        (in-hole H K)
+        "Skip"
+   )
+))
 
 
 
@@ -101,16 +118,7 @@
         "Unfold-Intersection"
    )
    
-   ;; Static evaluation
-   ;; Verify
-   (--> (in-hole H (V @ I))
-        (in-hole H ,(car (apply-reduction-relation* λCon-reduction (term (V @ I)))))
-        "Verify"
-   )
-   (--> (in-hole H (K @ Q))
-        (in-hole H K)
-        "Skip"
-   )
+
    
    
    
@@ -235,16 +243,3 @@
                                      
 |#
 
-(define Baseline-reduction
-  (reduction-relation
-   λCon-Baseline
-   
-   (--> (in-hole B (V @ I))
-        (in-hole B ,(car (apply-reduction-relation* λCon-reduction (term (V @ I)))))
-        "Baseline-Flat"
-   )
-   (--> (in-hole B (K @ Q))
-        (in-hole B K)
-        "Baseline-Function"
-   )
-))
