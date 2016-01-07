@@ -111,7 +111,7 @@
    ;; Lift
    
    (--> (in-hole H (λ x (S @ C)))
-        (in-hole H ((λ x S) @ (,Any → C)))
+        (in-hole H ((λ x S) @ (,Any? → C)))
         "Lift-Range?"
    )
 ))
@@ -121,15 +121,15 @@
 (traces 
  Sugar-reduction
  (term
-  ((λ f (f 1)) ((λ x (+ x 1)) @ (,Num → ,Num)))))
+  ((λ f (f 1)) ((λ x (+ x 1)) @ (,Num? → ,Num?)))))
 
 
 (test-->
  Sugar-reduction
  (term
-  ((λ f (f 1)) ((λ x (+ x 1)) @ (,Num → ,Num))))
+  ((λ f (f 1)) ((λ x (+ x 1)) @ (,Num? → ,Num?))))
  (term
-  ((λ f ((f @ (,Num → ,Num)) 1)) (λ x (+ x 1)))))
+  ((λ f ((f @ (,Num? → ,Num?)) 1)) (λ x (+ x 1)))))
 
 ;(test-->>
 ; Sugar-reduction
@@ -141,7 +141,7 @@
 (test-->>
  Sugar-reduction
  (term
-  ((λ f (f 1)) ((λ x (+ x 1)) @ (,Num → ,Num))))
+  ((λ f (f 1)) ((λ x (+ x 1)) @ (,Num? → ,Num?))))
  (term
-  (((λ f (f 1)) (λ x (+ x 1))) @ ,Num)))
+  (((λ f (f 1)) (λ x (+ x 1))) @ ,Num?)))
 
