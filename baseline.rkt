@@ -72,12 +72,9 @@
    )
 ))
 
-
-
-
-
 ;; Function unroll : x Q M -> N
-;; Unrolls a delayed contract Q to all 
+;; Unrolls a delayed contract Q of function x 
+;; to all uses of x
 
 (define-metafunction λCon-Baseline
   unroll : x Q M -> N
@@ -99,15 +96,16 @@
   [(unroll x Q any) any]
 )
 
-
-(define Sugar-reduction
-  (reduction-relation
-   λCon-Sugar
+(define Baseline-reduction2
+  (extend-reduction-relation Baseline-reduction
+   λCon-Baseline
+   
    ;; Unroll
    (--> (in-hole H ((λ x M) ((λ y N) @ Q)))
         (in-hole H ((λ x (unroll x Q M)) (λ y N)))
         "Unroll"
    )
+   
    ;; Unfold
    (--> (in-hole H ((M @ (C → D)) N))
         (in-hole H ((M (N @ C)) @ D))
@@ -118,16 +116,11 @@
         "Unfold-Intersection"
    )
    
-
-   
-   
-   
-   ;; Baseline reduction
-   
+   ;; TODO
    ;; collaps argument contarcts, because teh arg may be used several times
    ;; Move/ Propagate
-   ;; Lift
    
+   ;; Lift
    (--> (in-hole H (λ x (S @ C)))
         (in-hole H ((λ x S) @ (,Any? → C)))
         "Lift-Range?"
@@ -137,13 +130,13 @@
 
 
 (traces 
- Sugar-reduction
+ Baseline-reduction2
  (term
   ((λ f (f 1)) ((λ x (+ x 1)) @ (,Num? → ,Num?)))))
 
 
 (test-->
- Sugar-reduction
+ Baseline-reduction2
  (term
   ((λ f (f 1)) ((λ x (+ x 1)) @ (,Num? → ,Num?))))
  (term
@@ -157,7 +150,7 @@
 ;  ((λ f ((f 1) @ ,Num)) (λ x (+ x 1)))))
 
 (test-->>
- Sugar-reduction
+ Baseline-reduction2
  (term
   ((λ f (f 1)) ((λ x (+ x 1)) @ (,Num? → ,Num?))))
  (term
@@ -187,59 +180,4 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-#lang racket
-(require redex)
-
-(require "lj.rkt")
-(require "lcon.rkt")
-(require "contracts.rkt")
-
-(provide (all-defined-out))
-
-#|
- ___          _                           _ 
-/ __|_  _ _ _| |_ __ ___ __  __ _ _ _  __| |
-\__ \ || | ' \  _/ _` \ \ / / _` | ' \/ _` |
-|___/\_, |_||_\__\__,_/_\_\ \__,_|_||_\__,_|
-     |__/                                   
- ___                     _   _      ___                 _         
-/ __| ___ _ __  __ _ _ _| |_(_)__  |   \ ___ _ __  __ _(_)_ _  ___
-\__ \/ -_) '  \/ _` | ' \  _| / _| | |) / _ \ '  \/ _` | | ' \(_-<
-|___/\___|_|_|_\__,_|_||_\__|_\__| |___/\___/_|_|_\__,_|_|_||_/__/
-                                                                  
-|#
-
-(define-extended-language λCon-Baseline λCon
-  
-  ;; Baseline Terms (Final Terms)
-  ((S T) K x (λ x T) (S T) (op T ...) (x @ I) ((λ x M) @ Q))
-           
-  ;; Baseline Context
-  ((A B) hole (λ x B) (op S ... B M ...) (B M) (S B) (B @ C))
-)
-
-(define 
-  (done? S)
-  (redex-match? λCon-Baseline S))
-
-;; TODO
-;; every  is also an λCon-term
-
-#|
- ___        _         _   _          
-| _ \___ __| |_  _ __| |_(_)___ _ _  
-|   / -_) _` | || / _|  _| / _ \ ' \ 
-|_|_\___\__,_|\_,_\__|\__|_\___/_||_|
-                                     
-|#
 
