@@ -22,3 +22,15 @@ Reduces all function contracts on non-function objects.
 c @ (C -> D)
 
 Only function contracts on function (contracted functions) remain.
+
+
+
+Base/Native Operations
+----------------------
+
+- Use hard coded contracts to wrap native operations
+- and use the contact version instead of the original one.
+
+- Thus, instead of using plus (+), we can use + @ Num,Num->Num
+- The contract should be as precises as possible.
+- We than can check the input/ and use the range contract for lifting
