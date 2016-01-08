@@ -48,3 +48,9 @@ Notes
 
 - Only, collapse needs to give a special consideration to blame preservation.
 
+- Use: 
+-- flatten (alternative to unfold/ or to unroll an intersectiopn)
+-- plasticize (to create new function contracts)
+
+
+
