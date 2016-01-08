@@ -34,3 +34,17 @@ Base/Native Operations
 - Thus, instead of using plus (+), we can use + @ Num,Num->Num
 - The contract should be as precises as possible.
 - We than can check the input/ and use the range contract for lifting
+
+
+Notes
+=====
+
+- unfold/unroll are "blame preserving" rules
+- the do only the those operation which would otherwise be done at runtime.
+
+- lift is also "blame preserving" as it does only earlier checking of the
+- contract, and because the rules preserve the order of the checked contract
+- it did not change the semantics
+
+- Only, collapse needs to give a special consideration to blame preservation.
+
