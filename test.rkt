@@ -71,7 +71,7 @@
   (compare M)
   (eq? (evaluate (reduce M)) (evaluate M)))
 
-;(redex-check λCon M (compare (term M)) #:attempts 100000)
+(redex-check λCon M (compare (term M)) #:attempts 100000)
 
 ;; Note:
 ;; This Lemma first needs to check of both expressions are valid expressions
@@ -95,3 +95,24 @@
 
 ;; Note, success cannot ne verified by counting the top-level assertions.
 ;; It requires to count e.g. predicate checks during the evaluation.
+
+
+
+
+#|
+ _    _                
+| |__| |__ _ _ __  ___ 
+| '_ \ / _` | '  \/ -_)
+|_.__/_\__,_|_|_|_\___|
+
+|#
+
+;; Lemma: blame preservation
+;; -------------------------
+;; Contract optimization needs to preserve blaming.
+;; Let M be a λCon term, S be the optimization (M ~> S) of M,
+;; M -->* blame iff S -->* blame and boty blame the same party.
+
+;; This means,
+;; i)  M either fails at compile time iff it would fail for every inpuy, or
+;; ii) both terms fail at run time and blame the same party.

@@ -106,14 +106,14 @@
    λCon-Baseline
    
    ;; Unroll
-   (--> (in-hole H ((λ x M) ((λ y N) @ Q)))
-        (in-hole H ((λ x (unroll x Q M)) (λ y N)))
+   (--> (in-hole H ((λ x S) ((λ y T) @ Q)))
+        (in-hole H ((λ x (unroll x Q S)) (λ y T)))
         "Unroll"
    )
    
    ;; Unfold
-   (--> (in-hole H ((S @ (C → D)) N)) ;; Shoidl the arg also be sumplified ?
-        (in-hole H ((S (N @ C)) @ D))
+   (--> (in-hole H ((S @ (C → D)) T)) ;; Shoidl the arg also be sumplified ?
+        (in-hole H ((S (T @ C)) @ D))
         "Unfold-Function"
    )
    (--> (in-hole H ((S @ (Q ∩ R)) N))
@@ -142,6 +142,14 @@
    ;; and merge contracts
    
    
+   ;; Blame rule, 
+   ;; which reduces to blame if a code definitely woudl reduce to blame for every input
+   
+   ;; Blame
+   ;(--> (in-hole H blame) ;;Change to check blame state
+   ;     blame 
+   ;     "Blame"
+   ;) ;; top level reduction
    
 ))
 
@@ -150,4 +158,5 @@
 ;(traces Baseline-reduction2 example-1)
 (traces Baseline-reduction2 example-addOne1)
 (traces Baseline-reduction2 example-addOne2)
+(traces Baseline-reduction2 example-addOne3)
 ;(traces Baseline-reduction2 

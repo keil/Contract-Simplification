@@ -24,11 +24,11 @@
   ((C D) I Q (C ∪ D) (I ∩ C))
   
   ; Immediate Contracts
-  ((I J) (flat M))
+  ((I J) (flat (λ x M)))
 
   ; Delayed Contracts
-  ((Q R) (C → D) (x → C) (Q ∩ R))
-
+  ((Q R) (C → D) (Q ∩ R)) ;; (x → C)
+  
   ;; Values
   ((U V W) .... ((λ x M) @ Q))
   

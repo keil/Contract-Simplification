@@ -54,3 +54,10 @@ Notes
 
 
 
+Blame Preservation
+==================
+
+Contract Optimization needs to preserve blaming.
+Thus, contarcts must be checked in the same order, as they would be check in the normal code.
+
+
