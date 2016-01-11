@@ -4,7 +4,9 @@
 (require "lj.rkt")
 (require "lcon.rkt")
 (require "baseline.rkt")
+
 (require "contracts.rkt")
+(require "examples.rkt")
 
 #|
  _____       _      

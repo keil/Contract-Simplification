@@ -25,13 +25,19 @@
 (define-extended-language λCon-Baseline λCon
 
   ;; Final Terms
+  ;; -----------
   ;; Final terms are all non-reducible terms,
   ;; e.g. Immediate Contracts in variables (x @ (flat M))
   ((S T) 
-   ;; All term from λJ
+   ;; Term from λJ
    K x (λ x T) (S T) (op T ...)
-   ;; Non-reducible contract assertions
+   ;; Term from λCon
+   ;; - Non-reducible contract assertions (should be liftet)
+   ;; - Blame
+   ;; - Delayed contracts (at top level, or on X)
    (x @ I))
+  
+  ;; - Top-level function contract
 
   ;; TODO
   ;; One top-level function-contract might remain
@@ -40,7 +46,7 @@
   ;;((λ x M) @ Q))
   
   ;; Baseline Reduction Context
-  ((G H) hole (λ x H) (op S ... H M ...) (H M) (S H) (H @ C))
+  ((G H) hole (λ x H) (op S ... H M ...) (H M) (S H) (H @ C)) ;; Todo (H @ Q)
 )
 
 (define 
@@ -56,6 +62,7 @@
 |#
 
 ;; Baseline Reduction
+;; ------------------
 ;; Verifies all (immediate) contracts 
 ;; that can be check at compile time
 
@@ -78,6 +85,7 @@
 ))
 
 ;; Function unroll : x Q M -> N
+;; ----------------------------
 ;; Unrolls a delayed contract Q of function x 
 ;; to all uses of x
 
@@ -101,62 +109,65 @@
   [(unroll x Q any) any]
 )
 
+;; Contract Propagration
+;; ----------------------------
+;; Applies Contract-assertion rules at compile time whereever possible and
+;; lifts contract to the enclosing module boundaries
+
 (define Baseline-reduction2
   (extend-reduction-relation Baseline-reduction
    λCon-Baseline
    
    ;; Unroll
-   (--> (in-hole H ((λ x S) ((λ y T) @ Q)))
-        (in-hole H ((λ x (unroll x Q S)) (λ y T)))
+   (--> (in-hole H ((λ x M) ((λ y N) @ Q)))
+        (in-hole H ((λ x (unroll x Q M)) (λ y N)))
         "Unroll"
    )
    
    ;; Unfold
-   (--> (in-hole H ((S @ (C → D)) T)) ;; Shoidl the arg also be sumplified ?
-        (in-hole H ((S (T @ C)) @ D))
+   (--> (in-hole H ((M @ (C → D)) N)) ;; N should be T (optimized)
+        (in-hole H ((M (N @ C)) @ D))
         "Unfold-Function"
    )
    (--> (in-hole H ((S @ (Q ∩ R)) N))
         (in-hole H (((S @ Q) @ R) N))
         "Unfold-Intersection"
    )
+
+   ;; Lift
+   ;(--> (in-hole H (λ x (S @ C)))
+   ;     (in-hole H ((λ x S) @ (,Any? → C)))
+   ;     "Lift"
+   ;)
+   
+   ;; Sink
+   (--> (in-hole H (λ x (S @ C)))
+        (in-hole H ((λ x S) @ (,Any? → C)))
+        "Sink"
+   )
+   
    
    ;; TODO
    ;; collaps argument contarcts, because teh arg may be used several times
    ;; Move/ Propagate
    ;; Lift Domain
-
-   ;; Lift
-   (--> (in-hole H (λ x (S @ C)))
-        (in-hole H ((λ x S) @ (,Any? → C)))
-        "Lift-Range?"
-   )
    
    ;; Collapse
-   (--> (in-hole H ((S @ C) @ D)) ;; Only delayed contarcts?
-        (in-hole H (S @ (C • D))) ;; Did not work for more than two contract, right?
-        "Collaps"
-   )
+   ;(--> (in-hole H ((S @ C) @ D)) ;; Only delayed contarcts?
+   ;     (in-hole H (S @ (C • D))) ;; Did not work for more than two contract, right?
+   ;     "Collaps"
+   ;)
    
    ;; TODO, implement predicate refinement
    ;; and merge contracts
    
    
-   ;; Blame rule, 
-   ;; which reduces to blame if a code definitely woudl reduce to blame for every input
-   
-   ;; Blame
-   ;(--> (in-hole H blame) ;;Change to check blame state
-   ;     blame 
-   ;     "Blame"
-   ;) ;; top level reduction
    
 ))
 
 
 
 ;(traces Baseline-reduction2 example-1)
-(traces Baseline-reduction2 example-addOne1)
-(traces Baseline-reduction2 example-addOne2)
-(traces Baseline-reduction2 example-addOne3)
+;(traces Baseline-reduction2 example-addOne1)
+;(traces Baseline-reduction2 example-addOne2)
 ;(traces Baseline-reduction2 

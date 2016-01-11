@@ -54,10 +54,31 @@ Notes
 
 
 
+
+
 Blame Preservation
 ==================
 
-Contract Optimization needs to preserve blaming.
-Thus, contarcts must be checked in the same order, as they would be check in the normal code.
+Optimizing contract needs to preserve the blame behaviour of a program. This
+requires:
+
+i) Contracts must be checked in the same order, i.e. updating the callback
+structure (constrains) must happen in the same order as the dynamic checking
+would update the constraint state.
+
+ii) Only immediate contract on variables can be lifted. This is required as a
+variable can be checked against two different contracts in two different
+context, whose domain is not disjoint.
+
+iii) A contract in the body of another closure is not allowed to be lifted, as
+the function might not be called. In this situation we can maybe introduce a new
+function/ application to create a new function contract.
 
 
+Static Blame
+============
+
+What to do if an expression evaluates statically to blame?
+
+As the function body might not be called, we are not allowed to evaluate
+completely to blame.

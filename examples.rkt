@@ -47,7 +47,4 @@
 
 
 
-(define 
-  example-addOne3
-  (term 
-   ((λ plus (λ x ((plus "a") x))) ((λ x (λ y (+ x y))) @ (,Num? → (,Num? → ,Num?))))))
+
