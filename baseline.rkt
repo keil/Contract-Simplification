@@ -145,6 +145,28 @@
         "Sink"
    )
    
+   ;; TODO eta reduction
+   
+   ;; Lift
+   (--> (in-hole H (λ x ((λ y M) (x @ C)))) ;; All types of contracts?
+        (in-hole H ((λ x (λ y M)) @ (C → ,Any?)))
+        "Lift"
+   )
+   
+   ;; Lift
+   (--> (in-hole H (λ x ((λ y M) (x @ C)))) ;; All types of contracts?
+        (in-hole H ((λ x (λ y M)) @ (C → ,Any?)))
+        "Lift"
+   )
+   
+   ;; TODO, values without contracts
+      
+   ;; Propagate
+   (--> (in-hole H (λ x ((λ y M) (x @ C)))) ;; All types of contracts?
+        (in-hole H ((λ x (λ y M)) @ (C → ,Any?)))
+        "Lift"
+   )
+   
    
    ;; TODO
    ;; collaps argument contarcts, because teh arg may be used several times
@@ -184,7 +206,7 @@
 ;(traces Baseline-reduction2 example-4)
 
 (variable-not-in (term (+ x 1)) (term x))
-
+(variable-not-in (term (+ x 1)) (term y))
 
 ;(reduce example-2)
 ;(traces Baseline-reduction2 example-2)
