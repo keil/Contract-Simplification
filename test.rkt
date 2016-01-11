@@ -58,14 +58,7 @@
 ;; M -> V and N -> V must reduce to the same value 
 ;; After each reduction sequence M ~> S
 ;; M -> V and S -> V must reduce to the same value 
-
-(define
-  (reduce M)
-  (car (apply-reduction-relation* Baseline-reduction M)))
-
-(define
-  (evaluate M)
-  (car (apply-reduction-relation* λCon-reduction M)))
+;; i.e. they are equivalent under baseline-reduction
 
 (define
   (compare M)

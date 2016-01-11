@@ -1,10 +1,3 @@
-\J
-==
-
-- Extend Syntax with bololean and string values
-- More native operators
-- Overload + operator 
-
 \Con
 ====
 
@@ -13,14 +6,22 @@
 - (Implement Contract Abstraction/ Dependent Contract)
 
 
-Test
-====
-
-- Implement a simulation relation that checks if the unmodified 
-  and the modified code lead to the same outcome
-
-
 Open Points
 ===========
 
-- Simulation 
+*** Theorems
+- Simulation
+- Progress/ Preservation
+- Blame
+
+
+
+- Questions
+
+- A possibility to simplify examples
+- e.g. by using the Names ,Nat instead of the predicate?
+- use preducate names and unroll only when needed.
+
+
+- how can I guarantee that I do not create more contract, for example 
+- because some value is not used

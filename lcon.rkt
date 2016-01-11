@@ -20,15 +20,18 @@
 
 (define-extended-language λCon λJ
   
+  ;; False Values/Constants
+  (false #f 0 "")
+  
   ;; Contracts
   ((C D) I Q (C ∪ D) (I ∩ C))
   
   ; Immediate Contracts
-  ((I J) (flat (λ x M)))
+  ((I J) (flat M))
 
   ; Delayed Contracts
-  ((Q R) (C → D) (Q ∩ R)) ;; (x → C)
-  
+  ((Q R) (C → D) (x → C) (Q ∩ R))
+
   ;; Values
   ((U V W) .... ((λ x M) @ Q))
   
@@ -37,9 +40,6 @@
   
   ;; Contexts
   ((E F) .... (E @ C) (V @ (eval E)))
-  
-  ;; False Value
-  (false #f 0 "")
 )
 
 (define false? 
@@ -101,3 +101,7 @@
         "D-Intersection"
    )
 ))
+
+(define
+  (evaluate M)
+  (car (apply-reduction-relation* λCon-reduction M)))

@@ -82,3 +82,31 @@ What to do if an expression evaluates statically to blame?
 
 As the function body might not be called, we are not allowed to evaluate
 completely to blame.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+- Lifting only x@I of x is direclty used in the body
+- otherwise introduce a new lambda term
+
+\x \y (+ x@I y)
+
+- x@I cannot be lifted to \x because \y M might never be used/called
+
+   \x \y (+ x@I y)
+~> \x \y (\x (+ x y) @ I->*) (x)
+
+
+
+
+- eta reduction

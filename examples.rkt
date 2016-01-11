@@ -3,6 +3,7 @@
 
 (require "lj.rkt")
 (require "lcon.rkt")
+(require "baseline.rkt")
 
 (require "contracts.rkt")
 
@@ -16,21 +17,26 @@
 
 |#
 
-
-
 ;; Test Cases
 
 (define 
   example-0
   (term ((λ x (+ x (1 @ ,Nat?))) 1)))
 
-;;(compare example-0)
-
-
 (define 
   example-1
   (term ((λ f (f 1)) ((λ x (+ x 1)) @ (,Num? → ,Num?)))))
 
+(define 
+  example-2
+  (term ((λ f ((f 1) @ ,Nat?)) (λ x (+ x 1)))))
+
+(test-->>
+ Baseline-reduction2 example-2
+ (term
+  (((λ f (f 1)) (λ x (+ x 1))) @ ,Num?)))
+  
+  
 ;; Contract at different prosiitions
 ;; on plus, as contract on the outer function
 ;; and with or without concrete top-level application

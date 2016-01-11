@@ -5,7 +5,6 @@
 (require "lcon.rkt")
 
 (require "contracts.rkt")
-(require "examples.rkt")
 
 (provide (all-defined-out))
 
@@ -165,6 +164,30 @@
    
 ))
 
+(define
+  (reduce M)
+  (car (apply-reduction-relation* Baseline-reduction M)))
+
+#|
+ _____       _      
+|_   _|__ __| |_ ___
+  | |/ -_|_-<  _(_-<
+  |_|\___/__/\__/__/
+                    
+|#
+
+(define 
+  example-4
+  (term ((λ x (+ (x @ ,Num?) 1)) 1)))
+
+(reduce example-4)
+;(traces Baseline-reduction2 example-4)
+
+(variable-not-in (term (+ x 1)) (term x))
+
+
+;(reduce example-2)
+;(traces Baseline-reduction2 example-2)
 
 
 ;(traces Baseline-reduction2 example-1)
