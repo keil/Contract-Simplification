@@ -148,24 +148,23 @@
    ;; TODO eta reduction
    
    ;; Lift
-   (--> (in-hole H (λ x ((λ y M) (x @ C)))) ;; All types of contracts?
+   (--> (in-hole H (λ x ((λ y M) (x @ C)))) ;; All types of contracts? .. generalize λ y M to M
         (in-hole H ((λ x (λ y M)) @ (C → ,Any?)))
         "Lift"
    )
-   
-   ;; Lift
-   (--> (in-hole H (λ x ((λ y M) (x @ C)))) ;; All types of contracts?
-        (in-hole H ((λ x (λ y M)) @ (C → ,Any?)))
-        "Lift"
-   )
-   
-   ;; TODO, values without contracts
       
    ;; Propagate
-   (--> (in-hole H (λ x ((λ y M) (x @ C)))) ;; All types of contracts?
-        (in-hole H ((λ x (λ y M)) @ (C → ,Any?)))
-        "Lift"
+   (--> (in-hole H (λ x ((λ y M) (z @ C)))) ;; All types of contracts?
+        (in-hole H ((λ y (λ z M)) (z @ C)))
+        "Propagate"
    )
+   ;; push , flatten propagate
+   
+         ;; Pull
+   (--> (in-hole H (op S ... (M @ C) N ...)) ;; all types of cvontract ?
+        (in-hole H (((λ x (op S ... x N ...)) @ (C → ,Any?)) M))
+        "Flatten"
+   ) ;; TODO, introduce new variable name
    
    
    ;; TODO
@@ -202,11 +201,31 @@
   example-4
   (term ((λ x (+ (x @ ,Num?) 1)) 1)))
 
-(reduce example-4)
+;(reduce example-4)
 ;(traces Baseline-reduction2 example-4)
 
-(variable-not-in (term (+ x 1)) (term x))
-(variable-not-in (term (+ x 1)) (term y))
+; TODO, order of reduction steps
+
+(define 
+  example-5
+  (term (λ x (λ y (+ (x @ ,Num?) y)))))
+
+(reduce example-5)
+(traces Baseline-reduction2 example-5)
+
+(define 
+  example-6
+  (term (λ x (λ y (+ (x @ ,Num?) (y @ ,Num?))))))
+
+;(reduce example-6)
+;(traces Baseline-reduction2 example-6)
+
+
+
+
+
+;(variable-not-in (term (+ x 1)) (term x))
+;(variable-not-in (term (+ x 1)) (term y))
 
 ;(reduce example-2)
 ;(traces Baseline-reduction2 example-2)
