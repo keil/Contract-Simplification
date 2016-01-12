@@ -25,3 +25,11 @@ Open Points
 
 - how can I guarantee that I do not create more contract, for example 
 - because some value is not used
+
+
+
+
+- normale code optimization required,
+- this means 
+etwa reduction
+\X.X -> X

@@ -27,7 +27,7 @@
   ;; -----------
   ;; Final terms are all non-reducible terms,
   ;; e.g. Immediate Contracts in variables (x @ (flat M))
-  ((S T) 
+  ((R S T) 
    ;; Term from λJ
    K x (λ x T) (S T) (op T ...)
    ;; Term from λCon
@@ -35,13 +35,24 @@
    ;; - Blame
    ;; - Delayed contracts (at top level, or on X)
    ;;(x @ I))
+   
+   ;; Immeidate Contract
+   ((op S ...) @ I)
+   ((S T) @ I)
+   (x @ I)
+   
+   ;; Delayed Contracts
+   ((S T) @ Q)
+   ((λ x S) @ Q)
+   
+   ;; TODO, union is missing
    )
   
   ;; TODO, say the optimization is finished if only 
   ;; one top level delayed contarcts remains
   
   ;; Final Terms
-  (R S (R_1 R_2) (R @ C) ((λ x R) @ C) (x @ C))
+  ;(R S (R_1 R_2) (R @ C) ((λ x R) @ C) (x @ C))
   
   
   ;; - Top-level function contract
@@ -91,7 +102,12 @@
    
    (--> (in-hole H (K @ Q))
         (in-hole H K)
-        "Skip"
+        "Skip/Constant"
+   )
+   
+   (--> (in-hole H ((op M ...) @ Q))
+        (in-hole H (op M ...))
+        "Skip/Operation"
    )
 ))
 
