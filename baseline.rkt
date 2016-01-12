@@ -144,16 +144,16 @@
    ;; Unfold
    (--> (in-hole H ((M @ (C → D)) N))
         (in-hole H ((M (N @ C)) @ D))
-        "Unfold-Function"
+        "Unfold/Function"
    )
    (--> (in-hole H ((M @ (Q ∩ R)) N))
         (in-hole H (((M @ Q) @ R) N))
-        "Unfold-Intersection"
+        "Unfold/Intersection"
    )
 
    ;; Lower (down)
-   (--> (in-hole H (λ x (M @ C)))
-        (in-hole H ((λ x M) @ (,Any? → C)))
+   (--> (in-hole H (λ x (R @ C)))
+        (in-hole H ((λ x R) @ (,Any? → C)))
         "Lower"
    )
    
@@ -173,7 +173,14 @@
         "Swap"
    )
    
-   
+   ;; Flatten (factorize)
+   (--> (in-hole H (op S ... (x @ C) N ...))
+        (in-hole H (((λ y (op S ... x N ...)) @ (C → ,Any?)) x))
+        "Flatten"
+        (fresh y)
+   ) 
+   ;; TODO, is factorize restricted to valiable names ?
+   ;; TOfactorizeDO, introduce new variable name
    
    
    
@@ -203,10 +210,10 @@
    ;; push , flatten propagate
    
          ;; Pull
-   (--> (in-hole H (op S ... (M @ C) N ...)) ;; all types of cvontract ?
-        (in-hole H (((λ x (op S ... x N ...)) @ (C → ,Any?)) M))
-        "Flatten"
-   ) ;; TODO, introduce new variable name
+;   (--> (in-hole H (op S ... (M @ C) N ...)) ;; all types of cvontract ?
+;        (in-hole H (((λ x (op S ... x N ...)) @ (C → ,Any?)) M))
+;        "Flatten"
+;   ) ;; TODO, introduce new variable name
    
    
    ;; TODO
@@ -252,8 +259,8 @@
   example-5
   (term (λ x (λ y (+ (x @ ,Num?) y)))))
 
-(reduce example-5)
-(traces Baseline-reduction2 example-5)
+;(reduce example-5)
+;(traces Baseline-reduction2 example-5)
 
 (define 
   example-6

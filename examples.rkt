@@ -17,24 +17,75 @@
 
 |#
 
-;; Test Cases
+
+;; Example: 0
+;; ---------
 
 (define 
   example-0
   (term ((λ x (+ x (1 @ ,Nat?))) 1)))
 
+;(traces
+; Baseline-reduction2
+; example-0)
+
+(test-->>
+ Baseline-reduction2
+ example-0
+ (term ((λ x (+ x 1)) 1)))
+ 
+
+
+;; Example: 1
+;; ---------
+
 (define 
   example-1
   (term ((λ f (f 1)) ((λ x (+ x 1)) @ (,Num? → ,Num?)))))
+
+;(traces
+; Baseline-reduction2
+; example-1)
+
+(test-->>
+ Baseline-reduction2
+ example-1
+ (term (((λ f (f 1)) (λ x (+ x 1))) @ ,Num?)))
+
+
+
+;; Example: 2
+;; ---------
 
 (define 
   example-2
   (term ((λ f ((f 1) @ ,Nat?)) (λ x (+ x 1)))))
 
+;(traces
+; Baseline-reduction2
+; example-2)
+
 (test-->>
- Baseline-reduction2 example-2
- (term
-  (((λ f (f 1)) (λ x (+ x 1))) @ ,Num?)))
+ Baseline-reduction2
+ example-2
+ (term (((λ f (f 1)) (λ x (+ x 1))) @ ,Nat?)))
+
+
+
+
+;; Example: addOne 1
+;; -----------------
+
+(define 
+  example-addOne1
+  (term 
+   ((λ plus (λ x ((plus 1) x))) ((λ x (λ y (+ x y))) @ (,Num? → (,Num? → ,Num?))))))
+
+
+
+
+
+
   
   
 ;; Contract at different prosiitions
@@ -54,3 +105,24 @@
 
 
 
+
+
+
+
+
+
+
+
+;; Predicates
+
+#|
+
+|#
+
+;(traces
+; Baseline-reduction2
+; (term (λ x ((x @ ,Nat?) @ ,Pos?))))
+
+
+
+(test-results)
