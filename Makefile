@@ -7,8 +7,9 @@ commit:
 
 tag:
 	tname=$(shell date +%Y%m%d)-$(shell date +%H%M%S)
-	svn cp . ../../tags/Sugar_$(tname)
-	svn ci ../../tags/Sugar_$(tname) -m "add new tag"
+	$(tname)
+#	svn cp . ../../tags/Sugar_$(tname)
+#	svn ci ../../tags/Sugar_$(tname) -m "add new tag"
 # svn cp . ../../tags/Sugar_$(shell date +%Y%m%d)-
 #	svn ci ../../tags/Sugar_$(shell date +%Y%m%d)-$(name) -m "add new tag"
 
