@@ -34,7 +34,15 @@
    ;; - Non-reducible contract assertions (should be liftet)
    ;; - Blame
    ;; - Delayed contracts (at top level, or on X)
-   (x @ I))
+   ;;(x @ I))
+   )
+  
+  ;; TODO, say the optimization is finished if only 
+  ;; one top level delayed contarcts remains
+  
+  ;; Final Terms
+  (R S ((λ x S) @ Q) (x @ C))
+  
   
   ;; - Top-level function contract
 
@@ -48,9 +56,13 @@
   ((G H) hole (λ x H) (op S ... H M ...) (H M) (S H) (H @ C)) ;; Todo (H @ Q)
 )
 
+;(define 
+;  (done? M)
+;  (redex-match? λCon-Baseline M))
 (define 
   (done? M)
-  (redex-match? λCon-Baseline M))
+  (redex-match? λCon-Baseline R))
+
 
 #|
  ___        _         _   _          
@@ -83,6 +95,9 @@
    )
 ))
 
+;; Unroll union ?
+
+
 ;; Function unroll : x Q M -> N
 ;; ----------------------------
 ;; Unrolls a delayed contract Q of function x 
@@ -113,6 +128,9 @@
 ;; Applies Contract-assertion rules at compile time whereever possible and
 ;; lifts contract to the enclosing module boundaries
 
+;; TODO, shoudl M be obpimized before applying another rule ?
+;; Lift: All types of contracts? .. generalize λ y M to M
+
 (define Baseline-reduction2
   (extend-reduction-relation Baseline-reduction
    λCon-Baseline
@@ -124,40 +142,64 @@
    )
    
    ;; Unfold
-   (--> (in-hole H ((M @ (C → D)) N)) ;; N should be T (optimized)
+   (--> (in-hole H ((M @ (C → D)) N))
         (in-hole H ((M (N @ C)) @ D))
         "Unfold-Function"
    )
-   (--> (in-hole H ((S @ (Q ∩ R)) N))
-        (in-hole H (((S @ Q) @ R) N))
+   (--> (in-hole H ((M @ (Q ∩ R)) N))
+        (in-hole H (((M @ Q) @ R) N))
         "Unfold-Intersection"
    )
 
+   ;; Lower (down)
+   (--> (in-hole H (λ x (M @ C)))
+        (in-hole H ((λ x M) @ (,Any? → C)))
+        "Lower"
+   )
+   
+   ;; Lift (up)
+   (--> (in-hole H (λ x ((λ y M) (x @ C))))
+        (in-hole H ((λ x (λ y M)) @ (C → ,Any?)))
+        "Lift"
+   )
+   
+   
+   ;; can this rule be more general as swapping may
+   ;; also work with v @ C
+   
+   ;; Swap
+   (--> (in-hole H (λ x ((λ y M) (z @ C))))
+        (in-hole H ((λ y (λ x M)) (z @ C)))
+        "Swap"
+   )
+   
+   
+   
+   
+   
+   
+   ;; Lift (up)
+   ;(--> (in-hole H (λ x ((λ y M) (x @ C)))) ;; All types of contracts? .. generalize λ y M to M
+   ;     (in-hole H ((λ x (λ y M)) @ (C → ,Any?)))
+   ;     "Lift"
+   ;)
    ;; Lift
    ;(--> (in-hole H (λ x (S @ C)))
    ;     (in-hole H ((λ x S) @ (,Any? → C)))
    ;     "Lift"
    ;)
    
-   ;; Sink
-   (--> (in-hole H (λ x (S @ C)))
-        (in-hole H ((λ x S) @ (,Any? → C)))
-        "Sink"
-   )
+
    
    ;; TODO eta reduction
    
-   ;; Lift
-   (--> (in-hole H (λ x ((λ y M) (x @ C)))) ;; All types of contracts? .. generalize λ y M to M
-        (in-hole H ((λ x (λ y M)) @ (C → ,Any?)))
-        "Lift"
-   )
+
       
    ;; Propagate
-   (--> (in-hole H (λ x ((λ y M) (z @ C)))) ;; All types of contracts?
-        (in-hole H ((λ y (λ z M)) (z @ C)))
-        "Propagate"
-   )
+   ;(--> (in-hole H (λ x ((λ y M) (z @ C)))) ;; All types of contracts?
+   ;     (in-hole H ((λ y (λ z M)) (z @ C)))
+   ;     "Propagate"
+   ;)
    ;; push , flatten propagate
    
          ;; Pull
