@@ -49,11 +49,25 @@ Notes
 - Only, collapse needs to give a special consideration to blame preservation.
 
 - Use: 
--- flatten (alternative to unfold/ or to unroll an intersectiopn)
+-- flatten (alternative to unfold/ or to unroll an intersection)
 -- plasticize (to create new function contracts)
 
 
 
+Contract Propagation
+====================
+
+- Contract Propagation (swap) works only if predicates are (stateless) and
+  independent from the external state. 
+- This means, if a predicate uses/refers to some external values, swap may
+  change the outcome of a predicate, i.e. because an operation between effects
+  some external values.
+- Swap is also nit allowed to change the order of predicates.
+- Swap works for "pure" predicates.
+- All other contract (Base, Abstraction, With) need a special treatment.
+
+- Implement a function checking if a contract C is pure, i.e. it consists of
+  base type pure predicates or arbitrary constructs of them.
 
 
 Blame Preservation
