@@ -41,7 +41,7 @@
   ;; one top level delayed contarcts remains
   
   ;; Final Terms
-  (R S ((λ x S) @ Q) (x @ C))
+  (R S (R_1 R_2) (R @ C) ((λ x R) @ C) (x @ C))
   
   
   ;; - Top-level function contract
@@ -142,12 +142,12 @@
    )
    
    ;; Unfold
-   (--> (in-hole H ((M @ (C → D)) N))
-        (in-hole H ((M (N @ C)) @ D))
+   (--> (in-hole H ((R @ (C → D)) T))
+        (in-hole H ((R (T @ C)) @ D))
         "Unfold/Function"
    )
-   (--> (in-hole H ((M @ (Q ∩ R)) N))
-        (in-hole H (((M @ Q) @ R) N))
+   (--> (in-hole H ((S @ (Q ∩ R)) T))
+        (in-hole H (((S @ Q) @ R) T))
         "Unfold/Intersection"
    )
 
@@ -158,8 +158,8 @@
    )
    
    ;; Lift (up)
-   (--> (in-hole H (λ x ((λ y M) (x @ C))))
-        (in-hole H ((λ x (λ y M)) @ (C → ,Any?)))
+   (--> (in-hole H (λ x (R (x @ C))))
+        (in-hole H ((λ x (R x)) @ (C → ,Any?)))
         "Lift"
    )
    
@@ -180,6 +180,7 @@
         (fresh y)
    ) 
    ;; TODO, is factorize restricted to valiable names ?
+   ;; what if (+ (+ 1 2) @ @, )
    ;; TOfactorizeDO, introduce new variable name
    
    

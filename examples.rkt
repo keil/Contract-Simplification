@@ -77,11 +77,18 @@
 ;; -----------------
 
 (define 
-  example-addOne1
+  example:addOne/1
   (term 
    ((λ plus (λ x ((plus 1) x))) ((λ x (λ y (+ x y))) @ (,Num? → (,Num? → ,Num?))))))
 
+(traces
+ Baseline-reduction2
+ example:addOne/1)
 
+(test-->>
+ Baseline-reduction2
+ example:addOne/1
+ (term (((λ f (f 1)) (λ x (+ x 1))) @ ,Nat?)))
 
 
 
