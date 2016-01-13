@@ -207,12 +207,23 @@
    ;; flatten
    
    
+   
+   
+   ;; new lift ?
+   (--> (in-hole H (λ x (in-hole G (x @ C)))) ;; ? all contracts?
+        (in-hole H ((λ x (in-hole G (x))) @ (C → ,Any?)))
+        "NewLift"
+        (side-condition (not (bound? x (in-hole G (x)))))
+   )
+   
+   
+   
       
    ;; Flatten (factorize)
    (--> (in-hole H (op M ... (N @ C) L ...))
         ;(in-hole H ((λ x (op S ... x L ...)) (N @ C)))
         (in-hole H (((λ x (op M ... x L ...)) @ (C → ,Any?)) N))
-        "Flatten" ;; introduce new boundaries/ 
+        "FlattenX" ;; introduce new boundaries/ 
         (fresh x)
    )
    

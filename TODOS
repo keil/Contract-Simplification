@@ -33,3 +33,7 @@ Open Points
 - this means 
 etwa reduction
 \X.X -> X
+
+
+- implement a native if because if is an interesting case
+- similat ro rackets native case ?
