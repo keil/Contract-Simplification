@@ -187,9 +187,13 @@
    ;; also work with v @ C
    
    ;; Swap
-   (--> (in-hole H (λ x ((λ y M) (z @ C))))
-        (in-hole H ((λ y (λ x M)) (z @ C)))
-        "Swap"
+   ;(--> (in-hole H (λ x ((λ y M) (z @ C))))
+   ;     (in-hole H ((λ y (λ x M)) (z @ C)))
+   ;     "Swap"
+   ;)
+   (--> (in-hole H (((λ x M) (x @ C)) N))
+        (in-hole H (((λ x (M N)) (x @ C))))
+        "Move?"
    )
    
    ;; Flatten (factorize)
