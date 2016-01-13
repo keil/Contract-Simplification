@@ -39,14 +39,17 @@
    ;; Immeidate Contract
    ((op S ...) @ I)
    ((S T) @ I)
-   (x @ I)
-   
+;   (x @ I) -- gets liftet
+  
    ;; Delayed Contracts
-   ((S T) @ Q)
-   ((λ x S) @ Q)
+   ;((S T) @ Q)
+   ;((λ x S) @ Q)
    
    ;; TODO, union is missing
    )
+
+  ;; Final Terms
+  (final T )
   
   ;; TODO, say the optimization is finished if only 
   ;; one top level delayed contarcts remains
@@ -72,7 +75,7 @@
 ;  (redex-match? λCon-Baseline M))
 (define 
   (done? M)
-  (redex-match? λCon-Baseline R))
+  (redex-match? λCon-Baseline R M))
 
 
 #|

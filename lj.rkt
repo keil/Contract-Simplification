@@ -25,7 +25,8 @@
   (K number boolean string)
   
   ;; Variables
-  ((x y z) variable-not-otherwise-mentioned)
+  ((x y z) (variable-prefix x) (variable-prefix y) (variable-prefix z))
+           ;;variable-not-otherwise-mentioned)
   
   ;; Operations
   (op + * - / < > = and or not number? string? boolean?)
