@@ -162,15 +162,18 @@
    )
    
    ;; Unfold
-   (--> (in-hole H ((R @ (C → D)) T))
-        (in-hole H ((R (T @ C)) @ D))
+   (--> (in-hole H ((M @ (C → D)) N))
+        (in-hole H ((M (N @ C)) @ D))
         "Unfold/Function"
    )
-   (--> (in-hole H ((S @ (Q ∩ R)) T))
-        (in-hole H (((S @ Q) @ R) T))
+   (--> (in-hole H ((M @ (Q ∩ R)) N))
+        (in-hole H (((M @ Q) @ R) N))
         "Unfold/Intersection"
    )
 
+   
+   
+   
    ;; Lower (down)
    (--> (in-hole H (λ x (R @ C)))
         (in-hole H ((λ x R) @ (,Any? → C)))
