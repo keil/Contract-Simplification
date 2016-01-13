@@ -112,6 +112,16 @@
         (in-hole H (op M ...))
         "Skip/Operation"
    )
+      
+   (--> (in-hole H (M @ (C ∪ D)))
+        (in-hole H ((M @ C) @ D))
+        "Reduce/Union"
+   )
+   
+   (--> (in-hole H (M @ (I ∩ C)))
+        (in-hole H ((M @ I) @ C))
+        "Reduce/Intersection"
+   )
 ))
 
 ;; TODO
