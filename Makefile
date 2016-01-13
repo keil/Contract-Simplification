@@ -13,7 +13,7 @@ tag: sync
 # svn cp . ../../tags/Sugar_$(shell date +%Y%m%d)-
 #	svn ci ../../tags/Sugar_$(shell date +%Y%m%d)-$(name) -m "add new tag"
 
-ntag: make
+ntag: sync
 	svn cp . ../../tags/Sugar_$(name)
 	svn ci ../../tags/Sugar_$(name) -m "add new tag"
 
