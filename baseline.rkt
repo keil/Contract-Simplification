@@ -175,16 +175,48 @@
    
    
    ;; Lower (down)
-   (--> (in-hole H (λ x (R @ C)))
-        (in-hole H ((λ x R) @ (,Any? → C)))
+   (--> (in-hole H (λ x (M @ C)))
+        (in-hole H ((λ x M) @ (,Any? → C)))
         "Lower"
    )
    
    ;; Lift (up)
-   (--> (in-hole H (λ x (R (x @ C))))
-        (in-hole H ((λ x (R x)) @ (C → ,Any?)))
+   (--> (in-hole H (λ x (M (x @ C))))
+        (in-hole H ((λ x (M x)) @ (C → ,Any?)))
         "Lift"
    )
+   
+   ;; Collapse
+   (--> (in-hole H ((V @ C) @ D))
+        (in-hole H (V @ (C • D)))
+        "Collaps"
+   )
+   
+   ;; swap
+   
+   ;; flatten
+   
+   
+      
+   ;; Flatten (factorize)
+   (--> (in-hole H (op M ... (N @ C) L ...))
+        ;(in-hole H ((λ x (op S ... x L ...)) (N @ C)))
+        (in-hole H (((λ x (op M ... x L ...)) @ (C → ,Any?)) N))
+        "Flatten" ;; introduce new boundaries/ 
+        (fresh x)
+   )
+   
+   
+   
+   
+   
+   ;; Collapse
+   ;(--> (in-hole H ((S @ C) @ D)) ;; Only delayed contarcts? Only on values
+   ;     (in-hole H (S @ (C • D))) ;; Did not work for more than two contract, right?
+   ;     "Collaps"
+   ;)
+   
+   
    
    
    ;; can this rule be more general as swapping may

@@ -25,7 +25,8 @@
   (K number boolean string)
   
   ;; Variables
-  ((x y z) (variable-prefix x) (variable-prefix y) (variable-prefix z))
+  ((x y z) (variable-prefix x) (variable-prefix y) (variable-prefix z)
+           (variable-prefix f) (variable-prefix g) (variable-prefix h))
            ;;variable-not-otherwise-mentioned)
   
   ;; Operations
