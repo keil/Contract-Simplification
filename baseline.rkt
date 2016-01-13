@@ -217,8 +217,8 @@
    
    
    ;; new lift ?
-   (--> (in-hole H (λ x (in-hole A (x @ C)))) ;; ? all contracts?
-        (in-hole H ((λ x (in-hole A (x))) @ (C → ,Any?)))
+   (--> (in-hole H (λ x (in-hole A (x @ I)))) ;; ? all contracts?
+        (in-hole H ((λ x (in-hole A (x))) @ (I → ,Any?)))
         "NewLift"
    )
    
