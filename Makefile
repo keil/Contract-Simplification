@@ -7,7 +7,7 @@ sync: commit
 commit:
 	svn ci -m "sync"
 
-tag: make	
+tag: sync	
 	svn cp . ../../tags/Sugar_$(tname)
 	svn ci ../../tags/Sugar_$(tname) -m "add new tag"
 # svn cp . ../../tags/Sugar_$(shell date +%Y%m%d)-
