@@ -92,7 +92,9 @@
  (term ((λ x (+ ((x @ (,Num? → ,Num?)) 1) ((x @ (,Num? → ,Num?)) 2))) (λ x (+ (x 1))))))
 
 
-
+(traces
+ Baseline-reduction2
+ example:unroll/2)
 
 
 

@@ -68,6 +68,13 @@
   
   ;; Baseline Reduction Context
   ((G H) hole (λ x H) (op S ... H M ...) (H M) (S H) (H @ C)) ;; Todo (H @ Q)
+  
+  
+  
+  ;; Execution Body (name?)
+  (a K x (a_1 a_2) (op a ...)) ;; Contracts a @ C
+  (A hole (op a ... H M ...) (H M) (a H) (H @ C)) ;; Todo (H @ Q)
+  
 )
 
 ;(define 
@@ -210,22 +217,21 @@
    
    
    ;; new lift ?
-   (--> (in-hole H (λ x (in-hole G (x @ C)))) ;; ? all contracts?
-        (in-hole H ((λ x (in-hole G (x))) @ (C → ,Any?)))
+   (--> (in-hole H (λ x (in-hole A (x @ C)))) ;; ? all contracts?
+        (in-hole H ((λ x (in-hole A (x))) @ (C → ,Any?)))
         "NewLift"
-        (side-condition (not (bound? x (in-hole G (x)))))
    )
    
    
    
       
    ;; Flatten (factorize)
-   (--> (in-hole H (op M ... (N @ C) L ...))
-        ;(in-hole H ((λ x (op S ... x L ...)) (N @ C)))
-        (in-hole H (((λ x (op M ... x L ...)) @ (C → ,Any?)) N))
-        "FlattenX" ;; introduce new boundaries/ 
-        (fresh x)
-   )
+;   (--> (in-hole H (op M ... (N @ C) L ...))
+;        ;(in-hole H ((λ x (op S ... x L ...)) (N @ C)))
+;        (in-hole H (((λ x (op M ... x L ...)) @ (C → ,Any?)) N))
+;        "FlattenX" ;; introduce new boundaries/ 
+;        (fresh x)
+;   )
    
    
    
