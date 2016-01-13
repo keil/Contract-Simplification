@@ -5,7 +5,7 @@
 (require "lcon.rkt")
 (require "baseline.rkt")
 
-(require "contracts.rkt")
+;(require "contracts.rkt")
 
 (provide (all-defined-out))
 
@@ -22,7 +22,7 @@
 
 (define 
   example:verify/0
-  (term ((λ x (+ (1 @ ,Num?) x)) 1)))
+  (term ((λ x (+ (1 @ Num?) x)) 1)))
 
 (test-->
  Baseline-reduction2
@@ -34,7 +34,7 @@
 
 (define 
   example:skip/0
-  (term (+ (1 @ (,Num? → ,Num?)) 1)))
+  (term (+ (1 @ (Num? → Num?)) 1)))
 
 (test-->
  Baseline-reduction2
@@ -46,7 +46,7 @@
 
 (define 
   example:skip/1
-  (term ((+ 1 1) @ (,Num? → ,Num?))))
+  (term ((+ 1 1) @ (Num? → Num?))))
 
 (test-->
  Baseline-reduction2
@@ -60,36 +60,36 @@
 
 (define 
   example:unroll/0
-  (term ((λ x (x 2)) ((λ x (+ (x 1))) @ (,Num? → ,Num?)))))
+  (term ((λ x (x 2)) ((λ x (+ x 1)) @ (Num? → Num?)))))
 
 (test-->
  Baseline-reduction2
  example:unroll/0
- (term ((λ x ((x @ (,Num? → ,Num?)) 2)) (λ x (+ (x 1))))))
+ (term ((λ x ((x @ (Num? → Num?)) 2)) (λ x (+ x 1)))))
 
 ;; Example: unroll 1
 ;; -----------------
 
 (define 
   example:unroll/1
-  (term ((λ x (+ 1 (x 2))) ((λ x (+ (x 1))) @ (,Num? → ,Num?)))))
+  (term ((λ x (+ 1 (x 2))) ((λ x (+ x 1)) @ (Num? → Num?)))))
 
 (test-->
  Baseline-reduction2
  example:unroll/1
- (term ((λ x (+ 1 ((x @ (,Num? → ,Num?)) 2))) (λ x (+ (x 1))))))
+ (term ((λ x (+ 1 ((x @ (Num? → Num?)) 2))) (λ x (+ x 1)))))
 
 ;; Example: unroll 2
 ;; -----------------
 
 (define 
   example:unroll/2
-  (term ((λ x (+ (x 1) (x 2))) ((λ x (+ (x 1))) @ (,Num? → ,Num?)))))
+  (term ((λ x (+ (x 1) (x 2))) ((λ x (+ x 1)) @ (Num? → Num?)))))
 
 (test-->
  Baseline-reduction2
  example:unroll/2
- (term ((λ x (+ ((x @ (,Num? → ,Num?)) 1) ((x @ (,Num? → ,Num?)) 2))) (λ x (+ (x 1))))))
+ (term ((λ x (+ ((x @ (Num? → Num?)) 1) ((x @ (Num? → Num?)) 2))) (λ x (+ x 1)))))
 
 
 (traces
@@ -97,57 +97,56 @@
  example:unroll/2)
 
 
-
 ;; Example: unfold 0
 ;; -----------------
 
 (define 
   example:unfold/0
-  (term ((λ x ((x @ (,Num? → ,Num?)) 2)) (λ x (+ x 1)))))
+  (term ((λ x ((x @ (Num? → Num?)) 2)) (λ x (+ x 1)))))
 
 (test-->
  Baseline-reduction2
  example:unfold/0
- (term ((λ x ((x (2 @ ,Num?)) @ ,Num?)) (λ x (+ x 1)))))
+ (term ((λ x ((x (2 @ Num?)) @ Num?)) (λ x (+ x 1)))))
 
 ;; Example: unfold 1
 ;; -----------------
 
 (define 
   example:unfold/1
-  (term ((λ x (+ 1 ((x @ (,Num? → ,Num?)) 2))) (λ x (+ x 1)))))
+  (term ((λ x (+ 1 ((x @ (Num? → Num?)) 2))) (λ x (+ x 1)))))
 
 (test-->
  Baseline-reduction2
  example:unfold/1
-  (term ((λ x (+ 1 ((x (2 @ ,Num?)) @ ,Num?))) (λ x (+ x 1)))))
+  (term ((λ x (+ 1 ((x (2 @ Num?)) @ Num?))) (λ x (+ x 1)))))
 
 ;; Example: unfold 2
 ;; -----------------
 
 (define 
   example:unfold/2
-  (term ((λ x (+ ((x @ (,Num? → ,Num?)) 1) ((x @ (,Num? → ,Num?)) 2))) (λ x (+ x 1)))))
+  (term ((λ x (+ ((x @ (Num? → Num?)) 1) ((x @ (Num? → Num?)) 2))) (λ x (+ x 1)))))
 
 (test-->
  Baseline-reduction2
  example:unfold/2
- (term ((λ x (+ ((x (1 @ ,Num?)) @ ,Num?) ((x @ (,Num? → ,Num?)) 2))) (λ x (+ x 1)))))
+ (term ((λ x (+ ((x (1 @ Num?)) @ Num?) ((x @ (Num? → Num?)) 2))) (λ x (+ x 1)))))
 
 (test-->
  Baseline-reduction2
- (term ((λ x (+ ((x (1 @ ,Num?)) @ ,Num?) ((x @ (,Num? → ,Num?)) 2))) (λ x (+ x 1))))
- (term ((λ x (+ ((x 1) @ ,Num?) ((x @ (,Num? → ,Num?)) 2))) (λ x (+ x 1)))))
+ (term ((λ x (+ ((x (1 @ Num?)) @ Num?) ((x @ (Num? → Num?)) 2))) (λ x (+ x 1))))
+ (term ((λ x (+ ((x 1) @ Num?) ((x @ (Num? → Num?)) 2))) (λ x (+ x 1)))))
 
 (test-->
  Baseline-reduction2
- (term ((λ x (+ ((x 1) @ ,Num?) ((x @ (,Num? → ,Num?)) 2))) (λ x (+ x 1))))
- (term ((λ x (+ ((x 1) @ ,Num?) ((x (2 @ ,Num?)) @ ,Num?))) (λ x (+ x 1)))))
+ (term ((λ x (+ ((x 1) @ Num?) ((x @ (Num? → Num?)) 2))) (λ x (+ x 1))))
+ (term ((λ x (+ ((x 1) @ Num?) ((x (2 @ Num?)) @ Num?))) (λ x (+ x 1)))))
 
 (test-->
  Baseline-reduction2
- (term ((λ x (+ ((x 1) @ ,Num?) ((x (2 @ ,Num?)) @ ,Num?))) (λ x (+ x 1))))
- (term ((λ x (+ ((x 1) @ ,Num?) ((x 2) @ ,Num?))) (λ x (+ x 1)))))
+ (term ((λ x (+ ((x 1) @ Num?) ((x (2 @ Num?)) @ Num?))) (λ x (+ x 1))))
+ (term ((λ x (+ ((x 1) @ Num?) ((x 2) @ Num?))) (λ x (+ x 1)))))
 
 
 

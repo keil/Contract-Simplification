@@ -12,35 +12,7 @@
                                      
 |#
 
-(define Any?
-  (term (flat (λ x #t))))
 
-(define None?
-  (term (flat (λ x #f))))
-
-
-
-
-(define Num?
-  (term (flat (λ x (number? x)))))
-
-(define Str?
-  (term (flat (λ x (string? x)))))
-
-(define Bool?
-  (term (flat (λ x (boolean? x)))))
-
-
-
-
-(define Pos?
-  (term (flat (λ x (> x 0)))))
-
-(define Neg?
-  (term (flat (λ x (< x 0)))))
-
-(define Nat?
-  (term (flat (λ x (or (> x 0) (= x 0))))))
 
 
 

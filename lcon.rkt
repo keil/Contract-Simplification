@@ -27,7 +27,7 @@
   ((C D) I Q (C ∪ D) (I ∩ C))
   
   ; Immediate Contracts
-  ((I J) (flat M))
+  ((I J) (flat M) named)
 
   ; Delayed Contracts
   ((Q R) (C → D) (x → C) (Q ∩ R))
@@ -79,6 +79,21 @@
   
   ;; Solution (context/ subject)
   (ω (B_0 ∘ B_1))
+
+
+
+   ;; Only for testing 
+   ;; predicate names
+  (named
+   Any? ⊤
+   None? ⊥
+   Num?
+   Str?
+   Bool?
+   Pos?
+   Neg?
+   Nat?
+   )
 )
 
 (define-metafunction λCon
@@ -199,7 +214,28 @@
         (in-hole E (((V @ Q) @ R) W))
         "D-Intersection"
    )
+
+
+   ;; Test
+   (--> (in-hole E (V @ named))
+        (in-hole E (V @ (lookup named)))
+        "Named"
+   )
 ))
+
+(define-metafunction λCon
+  lookup : named -> I
+  [(lookup ⊤) (flat (λ x #t))]
+  [(lookup ⊥) (flat (λ x #f))]
+  [(lookup Num?) (flat (λ x (number? x)))]
+  [(lookup Str?) (flat (λ x (string? x)))]
+  [(lookup Bool?) (flat (λ x (boolean? x)))]
+
+  [(lookup Nat?) (flat (λ x (> x 0)))]
+  [(lookup Pos?) (flat (λ x (< x 0)))]
+  [(lookup Neg?) (flat (λ x (or (> x 0) (= x 0))))]
+)
+
 
 (define
   (evaluate M)
