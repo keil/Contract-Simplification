@@ -114,6 +114,7 @@
    )
 ))
 
+;; TODO
 ;; Unroll union ?
 
 
@@ -123,7 +124,7 @@
 ;; to all uses of x
 
 (define-metafunction λCon-Baseline
-  unroll : x Q M -> N
+  unroll : x Q any -> any
   
   ;; Don't continue if x is bound λ's body
   [(unroll x Q (λ x M)) (λ x M)]
@@ -155,8 +156,8 @@
    λCon-Baseline
    
    ;; Unroll
-   (--> (in-hole H ((λ x M) ((λ y N) @ Q)))
-        (in-hole H ((λ x (unroll x Q M)) (λ y N)))
+   (--> (in-hole H ((λ x M) (V @ Q)))
+        (in-hole H ((λ x (unroll x Q M)) V))
         "Unroll"
    )
    
