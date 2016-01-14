@@ -5,7 +5,6 @@
 (require "lcon.rkt")
 (require "baseline.rkt")
 
-(require "contracts.rkt")
 (require "examples.rkt")
 
 #|

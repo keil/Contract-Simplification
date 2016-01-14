@@ -4,8 +4,6 @@
 (require "lj.rkt")
 (require "lcon.rkt")
 
-(require "contracts.rkt")
-
 (provide (all-defined-out))
 
 #|

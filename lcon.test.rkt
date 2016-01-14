@@ -2,7 +2,6 @@
 (require redex)
 
 (require "lcon.rkt")
-(require "contracts.rkt")
 
 #|
  _____       _      
