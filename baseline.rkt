@@ -21,13 +21,37 @@
 
 (define-extended-language λCon-Baseline λCon
 
+  ;; Contract-free terms (λJ terms)
+  ((S T) K x (λ x T) (S T) (op T ...))
+  
+  ;; Final terms (top-level contracted)
+  (R 
+   ;; All contract-free terms
+   T
+   
+   ;; Imemdiate Contracts
+   ((op S ...) @ I)
+   ((S T) @ I)
+   
+   ;; Delayed Contracts
+   ((λ x T) @ Q)
+   (x @ Q)
+   ((S T) @ Q)
+   
+   )
+  
+  ;; Baseline Reduction Context
+  ((G H) hole (λ x H) (H M) (R H) (op R ... H M ...) (H @ C))
+  
+  
+  
   ;; Final Terms
   ;; -----------
   ;; Final terms are all non-reducible terms,
   ;; e.g. Immediate Contracts in variables (x @ (flat M))
-  ((R S T) 
+;  ((R S T) 
    ;; Term from λJ
-   K x (λ x T) (S T) (op T ...)
+;   K x (λ x T) (S T) (op T ...)
    ;; Term from λCon
    ;; - Non-reducible contract assertions (should be liftet)
    ;; - Blame
@@ -37,25 +61,25 @@
    ;;((λ x T) @ Q)
    
    ;; Immeidate Contract
-   ((op S ...) @ I)
-   ((S T) @ I) ;; will this mean that λ x ((S T) @ C) is final?
+;   ((op S ...) @ I)
+;   ((S T) @ I) ;; will this mean that λ x ((S T) @ C) is final?
    
    ;(x @ I) -- gets liftet
   
    ;; Delayed Contracts
-   ((λ x T) @ Q)
+;   ((λ x T) @ Q)
    ;((S T) @ Q)
    ;(x @ Q), wenn nicht in einer applikation
    ; und das nur innerhalb von applikationen oder op's
    
    ;; TODO, union is missing
-   )
+;   )
 
   
   
   
   ;; Final Terms
-  (final T ((λ x T) @ Q))
+  (final R)
   
   ;; TODO, say the optimization is finished if only 
   ;; one top level delayed contarcts remains
@@ -73,10 +97,9 @@
   ;;((λ x M) @ Q))
   
   ;; TODO, for testing
-  ((C D) .... (C • D))
+  ;((C D) .... (C • D))
   
-  ;; Baseline Reduction Context
-  ((G H) hole (λ x H) (op S ... H M ...) (H M) (S H) (H @ C)) ;; Todo (H @ Q)
+
   
   
   
@@ -188,12 +211,12 @@
    )
    
    ;; Unfold
-   (--> (in-hole H ((S @ (C → D)) T))
-        (in-hole H ((S (T @ C)) @ D))
+   (--> (in-hole H ((R @ (C → D)) T))
+        (in-hole H ((R (T @ C)) @ D))
         "Unfold/Function"
    )
-   (--> (in-hole H ((S @ (Q ∩ R)) T))
-        (in-hole H (((S @ Q) @ R) T))
+   (--> (in-hole H ((R @ (Q ∩ R)) T))
+        (in-hole H (((R @ Q) @ R) T))
         "Unfold/Intersection"
    )
 
