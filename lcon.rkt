@@ -20,6 +20,9 @@
 
 (define-extended-language λCon λJ
   
+  ;; Contracts
+  ;; ---------
+  
   ;; False Values/Constants
   (false #f 0 "")
   
@@ -34,23 +37,25 @@
 
   
   
-  
+  ;; λCon Extention
+  ;; --------------
   
   ;; Blame
-  (blame -blame +blame)
+  (blame +blame -blame)
   
   ;; Values
   ((U V W) .... ((λ x M) @ Q) blame)
   
   ;; Terms
-  ((L M N) .... (M @ C))
+  ((L M N) .... (M @ C) blame)
   
   ;; Contexts
   ((E F) .... (E @ C) (V @ (eval E)))
   
   
   
-  
+  ;; Blame Constraints
+  ;; -----------------
   
   ;; blame labels
   (♭ (variable-prefix ♭))
@@ -65,14 +70,7 @@
   (B #t #f)
   
   ;; Constraints
-  (κ 
-   B ι (ι_1 → ι_2) (ι_1 ∩ ι_2) (ι_1 ∪ ι_2))
-;   (b ◃ B)
-;   (b ◃ ι)
-;   (b ◃ (ι_1 → ι_2))
-;   (b ◃ (ι_1 ∩ ι_2))
-;   (b ◃ (ι_1 ∪ ι_2))
-;   )
+  (κ B ι (ι_1 → ι_2) (ι_1 ∩ ι_2) (ι_1 ∪ ι_2))
   
   ;; State
   (ς · ((b ◃ κ) ς))
@@ -81,9 +79,11 @@
   (ω (B_0 ∘ B_1))
 
 
+  
+  ;; Predefined Predicates
+  ;; ---------------------
 
-   ;; Only for testing 
-   ;; predicate names
+  ;; TODO, only for testing
   (named
    Any? ⊤
    None? ⊥
@@ -108,8 +108,6 @@
 (define-metafunction λCon
   context : ω -> B
   [(context (B_0 ∘ B_1)) B_0])
-
-
 
 (define-metafunction λCon
   μ : ς b -> ω
@@ -138,9 +136,6 @@
 (define-metafunction λCon
   solve/∪ : ω ω -> ω
   [(solve/∪ ω_0 ω_1) ((and (context ω_0) (context ω_1)) ∘ (or (subject ω_0) (subject ω_1)))])
-
-
-
 
 
 (define-metafunction λCon
@@ -189,7 +184,8 @@
         ;(side-condition (not (equal? (term W) #f)))
    )
    (--> (in-hole E (V @ (eval W)))
-        blame ;; TODO, Change to V and introduce top-level blame
+        (in-hole E V)
+        ;;blame ;; TODO, Change to V and introduce top-level blame
         "Blame"
         (side-condition (false? (term W)))
    )
@@ -216,10 +212,10 @@
    )
 
 
-   ;; Test
+   ;; Lookup
    (--> (in-hole E (V @ named))
         (in-hole E (V @ (lookup named)))
-        "Named"
+        "Lookup"
    )
 ))
 
@@ -227,14 +223,19 @@
   lookup : named -> I
   [(lookup ⊤) (flat (λ x #t))]
   [(lookup ⊥) (flat (λ x #f))]
+  
+  [(lookup Any?) (flat (λ x #t))]
+  [(lookup None?) (flat (λ x #f))]
+  
   [(lookup Num?) (flat (λ x (number? x)))]
   [(lookup Str?) (flat (λ x (string? x)))]
   [(lookup Bool?) (flat (λ x (boolean? x)))]
 
-  [(lookup Nat?) (flat (λ x (> x 0)))]
-  [(lookup Pos?) (flat (λ x (< x 0)))]
-  [(lookup Neg?) (flat (λ x (or (> x 0) (= x 0))))]
+  [(lookup Pos?) (flat (λ x (> x 0)))]
+  [(lookup Nat?) (flat (λ x (or (> x 0) (= x 0))))]
+  [(lookup Neg?) (flat (λ x (< x 0)))]
 )
+
 
 
 (define
