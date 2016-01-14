@@ -38,21 +38,24 @@
    
    ;; Immeidate Contract
    ((op S ...) @ I)
-   ((S T) @ I)
+   ((S T) @ I) ;; will this mean that λ x ((S T) @ C) is final?
    
    ;(x @ I) -- gets liftet
   
    ;; Delayed Contracts
    ((λ x T) @ Q)
-   ((S T) @ Q)
+   ;((S T) @ Q)
    ;(x @ Q), wenn nicht in einer applikation
    ; und das nur innerhalb von applikationen oder op's
    
    ;; TODO, union is missing
    )
 
+  
+  
+  
   ;; Final Terms
-  (final T )
+  (final T ((λ x T) @ Q))
   
   ;; TODO, say the optimization is finished if only 
   ;; one top level delayed contarcts remains

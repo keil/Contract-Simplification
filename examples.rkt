@@ -136,10 +136,10 @@
  (term ((λ x (+ ((x 1) @ Num?) ((x @ (Num? → Num?)) 2))) (λ x (+ x 1))))
  (term ((λ x (+ ((x 1) @ Num?) ((x (2 @ Num?)) @ Num?))) (λ x (+ x 1)))))
 
-;(test-->
-; Baseline-reduction2
-; (term ((λ x (+ ((x 1) @ Num?) ((x (2 @ Num?)) @ Num?))) (λ x (+ x 1))))
-; (term ((λ x (+ ((x 1) @ Num?) ((x 2) @ Num?))) (λ x (+ x 1)))))
+(test-->
+ Baseline-reduction2
+ (term ((λ x (+ ((x 1) @ Num?) ((x (2 @ Num?)) @ Num?))) (λ x (+ x 1))))
+ (term ((λ x (+ ((x 1) @ Num?) ((x 2) @ Num?))) (λ x (+ x 1)))))
 
 (traces Baseline-reduction2
  example:unroll/2)
@@ -183,7 +183,7 @@
  (term ((((λ x (+ x 1)) 1) @ Num?) @ Pos?)))
 
 
-
+(traces Baseline-reduction2  example:term/2)
 
 ;(done? (term (λ x (((+ x 1) @ ,Num?) @ , Pos?))))
 
