@@ -34,10 +34,13 @@
    ;; - Delayed contracts (at top level, or on X)
    ;;(x @ I))
    
+   ((λ x T) @ Q)
+   
    ;; Immeidate Contract
-   ((op S ...) @ I)
-   ((S T) @ I)
-;   (x @ I) -- gets liftet
+   ;((op S ...) @ I)
+   ;((S T) @ I)
+   
+   ;(x @ I) -- gets liftet
   
    ;; Delayed Contracts
    ;((S T) @ Q)
@@ -63,6 +66,9 @@
   ;; because it cannot be reduced
   ;; (as it is the final interface description)
   ;;((λ x M) @ Q))
+  
+  ;; TODO, for testing
+  ((C D) .... (C • D))
   
   ;; Baseline Reduction Context
   ((G H) hole (λ x H) (op S ... H M ...) (H M) (S H) (H @ C)) ;; Todo (H @ Q)
@@ -177,17 +183,19 @@
    )
    
    ;; Unfold
-   (--> (in-hole H ((M @ (C → D)) N))
-        (in-hole H ((M (N @ C)) @ D))
+   (--> (in-hole H ((S @ (C → D)) T))
+        (in-hole H ((S (T @ C)) @ D))
         "Unfold/Function"
    )
-   (--> (in-hole H ((M @ (Q ∩ R)) N))
-        (in-hole H (((M @ Q) @ R) N))
+   (--> (in-hole H ((S @ (Q ∩ R)) T))
+        (in-hole H (((S @ Q) @ R) T))
         "Unfold/Intersection"
    )
 
-   
-   
+   ;; TODO, shoudl this be a canonical contract
+   ;; Qc are either (⊤ → Qc) or (Qc ∩ Qc)?
+   ;; or (Qc → Qc)
+   ;; also in 
    
    ;; Lower (down)
    (--> (in-hole H (λ x (M @ C)))
@@ -212,26 +220,22 @@
 ;   "Lift"
 ;   )
    
+   
    ;; Collapse
-   (--> (in-hole H ((V @ C) @ D))
-        (in-hole H (V @ (C • D)))
-        "Collaps"
-   )
+   ;; --------
    
-   ;; swap
+   ;; TODO, what kind of contracts should be collapsed?
+   ;; For example:
+   ;; - Flat contarcts: (flat M) • (flat N) --> (flat (M • N))
+   ;; - Function contracts: (⊤ → Num) • (Num → ⊤) --> (Num → Num)
+   ;; - Function contracts: (⊤ → Num) • (⊤ → Pos) --> (⊤ → (Num • Pos))
    
-   ;; flatten
-   
-   
-   
-   
-
-   
-   
-
-   
-  
-   
+   ; Collapse
+   ;(--> (in-hole H ((V @ Q) @ R))
+   ;     (in-hole H (V @ (Q • R)))
+   ;     "Collaps"
+   ;)
+ 
 ))
 
 (define
