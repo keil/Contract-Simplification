@@ -8,18 +8,12 @@
 (provide (all-defined-out))
 
 
-
-
-
-
-
-
 ;; Example: 0
 ;; ---------
 
 (define 
   example-0
-  (term ((λ x (+ x (1 @ ,Nat?))) 1)))
+  (term ((λ x (+ x (1 @ Nat?))) 1)))
 
 ;(traces
 ; Baseline-reduction2
@@ -37,7 +31,7 @@
 
 (define 
   example-1
-  (term ((λ f (f 1)) ((λ x (+ x 1)) @ (,Num? → ,Num?)))))
+  (term ((λ f (f 1)) ((λ x (+ x 1)) @ (Num? → Num?)))))
 
 ;(traces
 ; Baseline-reduction2
@@ -46,7 +40,7 @@
 (test-->>
  Baseline-reduction2
  example-1
- (term (((λ f (f 1)) (λ x (+ x 1))) @ ,Num?)))
+ (term (((λ f (f 1)) (λ x (+ x 1))) @ Num?)))
 
 
 
@@ -55,7 +49,7 @@
 
 (define 
   example-2
-  (term ((λ f ((f 1) @ ,Nat?)) (λ x (+ x 1)))))
+  (term ((λ f ((f 1) @ Nat?)) (λ x (+ x 1)))))
 
 ;(traces
 ; Baseline-reduction2
@@ -64,7 +58,7 @@
 (test-->>
  Baseline-reduction2
  example-2
- (term (((λ f (f 1)) (λ x (+ x 1))) @ ,Nat?)))
+ (term (((λ f (f 1)) (λ x (+ x 1))) @ Nat?)))
 
 
 
@@ -75,7 +69,7 @@
 (define 
   example:addOne/1
   (term 
-   ((λ plus (λ x ((plus 1) x))) ((λ x (λ y (+ x y))) @ (,Num? → (,Num? → ,Num?))))))
+   ((λ plus (λ x ((plus 1) x))) ((λ x (λ y (+ x y))) @ (Num? → (Num? → Num?))))))
 
 ;(traces
 ; Baseline-reduction2
@@ -98,12 +92,12 @@
 (define 
   example-addOne1
   (term 
-   ((λ plus (λ x ((plus 1) x))) ((λ x (λ y (+ x y))) @ (,Num? → (,Num? → ,Num?))))))
+   ((λ plus (λ x ((plus 1) x))) ((λ x (λ y (+ x y))) @ (Num? → (Num? → Num?))))))
 
 (define 
   example-addOne2
   (term 
-   (((λ plus (λ x ((plus 1) x))) @ ((,Num? → (,Num? → ,Num?)) → (,Num? → ,Num?))) (λ x (λ y (+ x y))))))
+   (((λ plus (λ x ((plus 1) x))) @ ((Num? → (Num? → Num?)) → (Num? → Num?))) (λ x (λ y (+ x y))))))
 
 
 
