@@ -115,7 +115,7 @@
 (define 
   (done? M)
   (redex-match? λCon-Baseline R M))
-
+;(done? (term ((((λ x (+ x 1)) 1) @ Num?) @ Pos?)))
 
 #|
  ___        _         _   _          

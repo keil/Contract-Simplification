@@ -141,8 +141,7 @@
  (term ((λ x (+ ((x 1) @ Num?) ((x (2 @ Num?)) @ Num?))) (λ x (+ x 1))))
  (term ((λ x (+ ((x 1) @ Num?) ((x 2) @ Num?))) (λ x (+ x 1)))))
 
-(traces Baseline-reduction2
- example:unroll/2)
+;(traces Baseline-reduction2 example:unroll/2)
 
 ;; Example: Term-0
 ;; ---------------
@@ -182,18 +181,7 @@
  example:term/2
  (term ((((λ x (+ x 1)) 1) @ Num?) @ Pos?)))
 
-
-(traces Baseline-reduction2  example:term/2)
-
-;(done? (term (λ x (((+ x 1) @ ,Num?) @ , Pos?))))
-
-;(traces Baseline-reduction2  (term (λ x (((+ x 1) @ ,Num?) @ , Pos?))))
-
-
-;; test with application
-
-
-
+;(traces Baseline-reduction2  example:term/2)
 
 
 
