@@ -37,3 +37,15 @@ etwa reduction
 
 - implement a native if because if is an interesting case
 - similat ro rackets native case ?
+
+
+
+Untoll
+------
+
+- Make an example where range/domain contract are itself a function contract.
+  What shoudl be the intednded result?
+
+
+ 
+

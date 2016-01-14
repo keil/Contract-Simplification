@@ -1,0 +1,60 @@
+
+
+
+Predicates
+==========
+
+- Unrolling/Combining predicates works only if predicates are pure. This means
+  that base contracts and abstractions cannot be refined or reduces as there
+  evaluation may depend on the current context. 
+  
+  New flat contracts/ predicates are stateless and have to work on their input.
+  Further, the argument is wrapped in a special proxy that projects objects and
+  guarantees that the predicate did not access the object. This is required
+  because the object may change over time. And checking a predicate on an object
+  twice may not lead to the same outcome, as the object changes over time and
+  also because a property access in a predicate may change the object itself. 
+  
+  All other kinds need to implemented as another/special contract, e.g. Method
+  Contract or Invariant Contract.
+
+
+
+
+Baseline Optimization
+=====================
+
+Lift 
+----
+
+- Needs to stop at the first lambda term, as this lambda might never be called.
+  This step guarantees that we do only "benefiting" optimizations.
+
+- It is only allowed to lift immediate contract because delayed contract will be
+  checked later on (or never) and it is not possible to combine them.
+
+  => Delayed contract on function a valid final terms (even if they are nested
+  in a subexpression)
+
+
+Unroll
+------
+
+- We unroll the function/ delayed contract to all uses of that function. 
+
+  We do not split domain/range contract at this place and we neither move the
+  domain contract to the applications mot do we move the range contract to the
+  function body.
+
+  The reason for is as follows:
+
+  i) A delayed contract may also be an intersection, and thus it would require
+  to the unroll the whole contract at definition.
+  
+  ii) The goal is to create a contract on the upper/enclosing function, and
+  moving the range contract to the function body prohibits this.
+
+  iii) What happens is domain/range contract are itself function contracts?
+
+
+
