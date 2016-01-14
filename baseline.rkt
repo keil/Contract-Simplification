@@ -34,17 +34,19 @@
    ;; - Delayed contracts (at top level, or on X)
    ;;(x @ I))
    
-   ((λ x T) @ Q)
+   ;;((λ x T) @ Q)
    
    ;; Immeidate Contract
-   ;((op S ...) @ I)
-   ;((S T) @ I)
+   ((op S ...) @ I)
+   ((S T) @ I)
    
    ;(x @ I) -- gets liftet
   
    ;; Delayed Contracts
-   ;((S T) @ Q)
-   ;((λ x S) @ Q)
+   ((λ x T) @ Q)
+   ((S T) @ Q)
+   ;(x @ Q), wenn nicht in einer applikation
+   ; und das nur innerhalb von applikationen oder op's
    
    ;; TODO, union is missing
    )
