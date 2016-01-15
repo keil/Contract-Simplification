@@ -21,6 +21,18 @@
 
 (define-extended-language λCon-Baseline λCon
 
+
+  ;; restrict to flat contracts instead of I
+  
+  ;; pre-evaluated contracts
+  (Cc (Dc → Rc))
+  ;; Domain contracts
+  (Dc I (Rc → Cc))
+  ;; Range contracts
+  (Rc ⊤ (Dc → Rc))
+
+
+  
   ;; Contract-free terms (λJ terms)
   ((S T) K x (λ x T) (S T) (op T ...))
   
@@ -209,6 +221,23 @@
         (in-hole H ((λ x (unroll x Q M)) V))
         "Unroll"
    )
+
+   ;; any intersection needs to be unrolled before
+   ;; lift is only allowed to lift Cx contracts
+   
+   ;; ??
+   (--> (in-hole H ((λ x M) @ (C → D)))
+        (in-hole H (λ x ((unroll x C M) @ D)))
+        "XXX"
+   )
+
+   
+
+   
+   ;; what happens if (λ x M) is also contracted?
+   ;; can we say that (λ x M) needs to be unrolled before
+   ;;: this merans onbe part is alredy inside of m, ans the other part on V
+   ;; onlzy V or is also M @ Qx allowed
    
    ;; Unfold
    (--> (in-hole H ((R @ (C → D)) T))
