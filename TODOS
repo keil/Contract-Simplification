@@ -39,6 +39,25 @@ etwa reduction
 - similat ro rackets native case ?
 
 
+Predicate Refinement
+====================
+
+- Implement a predicate refinement similar to the fullback in TreatJS.
+
+i) State different properties independently from other properties and let the
+   final flat-contract be a conjunction of different predicates. 
+   (flat M ...)
+
+ii) Each predicates is a refinement of other predicates.
+    (flat \ x (number? x)) refined \top
+
+iii) Implement subset calculation and set difference.
+
+
+
+
+
+
 
 Untoll
 ------
