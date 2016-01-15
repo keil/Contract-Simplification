@@ -71,3 +71,47 @@ Collapse
 --------
 
 - Implement Meta-Function
+
+
+
+Native contracts
+----------------
+
+Implement predefined contracts for native operators! 
+(Should they raise a static blame iif they know that the dynamic execution woult
+fails?)
+
+- in combination with refinement predicates
+- a contract on the output of a native function
+
+
+
+
+
+Subject-free/ pre-evaluated contracts
+-------------------------------------
+
+Immediate contracts on the range gets moved into the fun runs body?
+
+- Only non-checkable delayed contracts remain.
+
+But, is it than possible to produce an upper-level interface description?
+Benefits?
+
+- Compare to norms unrolling 
+
+Normalized Contract:
+(Intersection/ Union/ Dependent Contract/ Abstraction)
+
+Contract C:= D -> R 
+
+Domain D := I | R -> D
+Range R := T | D -> R
+
+Example:
+(N -> N) -> (N -> N)
+(T -> N) -> (N -> T)
+
+Efficient reduction vs. an upper description (contract).
+(Context contract, alternative is to split the contract, similar to Dimulas and
+than to assert both parties in separation?)
