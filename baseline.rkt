@@ -108,7 +108,7 @@
   ;;((λ x M) @ Q))
   
   ;; TODO, for testing
-  ;((C D) .... (C • D))
+  ;;((C D) .... (C • D))
   
 
   
@@ -176,6 +176,11 @@
         (in-hole H ((M @ I) @ C))
         "Reduce/Intersection"
    )
+
+   (--> (in-hole H (R @ ⊤))
+        (in-hole H R)
+        "Reduce"
+   )
 ))
 
 ;; TODO
@@ -220,8 +225,8 @@
    λCon-Baseline
    
    ;; Unroll
-   (--> (in-hole H ((λ x M) (V @ Qc))) ;; before Q now Qc
-        (in-hole H ((λ x (unroll x Q M)) V))
+   (--> (in-hole H ((λ x M) (R @ Qc))) ;; before Q now Qc (V @ C)
+        (in-hole H ((λ x (unroll x Qc M)) R))
         "Unroll/Context"
    )
 
@@ -231,8 +236,8 @@
    ;; ??
    ;; need to guarantee that I do not call this function again aufter lifting
    ;; otherwise use the speil operator from Dimulas
-   (--> (in-hole H ((λ x M) @ (C → D)))
-        (in-hole H (λ x ((unroll x C M) @ D)))
+   (--> (in-hole H ((λ x M) @ (Q → D)))
+        (in-hole H (λ x ((unroll x Q M) @ D)))
         "Unroll/Subject"
         (side-condition (not (canonical? (term (C → D)))))
    )
@@ -272,7 +277,7 @@
    ;; on argument x and creates a new function contract.
    
    (--> (in-hole H (λ x (in-hole A (x @ I)))) ;; ? all contracts?
-        (in-hole H ((λ x (in-hole A (x))) @ (I → ⊤)))
+        (in-hole H ((λ x (in-hole A x)) @ (I → ⊤)))
         "Lift"
    )
    
