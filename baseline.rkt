@@ -25,9 +25,9 @@
   ;; restrict to flat contracts instead of I
   
   ;; pre-evaluated contracts
-  (Cc (Dc → Rc))
+  (Qc (Dc → Rc))
   ;; Domain contracts
-  (Dc I (Rc → Cc))
+  (Dc I (Rc → Dc))
   ;; Range contracts
   (Rc ⊤ (Dc → Rc))
 
@@ -88,8 +88,7 @@
 ;   )
 
   
-  
-  
+   
   ;; Final Terms
   (final R)
   
@@ -120,6 +119,10 @@
   (A hole (op a ... H M ...) (H M) (a H) (H @ C)) ;; Todo (H @ Q)
   
 )
+
+(define 
+  (canonical? C)
+  (redex-match? λCon-Baseline Qc C))
 
 ;(define 
 ;  (done? M)
@@ -185,23 +188,23 @@
 ;; to all uses of x
 
 (define-metafunction λCon-Baseline
-  unroll : x Q any -> any
+  unroll : x C any -> any
   
   ;; Don't continue if x is bound λ's body
-  [(unroll x Q (λ x M)) (λ x M)]
+  [(unroll x C (λ x M)) (λ x M)]
   
   ;; Continue unrollong on λ's body
-  [(unroll x Q (λ y M)) (λ y (unroll x Q M))]
+  [(unroll x C (λ y M)) (λ y (unroll x C M))]
   
   ;; Put contract to the usage of x
-  [(unroll x Q x) (x @ Q)]
+  [(unroll x C x) (x @ C)]
 
   ;; Continue unrollong on the structure of M
-  [(unroll x Q (any ...)) ((unroll x Q any) ...)]
+  [(unroll x C (any ...)) ((unroll x C any) ...)]
   
   ;; Return the target expression M if
   ;; none of the previous rules match
-  [(unroll x Q any) any]
+  [(unroll x C any) any]
 )
 
 ;; Contract Propagration
@@ -217,18 +220,21 @@
    λCon-Baseline
    
    ;; Unroll
-   (--> (in-hole H ((λ x M) (V @ Q)))
+   (--> (in-hole H ((λ x M) (V @ Qc))) ;; before Q now Qc
         (in-hole H ((λ x (unroll x Q M)) V))
-        "Unroll"
+        "Unroll/Context"
    )
 
    ;; any intersection needs to be unrolled before
    ;; lift is only allowed to lift Cx contracts
    
    ;; ??
+   ;; need to guarantee that I do not call this function again aufter lifting
+   ;; otherwise use the speil operator from Dimulas
    (--> (in-hole H ((λ x M) @ (C → D)))
         (in-hole H (λ x ((unroll x C M) @ D)))
-        "XXX"
+        "Unroll/Subject"
+        (side-condition (not (canonical? (term (C → D)))))
    )
 
    
@@ -255,8 +261,8 @@
    ;; also in 
    
    ;; Lower (down)
-   (--> (in-hole H (λ x (M @ C)))
-        (in-hole H ((λ x M) @ (⊤ → C)))
+   (--> (in-hole H (λ x (M @ Q))) ;; C before, now Q
+        (in-hole H ((λ x M) @ (⊤ → Q)))
         "Lower"
    )
 
