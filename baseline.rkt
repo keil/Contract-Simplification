@@ -237,7 +237,7 @@
    ;; need to guarantee that I do not call this function again aufter lifting
    ;; otherwise use the speil operator from Dimulas
    (--> (in-hole H ((λ x M) @ (Q → C)))
-        (in-hole H ((λ x ((unroll x Q M)) @ (⊤ → D))))
+        (in-hole H ((λ x (unroll x Q M)) @ (⊤ → C)))
         "Unroll/Subject/Domain"
         (side-condition (not (canonical? (term (Q → D)))))
    )
