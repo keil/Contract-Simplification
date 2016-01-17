@@ -236,12 +236,16 @@
    ;; ??
    ;; need to guarantee that I do not call this function again aufter lifting
    ;; otherwise use the speil operator from Dimulas
-   (--> (in-hole H ((λ x M) @ (Q → D)))
-        (in-hole H (λ x ((unroll x Q M) @ D)))
-        "Unroll/Subject"
-        (side-condition (not (canonical? (term (C → D)))))
+   (--> (in-hole H ((λ x M) @ (Q → C)))
+        (in-hole H ((λ x ((unroll x Q M)) @ (⊤ → D))))
+        "Unroll/Subject/Domain"
+        (side-condition (not (canonical? (term (Q → D)))))
    )
-
+   (--> (in-hole H ((λ x M) @ (Dc → D)))
+        (in-hole H (λ x (M @ D)))
+        "Unroll/Subject/Range"
+        (side-condition (not (canonical? (term (Dc → D)))))
+   )
    
 
    
