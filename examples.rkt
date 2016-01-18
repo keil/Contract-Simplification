@@ -17,6 +17,23 @@
 
 
 
+;; Examples: Simple Terms
+;; ======================
+
+(define 
+  example:term/0
+  (term (((λ x (+ x 1)) @ (Num? → Num?)) 1)))
+
+(define 
+  example:term/1
+  (term (λ x (((+ x 1) @ Num?) @ Pos?))))
+
+(define 
+  example:term/2
+  (term ((λ x (((+ x 1) @ Num?) @ Pos?)) 1)))
+
+
+
 ;; Examples: Remain
 ;; ================
 
@@ -102,20 +119,3 @@
 (define 
   example:unfold/2
   (term ((λ x (+ ((x @ (Num? → Num?)) 1) ((x @ (Num? → Num?)) 2))) (λ x (+ x 1)))))
-
-
-
-;; Examples: Simple Terms
-;; ======================
-
-(define 
-  example:term/0
-  (term (((λ x (+ x 1)) @ (Num? → Num?)) 1)))
-
-(define 
-  example:term/1
-  (term (λ x (((+ x 1) @ Num?) @ Pos?))))
-
-(define 
-  example:term/2
-  (term ((λ x (((+ x 1) @ Num?) @ Pos?)) 1)))

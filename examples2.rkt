@@ -8,57 +8,40 @@
 (provide (all-defined-out))
 
 
-;; Example: 0
-;; ---------
-
-(define 
-  example-0
-  (term ((λ x (+ x (1 @ Nat?))) 1)))
-
-;(traces
-; Baseline-reduction
-; example-0)
-
-(test-->>
- Baseline-reduction
- example-0
- (term ((λ x (+ x 1)) 1)))
- 
-
-
 ;; Example: 1
 ;; ---------
 
 (define 
-  example-1
+  example:1
   (term ((λ f (f 1)) ((λ x (+ x 1)) @ (Num? → Num?)))))
 
-;(traces
-; Baseline-reduction
-; example-1)
+(traces Baseline-reduction example:1)
 
 (test-->>
  Baseline-reduction
- example-1
+ example:1
  (term (((λ f (f 1)) (λ x (+ x 1))) @ Num?)))
 
 
 
 ;; Example: 2
-;; ---------
+;; ----------
 
 (define 
-  example-2
+  example:2
   (term ((λ f ((f 1) @ Nat?)) (λ x (+ x 1)))))
 
-;(traces
-; Baseline-reduction
-; example-2)
+; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+; Note: Matthias Keil
+; [Lower] moves only function/delayed contracts
+; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-(test-->>
- Baseline-reduction
- example-2
- (term (((λ f (f 1)) (λ x (+ x 1))) @ Nat?)))
+;(traces Baseline-reduction example:2)
+
+;(test-->>
+; Baseline-reduction
+; example:2
+; (term (((λ f (f 1)) (λ x (+ x 1))) @ Nat?)))
 
 
 

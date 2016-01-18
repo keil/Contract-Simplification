@@ -115,3 +115,13 @@ Example:
 Efficient reduction vs. an upper description (contract).
 (Context contract, alternative is to split the contract, similar to Dimulas and
 than to assert both parties in separation?)
+
+
+
+Collapse Predicates
+===================
+
+- needs to preserve the order of the checked predicates
+- (reverse the order when combining function contracts)
+
+

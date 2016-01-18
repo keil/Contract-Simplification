@@ -19,6 +19,11 @@
 ;; ====================
 
 (test-->>
+ Baseline-reduction
+ (term ((λ x (+ x (1 @ Nat?))) 1))
+ (term ((λ x (+ x 1)) 1)))
+
+(test-->>
  Pre-evaluation
  (term ((1 @ Nat?) @ Nat?))
  (term 1))

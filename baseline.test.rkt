@@ -19,7 +19,7 @@
 ; Test  λCon-Baseline2/ Reduction
 
 (test-->
- Baseline-reduction2
+ Baseline-reduction
  (term
   ((λ f (f 1)) ((λ x (+ x 1)) @ (Num? → Num?))))
  (term
@@ -30,7 +30,7 @@
 
 
 (test-->>
- Baseline-reduction2
+ Baseline-reduction
  (term
   ((λ f (f 1)) ((λ x (+ x 1)) @ (Num? → Num?))))
  (term

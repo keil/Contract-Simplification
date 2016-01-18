@@ -15,6 +15,8 @@
                     
 |#
 
+
+
 ;; Test: Simple Terms
 ;; ==================
 
@@ -23,15 +25,21 @@
  example:term/0
  (term (((λ x (+ x 1)) 1) @ Num?)))
 
-(test-->>
- Baseline-reduction
- example:term/1
- (term (((λ x (+ x 1)) @ (⊤ → Num?)) @ (⊤ → Pos?))))
+; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+; Note: Matthias Keil
+; [Lower] moves only function/delayed contracts
+; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-(test-->>
- Baseline-reduction
- example:term/2
- (term ((((λ x (+ x 1)) 1) @ Num?) @ Pos?)))
+;(test-->>
+; Baseline-reduction
+; example:term/1
+; (term (((λ x (+ x 1)) @ (⊤ → Num?)) @ (⊤ → Pos?))))
+ 
+;(test-->>
+; Baseline-reduction
+; example:term/2
+; (term ((((λ x (+ x 1)) 1) @ Num?) @ Pos?)))
+
 
 
 ;; Test Unroll
