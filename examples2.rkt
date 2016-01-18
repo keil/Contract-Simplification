@@ -15,12 +15,17 @@
   example:1
   (term ((λ f (f 1)) ((λ x (+ x 1)) @ (Num? → Num?)))))
 
-(traces Baseline-reduction example:1)
+; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+; Note: Matthias Keil
+; [Lower] moves only function/delayed contracts
+; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-(test-->>
- Baseline-reduction
- example:1
- (term (((λ f (f 1)) (λ x (+ x 1))) @ Num?)))
+;(traces Baseline-reduction example:1)
+
+;(test-->>
+; Baseline-reduction
+; example:1
+; (term (((λ f (f 1)) (λ x (+ x 1))) @ Num?)))
 
 
 
@@ -76,6 +81,8 @@
   example-addOne1
   (term 
    ((λ plus (λ x ((plus 1) x))) ((λ x (λ y (+ x y))) @ (Num? → (Num? → Num?))))))
+
+
 
 (define 
   example-addOne2
