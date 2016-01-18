@@ -27,7 +27,7 @@
   ((S T) K x (λ x T) (S T) (op T ...))
   
   ;; Final terms (only top-level contracted)
-  (R 
+  (B 
    ;; Contract-free terms
    T
    ;; Imemdiate Contracts
@@ -45,10 +45,10 @@
    )
   
   ;; Final Terms
-  (final R)
+  (final B)
   
   ;; Baseline Reduction Context
-  ((G H) hole (λ x H) (H M) (R H) (op R ... H M ...) (H @ C))
+  ((G H) hole (λ x H) (H M) (B H) (op B ... H M ...) (H @ C))
   
   
     ;; restrict to flat contracts instead of I
@@ -142,23 +142,23 @@
 ;; to all uses of x
 
 (define-metafunction λCon-Baseline
-  unroll : x C any -> any
+  unroll : x Q any -> any
   
   ;; Don't continue if x is bound λ's body
-  [(unroll x C (λ x M)) (λ x M)]
+  [(unroll x Q (λ x M)) (λ x M)]
   
   ;; Continue unrollong on λ's body
-  [(unroll x C (λ y M)) (λ y (unroll x C M))]
+  [(unroll x Q (λ y M)) (λ y (unroll x Q M))]
   
   ;; Put contract to the usage of x
-  [(unroll x C x) (x @ C)]
+  [(unroll x Q x) (x @ Q)]
 
   ;; Continue unrollong on the structure of M
-  [(unroll x C (any ...)) ((unroll x C any) ...)]
+  [(unroll x Q (any ...)) ((unroll x Q any) ...)]
   
   ;; Return the target expression M if
   ;; none of the previous rules match
-  [(unroll x C any) any]
+  [(unroll x Q any) any]
 )
 
 ;; Contract Propagration
@@ -174,8 +174,8 @@
    λCon-Baseline
    
    ;; Unroll
-   (--> (in-hole H ((λ x M) (R @ Q))) ;; before Q now Qc (V @ C)
-        (in-hole H ((λ x (unroll x Q M)) R))
+   (--> (in-hole H ((λ x M) (B @ Q))) ;; before Q now Qc (V @ C)
+        (in-hole H ((λ x (unroll x Q M)) B))
         "Unroll"
    )
 
@@ -204,12 +204,12 @@
    ;; onlzy V or is also M @ Qx allowed
    
    ;; Unfold
-   (--> (in-hole H ((R @ (C → D)) T))
-        (in-hole H ((R (T @ C)) @ D))
+   (--> (in-hole H ((B @ (C → D)) M))
+        (in-hole H ((B (M @ C)) @ D))
         "Unfold/Function"
    )
-   (--> (in-hole H ((R @ (Q ∩ R)) T))
-        (in-hole H (((R @ Q) @ R) T))
+   (--> (in-hole H ((B @ (Q ∩ R)) M))
+        (in-hole H (((B @ Q) @ R) M))
         "Unfold/Intersection"
    )
 
@@ -219,8 +219,8 @@
    ;; also in 
    
    ;; Lower (down)
-   (--> (in-hole H (λ x (R @ C))) ;; C before, now Q
-        (in-hole H ((λ x R) @ (⊤ → C)))
+   (--> (in-hole H (λ x (B @ C))) ;; C before, now Q
+        (in-hole H ((λ x B) @ (⊤ → C)))
         "Lower"
    )
 
@@ -247,6 +247,10 @@
    ;; - Function contracts: (⊤ → Num) • (⊤ → Pos) --> (⊤ → (Num • Pos))
    
    ; Collapse
+   ;(--> (in-hole H ((S @ C) @ D))
+   ;     (in-hole H (S @ (collapse C D)))
+   ;     "Collaps"
+   ;)
    (--> (in-hole H ((S @ C) @ D))
         (in-hole H (S @ (collapse C D)))
         "Collaps"

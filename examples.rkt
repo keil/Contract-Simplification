@@ -67,7 +67,7 @@
 
 (define 
   example:remain/7
-  (term (λ f ((f (λ x x)) 1)  ((λ x x) @ ((Num? → Num?) → (Num? → Num?))))))
+  (term (λ f ((f (λ x x)) 1) ((λ x x) @ ((Num? → Num?) → (Num? → Num?))))))
 
 
 
