@@ -20,117 +20,69 @@
 |#
 
 (define-extended-language λCon-Baseline λCon
-
-
-  ;; restrict to flat contracts instead of I
   
-  ;; pre-evaluated contracts
-  (Qc (Dc → Rc))
-  ;; Domain contracts
-  (Dc I (Rc → Dc))
-  ;; Range contracts
-  (Rc ⊤ (Dc → Rc))
-
-
+  
   
   ;; Contract-free terms (λJ terms)
   ((S T) K x (λ x T) (S T) (op T ...))
   
-  ;; Final terms (top-level contracted)
+  ;; Final terms (only top-level contracted)
   (R 
-   ;; All contract-free terms
+   ;; Contract-free terms
    T
-   
    ;; Imemdiate Contracts
    ((op S ...) @ I)
    ((S T) @ I)
    
    ;; Delayed Contracts
-   ((λ x T) @ Q)
-   (x @ Q)
+   ;((λ x T) @ Q)
+   ;(x @ Q)
+   (S (T @ Q))
    ((S T) @ Q)
    
+   ;(M (N @ Q)) (M (N @ Qz))
+   
    )
+  
+  ;; Final Terms
+  (final R)
   
   ;; Baseline Reduction Context
   ((G H) hole (λ x H) (H M) (R H) (op R ... H M ...) (H @ C))
   
   
+    ;; restrict to flat contracts instead of I
   
-  ;; Final Terms
-  ;; -----------
-  ;; Final terms are all non-reducible terms,
-  ;; e.g. Immediate Contracts in variables (x @ (flat M))
-;  ((R S T) 
-   ;; Term from λJ
-;   K x (λ x T) (S T) (op T ...)
-   ;; Term from λCon
-   ;; - Non-reducible contract assertions (should be liftet)
-   ;; - Blame
-   ;; - Delayed contracts (at top level, or on X)
-   ;;(x @ I))
-   
-   ;;((λ x T) @ Q)
-   
-   ;; Immeidate Contract
-;   ((op S ...) @ I)
-;   ((S T) @ I) ;; will this mean that λ x ((S T) @ C) is final?
-   
-   ;(x @ I) -- gets liftet
-  
-   ;; Delayed Contracts
-;   ((λ x T) @ Q)
-   ;((S T) @ Q)
-   ;(x @ Q), wenn nicht in einer applikation
-   ; und das nur innerhalb von applikationen oder op's
-   
-   ;; TODO, union is missing
-;   )
-
-  
-   
-  ;; Final Terms
-  (final R)
-  
-  ;; TODO, say the optimization is finished if only 
-  ;; one top level delayed contarcts remains
-  
-  ;; Final Terms
-  ;(R S (R_1 R_2) (R @ C) ((λ x R) @ C) (x @ C))
-  
-  
-  ;; - Top-level function contract
-
-  ;; TODO
-  ;; One top-level function-contract might remain
-  ;; because it cannot be reduced
-  ;; (as it is the final interface description)
-  ;;((λ x M) @ Q))
-  
-  ;; TODO, for testing
-  ;;((C D) .... (C • D))
+  ;; pre-evaluated contracts
+  ;(Qc (Dc → Rc))
+  ;; Domain contracts
+  ;(Dc I (Rc → Dc))
+  ;; Range contracts
+  ;(Rc ⊤ (Dc → Rc))
   
 
-  
-  
-  
   ;; Execution Body (name?)
   (a K x (a_1 a_2) (op a ...)) ;; Contracts a @ C
   (A hole (op a ... H M ...) (H M) (a H) (H @ C)) ;; Todo (H @ Q)
   
+  ;; Extend contracts
+  ((C D) .... (C • D))
+
 )
 
 (define 
   (canonical? C)
   (redex-match? λCon-Baseline Qc C))
 
-;(define 
-;  (done? M)
-;  (redex-match? λCon-Baseline M))
+
+;; Done
+;; ----
+;; Test if an expression is in a final state
+
 (define 
   (done? M)
-  (redex-match? λCon-Baseline R M))
-;(done? (term ((((λ x (+ x 1)) 1) @ Num?) @ Pos?)))
+  (redex-match? λCon-Baseline final M))
+
 
 #|
  ___        _         _   _          
@@ -177,15 +129,12 @@
         "Reduce/Intersection"
    )
 
-   (--> (in-hole H (R @ ⊤))
-        (in-hole H R)
-        "Reduce"
-   )
+   ; Not required because of [Verify]
+   ;(--> (in-hole H (R @ ⊤))
+   ;     (in-hole H R)
+   ;     "Reduce"
+   ;)
 ))
-
-;; TODO
-;; Unroll union ?
-
 
 ;; Function unroll : x Q M -> N
 ;; ----------------------------
@@ -227,7 +176,7 @@
    ;; Unroll
    (--> (in-hole H ((λ x M) (R @ Q))) ;; before Q now Qc (V @ C)
         (in-hole H ((λ x (unroll x Q M)) R))
-        "Unroll/Context"
+        "Unroll"
    )
 
    ;; any intersection needs to be unrolled before
@@ -270,8 +219,8 @@
    ;; also in 
    
    ;; Lower (down)
-   (--> (in-hole H (λ x (M @ Q))) ;; C before, now Q
-        (in-hole H ((λ x M) @ (⊤ → Q)))
+   (--> (in-hole H (λ x (R @ C))) ;; C before, now Q
+        (in-hole H ((λ x R) @ (⊤ → C)))
         "Lower"
    )
 
@@ -285,12 +234,7 @@
         "Lift"
    )
    
-   ;; Lift (up)
-   ;(--> (in-hole H (λ x (M (x @ C))))
-   ;    (in-hole H ((λ x (M x)) @ (C → ,Any?)))
-;
-;   "Lift"
-;   )
+
    
    
    ;; Collapse
@@ -303,16 +247,74 @@
    ;; - Function contracts: (⊤ → Num) • (⊤ → Pos) --> (⊤ → (Num • Pos))
    
    ; Collapse
-   ;(--> (in-hole H ((V @ Q) @ R))
-   ;     (in-hole H (V @ (Q • R)))
-   ;     "Collaps"
-   ;)
+   (--> (in-hole H ((S @ C) @ D))
+        (in-hole H (S @ (collapse C D)))
+        "Collaps"
+   )
+   ; Reverse
+   (--> (in-hole H ((V @ Q) @ I))
+        (in-hole H ((V @ I) @ Q))
+        "Reverse"
+   )
  
 ))
+
+
+
+
+
+
+;; Function unroll : x Q M -> N
+;; ----------------------------
+;; Unrolls a delayed contract Q of function x 
+;; to all uses of x
+
+;; blame perserving
+;; constraint set
+
+(define-metafunction λCon-Baseline
+  collapse : C D -> C
+  
+  ;; +++++++++++++
+  ;; Special Rules
+  ;; -------------
+  ;; Delete this if predicate refinement is implemented
+  [(collapse ⊤ C) C]
+  [(collapse C ⊤) C]
+  ;; +++++++++++++
+  
+  ;; Collapse flat contarcts.
+  [(collapse (flat M) (flat N)) ((flat M) • (flat N))]
+  
+  ;; Collapse function contract.
+  ;; reverse order of preduicates, depending on the evaluation order
+  [(collapse (C_l → D_l) (C_r → D_r)) ((collapse C_r C_l) → (collapse D_l D_r))]
+  
+  ;; +++++++++++++++++++++++++++++++++++
+  ;; Default, if not otherwise mentioned
+  ;; ((C ∪ D) is unrolled, (I ∩ C) is unrolled)
+  ;; TODO, it this correct, or is it also ok
+  ;; to remain the sequential assertion @ C @ D
+  [(collapse C C) C]
+  [(collapse C D) (C • D)]
+)
+
+
+
+
+
+
+;; Reduce
+;; ------
+;; Applies the baseline reduction
 
 (define
   (reduce M)
   (car (apply-reduction-relation* Baseline-reduction M)))
+
+
+
+
 
 #|
  _____       _      
@@ -321,6 +323,9 @@
   |_|\___/__/\__/__/
                     
 |#
+
+
+
 
 (define 
   example-4

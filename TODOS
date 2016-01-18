@@ -125,3 +125,38 @@ Collapse Predicates
 - (reverse the order when combining function contracts)
 
 
+
+
+Contract Integration
+====================
+
+*** Approaches
+i) first to define a contract subset of remaining contracts
+ii) use a split operator to produce two (subject/context) contracts
+
+- \ x . 1 @ Num -> Num
+  is not allowed to be reduced to \ x . 1 
+  because \ x . 1 can be called with values other than Num
+
+- \ x . x @ Num -> Num
+  is not allowed to be reduced to (\ x . (x @ Num)) @ (Num - T)
+  because the constraint for (x @ Num) is created once ans all evaluations 
+  will update to the same constraint
+
+
+=> This, we are only allowed to replace \ x M @ Q to all uses but not con
+concentrate a number of applications on one assertion
+
+=> one delayed assertion --> multiple assertion on all uses
+
+It remains, is it possible to make an common evaluation, with a neutral context
+to detect definitive static blame messages.
+
+
+
+Questions
+=========
+
+*** Will moving contracts cause more contract violations, as some violations
+might not happen because a function is never called?
+

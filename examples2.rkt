@@ -8,6 +8,101 @@
 (provide (all-defined-out))
 
 
+
+
+;; Motivating Example: AddOne
+;; --------------------------
+
+(define 
+  example:addOne0
+  (term 
+   ((λ f (f 1)) ((λ x (λ y (+ x y))) @ (Num? → (Num? → Num?))))))
+
+;(traces Baseline-reduction example:addOne0)
+
+(test-->>
+ Baseline-reduction
+ example:addOne0
+ (term (((λ f (f 1)) (λ x (λ y (+ x y)))) @ (Num? → Num?))))
+
+;; XXX, with contract on addOne
+;; with an intersectionb on plus (overload plus)
+
+(define 
+  example:addOne1
+  (term ((λ f (λ x ((f 1) x))) ((λ x (λ y (+ x y))) @ (Num? → (Num? → Num?))))))
+
+;(traces Baseline-reduction example:addOne1)
+
+(test-->>
+ Baseline-reduction
+ example:addOne1
+ (term (((λ f (λ x ((f 1) x))) (λ x (λ y (+ x y)))) @ (Num? → Num?))))
+
+
+(define 
+  example:addOne2
+  (term ((λ f (λ x ((f x) 1))) ((λ x (λ y (+ x y))) @ (Num? → (Num? → Num?))))))
+
+;(traces Baseline-reduction example:addOne2)
+
+(test-->>
+ Baseline-reduction
+ example:addOne2
+ (term (((λ f (λ x ((f x) 1))) (λ x (λ y (+ x y)))) @ (Num? → Num?))))
+
+
+
+;; Motivating Example: Double
+;; --------------------------
+
+
+(define 
+  example:double0
+  (term ((λ f (λ x ((f x) x))) ((λ x (λ y (+ x y))) @ (Num? → (Num? → Num?))))))
+
+;(traces Baseline-reduction example:double0)
+
+(test-->>
+ Baseline-reduction
+ example:double0
+ (term (((λ f (λ x ((f x) x))) (λ x (λ y (+ x y)))) @ (Num? → Num?))))
+
+
+
+
+
+;; Motivating Example: Inc
+;; -----------------------
+
+(define 
+  example:inc0
+  (term ((λ f (λ x (f x))) ((λ x (λ y (+ x y))) @ (Num? → (Num? → Num?))))))
+
+(traces Baseline-reduction example:inc0)
+
+(test-->>
+ Baseline-reduction
+ example:inc0
+ (term (((λ f (λ x (f x))) (λ x (λ y (+ x y)))) @ (Num? → (Num? → Num?)))))
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ;; Example: 1
 ;; ---------
 
@@ -71,8 +166,8 @@
 
 
 
-  
-  
+
+
 ;; Contract at different prosiitions
 ;; on plus, as contract on the outer function
 ;; and with or without concrete top-level application
