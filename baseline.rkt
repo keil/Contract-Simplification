@@ -148,7 +148,7 @@
 ;; TODO
 ;; implement top-level blame rule
 
-(define Baseline-reduction
+(define Pre-evaluation
   (reduction-relation
    λCon-Baseline
    
@@ -220,13 +220,13 @@
 ;; TODO, shoudl M be obpimized before applying another rule ?
 ;; Lift: All types of contracts? .. generalize λ y M to M
 
-(define Baseline-reduction2
-  (extend-reduction-relation Baseline-reduction
+(define Baseline-reduction
+  (extend-reduction-relation Pre-evaluation
    λCon-Baseline
    
    ;; Unroll
-   (--> (in-hole H ((λ x M) (R @ Qc))) ;; before Q now Qc (V @ C)
-        (in-hole H ((λ x (unroll x Qc M)) R))
+   (--> (in-hole H ((λ x M) (R @ Q))) ;; before Q now Qc (V @ C)
+        (in-hole H ((λ x (unroll x Q M)) R))
         "Unroll/Context"
    )
 
@@ -236,16 +236,16 @@
    ;; ??
    ;; need to guarantee that I do not call this function again aufter lifting
    ;; otherwise use the speil operator from Dimulas
-   (--> (in-hole H ((λ x M) @ (Q → C)))
-        (in-hole H ((λ x (unroll x Q M)) @ (⊤ → C)))
-        "Unroll/Subject/Domain"
-        (side-condition (not (canonical? (term (Q → D)))))
-   )
-   (--> (in-hole H ((λ x M) @ (Dc → D)))
-        (in-hole H (λ x (M @ D)))
-        "Unroll/Subject/Range"
-        (side-condition (not (canonical? (term (Dc → D)))))
-   )
+;   (--> (in-hole H ((λ x M) @ (Q → C)))
+;        (in-hole H ((λ x (unroll x Q M)) @ (⊤ → C)))
+;        "Unroll/Subject/Domain"
+;        (side-condition (not (canonical? (term (Q → D)))))
+;   )
+;   (--> (in-hole H ((λ x M) @ (Dc → D)))
+;        (in-hole H (λ x (M @ D)))
+;        "Unroll/Subject/Range"
+;        (side-condition (not (canonical? (term (Dc → D)))))
+;   )
    
 
    

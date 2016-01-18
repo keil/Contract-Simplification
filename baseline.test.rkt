@@ -5,7 +5,7 @@
 (require "lcon.rkt")
 (require "baseline.rkt")
 
-(require "examples.rkt")
+;(require "examples.rkt")
 
 #|
  _____       _      
@@ -14,33 +14,6 @@
   |_|\___/__/\__/__/
                     
 |#
-
-;; Test λCon-Baseline/ Done
-;; ========================
-
-(done? (term (+ 1 2))) ; expect #t
-(done? (term ((λ x (+ x 1)) 1))) ; expect #t
-(done? (term (((λ x (+ x 1)) @ (Nat? → Nat?)) 1))) ; expect #f
-
-(done? (term ((λ x (+ x 1)) (1 @ Nat?)))) ; expect #f
-(done? (term ((λ x (+ x (1 @ Nat?))) 1))) ; expect #f
-(done? (term ((λ x (+ (x @ Nat?) 1)) 1))) ; expect #f
-
-;; Test λCon-Baseline/ Reduction
-(test-->> Baseline-reduction (term ((1 @ Nat?) @ Nat?)) (term 1))
-(test-->> Baseline-reduction (term ((0 @ Nat?) @ Nat?)) (term 0))
-
-;(test-->> Baseline-reduction (term (assert (assert 0 Pos?) Nat?)) (term +blmae))
-;(test-->> Baseline-reduction (term ((0 @ Nat?) @ Pos?)) (term +blame))
-
-(test-->> Baseline-reduction (term ((λ x (+ x 1)) (1 @ Nat?))) (term ((λ x (+ x 1)) 1)))
-(test-->> Baseline-reduction (term ((λ x (+ x (1 @ Nat?))) 1)) (term ((λ x (+ x 1)) 1)))
-
-(test-->> Baseline-reduction (term ((λ x (+ (x @ Nat?) 1)) 1)) (term ((λ x (+ (x @ Nat?) 1)) 1)))
- 
-(test-->> Baseline-reduction (term (1 @ (Nat? → Nat?))) (term 1)) 
-(test-->> Baseline-reduction (term (x @ (Nat? → Nat?))) (term (x @ (Nat? → Nat?))))
-
 
 
 ; Test  λCon-Baseline2/ Reduction
@@ -51,6 +24,10 @@
   ((λ f (f 1)) ((λ x (+ x 1)) @ (Num? → Num?))))
  (term
   ((λ f ((f @ (Num? → Num?)) 1)) (λ x (+ x 1)))))
+
+(traces Baseline-reduction2 (term
+  ((λ f (f 1)) ((λ x (+ x 1)) @ (Num? → Num?)))))
+
 
 (test-->>
  Baseline-reduction2
@@ -65,4 +42,3 @@
 
 
 
-(test-results)

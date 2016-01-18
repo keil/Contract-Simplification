@@ -16,11 +16,11 @@
   (term ((λ x (+ x (1 @ Nat?))) 1)))
 
 ;(traces
-; Baseline-reduction2
+; Baseline-reduction
 ; example-0)
 
 (test-->>
- Baseline-reduction2
+ Baseline-reduction
  example-0
  (term ((λ x (+ x 1)) 1)))
  
@@ -34,11 +34,11 @@
   (term ((λ f (f 1)) ((λ x (+ x 1)) @ (Num? → Num?)))))
 
 ;(traces
-; Baseline-reduction2
+; Baseline-reduction
 ; example-1)
 
 (test-->>
- Baseline-reduction2
+ Baseline-reduction
  example-1
  (term (((λ f (f 1)) (λ x (+ x 1))) @ Num?)))
 
@@ -52,11 +52,11 @@
   (term ((λ f ((f 1) @ Nat?)) (λ x (+ x 1)))))
 
 ;(traces
-; Baseline-reduction2
+; Baseline-reduction
 ; example-2)
 
 (test-->>
- Baseline-reduction2
+ Baseline-reduction
  example-2
  (term (((λ f (f 1)) (λ x (+ x 1))) @ Nat?)))
 
@@ -72,11 +72,11 @@
    ((λ plus (λ x ((plus 1) x))) ((λ x (λ y (+ x y))) @ (Num? → (Num? → Num?))))))
 
 ;(traces
-; Baseline-reduction2
+; Baseline-reduction
 ; example:addOne/1)
 
 ;(test-->>
-; Baseline-reduction2
+; Baseline-reduction
 ; example:addOne/1
 ; (term (((λ f (f 1)) (λ x (+ x 1))) @ ,Nat?)))
 
@@ -117,7 +117,7 @@
 |#
 
 ;(traces
-; Baseline-reduction2
+; Baseline-reduction
 ; (term (λ x ((x @ ,Nat?) @ ,Pos?))))
 
 
