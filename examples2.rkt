@@ -79,7 +79,7 @@
   example:inc0
   (term ((λ f (λ x (f x))) ((λ x (λ y (+ x y))) @ (Num? → (Num? → Num?))))))
 
-(traces Baseline-reduction example:inc0)
+;(traces Baseline-reduction example:inc0)
 
 (test-->>
  Baseline-reduction
@@ -146,25 +146,6 @@
 
 
 
-;; Example: addOne 1
-;; -----------------
-
-(define 
-  example:addOne/1
-  (term 
-   ((λ plus (λ x ((plus 1) x))) ((λ x (λ y (+ x y))) @ (Num? → (Num? → Num?))))))
-
-;(traces
-; Baseline-reduction
-; example:addOne/1)
-
-;(test-->>
-; Baseline-reduction
-; example:addOne/1
-; (term (((λ f (f 1)) (λ x (+ x 1))) @ ,Nat?)))
-
-
-
 
 
 
@@ -172,27 +153,40 @@
 ;; on plus, as contract on the outer function
 ;; and with or without concrete top-level application
 
-(define 
-  example-addOne1
-  (term 
-   ((λ plus (λ x ((plus 1) x))) ((λ x (λ y (+ x y))) @ (Num? → (Num? → Num?))))))
+
+
 
 
 
 (define 
-  example-addOne2
+  example:addOne3
   (term 
-   (((λ plus (λ x ((plus 1) x))) @ ((Num? → (Num? → Num?)) → (Num? → Num?))) (λ x (λ y (+ x y))))))
+   (((λ f (λ x ((f 1) x))) @ ((Num? → (Num? → Num?)) → (Num? → Num?))) (λ x (λ y (+ x y))))))
+
+;(traces Baseline-reduction example:addOne3)
+
+(test-->>
+ Baseline-reduction
+ example:addOne3
+ (term (((λ f (λ x ((f 1) x))) (λ x (λ y (+ x y)))) @ (Num? → Num?))))
+
+  
+
+(define 
+  example:addOne4
+  (term 
+   (((λ f (λ x ((f 1) x))) @ ((Num? → (Num? → Num?)) → (Num? → Num?))) ((λ x (λ y (+ x y))) @ (Num? → (Num? → Num?))))))
+
+(traces Baseline-reduction example:addOne4)
+
+(test-->>
+ Baseline-reduction
+ example:addOne4
+ (term (((λ f (λ x ((f 1) x))) (λ x (λ y (+ x y)))) @ (Num? → Num?))))
 
 
 
-
-
-
-
-
-
-
+;; Test with intersection
 
 
 ;; Predicates
