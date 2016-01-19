@@ -112,12 +112,9 @@
  (term (⊑ (Num? → Nat?) ((Nat? → Nat?) ∩ (Str? → Str?)))) 
  #f)
 
-;(check-eq?
-; (term (⊑ (Nat? → Nat?) ((Nat? → Nat?) ∩ (Nat? → Str?)))) 
-; #f) ;; D blames always (this it is more restrictive)
-
-
-
+(check-eq?
+ (term (⊑ (Nat? → Nat?) ((Nat? → Nat?) ∩ (Nat? → Str?)))) 
+ #f) 
 
 (check-eq?
  (term (⊑ ((Num? → Num?) ∩ (Num? → Num?)) (Num? → Num?)))
@@ -135,21 +132,13 @@
  (term (⊑ ((Nat? → Nat?) ∩ (Str? → Str?)) (Num? → Num?)))
  #f)
 
-;(check-eq?
-; (term (⊑ ((Num? → Num?) ∩ (Num? → Str?)) (Num? → Num?)))
-; #t) ;; C blames always (this it is more restrictive)
+(check-eq?
+ (term (⊑ ((Num? → Num?) ∩ (Num? → Str?)) (Num? → Num?)))
+ #t)
 
 (check-eq?
  (term (⊑ ((Nat? → Nat?) ∩ (Pos? → Pos?)) (Pos? → Pos?))) 
  #f)
-
-
-
-
-
-
-
-
 
 (check-eq?
  (term (⊑ (⊤ → Nat?) ((⊤ → Nat?) ∩ (⊤ → Str?)))) 
@@ -163,8 +152,6 @@
  (term (⊑ (⊤ → Num?) ((⊤ → Nat?) ∩ (⊤ → Str?)))) 
  #f)
 
-
-
 (check-eq?
  (term (⊑ ((⊤ → Num?) ∩ (⊤ → Str?)) (⊤ → Num?))) 
  #t)
@@ -176,9 +163,6 @@
 (check-eq?
  (term (⊑ ((⊤ → Nat?) ∩ (⊤ → Str?)) (⊤ → Num?))) 
  #t)
-
-
-
 
 (check-eq?
  (term (⊑ (Nat? → ⊤) ((Nat? → ⊤) ∩ (Str? → ⊤)))) 
@@ -192,8 +176,6 @@
  (term (⊑ (Nat? → ⊤) ((Num? → ⊤) ∩ (Str? → ⊤)))) 
  #t)
 
-
-
 (check-eq?
  (term (⊑ ((Num? → ⊤) ∩ (Str? → ⊤)) (Num? → ⊤))) 
  #f)
@@ -205,9 +187,6 @@
 (check-eq?
  (term (⊑ ((Nat? → ⊤) ∩ (Str? → ⊤)) (Num? → ⊤))) 
  #f)
-
-
-
 
 (check-eq?
  (term (⊑ (Num? → ⊤) (⊤ → Num?))) 
