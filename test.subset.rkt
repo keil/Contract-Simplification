@@ -207,3 +207,12 @@
  #f)
 
 
+
+
+(check-eq?
+ (term (⊑ (Num? → ⊤) (⊤ → Num?))) 
+ #f)
+
+(check-eq?
+ (term (⊑ (⊤ → Num?) (Num? → ⊤))) 
+ #f)
