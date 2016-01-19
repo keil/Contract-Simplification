@@ -147,4 +147,7 @@
  Baseline-reduction
  example:inc/0
  (term (((λ f (λ x (f x))) (λ x (λ y (+ x y)))) @ (Num? → (Num? → Num?)))))
-  
+ 
+
+;; Print summary
+(test-results)

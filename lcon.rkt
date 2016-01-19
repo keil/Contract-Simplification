@@ -96,6 +96,91 @@
    )
 )
 
+;; Contract Inequalities
+;; =====================
+
+(define-metafunction λCon
+  ⊑ : C D -> boolean
+  [(⊑ C D) ,(and (term (⊑/context C D)) (term (⊑/subject C D)))]
+)
+
+(define-metafunction λCon
+  ⊑/context : C D -> boolean
+  ;; Flat
+  [(⊑/context (flat M) (flat M)) #t]
+  
+  ;; TODO
+  [(⊑/context named_0 named_1) #t]
+  
+  ;; Function
+  [(⊑/context (C_0 → D_0) (C_1 → D_1)) ,(and (term (⊑/subject C_0 C_1)) (term (⊑/context D_0 D_1)))]
+  ;; Intersection
+  [(⊑/context (C_0 ∩ D_0) C_1) ,(and (term (⊑/context C_0 C_1)) (term (⊑/context D_0 C_1)))]
+  [(⊑/context C_0 (C_1 ∩ D_1)) ,(or (term (⊑/context C_0 C_1)) (term (⊑/context C_0 D_1)))]
+  ;; Union
+  [(⊑/context (C_0 ∪ D_0) C_1) ,(or (term (⊑/context C_0 C_1)) (term (⊑/context D_0 C_1)))]
+  [(⊑/context C_0 (C_1 ∪ D_1)) ,(and (term (⊑/context C_0 C_1)) (term (⊑/context C_0 D_1)))]
+  ;; Dependent
+  ;; TODO
+)
+
+(define-metafunction λCon
+  ⊑/subject : C D -> boolean
+  ;; Flat Contracts
+  [(⊑/subject (flat M) (flat M)) #t]
+  [(⊑/subject (flat M) (flat N)) #f]
+  
+    ;; TODO
+  [(⊑/subject named ⊤) #t]
+  [(⊑/subject ⊥ named) #t]
+  [(⊑/subject named named) #t]
+  [(⊑/subject named named) #t]
+  [(⊑/subject Nat? Num?) #t]
+  [(⊑/subject Pos? Nat?) #t]
+  [(⊑/subject Pos? Num?) #t]
+  [(⊑/subject named_0 named_1) #f]
+  
+  ;; Function Contract
+  [(⊑/subject (C_0 → D_0) (C_1 → D_1)) ,(and (term (⊑/context C_0 C_1)) (implies (term (⊑/subject C_0 C_1)) (term (⊑/subject D_0 D_1))))]
+  ;; Intersection
+  [(⊑/subject (C_0 ∩ D_0) C_1) ,(or (term (⊑/subject C_0 C_1)) (term (⊑/subject D_0 C_1)))]
+  [(⊑/subject C_0 (C_1 ∩ D_1)) ,(and (term (⊑/subject C_0 C_1)) (term (⊑/subject C_0 D_1)))]
+  ;; Union
+  [(⊑/subject (C_0 ∪ D_0) C_1) ,(and (term (⊑/subject C_0 C_1)) (term (⊑/subject D_0 C_1)))]
+  [(⊑/subject C_0 (C_1 ∪ D_1)) ,(or (term (⊑/subject C_0 C_1)) (term (⊑/subject C_0 D_1)))]
+  ;; Dependent
+  ;; TODO
+)
+
+;; Semantic Definition of ⊑
+;; ------------------------
+;; If C ⊑ D then \forall 
+;; * V
+
+(term (⊑ (flat (λ x 1)) (flat (λ x 1))))
+(term (⊑ Num? Num?))
+(term (⊑ Nat? Num?))
+
+(term (⊑ (Num? → Num?) (Num? → Num?)))
+
+(term (⊑ (Nat? → Num?) (Num? → Num?)))
+(term (⊑ (Num? → Nat?) (Num? → Num?)))
+(term (⊑ (Nat? → Nat?) (Num? → Num?)))
+
+(term (⊑ (Num? → Num?) (Nat? → Num?)))
+(term (⊑ (Num? → Num?) (Num? → Nat?)))
+(term (⊑ (Num? → Num?) (Nat? → Nat?)))
+
+(term (⊑ (Num? → Num?) (Num? → Nat?)))
+
+
+
+
+
+;; Blame Calculation
+;; =================
+
+
 (define-metafunction λCon
   π : B -> ω
   [(π #t) (#t ∘ #t)]
