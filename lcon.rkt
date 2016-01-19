@@ -96,48 +96,8 @@
    )
 )
 
-;; Contract Inequalities
-;; =====================
-
-#|
-;; Naive Subtyping
-(define-metafunction λCon
-  ⊑ : C D -> boolean
-  
-  ;; Flat Contracts
-  [(⊑ (flat M) (flat M)) #t]
-  [(⊑ (flat M) (flat N)) #f]
-  
-  ;; TODO
-  [(⊑ named ⊤) #t]
-  [(⊑ ⊥ named) #t]
-  [(⊑ named named) #t]
-  [(⊑ named named) #t]
-  [(⊑ Nat? Num?) #t]
-  [(⊑ Pos? Nat?) #t]
-  [(⊑ Pos? Num?) #t]
-  [(⊑ named_0 named_1) #f]
-  
-  ;; Function Contract
-  [(⊑ (C_0 → D_0) (C_1 → D_1)) ,(and (term (⊑ C_0 C_1)) (term (⊑ D_0 D_1)))]
-
-  ;; Intersection
-  [(⊑ (C_0 ∩ D_0) C_1) ,(and (term (⊑ C_0 C_1)) (term (⊑ D_0 C_1)))]
-  [(⊑ C_0 (C_1 ∩ D_1)) ,(or (term (⊑ C_0 C_1)) (term (⊑ C_0 D_1)))]
-  
-  ;; Union
-  [(⊑ (C_0 ∪ D_0) C_1) ,(or (term (⊑ C_0 C_1)) (term (⊑ D_0 C_1)))]
-  [(⊑ C_0 (C_1 ∪ D_1)) ,(and (term (⊑ C_0 C_1)) (term (⊑ C_0 D_1)))]
-  ;; Dependent
-  ;; TODO  
-) 
-|#
-
-
-
-
-
-
+;; Naive Subtyping of Contracts
+;; ============================
 
 (define-metafunction λCon
   ⊑ : C D -> boolean
@@ -146,18 +106,14 @@
 
 (define-metafunction λCon
   ⊑/context : C D -> boolean
-  ;; Flat
-  [(⊑/context (flat M) (flat M)) #t]
-  
-  ;; TODO
-  [(⊑/context named_0 named_1) #t]
-  
-  ;; Function
+  ;; Immediate Contracts
+  [(⊑/context I J) #t]  
+  ;; Function Contract
   [(⊑/context (C_0 → D_0) (C_1 → D_1)) ,(and (term (⊑/subject C_0 C_1)) (term (⊑/context D_0 D_1)))]
-  ;; Intersection
+  ;; Intersection Contract
   [(⊑/context (C_0 ∩ D_0) C_1) ,(and (term (⊑/context C_0 C_1)) (term (⊑/context D_0 C_1)))]
   [(⊑/context C_0 (C_1 ∩ D_1)) ,(or (term (⊑/context C_0 C_1)) (term (⊑/context C_0 D_1)))]
-  ;; Union
+  ;; Union Contract
   [(⊑/context (C_0 ∪ D_0) C_1) ,(or (term (⊑/context C_0 C_1)) (term (⊑/context D_0 C_1)))]
   [(⊑/context C_0 (C_1 ∪ D_1)) ,(and (term (⊑/context C_0 C_1)) (term (⊑/context C_0 D_1)))]
   ;; Dependent
@@ -169,8 +125,8 @@
   ;; Flat Contracts
   [(⊑/subject (flat M) (flat M)) #t]
   [(⊑/subject (flat M) (flat N)) #f]
-  
-    ;; TODO
+  ;; Predefined Contracts
+  ;; TODO
   [(⊑/subject named ⊤) #t]
   [(⊑/subject ⊥ named) #t]
   [(⊑/subject named named) #t]
@@ -179,21 +135,15 @@
   [(⊑/subject Pos? Nat?) #t]
   [(⊑/subject Pos? Num?) #t]
   [(⊑/subject named_0 named_1) #f]
-  
   ;; Function Contract
-  [(⊑/subject (C_0 → D_0) (C_1 → D_1)) ,(and 
-                                         (term (⊑/context C_0 C_1))
-                                         (implies
-                                          (term (⊑/subject C_0 C_1))
-                                          (term (⊑/subject D_0 D_1))
-                                         ))]
-  ;; Intersection
+  [(⊑/subject (C_0 → D_0) (C_1 → D_1)) ,(and (term (⊑/context C_0 C_1)) (implies (term (⊑/subject C_0 C_1)) (term (⊑/subject D_0 D_1))))]
+  ;; Intersection Contract
   [(⊑/subject (C_0 ∩ D_0) C_1) ,(or (term (⊑/subject C_0 C_1)) (term (⊑/subject D_0 C_1)))]
   [(⊑/subject C_0 (C_1 ∩ D_1)) ,(and (term (⊑/subject C_0 C_1)) (term (⊑/subject C_0 D_1)))]
-  ;; Union
+  ;; Union Contract
   [(⊑/subject (C_0 ∪ D_0) C_1) ,(and (term (⊑/subject C_0 C_1)) (term (⊑/subject D_0 C_1)))]
   [(⊑/subject C_0 (C_1 ∪ D_1)) ,(or (term (⊑/subject C_0 C_1)) (term (⊑/subject C_0 D_1)))]
-  ;; Dependent
+  ;; Dependent Contract
   ;; TODO
 )
 
