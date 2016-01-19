@@ -1,5 +1,6 @@
 #lang racket
 (require redex)
+(require rackunit)
 
 (require "lj.rkt")
 
@@ -155,24 +156,81 @@
 ;; Semantic Definition of ⊑
 ;; ------------------------
 ;; If C ⊑ D then \forall 
-;; * V
+;; * V \in [[C]]+ => V \in [[D]]+
+;; * E \in [[C]]- => E \in [[D]]-
 
-(term (⊑ (flat (λ x 1)) (flat (λ x 1))))
-(term (⊑ Num? Num?))
-(term (⊑ Nat? Num?))
+(check-eq?
+ (term (⊑ (flat (λ x 1)) (flat (λ x 1))))
+ #t)
+(check-eq?
+ (term (⊑ Num? Num?))
+ #t)
 
-(term (⊑ (Num? → Num?) (Num? → Num?)))
+(check-eq?
+ (term (⊑ Nat? Num?))
+ #t)
 
-(term (⊑ (Nat? → Num?) (Num? → Num?)))
-(term (⊑ (Num? → Nat?) (Num? → Num?)))
-(term (⊑ (Nat? → Nat?) (Num? → Num?)))
+(check-eq?
+ (term (⊑ (Num? → Num?) (Num? → Num?)))
+ #t)
 
-(term (⊑ (Num? → Num?) (Nat? → Num?)))
-(term (⊑ (Num? → Num?) (Num? → Nat?)))
-(term (⊑ (Num? → Num?) (Nat? → Nat?)))
 
-(term (⊑ (Num? → Num?) (Num? → Nat?)))
+(check-eq?
+ (term (⊑ (Nat? → Num?) (Num? → Num?)))
+ #t)
+(check-eq?
+ (term (⊑ (Num? → Nat?) (Num? → Num?)))
+ #t)
+(check-eq?
+ (term (⊑ (Nat? → Nat?) (Num? → Num?)))
+ #t)
 
+
+(check-eq?
+ (term (⊑ (Num? → Num?) (Nat? → Num?)))
+ #f)
+(check-eq?
+ (term (⊑ (Num? → Num?) (Num? → Nat?)))
+ #f)
+(check-eq?
+ (term (⊑ (Num? → Num?) (Nat? → Nat?)))
+ #f)
+
+
+(check-eq?
+ (term (⊑ ((Num? → Num?) ∩ (Num? → Num?)) (Num? → Num?)))
+ #t)
+
+(check-eq?
+ (term (⊑ ((Nat? → Nat?) ∩ (Num? → Num?)) (Num? → Num?)))
+ #t)
+
+(check-eq?
+ (term (⊑ ((Nat? → Nat?) ∩ (Num? → Num?)) (Num? → Num?))) 
+ #t)
+
+
+(check-eq?
+ (term (⊑ ((Nat? → Nat?) ∩ (Pos? → Pos?)) (Num? → Num?))) 
+ #t)
+
+(check-eq?
+ (term (⊑ ((Num? → Num?) ∩ (Str? → Str?)) (Num? → Num?))) 
+ #f)
+
+(check-eq?
+ (term (⊑ (Nat? → Nat?) ((Num? → Num?) ∩ (Str? → Str?)))) 
+ #t)
+
+(check-eq?
+ (term (⊑ (Nat? → Nat?) ((Nat? → Str?) ∩ (Str? → Str?)))) 
+ #f)
+
+(check-eq?
+ (term (⊑ (Nat? → Nat?) ((Nat? → Nat?) ∩ (Nat? → Str?)))) 
+ #f)
+
+;(term (⊑ (Num? → Num?) ((Num? → Num?) ∩ (Num? → Num?))))
 
 
 
