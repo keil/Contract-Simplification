@@ -99,7 +99,7 @@
 ;; Contract Inequalities
 ;; =====================
 
-
+#|
 ;; Naive Subtyping
 (define-metafunction λCon
   ⊑ : C D -> boolean
@@ -131,7 +131,7 @@
   ;; Dependent
   ;; TODO  
 ) 
-
+|#
 
 
 
@@ -140,8 +140,8 @@
 
 
 (define-metafunction λCon
-  ⊑/ : C D -> boolean
-  [(⊑/ C D) ,(and (term (⊑/context C D)) (term (⊑/subject C D)))]
+  ⊑ : C D -> boolean
+  [(⊑ C D) ,(and (term (⊑/context C D)) (term (⊑/subject C D)))]
 )
 
 (define-metafunction λCon
@@ -181,7 +181,12 @@
   [(⊑/subject named_0 named_1) #f]
   
   ;; Function Contract
-  [(⊑/subject (C_0 → D_0) (C_1 → D_1)) ,(and (term (⊑/context C_0 C_1)) (term (⊑/subject D_0 D_1)))]
+  [(⊑/subject (C_0 → D_0) (C_1 → D_1)) ,(and 
+                                         (term (⊑/context C_0 C_1))
+                                         (implies
+                                          (term (⊑/subject C_0 C_1))
+                                          (term (⊑/subject D_0 D_1))
+                                         ))]
   ;; Intersection
   [(⊑/subject (C_0 ∩ D_0) C_1) ,(or (term (⊑/subject C_0 C_1)) (term (⊑/subject D_0 C_1)))]
   [(⊑/subject C_0 (C_1 ∩ D_1)) ,(and (term (⊑/subject C_0 C_1)) (term (⊑/subject C_0 D_1)))]

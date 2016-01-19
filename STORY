@@ -58,3 +58,7 @@ Unroll
 
 
 
+Lower
+-----
+
+- It would be ok to lower only delayed contracts 

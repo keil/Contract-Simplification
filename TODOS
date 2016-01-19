@@ -57,6 +57,13 @@ iii) Implement subset calculation and set difference.
 
 
 
+Lower
+-----
+
+- One can say that immediate contracts should not be lowered but lowering them
+  enables to optimize them on an upper level
+
+
 
 
 Untoll

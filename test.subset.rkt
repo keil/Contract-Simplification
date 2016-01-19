@@ -171,7 +171,7 @@
 
 (check-eq?
  (term (⊑ ((⊤ → Num?) ∩ (⊤ → Str?)) (⊤ → Nat?))) 
- #t)
+ #f)
 
 (check-eq?
  (term (⊑ ((⊤ → Nat?) ∩ (⊤ → Str?)) (⊤ → Num?))) 
