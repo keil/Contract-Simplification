@@ -111,13 +111,13 @@
   [(≤ P ⊤) #t]
   [(≤ P P) #t]
   
-  [(≤ P (M ⇒ P)) #t]
-  
+  [(≤ (M ⇒ P_r) P) (≤ P_r P)]
   
   [(≤ P any) #f])
 
-  ;; Predicates
-  ;(P ⊤ (M ⇒ P))
+
+
+  
 
 
 (define-metafunction λCon
@@ -125,12 +125,25 @@
   [(∈ P_i (flat P_0 ... P_i P_i+1 ...)) #t] ;; subset
   [(∈ P any) #f])
 
+
 (define-metafunction λCon
-  ∈x : P (flat P ...) -> boolean
+   : P (flat P ...) -> boolean
   [(∈x P_i (flat P_0 ... P_i P_i+1 ...)) #t]
   [(∈x P any) #f])
 
 
+
+(define-metafunction λCon
+  ⊑/flat : (flat P ...) (flat P ...) -> boolean
+  [(⊑/flat (flat P_0 ...) (flat P_1 ...)) (⊑/pred (P_0 ...) (P_0 ...))]
+)
+
+(define-metafunction λCon
+  ⊑/pred : (P ...) (P ...) -> boolean
+  [(⊑/pred (P_0 P_1 ...) (P_x ...)) (and (⊑/pred)))]
+)
+
+(⊑/pred (P_0 ...) (P_0 ...)
 
 
 ;; Naive Subsets of Contracts
