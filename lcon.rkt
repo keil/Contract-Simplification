@@ -105,46 +105,32 @@
 ;(number? +nan.0)
 ;(real? +nan.0)
 
+
+
 (define-metafunction λCon
   ≤ : P P -> boolean
-  
   [(≤ P ⊤) #t]
   [(≤ P P) #t]
-  
+  ;; Chain Lookup
   [(≤ (M ⇒ P_r) P) (≤ P_r P)]
-  
-  [(≤ P any) #f])
-
-
-
-  
-
+  ;; End
+  [(≤ any any) #f])
 
 (define-metafunction λCon
-  ∈ : P (flat P ...) -> boolean
-  [(∈ P_i (flat P_0 ... P_i P_i+1 ...)) #t] ;; subset
-  [(∈ P any) #f])
-
+  ∈ : P (P_0 ...) -> boolean
+  [(∈ P (P_0 P_1 ...)) ,(or (term (≤ P P_0)) (term (∈ P (P_1 ...))))]
+  [(∈ P ()) #f])
 
 (define-metafunction λCon
-   : P (flat P ...) -> boolean
-  [(∈x P_i (flat P_0 ... P_i P_i+1 ...)) #t]
-  [(∈x P any) #f])
-
-
+  ≤/ : (P ...) (P ...) -> boolean
+  [(≤/ (P_0 P_1 ...) (P ...)) ,(and (term (∈ P_0 (P ...))) (term (≤/ (P_1 ...) (P ...))))]
+  [(≤/ () (P ...)) #t]
+)
 
 (define-metafunction λCon
   ⊑/flat : (flat P ...) (flat P ...) -> boolean
-  [(⊑/flat (flat P_0 ...) (flat P_1 ...)) (⊑/pred (P_0 ...) (P_0 ...))]
+  [(⊑/flat (flat P_0 ...) (flat P_1 ...)) (≤ (P_0 ...) (P_0 ...))]
 )
-
-(define-metafunction λCon
-  ⊑/pred : (P ...) (P ...) -> boolean
-  [(⊑/pred (P_0 P_1 ...) (P_x ...)) (and (⊑/pred)))]
-)
-
-(⊑/pred (P_0 ...) (P_0 ...)
-
 
 ;; Naive Subsets of Contracts
 ;; ==========================
@@ -343,6 +329,7 @@
         )
    ))
 
+
 (define-metafunction λCon
   lookup : named -> I
   [(lookup ⊤) (flat (λ x #t))]
@@ -358,6 +345,20 @@
   [(lookup Pos?) (flat (λ x (> x 0)))]
   [(lookup Nat?) (flat (λ x (or (> x 0) (= x 0))))]
   [(lookup Neg?) (flat (λ x (< x 0)))]
+  ) 
+
+(define-metafunction λCon
+  lookup/ : named -> I
+  [(lookup/ ⊤) (λ x #t)]
+  [(lookup/ ⊥) (λ x #f)]
+
+  [(lookup/ Num?) ((λ x (number? x)) ⇒ ⊤)]
+  [(lookup/ Str?) ((λ x (string? x)) ⇒ ⊤)]
+  [(lookup/ Bool?) ((λ x (boolean? x)) ⇒ ⊤)]
+
+  [(lookup/ Nat?) ((λ x (or (> x 0) (= x 0))) ⇒ Num?)]
+  [(lookup/ Pos?) ((λ x (> x 0)) ⇒ Nat?)]
+  [(lookup/ Neg?) ((λ x (< x 0)) ⇒ Num?)]
   )
 
 
