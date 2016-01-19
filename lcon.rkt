@@ -142,7 +142,11 @@
   [(⊑/subject named_0 named_1) #f]
   
   ;; Function Contract
-  [(⊑/subject (C_0 → D_0) (C_1 → D_1)) ,(and (term (⊑/context C_0 C_1)) (implies (term (⊑/subject C_0 C_1)) (term (⊑/subject D_0 D_1))))]
+  [(⊑/subject (C_0 → D_0) (C_1 → D_1)) ,(and 
+                                         (term (⊑/context C_0 C_1))
+                                         (implies 
+                                          (term (⊑/subject C_0 C_1))
+                                          (term (⊑/subject D_0 D_1))))]
   ;; Intersection
   [(⊑/subject (C_0 ∩ D_0) C_1) ,(or (term (⊑/subject C_0 C_1)) (term (⊑/subject D_0 C_1)))]
   [(⊑/subject C_0 (C_1 ∩ D_1)) ,(and (term (⊑/subject C_0 C_1)) (term (⊑/subject C_0 D_1)))]
@@ -232,7 +236,17 @@
 
 ;(term (⊑ (Num? → Num?) ((Num? → Num?) ∩ (Num? → Num?))))
 
+(check-eq?
+ (term (⊑ ((Num? → Num?) ∩ (Num? → Str?)) (Num? → Num?))) 
+ #t)
 
+(check-eq?
+ (term (⊑ ((⊤ → Num?) ∩ (⊤ → Str?)) (⊤ → Num?))) 
+ #t)
+
+(check-eq?
+ (term (⊑ ((⊥ → Num?) ∩ (⊤ → Str?)) (⊤ → Num?))) 
+ #f)
 
 
 ;; Blame Calculation
