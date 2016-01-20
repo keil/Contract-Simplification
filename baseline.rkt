@@ -21,8 +21,6 @@
 
 (define-extended-language λCon-Baseline λCon
   
-  
-  
   ;; Contract-free terms (λJ terms)
   ((S T) K x (λ x T) (S T) (op T ...))
   
@@ -38,7 +36,7 @@
    ;((λ x T) @ Q)
    ;(x @ Q)
    (S (T @ Q))
-   ((S T) @ Q)
+   ;((S T) @ Q) ;; NOT n element of B, because it is M @ Q
    
    ;(M (N @ Q)) (M (N @ Qz))
    
@@ -62,6 +60,7 @@
   
 
   ;; Execution Body (name?)
+  ;; Function Body
   (a K x (a_1 a_2) (op a ...)) ;; Contracts a @ C
   (A hole (op a ... H M ...) (H M) (a H) (H @ C)) ;; Todo (H @ Q)
   
