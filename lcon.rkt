@@ -21,10 +21,14 @@
 (define-extended-language λCon λJ
   
   ;; Predicates
-  (P ⊤ (M ⇒ P))
+  ;; ----------
+
+  (P ⊤ (M ⇒ P) predefined)
+  
+  
   
   ;; Contracts
-  ;; ---------
+  ;; =========
   
   ;; False Values/Constants
   (false #f 0 "")
@@ -41,7 +45,7 @@
   
   
   ;; λCon Extention
-  ;; --------------
+  ;; ==============
   
   ;; Blame
   (blame +blame -blame)
@@ -58,7 +62,7 @@
   
   
   ;; Blame Constraints
-  ;; -----------------
+  ;; =================
   
   ;; blame labels
   (♭ (variable-prefix ♭))
@@ -81,23 +85,73 @@
   ;; Solution (context/ subject)
   (ω (B_0 ∘ B_1))
   
-  
-  
   ;; Predefined Predicates
-  ;; ---------------------
-  
-  ;; TODO, only for testing
-  (named
-   Any? ⊤
-   None? ⊥
+  ;; =====================
+
+  (predefined
+   ⊤
+   ⊥
    Num?
    Str?
    Bool?
    Pos?
    Neg?
    Nat?
+  )
+  
+  ;; TODO, only for testing
+  (named Any? ⊤ None? ⊥ Num?
+   Str? Bool? Pos? Neg? Nat?
    )
   )
+
+
+
+(define-metafunction λCon
+  lookup/ : named -> I
+  
+  ;; First level
+  [(lookup/ ⊤) (λ x #t)]
+
+  ;; Second Level
+  [(lookup/ Num?) ((λ x (number? x)) ⇒ ⊤)]
+  [(lookup/ Str?) ((λ x (string? x)) ⇒ ⊤)]
+  [(lookup/ Bool?) ((λ x (boolean? x)) ⇒ ⊤)]
+
+  ;; Third Level
+  [(lookup/ Real?) ((λ x (real? x)) ⇒ Number?)]
+  [(lookup/ Zero?) ((λ x (zero? x)) ⇒ Number?)]
+  [(lookup/ Exact?) ((λ x (exact? x)) ⇒ Number?)]
+  [(lookup/ Inexact?) ((λ x (inexact? x)) ⇒ Number?)]
+  
+  ;; Fourth Level
+  [(lookup/ Rational?) ((λ x (rational? x)) ⇒ Real?)]
+  [(lookup/ Positive?) ((λ x (positive? x)) ⇒ Real?)]
+  [(lookup/ Negative?) ((λ x (negative? x)) ⇒ Real?)]
+  
+  ;; Fifth Level
+  [(lookup/ Integer?) ((λ x (integer? x)) ⇒ Rational?)]
+  
+  ;; Sixth Level
+  [(lookup/ Even?) ((λ x (even? x)) ⇒ Integer?)]
+  [(lookup/ Odd?) ((λ x (odd? x)) ⇒ Integer?)]
+  
+  
+  ;; Cross-predicates
+  
+  [(lookup/ Natatural?) ((λ x (or (> x 0) (= x 0))) ⇒ Num?)]
+
+  
+  
+  ;PosInt
+  
+  ;(with-handlers ([exn:fail? (lambda (exn) #f)]) (< #f 1))
+  ;(with-handlers ([(λ x #t) (lambda (exn) #f)]) (< #f 1))
+  
+  
+  [(lookup/ ⊥) (λ x #f)]
+  )
+
 
 ;; Predicate Subset
 ;; ================
@@ -331,38 +385,26 @@
 
 
 (define-metafunction λCon
-  lookup : named -> I
+  lookup : predefined -> (flat P ...)
+  
   [(lookup ⊤) (flat (λ x #t))]
   [(lookup ⊥) (flat (λ x #f))]
-  
-  [(lookup Any?) (flat (λ x #t))]
-  [(lookup None?) (flat (λ x #f))]
-  
+    
   [(lookup Num?) (flat (λ x (number? x)))]
   [(lookup Str?) (flat (λ x (string? x)))]
   [(lookup Bool?) (flat (λ x (boolean? x)))]
+  
+  
   
   [(lookup Pos?) (flat (λ x (> x 0)))]
   [(lookup Nat?) (flat (λ x (or (> x 0) (= x 0))))]
   [(lookup Neg?) (flat (λ x (< x 0)))]
   ) 
 
-(define-metafunction λCon
-  lookup/ : named -> I
-  [(lookup/ ⊤) (λ x #t)]
-  [(lookup/ ⊥) (λ x #f)]
-
-  [(lookup/ Num?) ((λ x (number? x)) ⇒ ⊤)]
-  [(lookup/ Str?) ((λ x (string? x)) ⇒ ⊤)]
-  [(lookup/ Bool?) ((λ x (boolean? x)) ⇒ ⊤)]
-
-  [(lookup/ Nat?) ((λ x (or (> x 0) (= x 0))) ⇒ Num?)]
-  [(lookup/ Pos?) ((λ x (> x 0)) ⇒ Nat?)]
-  [(lookup/ Neg?) ((λ x (< x 0)) ⇒ Num?)]
-  )
-
 
 
 (define
   (evaluate M)
   (car (apply-reduction-relation* λCon-reduction M)))
+
+(evaluate (term (#t @ (flat (λ x (< x 1))))))
