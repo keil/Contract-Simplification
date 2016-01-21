@@ -61,4 +61,13 @@ Unroll
 Lower
 -----
 
-- It would be ok to lower only delayed contracts 
+- It would be ok to lower only delayed contracts
+
+
+General Notes
+=============
+
+- Two different delayed contracts on a value cannot be combined to an
+  intersection, as the intersection provides a different semantics
+  -- the domains might not be disjount, this, a wront party might be blamed.
+

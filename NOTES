@@ -124,3 +124,24 @@ completely to blame.
 
 
 - eta reduction
+
+
+Inner Unfold
+============
+
+- Not possible to replace one delayed contract by one immediate check.
+
+
+
+Abstract Values
+===============
+
+- Think about:
+  Use abstract values { V | I } to remember previously evaluated predicates.
+
+- Virtual Contract:
+  Use virtual contracts for primitive operations. But only to reduce imemdiate
+  Contracts, and not to lift the contract to an upper description.
+
+- Use symbolic execution to verify contracts?
+
