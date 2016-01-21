@@ -2,6 +2,7 @@
 (require redex)
 
 (require "lj.rkt")
+(require "lcon.rkt")
 
 (provide (all-defined-out))
 
@@ -18,307 +19,11 @@
                                                                   
 |#
 
-(define-extended-language λCon λJ
-  
-  ;; Predicates
-  ;; ----------
-
-  (P ⊤ (M ⇒ P) predefined)
-  
-  
-  
-  ;; Contracts
-  ;; =========
-  
-  ;; False Values/Constants
-  (false #f 0 "")
-  
-  ;; Contracts
-  ((C D) I Q (C ∪ D) (I ∩ C))
-  
-  ; Immediate Contracts
-  ((I J) (flat M) named (flat P ...))
-  
-  ; Delayed Contracts
-  ((Q R) (C → D) (x → C) (Q ∩ R))
-  
-  
-  
-  ;; λCon Extention
-  ;; ==============
-  
-  ;; Blame
-  (blame +blame -blame)
-  
+(define-extended-language λCon-Symbolic λCon
   ;; Values
-  ((U V W) .... ((λ x M) @ Q) blame)
-  
-  ;; Terms
-  ((L M N) .... (M @ C) blame)
-  
-  ;; Contexts
-  ((E F) .... (E @ C) (V @ (eval E)))
-  
-  
-  
-  ;; Blame Constraints
-  ;; =================
-  
-  ;; blame labels
-  (♭ (variable-prefix ♭))
-  
-  ;; blame variales
-  (ι (variable-prefix ♭))
-  
-  ;; blame identifiers
-  (b ♭ ι)
-  
-  ;; boolean values
-  (B #t #f)
-  
-  ;; Constraints
-  (κ B ι (ι_1 → ι_2) (ι_1 ∩ ι_2) (ι_1 ∪ ι_2))
-  
-  ;; State
-  (ς · ((b ◃ κ) ς))
-  
-  ;; Solution (context/ subject)
-  (ω (B_0 ∘ B_1))
-  
-  ;; Predefined Predicates
-  ;; =====================
-
-  (predefined
-   ⊤
-   ⊥
-   Num?
-   Str?
-   Bool?
-   Pos?
-   Neg?
-   Nat?
-  )
-  
-  ;; TODO, only for testing
-  (named Any? ⊤ None? ⊥ Num?
-   Str? Bool? Pos? Neg? Nat?
-   )
-  )
-
-
-
-(define-metafunction λCon
-  lookup/ : named -> I
-  
-  ;; First level
-  [(lookup/ ⊤) (λ x #t)]
-
-  ;; Second Level
-  [(lookup/ Num?) ((λ x (number? x)) ⇒ ⊤)]
-  [(lookup/ Str?) ((λ x (string? x)) ⇒ ⊤)]
-  [(lookup/ Bool?) ((λ x (boolean? x)) ⇒ ⊤)]
-
-  ;; Third Level
-  [(lookup/ Real?) ((λ x (real? x)) ⇒ Number?)]
-  [(lookup/ Zero?) ((λ x (zero? x)) ⇒ Number?)]
-  [(lookup/ Exact?) ((λ x (exact? x)) ⇒ Number?)]
-  [(lookup/ Inexact?) ((λ x (inexact? x)) ⇒ Number?)]
-  
-  ;; Fourth Level
-  [(lookup/ Rational?) ((λ x (rational? x)) ⇒ Real?)]
-  [(lookup/ Positive?) ((λ x (positive? x)) ⇒ Real?)]
-  [(lookup/ Negative?) ((λ x (negative? x)) ⇒ Real?)]
-  
-  ;; Fifth Level
-  [(lookup/ Integer?) ((λ x (integer? x)) ⇒ Rational?)]
-  
-  ;; Sixth Level
-  [(lookup/ Even?) ((λ x (even? x)) ⇒ Integer?)]
-  [(lookup/ Odd?) ((λ x (odd? x)) ⇒ Integer?)]
-  
-  
-  ;; Cross-predicates
-  
-  [(lookup/ Natatural?) ((λ x (or (> x 0) (= x 0))) ⇒ Num?)]
-
-  
-  
-  ;PosInt
-  
-  ;(with-handlers ([exn:fail? (lambda (exn) #f)]) (< #f 1))
-  ;(with-handlers ([(λ x #t) (lambda (exn) #f)]) (< #f 1))
-  
-  
-  [(lookup/ ⊥) (λ x #f)]
-  )
-
-
-;; Predicate Subset
-;; ================
-;(< #t #f) defined on real
-;(number? +nan.0)
-;(real? +nan.0)
-
-
-
-(define-metafunction λCon
-  ≤ : P P -> boolean
-  [(≤ P ⊤) #t]
-  [(≤ P P) #t]
-  ;; Chain Lookup
-  [(≤ (M ⇒ P_r) P) (≤ P_r P)]
-  ;; End
-  [(≤ any any) #f])
-
-(define-metafunction λCon
-  ∈ : P (P_0 ...) -> boolean
-  [(∈ P (P_0 P_1 ...)) ,(or (term (≤ P P_0)) (term (∈ P (P_1 ...))))]
-  [(∈ P ()) #f])
-
-(define-metafunction λCon
-  ≤/ : (P ...) (P ...) -> boolean
-  [(≤/ (P_0 P_1 ...) (P ...)) ,(and (term (∈ P_0 (P ...))) (term (≤/ (P_1 ...) (P ...))))]
-  [(≤/ () (P ...)) #t]
+  ((U V W) .... (V @ C) ?)
 )
-
-(define-metafunction λCon
-  ⊑/flat : (flat P ...) (flat P ...) -> boolean
-  [(⊑/flat (flat P_0 ...) (flat P_1 ...)) (≤ (P_0 ...) (P_0 ...))]
-)
-
-;; Naive Subsets of Contracts
-;; ==========================
-
-;; A contract C is subset of contract D iff
-;; C is more restrictive than D.
-
-;; If C ⊑ D then \forall .
-;; * V \in [[C]]+ => V \in [[D]]+
-;; * E \in [[C]]- => E \in [[D]]-
-;; resp.
-;; * V \not\in [[D]]+ => V \not\in [[C]]+
-;; * E \not\in [[D]]- => E \not\in [[C]]-
-
-;; It follows that:
-;;    E[[ M @ D ]] --> +blame/-blame
-;; => E[[ M @ C ]] --> +blame/-blame
-;; resp.
-;;    E[[ M @ C ]] --> V
-;; => E[[ M @ D ]] --> V
-
-(define-metafunction λCon
-  ⊑ : C D -> boolean
-  [(⊑ C D) ,(and (term (⊑/context C D)) (term (⊑/subject C D)))])
-
-(define-metafunction λCon
-  ⊑/context : C D -> boolean
-  ;; Immediate Contracts
-  [(⊑/context I J) #t]  
-  ;; Function Contract
-  [(⊑/context (C_0 → D_0) (C_1 → D_1)) ,(and (term (⊑/subject C_0 C_1)) (term (⊑/context D_0 D_1)))]
-  ;; Intersection Contract
-  [(⊑/context (C_0 ∩ D_0) C_1) ,(and (term (⊑/context C_0 C_1)) (term (⊑/context D_0 C_1)))]
-  [(⊑/context C_0 (C_1 ∩ D_1)) ,(or (term (⊑/context C_0 C_1)) (term (⊑/context C_0 D_1)))]
-  ;; Union Contract
-  [(⊑/context (C_0 ∪ D_0) C_1) ,(or (term (⊑/context C_0 C_1)) (term (⊑/context D_0 C_1)))]
-  [(⊑/context C_0 (C_1 ∪ D_1)) ,(and (term (⊑/context C_0 C_1)) (term (⊑/context C_0 D_1)))]
-  ;; Dependent
-  ;; TODO
-  )
-
-(define-metafunction λCon
-  ⊑/subject : C D -> boolean
-  ;; Flat Contracts
-  [(⊑/subject (flat M) (flat M)) #t]
-  [(⊑/subject (flat M) (flat N)) #f]
-  ;; Predefined Contracts
-  ;; TODO
-  [(⊑/subject named ⊤) #t]
-  [(⊑/subject ⊥ named) #t]
-  [(⊑/subject named named) #t]
-  [(⊑/subject named named) #t]
-  [(⊑/subject Nat? Num?) #t]
-  [(⊑/subject Pos? Nat?) #t]
-  [(⊑/subject Pos? Num?) #t]
-  [(⊑/subject named_0 named_1) #f]
-  ;; Function Contract
-  [(⊑/subject (C_0 → D_0) (C_1 → D_1)) ,(and (term (⊑/context C_0 C_1)) (implies (term (⊑/subject C_0 C_1)) (term (⊑/subject D_0 D_1))))]
-  ;; Intersection Contract
-  [(⊑/subject (C_0 ∩ D_0) C_1) ,(or (term (⊑/subject C_0 C_1)) (term (⊑/subject D_0 C_1)))]
-  [(⊑/subject C_0 (C_1 ∩ D_1)) ,(and (term (⊑/subject C_0 C_1)) (term (⊑/subject C_0 D_1)))]
-  ;; Union Contract
-  [(⊑/subject (C_0 ∪ D_0) C_1) ,(and (term (⊑/subject C_0 C_1)) (term (⊑/subject D_0 C_1)))]
-  [(⊑/subject C_0 (C_1 ∪ D_1)) ,(or (term (⊑/subject C_0 C_1)) (term (⊑/subject C_0 D_1)))]
-  ;; Dependent Contract
-  ;; TODO
-  )
-
-
-
-;; Blame Calculation
-;; =================
-
-
-(define-metafunction λCon
-  π : B -> ω
-  [(π #t) (#t ∘ #t)]
-  [(π #f) (#t ∘ #f)])
-
-(define-metafunction λCon
-  subject : ω -> B
-  [(subject (B_0 ∘ B_1)) B_1])
-
-(define-metafunction λCon
-  context : ω -> B
-  [(context (B_0 ∘ B_1)) B_0])
-
-(define-metafunction λCon
-  μ : ς b -> ω
-  [(μ ((b_0 ◃ κ) ς) b_0) (solve ((b_0 ◃ κ) ς) κ)]
-  [(μ ((b_0 ◃ κ) ς) b_1) (μ ς b_1)])
-
-(define-metafunction λCon
-  solve : ς κ -> ω
   
-  [(solve ς (ι_0 → ι_1)) (solve/→ (μ ι_0) (μ ι_1))]
-  [(solve ς (ι_0 ∩ ι_1)) (solve/∩ (μ ι_0) (μ ι_1))]
-  [(solve ς (ι_0 ∪ ι_1)) (solve/∪ (μ ι_0) (μ ι_1))]
-  
-  [(solve ς ι) (μ ι)]
-  [(solve ς B) (π B)]
-  )
-
-(define-metafunction λCon
-  solve/→ : ω ω -> ω
-  [(solve/→ ω_0 ω_1) ((and (subject ω_0) (context ω_1)) ∘ (and (context ω_0) (implies (subject ω_0) (subject ω_1))))])
-
-(define-metafunction λCon
-  solve/∩ : ω ω -> ω
-  [(solve/∩ ω_0 ω_1) ((or (context ω_0) (context ω_1)) ∘ (and (subject ω_0) (subject ω_1)))])
-
-(define-metafunction λCon
-  solve/∪ : ω ω -> ω
-  [(solve/∪ ω_0 ω_1) ((and (context ω_0) (context ω_1)) ∘ (or (subject ω_0) (subject ω_1)))])
-
-
-(define-metafunction λCon
-  is-blame-state? : ς -> B
-  [(is-blame-state? ((♭ ◃ κ) ς)) (or (μ ((♭ ◃ κ) ς) ♭) (is-blame-state? ς))]
-  [(is-blame-state? ((ι ◃ κ) ς)) (is-blame-state? ς)]
-  [(is-blame-state? ·) #f])
-
-
-;(redex-match? λCon ♭ (term ♭1))
-;(variable-not-in (term (+ ♭1 ♭1)) (term ♭))
-;(variable-not-in (term (+ ι y)) (term ι))
-;(fresh (term (+ ι y)))
-
-
-(define false? 
-  (redex-match? λCon false))
-
-(define λCon-value?
-  (redex-match? λCon V))
 
 #|
  ___        _         _   _          
@@ -328,34 +33,72 @@
                                      
 |#
 
-(define λCon-reduction
-  (extend-reduction-relation 
-   λJ-reduction
-   λCon
+#|(define-metafunction λJ
+  subst : x any any -> any
+  [(subst x any (λ x M)) (λ x M)]
+  [(subst x any (λ y M)) (λ y (subst x any M))]
+  [(subst x any x) any]
+  [(subst x any y) y]
+  [(subst x any_1 (any_2 ...)) ((subst x any_1 any_2) ...)]
+  [(subst x any_1 any_2) any_2]
+)|#
+
+(define-metafunction λCon-Symbolic
+  δ/ : op V ... -> (V @ C)
+  
+  [(δ/ + V ...) (? @ Num?)]
+  [(δ/ * V ...) (? @ Num?)]
+  [(δ/ - V ...) (? @ Num?)]
+  [(δ/ / V ...) (? @ Num?)]
+  
+  [(δ/ < V ...) (? @ Bool?)]
+  [(δ/ > V ...) (? @ Bool?)]
+  [(δ/ = V ...) (? @ Bool?)]
+  
+  [(δ/ and V ...) (? @ Bool?)]
+  [(δ/ or V ...) (? @ Bool?)]
+  [(δ/ not V ...) (? @ Bool?)]
+  
+  [(δ/ number? V ...) (? @ Bool?)]
+  [(δ/ string? V ...) (? @ Bool?)]
+  [(δ/ boolean? V ...) (? @ Bool?)]
+)
+
+(define Symbolic-reduction
+  (reduction-relation
+   λCon-Symbolic
+   (--> (in-hole E (op V ...))
+        (in-hole E (δ/ op V ...))
+        "δ"
+   )
+   (--> (in-hole E ((λ x M) V))
+        (in-hole E (subst x V M))
+        "β"
+   )
+   
+   ;; From λCon
    ;   (--> (in-hole E (assert v C))
    ;        (in-hole E (v @ C))
    ;        "Assert"
    ;   )
    ;; Immediate Contarcts
-   (--> (in-hole E (V @ (flat M)))
-        (in-hole E (V @ (eval ,(with-handlers 
-                             ([(λ x #t) (lambda (exn) (term #f))])
-                           (evaluate (term (M V)))))))
-        ;(in-hole E (V @ (eval (M V))))
-        "Flat"
-        )
-   (--> (in-hole E (V @ (eval W)))
-        (in-hole E V)
-        "Unit"
-        (side-condition (not (false? (term W))))
-        ;(side-condition (not (equal? (term W) #f)))
-        )
-   (--> (in-hole E (V @ (eval W)))
-        (in-hole E V)
-        ;;blame ;; TODO, Change to V and introduce top-level blame
-        "Blame"
-        (side-condition (false? (term W)))
-        )
+   ;(--> (in-hole E (V @ (flat M)))
+   ;     (in-hole E (V : (flat M)))
+   ;     ;(in-hole E (V @ (eval (M V))))
+   ;     "Flat"
+   ;     )
+   ;(--> (in-hole E (V @ (eval W)))
+   ;     (in-hole E V)
+   ;     "Unit"
+   ;     (side-condition (not (false? (term W))))
+   ;     ;(side-condition (not (equal? (term W) #f)))
+   ;     )
+   ;(--> (in-hole E (V @ (eval W)))
+   ;     (in-hole E V)
+   ;     ;;blame ;; TODO, Change to V and introduce top-level blame
+   ;     "Blame"
+   ;     (side-condition (false? (term W)))
+   ;     )
    (--> (in-hole E (V @ (C ∪ D)))
         (in-hole E ((V @ C) @ D))
         "Union"
@@ -379,33 +122,45 @@
         )
    
    
-   ;; Lookup
-   (--> (in-hole E (V @ named))
-        (in-hole E (V @ (lookup named)))
-        "Lookup"
-        )
-   ))
 
-
-(define-metafunction λCon
-  lookup : named -> (flat M)
+   
+))
   
-  [(lookup ⊤) (flat (λ x #t))]
-  [(lookup ⊥) (flat (λ x #f))]
-    
-  [(lookup Num?) (flat (λ x (number? x)))]
-  [(lookup Str?) (flat (λ x (string? x)))]
-  [(lookup Bool?) (flat (λ x (boolean? x)))]
-  
-  
-  
-  [(lookup Pos?) (flat (λ x (> x 0)))]
-  [(lookup Nat?) (flat (λ x (or (> x 0) (= x 0))))]
-  [(lookup Neg?) (flat (λ x (< x 0)))]
-  ) 
-
 
 
 (define
-  (evaluate M)
-  (car (apply-reduction-relation* λCon-reduction M)))
+  (analyse M)
+  (car (apply-reduction-relation* Symbolic-reduction M)))
+
+
+
+;; Test λCon/ Syntax
+(redex-match λCon M (term (1 @ (flat 1))))
+(redex-match λCon M (term ((+ 1 2) @ (flat 1))))
+
+(redex-match λCon M (term (1 @ (flat (+ 1 1)))))
+(redex-match λCon M (term ((+ 1 2) @ (flat (+ 1 1)))))
+
+(redex-match λCon M (term ((λ x (+ x 1)) @ ((flat 1) → (flat 1)))))
+(redex-match λCon M (term (((λ x (+ x 1)) @ ((flat 1) → (flat 1))) 1)))
+
+(redex-match λCon M (term ((λ x 1) +blame)))
+(redex-match λCon M (term ((λ x 1) -blame)))
+
+;; Test λCon/ Reduction
+(test-->> Symbolic-reduction (term ((+ 1 2) @ (flat (λ x 1)))) (term 3))
+(test-->> Symbolic-reduction (term ((+ 1 2) @ Any?)) (term 3))
+(test-->> Symbolic-reduction (term ((+ 1 2) @ None?)) (term +blame))
+
+(test-->> Symbolic-reduction (term (((λ x (+ x 1)) @ (Nat? → Nat?)) 1)) (term 2))
+
+(test-->> Symbolic-reduction (term (((λ x (+ x 1)) @ (Pos? → Pos?)) 0)) (term -blame)) 
+(test-->> Symbolic-reduction (term (((λ x (- x 1)) @ (Pos? → Pos?)) 1)) (term +blame))
+
+(test-->> Symbolic-reduction (term ((((λ x (λ y (+ x y))) @ (Pos? → (Pos? → Pos?))) 1) 1)) (term 2))
+
+(test-->> Symbolic-reduction (term ((λ x (x 1)) ((λ x (+ x 1)) @ (Pos? → Pos?)))) (term 2))
+
+(test-->> Symbolic-reduction (term ((((λ y (λ x ((y x) 1))) @ ((Pos? → (Pos? → Pos?)) → (Pos? → Pos?))) (λ x (λ y (+ x y)))) 1)) (term 2))
+
+(test-results)
