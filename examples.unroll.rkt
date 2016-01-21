@@ -30,7 +30,7 @@
   (term ((λ f (f 1)) ((λ x 1) @ (Num? → Num?)))))
 
 (test-->
- Baseline-reduction2
+ Baseline-reduction
  example:unroll/subject/0
  (term ((λ f (f 1)) (λ x 1))))
 
@@ -43,7 +43,7 @@
   (term ((λ x (x 1)) ((λ x x) @ (Num? → Num?)))))
 
 (test-->
- Baseline-reduction2
+ Baseline-reduction
  example:unroll/subject/1
  (term ((λ x (x 1)) (λ x 1))))
 
@@ -60,11 +60,11 @@
   (term ((λ f (f 1)) ((λ x x) @ ((Num? → Num?) → (Num? → Num?))))))
 
 (test-->
- Baseline-reduction2
+ Baseline-reduction
  example:unroll/subject/2
  (term ((λ x (x 1)) (λ x 1))))
 
-(traces Baseline-reduction2 example:unroll/subject/2)
+(traces Baseline-reduction example:unroll/subject/2)
 
 
 

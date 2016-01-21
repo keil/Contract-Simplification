@@ -338,7 +338,10 @@
    ;   )
    ;; Immediate Contarcts
    (--> (in-hole E (V @ (flat M)))
-        (in-hole E (V @ (eval (M V))))
+        (in-hole E (V @ (eval ,(with-handlers 
+                             ([(λ x #t) (lambda (exn) (term #f))])
+                           (evaluate (term (M V)))))))
+        ;(in-hole E (V @ (eval (M V))))
         "Flat"
         )
    (--> (in-hole E (V @ (eval W)))
@@ -385,7 +388,7 @@
 
 
 (define-metafunction λCon
-  lookup : predefined -> (flat P ...)
+  lookup : named -> (flat M)
   
   [(lookup ⊤) (flat (λ x #t))]
   [(lookup ⊥) (flat (λ x #f))]
@@ -406,5 +409,3 @@
 (define
   (evaluate M)
   (car (apply-reduction-relation* λCon-reduction M)))
-
-(evaluate (term (#t @ (flat (λ x (< x 1))))))
