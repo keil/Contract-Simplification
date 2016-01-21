@@ -66,12 +66,20 @@
   
   ;; Extend contracts
   ((C D) .... (C • D))
+  
+  
+  ;; Canonical Contract
+  
+  (QC (DC → RC))
+  (DC ⊤ ⊥ I (RC → DC))
+  (RC ⊤ ⊥ (DC → RC))
+  
 
 )
 
 (define 
   (canonical? C)
-  (redex-match? λCon-Baseline Qc C))
+  (redex-match? λCon-Baseline QC C))
 
 
 ;; Done
@@ -82,6 +90,7 @@
   (done? M)
   (redex-match? λCon-Baseline final M))
 
+;(canonical? (term (Num? → Num?)))
 
 #|
  ___        _         _   _          
@@ -102,6 +111,25 @@
 (define Pre-evaluation
   (reduction-relation
    λCon-Baseline
+   
+   ;; ++++++++++++++++++++++++++++++++++++++++++++++++++
+   
+   ;; remve this rules
+   ;; use a sprecual syntact for empty contracts
+   ;; (empty T (empty → empty) ...
+   
+   ;(--> (in-hole H (M @ ⊤))
+   ;     (in-hole H M)
+   ;     "Remove/Top"
+   ;)
+   
+   ;(--> (in-hole H (M @ (⊤ → ⊤)))
+   ;     (in-hole H M)
+   ;     "Reduce/Top2"
+   ;)
+   
+   ;; ++++++++++++++++++++++++++++++++++++++++++++++++++
+   
    
    (--> (in-hole H (V @ I))
         (in-hole H ,(car (apply-reduction-relation* λCon-reduction (term (V @ I)))))
@@ -176,6 +204,7 @@
    (--> (in-hole H ((λ x M) (B @ Q))) ;; before Q now Qc (V @ C)
         (in-hole H ((λ x (unroll x Q M)) B))
         "Unroll"
+        ;(side-condition (canonical? (term Q))) ;; XXX
    )
 
    ;; any intersection needs to be unrolled before
@@ -221,6 +250,7 @@
    (--> (in-hole H (λ x (B @ C))) ;; C before, now Q
         (in-hole H ((λ x B) @ (⊤ → C)))
         "Lower"
+        ;(side-condition (not (redex-match? λCon-Baseline V (term B)))) ;; XXX
    )
 
    ;; Lift (up) Contract
@@ -233,7 +263,35 @@
         "Lift"
    )
    
+   
+   ;; Deconstruct/ Reconstruct Contract
+   ;; ---------------------------------
+   
+;   (--> (in-hole H ((λ x (in-hole A (x M))) @ (Q → D))) ;; ? all contracts? ;; every context
+;        (in-hole H ((λ x (in-hole A ((x @ Q) M))) @ (⊤ → D)))
+;        "Deconstruct/Domain"
+;        (side-condition (not (canonical? (term (Q → D)))))
+        ;; side condition: contract not in canonical form
+;   )
+   
+;   (--> (in-hole H ((λ x V) @ (C → D))) ;; ? all contracts?
+;        (in-hole H ((λ x (V @ D)) @ (C → ⊤))) ;; ? all contracts?
+;        "Deconstruct/Range"
+        ;; cicle
+;        (side-condition (not (canonical? (term (C → D)))))
+        ;; side condition: contract not in canonical form
+;   )
+   
+  ; (--> (in-hole H ((λ x V) @ (C → I))) ;; ? all contracts?
+  ;      (in-hole H ((λ x (V @ I)) @ (C → ⊤))) ;; ? all contracts?
+  ;      "Deconstruct/Range2"
+  ;      (side-condition (not (canonical? (term (C → I)))))
+        ;; cicle
+        ;; side condition: contract not in canonical form
+  ; )
 
+   
+   
    
    
    ;; Collapse
