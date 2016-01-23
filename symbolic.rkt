@@ -21,20 +21,22 @@
 
 (define-extended-language λCon-Symbolic λCon
   
-  ((U V W) .... ?)
-  
-  ;; Virtual Values/ Symbols
-  ((S T) V (V @ (P ...)))
-  
-  ((L M N) .... S)
-  
+  ;; TODO
+  ;; Predicates
   (P (flat (λ x M)) named)
   
-  ;; Operations
-  (bool-op < > = and or not number? string? boolean?)
-  (num-op + * - /)
+  ;; Values
+  ((U V W) .... ?)
+  
+  ;; Symbolic Values
+  ((S T) (V P ...))
+  
+  ;; Terms
+  ((L M N) .... S)
+  
+  ;; Contexts
+  ((E F) hole (E N) (S E) (op S ... E M ...) (E @ C) (S @ (eval E)))
   )
-
 
 #|
  ___        _         _   _          
@@ -46,56 +48,62 @@
 
 (define-metafunction λCon-Symbolic
   unpack : S -> V
-  [(unpack (V @  (P ...))) V]
+  [(unpack (V P ...)) V]
   [(unpack V) V]
   [(unpack any) ?]
   )
 
 (define-metafunction λCon-Symbolic
-  δ/ : op S ... -> S
+  δ/ : op V ... -> V
   [(δ/ op K ...) (δ op K ...)]
   [(δ/ op any ...) ?]
   )
 
 (define-metafunction λCon-Symbolic
-  Δ : op S ... -> (S @ (C ...))
-  [(Δ num-op S ...) ((δ/ num-op (unpack S) ...) @ (Num?))]  
-  [(Δ bool-op S ...) ((δ/ bool-op (unpack S) ...) @ (Bool?))]
+  Δ : op S ... -> S
+  [(Δ numeric S ...) ((δ/ numeric (unpack S) ...) Num?)]  
+  [(Δ logical S ...) ((δ/ logical (unpack S) ...) Bool?)]
+  [(Δ relational S ...) ((δ/ relational (unpack S) ...) Bool?)]
+  [(Δ predicates S ...) ((δ/ predicates (unpack S) ...) Bool?)]
   )
+
+;; do i really need this unpacking?
 
 (define Symbolic-reduction
   (reduction-relation
    λCon-Symbolic
    
+      (--> (in-hole E V)
+           (in-hole E (V))
+           "Abstract"
+           )
+   
+   ;; Rules from λJ
+   ;; =============
    (--> (in-hole E (op S ...))
         (in-hole E (Δ op S ...))
         "Δ"
         )
-   (--> (in-hole E ((λ x M) S))
+   (--> (in-hole E (((λ x M) P ...) S))
         (in-hole E (subst x S M))
         "β"
-   )
-   (--> (in-hole E (((λ x M) @ (P ...)) S))
-        (in-hole E (subst x S M))
-        "β/2"
-   )
-   
-   ;; From λCon
-   (--> (in-hole E ((S @ (P ...)) @ P_n))
-        (in-hole E (S @ (P ... P_n)))
-        "Combine"
         )
-   
    ;; From λCon
+   ;; =========
    ;   (--> (in-hole E (assert v C))
    ;        (in-hole E (v @ C))
    ;        "Assert"
    ;   )
-   
-   (--> (in-hole E (V @ P))
-        (in-hole E (V @ (P)))
+   (--> (in-hole E ((V P ...) @ P_n)) ;; Check if the predicate is valid? // only store values taht are satisfied?
+        (in-hole E (V P ... P_n))
         ;(in-hole E (V @ (eval (M V))))
         "Flat"
+        )
+   
+   (--> (in-hole E ((V P ...) @ Q)) 
+        (in-hole E ((V @ Q) P ... ))
+        ;(in-hole E (V @ (eval (M V))))
+        "Function"
         )
    ;; Immediate Contarcts
    ;(--> (in-hole E (V @ (flat M)))
@@ -127,7 +135,7 @@
    (--> (in-hole E ((S @ (C → D)) T))
         (in-hole E ((S (T @ C)) @ D))
         "D-Function"
-   )
+        )
    (--> (in-hole E ((S @ (x → C)) T)) ;; TODO
         (in-hole E ((S T) @ C))
         "D-Dependent"
@@ -135,12 +143,7 @@
    (--> (in-hole E ((S @ (Q ∩ R)) T))
         (in-hole E (((S @ Q) @ R) T))
         "D-Intersection"
-        )
-   
-   ;; aplication of a symnbolic function ?
-   ;; say, every value is a sum,bolic value
-   
-   
+        )   
    ))
 
 ; only alloweed to collect predicates that evaluate to true ?
@@ -148,6 +151,8 @@
 ; collecting did not mean that the value satisfied the contract/ only that it is checked against this contract
 ; but without a check of th blame state this is useless
 
+;; Symbolic Execution
+;; ================== 
 
 (define
   (analyse M)
@@ -155,23 +160,24 @@
 
 
 ;; Test λCon/ Reduction
-(test-->> Symbolic-reduction (term ((+ 1 2) @ Nat?)) (term (3 @ (Num? Nat?))))
+(test-->> Symbolic-reduction (term ((+ 1 2) @ Nat?)) (term (3 Num? Nat?)))
+(test-->> Symbolic-reduction (term ((+ 1 2) @ Any?)) (term (3 Num? Any?)))
+(test-->> Symbolic-reduction (term ((+ 1 2) @ None?)) (term (3 Num? None?))) ;(+blame @ (Pos? None?))
 
-(test-->> Symbolic-reduction (term ((+ 1 2) @ Any?)) (term (3 @ (Num? Any?))))
-(test-->> Symbolic-reduction (term ((+ 1 2) @ None?)) (term (3 @ (Num? None?)))) ;(+blame @ (Pos? None?))
+(test-->> Symbolic-reduction (term (((λ x (+ x 1)) @ (Nat? → Nat?)) 1)) (term (2 Num? Nat?)))
 
-(test-->> Symbolic-reduction (term (((λ x (+ x 1)) @ (Nat? → Nat?)) 1)) (term (2 @ (Num? Nat?))))
+(test-->> Symbolic-reduction (term (((λ x (+ x 1)) @ (Pos? → Pos?)) 0)) (term (1 Num? Pos?)))
+(test-->> Symbolic-reduction (term (((λ x (- x 1)) @ (Pos? → Pos?)) 1)) (term (0 Num? Pos?)))
 
-(test-->> Symbolic-reduction (term (((λ x (+ x 1)) @ (Pos? → Pos?)) 0)) (term (1 @ (Num? Pos?))))
-(test-->> Symbolic-reduction (term (((λ x (- x 1)) @ (Pos? → Pos?)) 1)) (term (0 @ (Num? Pos?))))
+(test-->> Symbolic-reduction (term ((((λ x (λ y (+ x y))) @ (Pos? → (Pos? → Pos?))) 1) 1)) (term (2 Num? Pos?)))
+(traces Symbolic-reduction (term ((((λ x (λ y (+ x y))) @ (Pos? → (Pos? → Pos?))) 1) 1)))
 
-(test-->> Symbolic-reduction (term ((((λ x (λ y (+ x y))) @ (Pos? → (Pos? → Pos?))) 1) 1)) (term (2 @ (Num? Pos?))))
 
-(test-->> Symbolic-reduction (term ((λ x (x 1)) ((λ x (+ x 1)) @ (Pos? → Pos?)))) (term (2 @ (Num? Pos?))))
+(test-->> Symbolic-reduction (term ((λ x (x 1)) ((λ x (+ x 1)) @ (Pos? → Pos?)))) (term (2 Num? Pos?)))
 
-(test-->> Symbolic-reduction (term ((((λ y (λ x ((y x) 1))) @ ((Pos? → (Pos? → Pos?)) → (Pos? → Pos?))) (λ x (λ y (+ x y)))) 1)) (term (2 @ (Num? Pos? Pos?))))
+(test-->> Symbolic-reduction (term ((((λ y (λ x ((y x) 1))) @ ((Pos? → (Pos? → Pos?)) → (Pos? → Pos?))) (λ x (λ y (+ x y)))) 1)) (term (2 Num? Pos? Pos?)))
 
-(test-->> Symbolic-reduction (term ((λ x (x 1)) ((λ x (+ x 1)) @ ⊤))) (term 2))
-(traces Symbolic-reduction (term ((λ x (x 1)) ((λ x (+ x 1)) @ ⊤))))
+(test-->> Symbolic-reduction (term ((λ x (x 1)) ((λ x (+ x 1)) @ ⊤))) (term (2 Num?)))
+;(traces Symbolic-reduction (term ((λ x (x 1)) ((λ x (+ x 1)) @ ⊤))))
 
 (test-results)

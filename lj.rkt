@@ -27,10 +27,18 @@
   ;; Variables
   ((x y z) (variable-prefix x) (variable-prefix y) (variable-prefix z)
            (variable-prefix f) (variable-prefix g) (variable-prefix h))
-           ;;variable-not-otherwise-mentioned)
   
   ;; Operations
-  (op + * - / < > = and or not number? string? boolean?)
+  (op predicates logical numeric relational)
+  
+  ;; TypeOf Predicates
+  (predicates number? string? boolean?)
+  ;; Logical Operators
+  (logical and or not)
+  ;; Numeric Operators
+  (numeric + * - /)
+  ;; Relational Operators
+  (relational < > =)
   
   ;; Values
   ((U V W) K (λ x M))
