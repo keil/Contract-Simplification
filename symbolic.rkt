@@ -26,10 +26,12 @@
   (P (flat (λ x M)) named)
   
   ;; Values
-  ((U V W) .... ?)
+  ;;((U V W) .... ?)
+  ;; Values
+  ((U V W) K (λ x M) ?)
   
   ;; Symbolic Values
-  ((S T) (V P ...))
+  ((S T) (V P ...) (S @ Q))
   
   ;; Terms
   ((L M N) .... S)
@@ -100,11 +102,11 @@
         "Flat"
         )
    
-   (--> (in-hole E ((V P ...) @ Q)) 
-        (in-hole E ((V @ Q) P ... ))
-        ;(in-hole E (V @ (eval (M V))))
-        "Function"
-        )
+   ;(--> (in-hole E ((V P ...) @ Q)) 
+   ;     (in-hole E ((V @ Q) P ... ))
+   ;     ;(in-hole E (V @ (eval (M V))))
+   ;     "Function"
+   ;     )
    ;; Immediate Contarcts
    ;(--> (in-hole E (V @ (flat M)))
    ;     (in-hole E (V : (flat M)))
