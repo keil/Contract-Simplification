@@ -49,7 +49,7 @@
   [(unpack (V @  (P ...))) V]
   [(unpack V) V]
   [(unpack any) ?]
- )
+  )
 
 (define-metafunction λCon-Symbolic
   δ/ : op S ... -> S
@@ -74,7 +74,11 @@
    (--> (in-hole E ((λ x M) S))
         (in-hole E (subst x S M))
         "β"
-        )
+   )
+   (--> (in-hole E (((λ x M) @ (P ...)) S))
+        (in-hole E (subst x S M))
+        "β/2"
+   )
    
    ;; From λCon
    (--> (in-hole E ((S @ (P ...)) @ P_n))
@@ -88,7 +92,7 @@
    ;        "Assert"
    ;   )
    
-    (--> (in-hole E (V @ P))
+   (--> (in-hole E (V @ P))
         (in-hole E (V @ (P)))
         ;(in-hole E (V @ (eval (M V))))
         "Flat"
@@ -111,25 +115,25 @@
    ;     "Blame"
    ;     (side-condition (false? (term W)))
    ;     )
-   (--> (in-hole E (V @ (C ∪ D)))
-        (in-hole E ((V @ C) @ D))
+   (--> (in-hole E (S @ (C ∪ D)))
+        (in-hole E ((S @ C) @ D))
         "Union"
         )
-   (--> (in-hole E (V @ (I ∩ C)))
-        (in-hole E ((V @ I) @ C))
+   (--> (in-hole E (S @ (I ∩ C)))
+        (in-hole E ((S @ I) @ C))
         "Intersection"
         )
    ;; Delayed Contarcts
-   (--> (in-hole E ((V @ (C → D)) S))
-        (in-hole E ((V (S @ C)) @ D))
+   (--> (in-hole E ((S @ (C → D)) T))
+        (in-hole E ((S (T @ C)) @ D))
         "D-Function"
-        )
-   (--> (in-hole E ((V @ (x → C)) W)) ;; TODO
-        (in-hole E ((V W) @ C))
+   )
+   (--> (in-hole E ((S @ (x → C)) T)) ;; TODO
+        (in-hole E ((S T) @ C))
         "D-Dependent"
         )
-   (--> (in-hole E ((V @ (Q ∩ R)) W))
-        (in-hole E (((V @ Q) @ R) W))
+   (--> (in-hole E ((S @ (Q ∩ R)) T))
+        (in-hole E (((S @ Q) @ R) T))
         "D-Intersection"
         )
    
@@ -166,5 +170,8 @@
 (test-->> Symbolic-reduction (term ((λ x (x 1)) ((λ x (+ x 1)) @ (Pos? → Pos?)))) (term (2 @ (Num? Pos?))))
 
 (test-->> Symbolic-reduction (term ((((λ y (λ x ((y x) 1))) @ ((Pos? → (Pos? → Pos?)) → (Pos? → Pos?))) (λ x (λ y (+ x y)))) 1)) (term (2 @ (Num? Pos? Pos?))))
+
+(test-->> Symbolic-reduction (term ((λ x (x 1)) ((λ x (+ x 1)) @ ⊤))) (term 2))
+(traces Symbolic-reduction (term ((λ x (x 1)) ((λ x (+ x 1)) @ ⊤))))
 
 (test-results)
