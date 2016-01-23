@@ -145,3 +145,41 @@ Abstract Values
 
 - Use symbolic execution to verify contracts?
 
+
+
+If-Condition
+============
+
+- Implement if construct
+- Contract the expression with a dependent contract
+- Union of two dependent contracts
+
+
+
+Notes
+=====
+
+Static evaluation needs to produce a constraint set
+
+
+Open questions
+==============
+
+*** Symbolic Contract Checking
+*** Hybrid Contract Checking
+
+How do I recognize that it is required to in-roll a contract.
+Inroll with static parallel execution.
+
+- Im only allowed to to the same thing than the standard evaluation would do
+- An immediate contract on the domain would be asserted to a value, not to the
+  variable., Thus, doing this would break the behaviour.
+
+- 
+
+
+*** Two delayed contract on a value/ variable are not allowed to be combined to
+an intersection on the upper level, because both contract may flow into
+different branches. Or, the subsequent evaluation attempts to fulfill the wrong
+side of the contract.
+
