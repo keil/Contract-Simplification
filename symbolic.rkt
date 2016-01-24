@@ -37,7 +37,7 @@
   ((L M N) .... S)
   
   ;; Contexts
-  ((E F) hole (E N) (S E) (op S ... E M ...) (E @ C) (S @ P (eval E)))
+  ((E F) hole (E N) (S E) (op S ... E M ...) (E @ C) (S @ (eval E)))
   
   
   (false .... ?)
@@ -109,25 +109,22 @@
    ;     "Function"
    ;     )
    ;; Immediate Contarcts
-   (--> (in-hole E ((V P ...) @ (flat M))) ;; Check if the predicate is valid? // only store values taht are satisfied?
-        ;;;;;(in-hole E (V P ... P_n))
+   (--> (in-hole E ((V P ...) @ (flat M)))
         (in-hole E ((V P ...) @ (eval (M V))))
         "Flat"
         )
-   (--> (in-hole E ((V P ...) @ named)) ;; Check if the predicate is valid? // only store values taht are satisfied?
-        ;;;;;(in-hole E (V P ... P_n))
+   (--> (in-hole E ((V P ...) @ named))
         (in-hole E ((V P ...) @ (lookup named)))
         "Lookup"
         )   
    
-   
-   (--> (in-hole E ((V P ...) @ (eval W)))
+   (--> (in-hole E ((V P ...) @ (eval (W P_n ...))))
         (in-hole E (V P ...))
         "Unit"
         (side-condition (not (false? (term W)))) ;;; ???
         ;(side-condition (not (equal? (term W) #f)))
         )
-   (--> (in-hole E ((V P ...) @ (eval W)))
+   (--> (in-hole E ((V P ...) @ (eval (W P_n ...))))
         (in-hole E (V P ...))
         ;;blame ;; TODO, Change to V and introduce top-level blame
         "Blame"
@@ -170,7 +167,7 @@
   (analyse M)
   (car (apply-reduction-relation* Symbolic-reduction M)))
 
-
+(traces Symbolic-reduction (term ((+ 1 2) @ Nat?)))
 ;; Test λCon/ Reduction
 (test-->> Symbolic-reduction (term ((+ 1 2) @ Nat?)) (term (3 Num? Nat?)))
 (test-->> Symbolic-reduction (term ((+ 1 2) @ ⊤)) (term (3 Num? ⊤)))
