@@ -21,12 +21,9 @@
 
 (define-extended-language λCon-Symbolic λCon
   
-  ;; TODO
   ;; Predicates
   (P (flat (λ x M)) named)
   
-  ;; Values
-  ;;((U V W) .... ?)
   ;; Values
   ((U V W) K (λ x M) ?)
   
@@ -40,10 +37,7 @@
   ((E F) hole (E N) (S E) (op S ... E M ...) (E @ C) (S @ (eval E)))
   
   ;; False Values
-  (false .... ?)
-  )
-
-
+  (false .... ?))
 
 #|
  ___        _         _   _          
@@ -68,13 +62,11 @@
 
 (define-metafunction λCon-Symbolic
   Δ : op S ... -> S
-  [(Δ numeric S ...) ((δ/ numeric (unpack S) ...) Num?)]  
-  [(Δ logical S ...) ((δ/ logical (unpack S) ...) Bool?)]
-  [(Δ relational S ...) ((δ/ relational (unpack S) ...) Bool?)]
-  [(Δ predicates S ...) ((δ/ predicates (unpack S) ...) Bool?)]
+  [(Δ numeric (V P ...) ...) ((δ/ numeric V ...) Num?)]  
+  [(Δ logical (V P ...) ...) ((δ/ logical V ...) Bool?)]
+  [(Δ relational (V P ...) ...) ((δ/ relational V ...) Bool?)]
+  [(Δ predicates (V P ...) ...) ((δ/ predicates V ...) Bool?)]
   )
-
-;; do i really need this unpacking?
 
 (define Symbolic-reduction
   (reduction-relation
@@ -95,19 +87,6 @@
         (in-hole E (subst x S M))
         "β"
         )
-   ;; From λCon
-   ;; =========
-   ;   (--> (in-hole E (assert v C))
-   ;        (in-hole E (v @ C))
-   ;        "Assert"
-   ;   )
-   
-   
-   ;(--> (in-hole E ((V P ...) @ Q)) 
-   ;     (in-hole E ((V @ Q) P ... ))
-   ;     ;(in-hole E (V @ (eval (M V))))
-   ;     "Function"
-   ;     )
    ;; Immediate Contarcts
    (--> (in-hole E ((V P ...) @ (flat M)))
         (in-hole E ((V P ... (flat M)) @ (eval (M V))))
