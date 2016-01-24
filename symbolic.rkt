@@ -81,7 +81,7 @@
    λCon-Symbolic
    
    (--> (in-hole E V)
-        (in-hole E (V))
+        (in-hole E (V ⊤))
         "Abstract"
         )
    
@@ -114,7 +114,7 @@
         "Flat"
         )
    (--> (in-hole E ((V P ...) @ named))
-        (in-hole E ((V P ... named) @ (eval (#t Bool?))))
+        (in-hole E ((V P ...) @ (lookup named)))
         "Lookup"
         )   
    
