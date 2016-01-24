@@ -37,8 +37,13 @@
   ((L M N) .... S)
   
   ;; Contexts
-  ((E F) hole (E N) (S E) (op S ... E M ...) (E @ C) (S @ (eval E)))
+  ((E F) hole (E N) (S E) (op S ... E M ...) (E @ C) (S @ P (eval E)))
+  
+  
+  (false .... ?)
   )
+
+
 
 #|
  ___        _         _   _          
@@ -75,10 +80,10 @@
   (reduction-relation
    λCon-Symbolic
    
-      (--> (in-hole E V)
-           (in-hole E (V))
-           "Abstract"
-           )
+   (--> (in-hole E V)
+        (in-hole E (V))
+        "Abstract"
+        )
    
    ;; Rules from λJ
    ;; =============
@@ -96,11 +101,7 @@
    ;        (in-hole E (v @ C))
    ;        "Assert"
    ;   )
-   (--> (in-hole E ((V P ...) @ P_n)) ;; Check if the predicate is valid? // only store values taht are satisfied?
-        (in-hole E (V P ... P_n))
-        ;(in-hole E (V @ (eval (M V))))
-        "Flat"
-        )
+   
    
    ;(--> (in-hole E ((V P ...) @ Q)) 
    ;     (in-hole E ((V @ Q) P ... ))
@@ -108,23 +109,32 @@
    ;     "Function"
    ;     )
    ;; Immediate Contarcts
-   ;(--> (in-hole E (V @ (flat M)))
-   ;     (in-hole E (V : (flat M)))
-   ;     ;(in-hole E (V @ (eval (M V))))
-   ;     "Flat"
-   ;     )
-   ;(--> (in-hole E (V @ (eval W)))
-   ;     (in-hole E V)
-   ;     "Unit"
-   ;     (side-condition (not (false? (term W))))
-   ;     ;(side-condition (not (equal? (term W) #f)))
-   ;     )
-   ;(--> (in-hole E (V @ (eval W)))
-   ;     (in-hole E V)
-   ;     ;;blame ;; TODO, Change to V and introduce top-level blame
-   ;     "Blame"
-   ;     (side-condition (false? (term W)))
-   ;     )
+   (--> (in-hole E ((V P ...) @ (flat M))) ;; Check if the predicate is valid? // only store values taht are satisfied?
+        ;;;;;(in-hole E (V P ... P_n))
+        (in-hole E ((V P ...) @ (eval (M V))))
+        "Flat"
+        )
+   (--> (in-hole E ((V P ...) @ named)) ;; Check if the predicate is valid? // only store values taht are satisfied?
+        ;;;;;(in-hole E (V P ... P_n))
+        (in-hole E ((V P ...) @ (lookup named)))
+        "Lookup"
+        )   
+   
+   
+   (--> (in-hole E ((V P ...) @ (eval W)))
+        (in-hole E (V P ...))
+        "Unit"
+        (side-condition (not (false? (term W)))) ;;; ???
+        ;(side-condition (not (equal? (term W) #f)))
+        )
+   (--> (in-hole E ((V P ...) @ (eval W)))
+        (in-hole E (V P ...))
+        ;;blame ;; TODO, Change to V and introduce top-level blame
+        "Blame"
+        (side-condition (false? (term W)))
+        )
+   
+   
    (--> (in-hole E (S @ (C ∪ D)))
         (in-hole E ((S @ C) @ D))
         "Union"
@@ -163,8 +173,8 @@
 
 ;; Test λCon/ Reduction
 (test-->> Symbolic-reduction (term ((+ 1 2) @ Nat?)) (term (3 Num? Nat?)))
-(test-->> Symbolic-reduction (term ((+ 1 2) @ Any?)) (term (3 Num? Any?)))
-(test-->> Symbolic-reduction (term ((+ 1 2) @ None?)) (term (3 Num? None?))) ;(+blame @ (Pos? None?))
+(test-->> Symbolic-reduction (term ((+ 1 2) @ ⊤)) (term (3 Num? ⊤)))
+(test-->> Symbolic-reduction (term ((+ 1 2) @ ⊥)) (term (3 Num? ⊥))) ;(+blame @ (Pos? None?))
 
 (test-->> Symbolic-reduction (term (((λ x (+ x 1)) @ (Nat? → Nat?)) 1)) (term (2 Num? Nat?)))
 
