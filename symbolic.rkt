@@ -34,7 +34,7 @@
   ((L M N) .... S (M || N))
   
   ;; Contexts
-  ((E F) hole (E N) (S E) (op S ... E M ...) (If E M N) (E @ C) (S @ (eval E)) (E || T) (S || E))
+  ((E F) hole (E N) (S E) (op S ... E M ...) (if E M N) (E @ C) (S @ (eval E)) (E || T) (S || E))
   
   ;; False Values
   (false .... ?))
@@ -76,13 +76,13 @@
 
 (define-metafunction λCon-Symbolic
   ⊗ : (P ...) (P ...) -> (P ...)
-
+  
   [(⊗ () (P ...)) ()]
   [(⊗ (P ...) ()) ()]
   
   [(⊗ (P) (P_0 ... P P_i ...)) (P)]
   [(⊗ (P) (P_0 ...)) (⊤)]
-
+  
   [(⊗ (P_0 P_1 ...) (P ...)) (⊕ (⊗ (P_0) (P ...)) (⊗ (P_1 ...) (P ...)))] 
   )
 
@@ -118,22 +118,27 @@
         (in-hole E (subst x S M))
         "β")
    
+   (--> (in-hole E ((? / P ...) S))
+        (in-hole E (? / ⊤))
+        "β/?")
+   
    ;; Application of ? .. (? 1) ?
    
    (--> (in-hole E (if (V / P ...) M N))
         (in-hole E M)
-        "if/true"
+        "If/true"
         (side-condition (not (false? (term V)))))
    
    (--> (in-hole E (if (V / P ...) M N))
-        (in-hole E M)
-        "if/false"
+        (in-hole E N)
+        "If/false"
         (side-condition (false? (term V))))
    
    (--> (in-hole E (if (? / P ...) M N))
-        (in-hole E (? / ))
-        "if"
-        )  
+        (in-hole E (? / ⊤)) ;; TODO, need to be (M || N) ;; require every rule for M N
+        "If/?")  
+   
+   
    ;; TODO
    ;; ? is also a false value.
    
@@ -203,7 +208,7 @@
 (define
   (⇒*/symbolic M)
   (do [(N (⇒/symbolic M) (⇒/symbolic N))] ((not (redex-match? λCon-Symbolic ((λ x M) / P ...) N)) N)))
-  
+
 
 (⇓/symbolic (term ((λ x (+ x 1)) 1)))
 (⇓/symbolic (term (((λ x (+ x 1)) @ (Nat? → Nat?)) 1)))
@@ -215,3 +220,16 @@
 (⇒*/symbolic (term (λ x (λ y (+ x y)))))
 (⇒*/symbolic (term (λ x (λ y (λ z (- (+ x y) z))))))
 (⇒*/symbolic (term (λ x (λ y (λ z (and (+ x y) z))))))
+
+(⇓/symbolic (term (if #t 1 2)))
+
+(⇓/symbolic
+ (term ((λ x ((if (boolean? x) (λ x (or x 1)) (λ x (+ x 1))) x)) 1))
+ )
+
+(⇒*/symbolic
+ (term (λ x ((if (boolean? x) (λ x (or x 1)) (λ x (+ x 1))) x))))
+
+(traces Symbolic-reduction  (term ((λ x ((if (boolean? x) (λ x (or x 1)) (λ x (+ x 1))) x)) (? / ⊤))))
+
+;(traces Symbolic-reduction (term (if #t 1 2)))

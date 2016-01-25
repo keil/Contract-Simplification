@@ -96,7 +96,7 @@
         (side-condition (not (false? (term V)))))
    
    (--> (in-hole E (if V M N))
-        (in-hole E M)
+        (in-hole E N)
         "if/false"
         (side-condition (false? (term V))))
    ))
