@@ -39,6 +39,9 @@
   ;; False Values
   (false .... ?))
 
+(define maybe-false? 
+  (redex-match? λCon-Symbolic false))
+
 #|
  ___        _         _   _          
 | _ \___ __| |_  _ __| |_(_)___ _ _  
@@ -127,7 +130,7 @@
    (--> (in-hole E (if (V / P ...) M N))
         (in-hole E M)
         "If/true"
-        (side-condition (not (false? (term V)))))
+        (side-condition (not (maybe-false? (term V)))))
    
    (--> (in-hole E (if (V / P ...) M N))
         (in-hole E N)
@@ -155,12 +158,12 @@
    (--> (in-hole E ((V / P_0 ...) @ (eval (W / P_n ...))))
         (in-hole E (V / P_0 ...))
         "Unit"
-        (side-condition (not (false? (term W)))))
+        (side-condition (not (maybe-false? (term W)))))
    
    (--> (in-hole E ((V / P_0 ... P_n) @ (eval (W / P ...))))
         (in-hole E (V / P_0 ...))
         "Blame"
-        (side-condition (false? (term W))))
+        (side-condition (maybe-false? (term W))))
    
    (--> (in-hole E (S @ (C ∪ D)))
         (in-hole E ((S @ C) @ D))
