@@ -62,10 +62,10 @@
 
 (define-metafunction λCon-Symbolic
   Δ : op S ... -> S
-  [(Δ numeric (V / P ...) ...) ((δ/ numeric V ...) Num?)]  
-  [(Δ logical (V / P ...) ...) ((δ/ logical V ...) Bool?)]
-  [(Δ relational (V / P ...) ...) ((δ/ relational V ...) Bool?)]
-  [(Δ predicates (V / P ...) ...) ((δ/ predicates V ...) Bool?)]
+  [(Δ numeric (V / P ...) ...) ((δ/ numeric V ...) / Num?)]  
+  [(Δ logical (V / P ...) ...) ((δ/ logical V ...) / Bool?)]
+  [(Δ relational (V / P ...) ...) ((δ/ relational V ...) / Bool?)]
+  [(Δ predicates (V / P ...) ...) ((δ/ predicates V ...) / Bool?)]
   )
 
 (define Symbolic-reduction
@@ -86,7 +86,7 @@
         (in-hole E (Δ op S ...))
         "Δ")
    
-   (--> (in-hole E (((λ x M) P ...) S))
+   (--> (in-hole E (((λ x M) / P ...) S))
         (in-hole E (subst x S M))
         "β")
    
@@ -112,11 +112,11 @@
    ;; Rules from λCon
    ;; ===============
    
-   ;; Immediate Contarcts
+   ;; Immediate Contracts
    ;; -------------------
    
    (--> (in-hole E ((V / P_0 ...) @ (flat M)))
-        (in-hole E ((V / P_0 ... (flat M)) @ (eval (M V))))
+        (in-hole E ((V / P_0 ... (pretty (flat M))) @ (eval (M V))))
         "Flat")
 
    (--> (in-hole E ((V / P_0 ...) @ (eval (W / P_n ...))))
@@ -137,7 +137,7 @@
         (in-hole E ((S @ I) @ C))
         "Intersection")
    
-   ;; Delayed Contarcts
+   ;; Delayed Contracts
    ;; -----------------
    
    (--> (in-hole E ((S @ (C → D)) T))
@@ -157,8 +157,9 @@
   
    (--> (in-hole E ((V / P ...) @ named))
         (in-hole E ((V / P ...) @ (lookup named)))
-        "Lookup"
-        ))
+        "Lookup")
+   
+   ))
 
 ;; Symbolic Execution
 ;; ================== 

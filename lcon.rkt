@@ -22,7 +22,7 @@
   
   ;; Predicates
   ;; ----------
-
+  
   (P ⊤ (M ⇒ P) predefined)
   
   
@@ -84,7 +84,7 @@
   
   ;; Predefined Predicates
   ;; =====================
-
+  
   (predefined
    ⊤
    ⊥
@@ -94,12 +94,12 @@
    Pos?
    Neg?
    Nat?
-  )
+   )
   
   ;; TODO, only for testing
   (named Any? ⊤ None? ⊥ Num?
-   Str? Bool? Pos? Neg? Nat?
-   )
+         Str? Bool? Pos? Neg? Nat?
+         )
   )
 
 
@@ -109,12 +109,12 @@
   
   ;; First level
   [(lookup/ ⊤) (λ x #t)]
-
+  
   ;; Second Level
   [(lookup/ Num?) ((λ x (number? x)) ⇒ ⊤)]
   [(lookup/ Str?) ((λ x (string? x)) ⇒ ⊤)]
   [(lookup/ Bool?) ((λ x (boolean? x)) ⇒ ⊤)]
-
+  
   ;; Third Level
   [(lookup/ Real?) ((λ x (real? x)) ⇒ Number?)]
   [(lookup/ Zero?) ((λ x (zero? x)) ⇒ Number?)]
@@ -137,7 +137,7 @@
   ;; Cross-predicates
   
   [(lookup/ Natatural?) ((λ x (or (> x 0) (= x 0))) ⇒ Num?)]
-
+  
   
   
   ;PosInt
@@ -176,12 +176,12 @@
   ≤/ : (P ...) (P ...) -> boolean
   [(≤/ (P_0 P_1 ...) (P ...)) ,(and (term (∈ P_0 (P ...))) (term (≤/ (P_1 ...) (P ...))))]
   [(≤/ () (P ...)) #t]
-)
+  )
 
 (define-metafunction λCon
   ⊑/flat : (flat P ...) (flat P ...) -> boolean
   [(⊑/flat (flat P_0 ...) (flat P_1 ...)) (≤ (P_0 ...) (P_0 ...))]
-)
+  )
 
 ;; Naive Subsets of Contracts
 ;; ==========================
@@ -332,8 +332,8 @@
    ;; Immediate Contarcts
    (--> (in-hole E (V @ (flat M)))
         (in-hole E (V @ (eval ,(with-handlers 
-                             ([(λ x #t) (lambda (exn) (term #f))])
-                           (evaluate (term (M V)))))))
+                                   ([(λ x #t) (lambda (exn) (term #f))])
+                                 (evaluate (term (M V)))))))
         ;(in-hole E (V @ (eval (M V))))
         "Flat"
         )
@@ -385,18 +385,33 @@
   
   [(lookup ⊤) (flat (λ x #t))]
   [(lookup ⊥) (flat (λ x #f))]
-    
+  
   [(lookup Num?) (flat (λ x (number? x)))]
   [(lookup Str?) (flat (λ x (string? x)))]
   [(lookup Bool?) (flat (λ x (boolean? x)))]
-  
-  
   
   [(lookup Pos?) (flat (λ x (> x 0)))]
   [(lookup Nat?) (flat (λ x (or (> x 0) (= x 0))))]
   [(lookup Neg?) (flat (λ x (< x 0)))]
   ) 
 
+(define-metafunction λCon
+  pretty : (flat M) -> I
+  
+  [(pretty (flat (λ x #t))) ⊤]
+  [(pretty (flat (λ x #f))) ⊥]
+  
+  [(pretty (flat (λ x (number? x)))) Num?]
+  [(pretty (flat (λ x (string? x)))) Str?]
+  [(pretty (flat (λ x (boolean? x)))) Bool?]
+  
+  [(pretty (flat (λ x (> x 0)))) Pos?]
+  [(pretty (flat (λ x (or (> x 0) (= x 0))))) Nat?]
+  [(pretty (flat (λ x (< x 0)))) Neg?]
+  
+  ;; Default Case
+  [(pretty any) any]
+  ) 
 
 
 (define
