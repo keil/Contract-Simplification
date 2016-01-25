@@ -27,8 +27,8 @@
   ;; Variables
   ((x y z) (variable-prefix x) (variable-prefix y) (variable-prefix z)
            (variable-prefix f) (variable-prefix g) (variable-prefix h))
-  
-  ;; Operations
+    
+  ;; Primitive Operations
   (op predicates logical numeric relational)
   
   ;; TypeOf Predicates
@@ -39,13 +39,13 @@
   (numeric + * - /)
   ;; Relational Operators
   (relational < > =)
-  
+    
   ;; Values
   ((U V W) K (λ x M))
   ;; False Values
   (false #f 0 "")
-  
-  ;; Contexts
+    
+  ;; Evaluation Contexts
   ((E F) hole (E N) (V E) (op V ... E M ...) (if E M N))
   )
 
