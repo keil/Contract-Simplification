@@ -34,7 +34,7 @@
   ((L M N) .... S (M || N))
   
   ;; Contexts
-  ((E F) hole (E N) (S E) (op S ... E M ...) (if E M N) (E @ C) (S @ (eval E)) (E || T) (S || E))
+  ((E F) hole (E N) (S E) (op S ... E M ...) (if E M N) (E @ C) (S @ (eval E)) (E || N) (S || E))
   
   ;; False Values
   (false .... ?))
@@ -110,6 +110,10 @@
         (in-hole E (★ (V / P_v ...) (W / P_w ...)))
         "Join")
    
+   (--> (in-hole E ((S_l || S_r) T))
+        (in-hole E ((S_l T) || (S_r T)))
+        "Split")
+   
    ;; Rules from λJ
    ;; =============
    
@@ -138,7 +142,7 @@
         (side-condition (false? (term V))))
    
    (--> (in-hole E (if (? / P ...) M N))
-        (in-hole E (? / ⊤)) ;; TODO, need to be (M || N) ;; require every rule for M N
+        (in-hole E (M || N))
         "If/?")  
    
    
