@@ -62,4 +62,50 @@
  (term ((λ x (x 1)) ((λ x (+ x 1)) @ ⊤)))
  (term (2 / Num?)))
 
+ 
+
+(test-->>
+ Symbolic-reduction
+ (term ((2 / Num?) || (2 / Num?)))
+ (term (2 / Num?)))
+
+(test-->>
+ Symbolic-reduction
+ (term ((2 / Num?) || (4 / Num?)))
+ (term (? / Num?)))
+
+(test-->>
+ Symbolic-reduction
+ (term ((2 / Num?) || (? / Num?)))
+ (term (? / Num?)))
+
+
+(test-->>
+ Symbolic-reduction
+ (term ((2 / Num?) || (2 / Nat?)))
+ (term (2 / Nat?))) ;; TODO
+
+(test-->>
+ Symbolic-reduction
+ (term ((2 / Num?) || (4 / Nat?)))
+ (term (? / Num?))) ;; TODO
+
+(test-->>
+ Symbolic-reduction
+ (term ((2 / Num?) || (? / Nat?)))
+ (term (? / Num?))) ;; TODO
+
+
+(test-->>
+ Symbolic-reduction
+ (term ((2 / Num?) || (#t / Bool?)))
+ (term (? / ⊤)))
+
+(test-->>
+ Symbolic-reduction
+ (term ((2 / Num?) || (? / Bool?)))
+ (term (? / ⊤)))
+
+
+
 (test-results)

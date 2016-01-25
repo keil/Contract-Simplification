@@ -31,10 +31,10 @@
   ((S T) (V / P ...) (S @ Q))
   
   ;; Terms
-  ((L M N) .... S)
+  ((L M N) .... S (M || N))
   
   ;; Contexts
-  ((E F) hole (E N) (S E) (op S ... E M ...) (If E M N) (E @ C) (S @ (eval E)))
+  ((E F) hole (E N) (S E) (op S ... E M ...) (If E M N) (E @ C) (S @ (eval E)) (E || T) (S || E))
   
   ;; False Values
   (false .... ?))
@@ -68,16 +68,44 @@
   [(Δ predicates (V / P ...) ...) ((δ/ predicates V ...) / Bool?)]
   )
 
+(define-metafunction λCon-Symbolic
+  ★ : S S -> S
+  [(★ (V / P_v ...) (V / P_w ...)) (V / ,(car (term (⊕ (P_v ...) (P_w ...)))))]
+  [(★ (V / P_v ...) (W / P_w ...)) (? / ,(car (term (⊗ (P_v ...) (P_w ...)))))]
+  )
+
+(define-metafunction λCon-Symbolic
+  ⊗ : (P ...) (P ...) -> (P ...)
+
+  [(⊗ () (P ...)) ()]
+  [(⊗ (P ...) ()) ()]
+  
+  [(⊗ (P) (P_0 ... P P_i ...)) (P)]
+  [(⊗ (P) (P_0 ...)) (⊤)]
+
+  [(⊗ (P_0 P_1 ...) (P ...)) (⊕ (⊗ (P_0) (P ...)) (⊗ (P_1 ...) (P ...)))] 
+  )
+
+(define-metafunction λCon-Symbolic
+  ⊕ : (P ...) (P ...) -> (P ...)  
+  [(⊕ (P ...) ()) (P ...)]
+  [(⊕ (P_0 ... P_i P_j ...) (P_i P ...)) (⊕ (P_0 ... P_i P_j ...) (P ...))]
+  [(⊕ (P ...) (P_0 P_1 ...)) (⊕ (P ... P_0) (P_1 ...))])
+
 (define Symbolic-reduction
   (reduction-relation
    λCon-Symbolic
-
+   
    ;; Abstraction of Values
    ;; =====================
    
    (--> (in-hole E V)
         (in-hole E (V / ⊤))
         "Abstract")
+   
+   (--> (in-hole E ((V / P_v ...) || (W / P_w ...)))
+        (in-hole E (★ (V / P_v ...) (W / P_w ...)))
+        "Join")
    
    ;; Rules from λJ
    ;; =============
@@ -92,7 +120,7 @@
    
    ;; Application of ? .. (? 1) ?
    
-  (--> (in-hole E (if (V / P ...) M N))
+   (--> (in-hole E (if (V / P ...) M N))
         (in-hole E M)
         "if/true"
         (side-condition (not (false? (term V)))))
@@ -101,14 +129,14 @@
         (in-hole E M)
         "if/false"
         (side-condition (false? (term V))))
-  
+   
    (--> (in-hole E (if (? / P ...) M N))
         (in-hole E (? / ))
         "if"
-   )  
+        )  
    ;; TODO
    ;; ? is also a false value.
-  
+   
    ;; Rules from λCon
    ;; ===============
    
@@ -118,7 +146,7 @@
    (--> (in-hole E ((V / P_0 ...) @ (flat M)))
         (in-hole E ((V / P_0 ... (pretty (flat M))) @ (eval (M V))))
         "Flat")
-
+   
    (--> (in-hole E ((V / P_0 ...) @ (eval (W / P_n ...))))
         (in-hole E (V / P_0 ...))
         "Unit"
@@ -128,7 +156,7 @@
         (in-hole E (V / P_0 ...))
         "Blame"
         (side-condition (false? (term W))))
-
+   
    (--> (in-hole E (S @ (C ∪ D)))
         (in-hole E ((S @ C) @ D))
         "Union")
@@ -154,7 +182,7 @@
    
    ;; Miscellaneous
    ;; -------------
-  
+   
    (--> (in-hole E ((V / P ...) @ named))
         (in-hole E ((V / P ...) @ (lookup named)))
         "Lookup")
@@ -165,5 +193,25 @@
 ;; ================== 
 
 (define
-  (analyse M)
+  (⇓/symbolic M)
   (car (apply-reduction-relation* Symbolic-reduction M)))
+
+(define
+  (⇒/symbolic M)
+  (⇓/symbolic (term (,M (? / ⊤)))))
+
+(define
+  (⇒*/symbolic M)
+  (do [(N (⇒/symbolic M) (⇒/symbolic N))] ((not (redex-match? λCon-Symbolic ((λ x M) / P ...) N)) N)))
+  
+
+(⇓/symbolic (term ((λ x (+ x 1)) 1)))
+(⇓/symbolic (term (((λ x (+ x 1)) @ (Nat? → Nat?)) 1)))
+(⇓/symbolic (term ((λ x (+ x 1)) (? / ⊤))))
+
+(⇒/symbolic (term (λ x (+ x 1))))
+(⇒/symbolic (term (λ x (λ y (+ x y)))))
+
+(⇒*/symbolic (term (λ x (λ y (+ x y)))))
+(⇒*/symbolic (term (λ x (λ y (λ z (- (+ x y) z))))))
+(⇒*/symbolic (term (λ x (λ y (λ z (and (+ x y) z))))))
