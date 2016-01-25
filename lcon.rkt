@@ -30,9 +30,6 @@
   ;; Contracts
   ;; =========
   
-  ;; False Values/Constants
-  (false #f 0 "")
-  
   ;; Contracts
   ((C D) I Q (C ∪ D) (I ∩ C))
   
@@ -312,10 +309,6 @@
 ;(variable-not-in (term (+ ♭1 ♭1)) (term ♭))
 ;(variable-not-in (term (+ ι y)) (term ι))
 ;(fresh (term (+ ι y)))
-
-
-(define false? 
-  (redex-match? λCon false))
 
 (define λCon-value?
   (redex-match? λCon V))
