@@ -71,3 +71,12 @@ General Notes
   intersection, as the intersection provides a different semantics
   -- the domains might not be disjount, this, a wront party might be blamed.
 
+
+
+Symbolic Execution
+==================
+
+; only alloweed to collect predicates that evaluate to true ?
+; reasong is that we need to consider the blame, od checked predictae
+; collecting did not mean that the value satisfied the contract/ only that it is checked against this contract
+; but without a check of th blame state this is useless
