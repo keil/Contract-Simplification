@@ -69,15 +69,15 @@
  (term (((λ f (f #t)) (λ x x)) @ Num?)))
 
 ; XXX
-(traces Baseline-reduction example:remain/6)
+;(traces Baseline-reduction example:remain/6)
 
 
 (test-->> 
  Baseline-reduction
  example:remain/7
- (term (λ f ((f (λ x x)) 1)  ((λ x x) @ ((Num? → Num?) → (Num? → Num?))))))
+ (term (λ f ((f (λ x x)) 1) ((λ x x) @ ((Num? → Num?) → (Num? → Num?))))))
 
 ; XXX
-(traces Baseline-reduction example:remain/7)
+;(traces Baseline-reduction example:remain/7)
 
 (test-results)
