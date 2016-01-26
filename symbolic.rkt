@@ -31,7 +31,7 @@
   ((S T) (V / (P ...)) (S @ Q))
   
   ;; Terms
-  ((L M N) .... S (M || N))
+  ((L M N) .... V S (M || N))
   
   ;; Contexts
   ((E F) hole (E N) (S E) (op S ... E M ...) (if E M N) (E @ C) (S @ (eval E P)) (E || N) (S || E))
@@ -178,7 +178,7 @@
         (side-condition (not (false? (term W)))))
    
    (--> (in-hole E ((V / (P_0 ...)) @ (eval (W / (P_w ...)) P)))
-        (in-hole E (V / (⊕ (P_0 ...) (⊥))))
+        (in-hole E (V / (P_0 ...)))
         "Blame"
         (side-condition (false? (term W))))
    
@@ -195,11 +195,15 @@
    
    (--> (in-hole E ((S @ (C → D)) T))
         (in-hole E ((S (T @ C)) @ D))
-        "D-Function")
+        "Function")
    
    (--> (in-hole E ((S @ (x → C)) T)) 
         (in-hole E ((S T) @ C))
-        "D-Dependent") ;; TODO
+        "Dependent") ;; TODO
+   
+   (--> (in-hole E (((S_l @ Q) || (S_r @ R)) T))
+        (in-hole E (((S_l @ Q) T) || ((S_r @ R) T)))
+        "Split")
    
    ;; Miscellaneous
    ;; -------------
@@ -221,37 +225,35 @@
   (⇒/symbolic M)
   (⇓/symbolic (term (,M (? / (⊤))))))
 
-(define ;; TODO
+(define
   (⇒*/symbolic M)
   (do [(N (⇒/symbolic M) (⇒/symbolic N))] ((not (redex-match? λCon-Symbolic ((λ x M) / (P ...)) N)) N)))
 
+#|
+ _____       _      
+|_   _|__ __| |_ ___
+  | |/ -_|_-<  _(_-<
+  |_|\___/__/\__/__/
+                    
+|#
 
-
-
-(⇓/symbolic (term ((λ x (+ x 1)) 1)))
-(⇓/symbolic (term (((λ x (+ x 1)) @ (Nat? → Nat?)) 1)))
-(⇓/symbolic (term ((λ x (+ x 1)) (? / (⊤)))))
+;(⇓/symbolic (term ((λ x (+ x 1)) 1)))
+;(⇓/symbolic (term (((λ x (+ x 1)) @ (Nat? → Nat?)) 1)))
+;(⇓/symbolic (term ((λ x (+ x 1)) (? / (⊤)))))
         
-(⇒/symbolic (term (λ x (+ x 1))))
-(⇒/symbolic (term (λ x (λ y (+ x y)))))
-(⇒*/symbolic (term (λ x (λ y (+ x y)))))
+;(⇒/symbolic (term (λ x (+ x 1))))
+;(⇒/symbolic (term (λ x (λ y (+ x y)))))
+;(⇒*/symbolic (term (λ x (λ y (+ x y)))))
 
-(⇒*/symbolic (term (λ x (λ y (+ x y)))))
-(⇒*/symbolic (term (λ x (λ y (λ z (- (+ x y) z))))))
-(⇒*/symbolic (term (λ x (λ y (λ z (and (+ x y) z))))))
+;(⇒*/symbolic (term (λ x (λ y (+ x y)))))
+;(⇒*/symbolic (term (λ x (λ y (λ z (- (+ x y) z))))))
+;(⇒*/symbolic (term (λ x (λ y (λ z (and (+ x y) z))))))
 
-(⇓/symbolic (term (if #t 1 2)))
+;(⇓/symbolic (term (if #t 1 2)))
 
-(⇓/symbolic
- (term ((λ x ((if (boolean? x) (λ x (or x 1)) (λ x (+ x 1))) x)) 1))
- )
+;(⇓/symbolic
+; (term ((λ x ((if (boolean? x) (λ x (or x 1)) (λ x (+ x 1))) x)) 1))
+; )
 
-(⇒*/symbolic
- (term (λ x ((if (boolean? x) (λ x (or x 1)) (λ x (+ x 1))) x))))
-
-;; better to say if fullfilles Bool? or Num?
-;; which is another predicate
-;(traces Symbolic-reduction  (term ((λ x ((if (boolean? x) (λ x (or x 1)) (λ x (+ x 1))) x)) (? / (⊤)))))
-
-
-;(traces Symbolic-reduction (term (if #t 1 2)))
+;(⇒*/symbolic
+; (term (λ x ((if (boolean? x) (λ x (or x 1)) (λ x (+ x 1))) x))))

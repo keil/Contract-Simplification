@@ -80,3 +80,9 @@ Symbolic Execution
 ; reasong is that we need to consider the blame, od checked predictae
 ; collecting did not mean that the value satisfied the contract/ only that it is checked against this contract
 ; but without a check of th blame state this is useless
+
+Consider the reduction of:
+(term ((¿ x ((if (boolean? x) (¿ x (or x 1)) (¿ x (+ x 1))) x)) (? / (¿))))
+The result could be Bool \vee Num
+;; better to say if fullfilles Bool? or Num?
+;; which is another predicate

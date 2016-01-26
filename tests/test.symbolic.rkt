@@ -28,7 +28,7 @@
 (test-->> 
  Symbolic-reduction 
  (term ((+ 1 2) @ ⊥))
- (term (3 / (Num? ⊥))))
+ (term (3 / (Num?))))
 
 (test-->> 
  Symbolic-reduction 
@@ -166,10 +166,49 @@
  (term (((λ x ((if (boolean? x) (λ x (or x 1)) (λ x (+ x 1))) x)) (? / (⊤))) (? / (⊤))))
  (term (? / (⊤))))
 
+;; TODO, test nested intersections
+
+;; Symbolic Execution
+;; ================== 
+
+(test-->>
+ Symbolic-reduction
+ (term (((λ x x) @ ((Num? → Num?) ∩ (Num? → Num?))) (? / (⊤))))
+ (term (? / (⊤ Num?))))
+
+(test-->>
+ Symbolic-reduction
+ (term (((λ x x) @ ((Num? → Num?) ∩ (Str? → Str?))) (? / (⊤))))
+ (term (? / (⊤))))
+
+(test-->>
+ Symbolic-reduction
+ (term (((λ x x) @ ((Num? → Num?) ∩ (Nat? → Nat?))) (? / (⊤))))
+ (term (? / (Num?))))
 
 
 
+(test-->>
+ Symbolic-reduction
+ (term (((λ x 1) @ ((Num? → Num?) ∩ (Num? → Num?))) (? / (⊤))))
+ (term (1 / (⊤ Num?))))
 
+(test-->>
+ Symbolic-reduction
+ (term (((λ x 1) @ ((Num? → Num?) ∩ (Str? → Str?))) (? / (⊤))))
+ (term (1 / (⊤ Num?))))
+
+(test-->>
+ Symbolic-reduction
+ (term (((λ x x) @ ((Num? → Num?) ∩ (Nat? → Nat?))) (? / (⊤))))
+ (term (? / (Num?))))
+
+
+
+(test-->>
+ Symbolic-reduction
+  (term ((((λ x (λ y (+ x y))) @ ((Num? → (Num? → Num?)) ∩ (Nat? → (Nat? → Nat?)))) (? / (⊤))) (? / (⊤))))
+ (term (? / (Num?))))
 
 
 (test-results)
