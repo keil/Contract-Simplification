@@ -74,6 +74,7 @@
 (define-metafunction λCon-Symbolic
   ★ : S S -> S
   [(★ (V / P_v ...) (V / P_w ...)) (V / ,(car (term (⊕ (P_v ...) (P_w ...)))))]
+  [(★ ((λ x M) / P_v ...) ((λ x N) / P_w ...)) ((λ x (M || N)) / ,(car (term (⊕ (P_v ...) (P_w ...)))))]
   [(★ (V / P_v ...) (W / P_w ...)) (? / ,(car (term (⊗ (P_v ...) (P_w ...)))))]
   )
 
@@ -106,13 +107,31 @@
         (in-hole E (V / ⊤))
         "Abstract")
    
+   (--> (in-hole E (((λ x M) / P_v ...) || ((λ y N) / P_w ...)))
+        (in-hole E (((λ z (subst x z M)) / P_v ...) || ((λ z (subst x z N)) / P_w ...)))
+        "α"
+        (side-condition (not (eq? (term x) (term y))))
+        (fresh z))
+   
    (--> (in-hole E ((V / P_v ...) || (W / P_w ...)))
         (in-hole E (★ (V / P_v ...) (W / P_w ...)))
-        "Join")
+        "Join"
+        (side-condition 
+         (nand
+         (redex-match? λCon (λ x M) (term V))
+         (redex-match? λCon (λ x M) (term W))
+         ))
+        )
    
-   (--> (in-hole E ((S_l || S_r) T))
-        (in-hole E ((S_l T) || (S_r T)))
-        "Split")
+   (--> (in-hole E (((λ x M) / P_l ...) || ((λ x N) / P_r ...)))
+        (in-hole E (★ ((λ x M) / P_l ...) ((λ x N) / P_r ...)))
+        "Join/Function")
+   
+   ;; Join of function and constant
+   
+   ;   (--> (in-hole E ((S_l || S_r) T))
+   ;        (in-hole E ((S_l T) || (S_r T)))
+   ;        "Split-App")
    
    ;; Rules from λJ
    ;; =============
@@ -127,7 +146,7 @@
    
    (--> (in-hole E ((? / P ...) S))
         (in-hole E (? / ⊤))
-        "β/?")
+        "Β")
    
    ;; Application of ? .. (? 1) ?
    
@@ -165,16 +184,16 @@
         (side-condition (not (maybe-false? (term W)))))
    
    (--> (in-hole E ((V / P_0 ... P_n) @ (eval (W / P ...))))
-        (in-hole E (V / P_0 ...))
+        (in-hole E (V / P_0 ... ⊥))
         "Blame"
         (side-condition (maybe-false? (term W))))
    
    (--> (in-hole E (S @ (C ∪ D)))
-        (in-hole E ((S @ C) @ D))
+        (in-hole E ((S @ C) || (S @ D)))
         "Union")
    
-   (--> (in-hole E (S @ (I ∩ C)))
-        (in-hole E ((S @ I) @ C))
+   (--> (in-hole E (S @ (C ∩ D)))
+        (in-hole E ((S @ C) || (S @ D)))
         "Intersection")
    
    ;; Delayed Contracts
@@ -187,10 +206,6 @@
    (--> (in-hole E ((S @ (x → C)) T)) 
         (in-hole E ((S T) @ C))
         "D-Dependent") ;; TODO
-   
-   (--> (in-hole E ((S @ (Q ∩ R)) T))
-        (in-hole E (((S @ Q) @ R) T))
-        "D-Intersection")
    
    ;; Miscellaneous
    ;; -------------
@@ -237,6 +252,9 @@
 (⇒*/symbolic
  (term (λ x ((if (boolean? x) (λ x (or x 1)) (λ x (+ x 1))) x))))
 
+;; better to say if fullfilles Bool? or Num?
+;; which is another predicate
 (traces Symbolic-reduction  (term ((λ x ((if (boolean? x) (λ x (or x 1)) (λ x (+ x 1))) x)) (? / ⊤))))
+
 
 ;(traces Symbolic-reduction (term (if #t 1 2)))
