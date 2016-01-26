@@ -25,7 +25,7 @@
 (test-->> 
  Symbolic-reduction 
  (term ((+ 1 2) @ ⊥))
- (term (3 / Num?))) ;TODO (+blame @ (Pos? None?))
+ (term (3 / Num? ⊥)))
 
 (test-->> 
  Symbolic-reduction 
@@ -40,7 +40,7 @@
 (test-->> 
  Symbolic-reduction 
  (term (((λ x (- x 1)) @ (Pos? → Pos?)) 1))
- (term (0 / Num?)))
+ (term (0 / Num? ⊥)))
 
 (test-->> 
  Symbolic-reduction 

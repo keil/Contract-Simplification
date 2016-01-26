@@ -39,8 +39,16 @@
   ;; False Values
   (false .... ?))
 
+
+;; Maybe-false
+;; ===========
 (define maybe-false? 
   (redex-match? λCon-Symbolic false))
+
+;; Maybe-true
+;; ==========
+(define maybe-true? 
+  (not (redex-match? λJ false)))
 
 #|
  ___        _         _   _          
@@ -74,8 +82,19 @@
 (define-metafunction λCon-Symbolic
   ★ : S S -> S
   [(★ (V / P_v ...) (V / P_w ...)) (V / ,(car (term (⊕ (P_v ...) (P_w ...)))))]
-  [(★ ((λ x M) / P_v ...) ((λ x N) / P_w ...)) ((λ x (M || N)) / ,(car (term (⊕ (P_v ...) (P_w ...)))))]
-  [(★ (V / P_v ...) (W / P_w ...)) (? / ,(car (term (⊗ (P_v ...) (P_w ...)))))]
+  
+  ;; combine contracts on identical values K (λ x M)
+  
+  ;; merge cntract on ? or different values
+  ;; function get ocmbines
+  ;
+  
+  
+  ;[(★ ((λ x M) / P_v ...) ((λ x N) / P_w ...)) ((λ x (M || N)) / ,(car (term (⊕ (P_v ...) (P_w ...)))))]
+  
+  
+  
+  ;[(★ (V / P_v ...) (W / P_w ...)) (? / ,(car (term (⊗ (P_v ...) (P_w ...)))))]
   )
 
 (define-metafunction λCon-Symbolic
@@ -116,22 +135,14 @@
    (--> (in-hole E ((V / P_v ...) || (W / P_w ...)))
         (in-hole E (★ (V / P_v ...) (W / P_w ...)))
         "Join"
-        (side-condition 
+        (side-condition
          (nand
-         (redex-match? λCon (λ x M) (term V))
-         (redex-match? λCon (λ x M) (term W))
-         ))
-        )
+          (redex-match? λCon (λ x M) (term V))
+          (redex-match? λCon (λ x M) (term W)))))
    
    (--> (in-hole E (((λ x M) / P_l ...) || ((λ x N) / P_r ...)))
         (in-hole E (★ ((λ x M) / P_l ...) ((λ x N) / P_r ...)))
         "Join/Function")
-   
-   ;; Join of function and constant
-   
-   ;   (--> (in-hole E ((S_l || S_r) T))
-   ;        (in-hole E ((S_l T) || (S_r T)))
-   ;        "Split-App")
    
    ;; Rules from λJ
    ;; =============
@@ -148,8 +159,6 @@
         (in-hole E (? / ⊤))
         "Β")
    
-   ;; Application of ? .. (? 1) ?
-   
    (--> (in-hole E (if (V / P ...) M N))
         (in-hole E M)
         "If/true"
@@ -164,10 +173,6 @@
         (in-hole E (M || N))
         "If/?")  
    
-   
-   ;; TODO
-   ;; ? is also a false value.
-   
    ;; Rules from λCon
    ;; ===============
    
@@ -181,12 +186,12 @@
    (--> (in-hole E ((V / P_0 ...) @ (eval (W / P_n ...))))
         (in-hole E (V / P_0 ...))
         "Unit"
-        (side-condition (not (maybe-false? (term W)))))
+        (side-condition (not (false? (term W)))))
    
    (--> (in-hole E ((V / P_0 ... P_n) @ (eval (W / P ...))))
         (in-hole E (V / P_0 ... ⊥))
         "Blame"
-        (side-condition (maybe-false? (term W))))
+        (side-condition (false? (term W))))
    
    (--> (in-hole E (S @ (C ∪ D)))
         (in-hole E ((S @ C) || (S @ D)))
@@ -230,6 +235,8 @@
 (define
   (⇒*/symbolic M)
   (do [(N (⇒/symbolic M) (⇒/symbolic N))] ((not (redex-match? λCon-Symbolic ((λ x M) / P ...) N)) N)))
+
+
 
 
 (⇓/symbolic (term ((λ x (+ x 1)) 1)))
