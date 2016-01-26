@@ -28,13 +28,13 @@
   ((U V W) K (λ x M) ?)
   
   ;; Symbolic Values
-  ((S T) (V / P ...) (S @ Q))
+  ((S T) (V / (P ...)) (S @ Q))
   
   ;; Terms
   ((L M N) .... S (M || N))
   
   ;; Contexts
-  ((E F) hole (E N) (S E) (op S ... E M ...) (if E M N) (E @ C) (S @ (eval E)) (E || N) (S || E))
+  ((E F) hole (E N) (S E) (op S ... E M ...) (if E M N) (E @ C) (S @ (eval E P)) (E || N) (S || E))
   
   ;; False Values
   (false .... ?))
@@ -60,7 +60,7 @@
 
 (define-metafunction λCon-Symbolic
   unpack : S -> V
-  [(unpack (V / P ...)) V]
+  [(unpack (V / (P ...))) V]
   [(unpack V) V]
   [(unpack any) ?]
   )
@@ -73,39 +73,28 @@
 
 (define-metafunction λCon-Symbolic
   Δ : op S ... -> S
-  [(Δ numeric (V / P ...) ...) ((δ/ numeric V ...) / Num?)]  
-  [(Δ logical (V / P ...) ...) ((δ/ logical V ...) / Bool?)]
-  [(Δ relational (V / P ...) ...) ((δ/ relational V ...) / Bool?)]
-  [(Δ predicates (V / P ...) ...) ((δ/ predicates V ...) / Bool?)]
+  [(Δ numeric (V / (P ...)) ...) ((δ/ numeric V ...) / (Num?))]  
+  [(Δ logical (V / (P ...)) ...) ((δ/ logical V ...) / (Bool?))]
+  [(Δ relational (V / (P ...)) ...) ((δ/ relational V ...) / (Bool?))]
+  [(Δ predicates (V / (P ...)) ...) ((δ/ predicates V ...) / (Bool?))]
   )
 
 (define-metafunction λCon-Symbolic
   ★ : S S -> S
-  [(★ (V / P_v ...) (V / P_w ...)) (V / ,(car (term (⊕ (P_v ...) (P_w ...)))))]
-  
-  ;; combine contracts on identical values K (λ x M)
-  
-  ;; merge cntract on ? or different values
-  ;; function get ocmbines
-  ;
-  
-  
-  ;[(★ ((λ x M) / P_v ...) ((λ x N) / P_w ...)) ((λ x (M || N)) / ,(car (term (⊕ (P_v ...) (P_w ...)))))]
-  
-  
-  
-  ;[(★ (V / P_v ...) (W / P_w ...)) (? / ,(car (term (⊗ (P_v ...) (P_w ...)))))]
+  ;; Merge predicates when values are identival
+  [(★ (K / (P_v ...)) (K / (P_w ...))) (K / (⊕ (P_v ...) (P_w ...)))]
+  [(★ ((λ x M) / (P_v ...)) ((λ x M) / (P_w ...))) ((λ x M) / (⊕ (P_v ...) (P_w ...)))]
+  ;; Make splitted function body
+  [(★ ((λ x M) / (P_v ...)) ((λ x N) / (P_w ...))) ((λ x (M || N)) / (⊗ (P_v ...) (P_w ...)))]
+  [(★ (V / (P_v ...)) (W / (P_w ...))) (? / (⊗ (P_v ...) (P_w ...)))]
   )
 
 (define-metafunction λCon-Symbolic
   ⊗ : (P ...) (P ...) -> (P ...)
-  
   [(⊗ () (P ...)) ()]
   [(⊗ (P ...) ()) ()]
-  
   [(⊗ (P) (P_0 ... P P_i ...)) (P)]
-  [(⊗ (P) (P_0 ...)) (⊤)]
-  
+  [(⊗ (P) (P_0 ...)) (⊤)]  
   [(⊗ (P_0 P_1 ...) (P ...)) (⊕ (⊗ (P_0) (P ...)) (⊗ (P_1 ...) (P ...)))] 
   )
 
@@ -123,25 +112,25 @@
    ;; =====================
    
    (--> (in-hole E V)
-        (in-hole E (V / ⊤))
+        (in-hole E (V / (⊤)))
         "Abstract")
    
-   (--> (in-hole E (((λ x M) / P_v ...) || ((λ y N) / P_w ...)))
-        (in-hole E (((λ z (subst x z M)) / P_v ...) || ((λ z (subst x z N)) / P_w ...)))
+   (--> (in-hole E (((λ x M) / (P_v ...)) || ((λ y N) / (P_w ...))))
+        (in-hole E (((λ z (subst x z M)) / (P_v ...)) || ((λ z (subst x z N)) / (P_w ...))))
         "α"
         (side-condition (not (eq? (term x) (term y))))
         (fresh z))
    
-   (--> (in-hole E ((V / P_v ...) || (W / P_w ...)))
-        (in-hole E (★ (V / P_v ...) (W / P_w ...)))
+   (--> (in-hole E ((V / (P_v ...)) || (W / (P_w ...))))
+        (in-hole E (★ (V / (P_v ...)) (W / (P_w ...))))
         "Join"
         (side-condition
          (nand
           (redex-match? λCon (λ x M) (term V))
           (redex-match? λCon (λ x M) (term W)))))
    
-   (--> (in-hole E (((λ x M) / P_l ...) || ((λ x N) / P_r ...)))
-        (in-hole E (★ ((λ x M) / P_l ...) ((λ x N) / P_r ...)))
+   (--> (in-hole E (((λ x M) / (P_l ...)) || ((λ x N) / (P_r ...))))
+        (in-hole E (★ ((λ x M) / (P_l ...)) ((λ x N) / (P_r ...))))
         "Join/Function")
    
    ;; Rules from λJ
@@ -151,25 +140,25 @@
         (in-hole E (Δ op S ...))
         "Δ")
    
-   (--> (in-hole E (((λ x M) / P ...) S))
+   (--> (in-hole E (((λ x M) / (P ...)) S))
         (in-hole E (subst x S M))
         "β")
    
-   (--> (in-hole E ((? / P ...) S))
+   (--> (in-hole E ((? / (P ...)) S))
         (in-hole E (? / ⊤))
         "Β")
    
-   (--> (in-hole E (if (V / P ...) M N))
+   (--> (in-hole E (if (V / (P ...)) M N))
         (in-hole E M)
         "If/true"
         (side-condition (not (maybe-false? (term V)))))
    
-   (--> (in-hole E (if (V / P ...) M N))
+   (--> (in-hole E (if (V / (P ...)) M N))
         (in-hole E N)
         "If/false"
         (side-condition (false? (term V))))
    
-   (--> (in-hole E (if (? / P ...) M N))
+   (--> (in-hole E (if (? / (P ...)) M N))
         (in-hole E (M || N))
         "If/?")  
    
@@ -179,17 +168,17 @@
    ;; Immediate Contracts
    ;; -------------------
    
-   (--> (in-hole E ((V / P_0 ...) @ (flat M)))
-        (in-hole E ((V / P_0 ... (pretty (flat M))) @ (eval (M V))))
+   (--> (in-hole E ((V / (P_0 ...)) @ (flat M)))
+        (in-hole E ((V / (P_0 ...)) @ (eval (M V) (flat M))))
         "Flat")
    
-   (--> (in-hole E ((V / P_0 ...) @ (eval (W / P_n ...))))
-        (in-hole E (V / P_0 ...))
+   (--> (in-hole E ((V / (P_0 ...)) @ (eval (W / (P_w ...)) P)))
+        (in-hole E (V / (⊕ (P_0 ...) ((pretty P)))))
         "Unit"
         (side-condition (not (false? (term W)))))
    
-   (--> (in-hole E ((V / P_0 ... P_n) @ (eval (W / P ...))))
-        (in-hole E (V / P_0 ... ⊥))
+   (--> (in-hole E ((V / (P_0 ...)) @ (eval (W / (P_w ...)) P)))
+        (in-hole E (V / (⊕ (P_0 ...) (⊥))))
         "Blame"
         (side-condition (false? (term W))))
    
@@ -215,8 +204,8 @@
    ;; Miscellaneous
    ;; -------------
    
-   (--> (in-hole E ((V / P ...) @ named))
-        (in-hole E ((V / P ...) @ (lookup named)))
+   (--> (in-hole E ((V / (P ...)) @ named))
+        (in-hole E ((V / (P ...)) @ (lookup named)))
         "Lookup")
    
    ))
@@ -230,21 +219,22 @@
 
 (define
   (⇒/symbolic M)
-  (⇓/symbolic (term (,M (? / ⊤)))))
+  (⇓/symbolic (term (,M (? / (⊤))))))
 
-(define
+(define ;; TODO
   (⇒*/symbolic M)
-  (do [(N (⇒/symbolic M) (⇒/symbolic N))] ((not (redex-match? λCon-Symbolic ((λ x M) / P ...) N)) N)))
+  (do [(N (⇒/symbolic M) (⇒/symbolic N))] ((not (redex-match? λCon-Symbolic ((λ x M) / (P ...)) N)) N)))
 
 
 
 
 (⇓/symbolic (term ((λ x (+ x 1)) 1)))
 (⇓/symbolic (term (((λ x (+ x 1)) @ (Nat? → Nat?)) 1)))
-(⇓/symbolic (term ((λ x (+ x 1)) (? / ⊤))))
-
+(⇓/symbolic (term ((λ x (+ x 1)) (? / (⊤)))))
+        
 (⇒/symbolic (term (λ x (+ x 1))))
 (⇒/symbolic (term (λ x (λ y (+ x y)))))
+(⇒*/symbolic (term (λ x (λ y (+ x y)))))
 
 (⇒*/symbolic (term (λ x (λ y (+ x y)))))
 (⇒*/symbolic (term (λ x (λ y (λ z (- (+ x y) z))))))
@@ -261,7 +251,7 @@
 
 ;; better to say if fullfilles Bool? or Num?
 ;; which is another predicate
-(traces Symbolic-reduction  (term ((λ x ((if (boolean? x) (λ x (or x 1)) (λ x (+ x 1))) x)) (? / ⊤))))
+(traces Symbolic-reduction  (term ((λ x ((if (boolean? x) (λ x (or x 1)) (λ x (+ x 1))) x)) (? / (⊤)))))
 
 
 ;(traces Symbolic-reduction (term (if #t 1 2)))
