@@ -145,7 +145,7 @@
         "β")
    
    (--> (in-hole E ((? / (P ...)) S))
-        (in-hole E (? / ⊤))
+        (in-hole E (? / (⊤)))
         "Β")
    
    (--> (in-hole E (if (V / (P ...)) M N))
@@ -251,7 +251,7 @@
 
 ;; better to say if fullfilles Bool? or Num?
 ;; which is another predicate
-(traces Symbolic-reduction  (term ((λ x ((if (boolean? x) (λ x (or x 1)) (λ x (+ x 1))) x)) (? / (⊤)))))
+;(traces Symbolic-reduction  (term ((λ x ((if (boolean? x) (λ x (or x 1)) (λ x (+ x 1))) x)) (? / (⊤)))))
 
 
 ;(traces Symbolic-reduction (term (if #t 1 2)))

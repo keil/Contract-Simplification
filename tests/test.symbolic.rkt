@@ -12,6 +12,9 @@
                     
 |#
 
+;; Symbolic-reduction 
+;; ==================
+
 (test-->> 
  Symbolic-reduction 
  (term ((+ 1 2) @ Nat?)) 
@@ -62,7 +65,9 @@
  (term ((λ x (x 1)) ((λ x (+ x 1)) @ ⊤)))
  (term (2 / (Num?))))
 
- 
+
+;; Join
+;; ====
 
 (test-->>
  Symbolic-reduction
@@ -105,6 +110,65 @@
  Symbolic-reduction
  (term ((2 / (Num?)) || (? / (Bool?))))
  (term (? / (⊤))))
+
+
+;; Symbolic Execution
+;; ================== 
+
+(test-->>
+ Symbolic-reduction 
+ (term ((λ x (+ x 1)) 1))
+ (term (2 / (Num?))))
+
+(test-->>
+ Symbolic-reduction 
+ (term (((λ x (+ x 1)) @ (Nat? → Nat?)) 1))
+ (term (2 / (Num?)))) ;; TODO
+
+(test-->>
+ Symbolic-reduction 
+ (term ((λ x (+ x 1)) (? / (⊤))))
+ (term (? / (Num?))))
+      
+ 
+(test-->>
+ Symbolic-reduction 
+ (term ((λ x (+ x 1)) (? / (⊤))))
+ (term (? / (Num?))))
+ 
+(test-->>
+ Symbolic-reduction 
+ (term (((λ x (λ y (+ x y)))(? / (⊤))) (? / (⊤))))
+ (term (? / (Num?))))
+
+ (test-->>
+ Symbolic-reduction 
+ (term ((((λ x (λ y (λ z (- (+ x y) z)))) (? / (⊤))) (? / (⊤))) (? / (⊤))))
+ (term (? / (Num?))))
+
+ (test-->>
+ Symbolic-reduction 
+ (term ((((λ x (λ y (λ z (and (+ x y) z)))) (? / (⊤))) (? / (⊤))) (? / (⊤))))
+ (term (? / (Bool?))))
+
+(test-->>
+ Symbolic-reduction 
+ (term (if #t 1 2))
+ (term (1 / (⊤))))
+
+(test-->>
+ Symbolic-reduction
+ (term ((λ x ((if (boolean? x) (λ x (or x 1)) (λ x (+ x 1))) x)) 1))
+ (term (2 / (Num?))))
+
+(test-->>
+ Symbolic-reduction
+ (term (((λ x ((if (boolean? x) (λ x (or x 1)) (λ x (+ x 1))) x)) (? / (⊤))) (? / (⊤))))
+ (term (? / (⊤))))
+
+
+
+
 
 
 
