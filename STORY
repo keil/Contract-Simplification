@@ -100,3 +100,29 @@ Predicate Refinements
 - Manual assignment might be wrong. So, where to know that the rule is correct?
 - The second contract/predicate might not be available when creating the first
   one. So, there is no valid subset information.. 
+
+
+
+
+
+
+
+
+Paper
+=====
+
+- Programmers extend there programs with additional checks to refine/restrict
+  values and to prevent errors or malformed behaviour.
+- Those checks can be written manually, or by using a contract system. A
+  contract system is more user-friendly as defined contracts are usable at
+  different places.
+
+- However, ever kind of additional check (hand written checks or contracts)
+  increases the tun rime.
+
+- But, contracts/check are not always at the best position, as the developer
+  look to the code from the programmers perspective. Contracts may check 
+  i) unused values (however, removing them would change the (blame-)semantics)
+  ii) may be placed at unusual/inefficient places as developers add
+  checks/contracts to sensitive data 
+- contracts/predicates may, knowingly or unknowingly, check redundant part
