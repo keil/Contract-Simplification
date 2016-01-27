@@ -2,7 +2,7 @@
 (require redex)
 (require rackunit)
 
-(require "lcon.rkt")
+(require "../lcon.rkt")
 
 (provide (all-defined-out))
 
@@ -13,6 +13,66 @@
   |_|\___/__/\__/__/
                     
 |#
+
+;; Predicate Containment
+;; =====================
+
+(check-eq?
+ (term (≤ Number? Number?))
+ #t)
+
+(check-eq?
+ (term (≤ Number? ⊤))
+ #t)
+
+(check-eq?
+ (term (≤ ⊤ Number?))
+ #f)
+
+
+
+(check-eq?
+ (term (≤ Real? ⊤))
+ #t)
+
+(check-eq?
+ (term (≤ Real? Number?))
+ #f) ;; TODO
+
+
+(check-eq?
+ (term (≤ Zero? Number?))
+ #t)
+
+(check-eq?
+ (term (≤ Positive? Real?))
+ #t)
+
+(check-eq?
+ (term (≤ Natural? Number?))
+ #f) ;; TODO
+
+(check-eq?
+ (term (≤ Natural? Real?))
+ #t)
+
+(check-eq?
+ (term (≤ Positive? Natural?))
+ #f) ; TODO
+
+
+
+
+;(term (Σ Positive?))
+;(term (Σ Natural?))
+
+
+
+
+
+
+
+
 
 ;; Semantic Definition of ⊑
 ;; ------------------------

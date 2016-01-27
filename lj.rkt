@@ -27,24 +27,25 @@
   ;; Variables
   ((x y z) (variable-prefix x) (variable-prefix y) (variable-prefix z)
            (variable-prefix f) (variable-prefix g) (variable-prefix h))
-    
+  
   ;; Primitive Operations
   (op predicates logical numeric relational)
   
   ;; TypeOf Predicates
-  (predicates number? string? boolean?)
+  (predicates number? complex? real? rational? integer? string? boolean?
+              exact? inexact? zero? positive? negative? even? odd?)
   ;; Logical Operators
   (logical and or not)
   ;; Numeric Operators
   (numeric + * - /)
   ;; Relational Operators
-  (relational < > =)
-    
+  (relational < > = <= >=)
+  
   ;; Values
   ((U V W) K (λ x M))
   ;; False Values
   (false #f 0 "")
-    
+  
   ;; Evaluation Contexts
   ((E F) hole (E N) (V E) (op V ... E M ...) (if E M N))
   )
