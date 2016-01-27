@@ -150,12 +150,46 @@
   
   ;; Third Level
   [(lookup/ NEven?) (Natural? / (λ x (even? x)))]
-  [(lookup/ NPOdd?)  (Natural? / (λ x (odd? x)))]
+  [(lookup/ NPOdd?) (Natural? / (λ x (odd? x)))]
   
   )
 
+;(variable-not-in (term ((λ x M) (λ x1 N))) (term x))
+
 ;; Predicates containment
 ;; ======================
+
+(define-metafunction λCon
+  ≼ : (λ x M) (λ x M) -> boolean
+
+  [(≼ (λ x M) (λ x M)) #t]
+  [(≼ (λ x M) (λ x N)) #f]
+  
+  [(≼ (λ x M) (λ y N)) (≼ (λ z (subst x z M)) (λ z (subst y z N)))
+                       (where z ,(variable-not-in (term ((λ x M) (λ y N))) (term z)))]
+  )
+
+(term (≼ (λ x (< x 0)) (λ x (< x 0))))
+(term (≼ (λ x (< x 0)) (λ z (< z 0))))
+
+(term (≼ (λ x (< x 0)) (λ x (<= x 0)))) 
+(term (≼ (λ x (< x 0)) (λ y (<= y 0))))
+
+
+(define-metafunction λCon
+  ≼/ : (λ x M) (λ x M) -> boolean
+  ;; Base Case
+  [(≼/ M M) #t]
+  
+  [(≼/ (λ x M) (λ x M)) #t]
+  
+  [(≼/ Real? Nummber?) #t]
+  [(≼/ Rational? Real?) #t]
+  [(≼/ Integer? Rational?) #t]
+  [(≼/ Positive? Natatural?) #t]
+  ;; Default Case
+  [(≼/ any_0 any_1) #f])
+;)
 
 ;(define-metafunction λCon
 ;  ≼ : P P -> boolean?
@@ -167,7 +201,7 @@
 ;  ;; Default Case
 ;  [(≼ any_0 any_1) #f]
 ;)
-  
+
 (define-metafunction λCon
   ≤ : P P -> boolean
   ;; Base cases
