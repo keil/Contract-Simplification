@@ -86,3 +86,17 @@ Consider the reduction of:
 The result could be Bool \vee Num
 ;; better to say if fullfilles Bool? or Num?
 ;; which is another predicate
+
+
+
+
+Predicate Refinements
+=====================
+
+- How to knwo taht X>0 is subset of X>=0
+- Or that real? ist subset of number?
+
+*** Problem: 
+- Manual assignment might be wrong. So, where to know that the rule is correct?
+- The second contract/predicate might not be available when creating the first
+  one. So, there is no valid subset information.. 
