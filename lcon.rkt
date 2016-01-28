@@ -46,6 +46,11 @@
    Even?
    Odd?
    Natural?
+   
+   UInteger?
+   UEven?
+   UOdd?
+   
    )
   
   ;; Contracts
@@ -143,14 +148,15 @@
 
   [(lookup/ Positive?) (Real? / (λ x (positive? x)))]
   [(lookup/ Negative?) (Real? / (λ x (negative? x)))]
-  [(lookup/ Natural?) (Real? / (λ x (<= x 0)))]
+  [(lookup/ Natural?)  (Real? / (λ x (<= x 0)))]
   
   [(lookup/ Even?) (Integer? / (λ x (even? x)))]
   [(lookup/ Odd?)  (Integer? / (λ x (odd? x)))]
+  [(lookup/ UInteger?)  (Integer? / (λ x (<= x 0)))]
   
   ;; Third Level
-  [(lookup/ NatEven?) (Natural? / (λ x (even? x)))]
-  [(lookup/ NatOdd?) (Natural? / (λ x (odd? x)))]
+  [(lookup/ UEven?) (UInteger? / (λ x (even? x)))]
+  [(lookup/ UOdd?)  (UInteger? / (λ x (odd? x)))]
   
   )
 
@@ -184,8 +190,14 @@
   ≼ : (λ x M) (λ x M) -> boolean
   [(≼ (λ x (complex? x))  (λ x (number? x)))   #t]
   [(≼ (λ x (real? x))     (λ x (number? x)))   #t]
+    
   [(≼ (λ x (rational? x)) (λ x (real? x)))     #t]
+  [(≼ (λ x (rational? x)) (λ x (number? x)))     #t]
+  
   [(≼ (λ x (integer? x))  (λ x (rational? x))) #t]
+  [(≼ (λ x (integer? x))  (λ x (real? x))) #t]
+  [(≼ (λ x (integer? x))  (λ x (number? x))) #t]
+  
   [(≼ (λ x (positive? x)) (λ x (<= x 0)))      #t]
   ;; Otherwise
   [(≼ any ...) (≡ any ...)])

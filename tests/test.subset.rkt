@@ -88,6 +88,30 @@
 
 
 
+(check-eq?
+ (term (≤ Odd? Real?))
+ #t)
+
+(check-eq?
+ (term (≤ UInteger? Integer?))
+ #t)
+
+(check-eq?
+ (term (≤ UInteger? Natural?))
+ #t)
+
+(check-eq?
+ (term (≤ UEven? Even?))
+ #t)
+
+(check-eq?
+ (term (≤ UOdd? Odd?))
+ #t)
+
+(check-eq?
+ (term (≤ UOdd? Real?))
+ #t)
+
 ;(term (Σ Positive?))
 ;(term (Σ Natural?))
 
