@@ -29,6 +29,11 @@
    ;⊤
    ;⊥
    
+   ;; +++++++++++++++++++++++++
+   ;; OLD named Predica
+   Num? Str? Bool? Pos? Neg? Nat?
+   ;; +++++++++++++++++++++++++
+   
    Number?
    Complex?
    Real?
@@ -36,7 +41,7 @@
    Integer?
    String?
    Boolean?
-
+   
    Exact?
    Inexact?
    Zero?
@@ -64,7 +69,8 @@
   
   ; Immediate Contracts
   ((I J) 
-   (flat M) named ;; TODO
+   (flat M) 
+   ;named ;; TODO
    P ;; TODO
    (flat P))
   
@@ -117,9 +123,10 @@
   
   
   ;; TODO, only for testing
-  (named Any? ⊤ None? ⊥ Num?
-         Str? Bool? Pos? Neg? Nat?
-         )
+  ;(named Any? ⊤ None? ⊥ Num?
+  ;       Str? Bool? Pos? Neg? Nat?
+  ;       )
+  
   )
 
 ;; Predefined Predicates
@@ -138,7 +145,7 @@
   [(lookup/ Real?)     (⊤ / (λ x (real? x)))]
   [(lookup/ Rational?) (⊤ / (λ x (rational? x)))]
   [(lookup/ Integer?)  (⊤ / (λ x (integer? x)))]
-
+  
   [(lookup/ String?)   (⊤ / (λ x (string? x)))]
   [(lookup/ Boolean?)  (⊤ / (λ x (boolean? x)))]
   
@@ -146,7 +153,7 @@
   [(lookup/ Exact?)   (Number? / (λ x (exact? x)))]
   [(lookup/ Inexact?) (Number? / (λ x (inexact? x)))]
   [(lookup/ Zero?)    (Number? / (λ x (zero? x)))]
-
+  
   [(lookup/ Positive?) (Real? / (λ x (positive? x)))]
   [(lookup/ Negative?) (Real? / (λ x (negative? x)))]
   [(lookup/ Natural?)  (Real? / (λ x (<= x 0)))]
@@ -159,9 +166,16 @@
   [(lookup/ UEven?) (UInteger? / (λ x (even? x)))]
   [(lookup/ UOdd?)  (UInteger? / (λ x (odd? x)))]
   
+  
+  ;; OLD named flat contracts
+  [(lookup/ Num?) Number?]
+  [(lookup/ Bool?) Boolean?]
+  [(lookup/ Str?) String?]
+  [(lookup/ Neg?) Negative?]
+  [(lookup/ Pos?) Positive?]
+  [(lookup/ Nat?) Natural?]
+  
   )
-
-
 
 ;; Predicates containment
 ;; ======================
@@ -193,7 +207,7 @@
   ≼ : (λ x M) (λ x M) -> boolean
   [(≼ (λ x (complex? x))  (λ x (number? x)))   #t]
   [(≼ (λ x (real? x))     (λ x (number? x)))   #t]
-    
+  
   [(≼ (λ x (rational? x)) (λ x (real? x)))     #t]
   [(≼ (λ x (rational? x)) (λ x (number? x)))     #t]
   
@@ -342,7 +356,7 @@
   [(⊑/subject (flat M) (flat M)) #t]
   [(⊑/subject (flat M) (flat N)) #f]
   ;; Predefined Contracts
-   [(⊑/subject P_0 P_1) (≤ P_0 P_1)]
+  [(⊑/subject P_0 P_1) (≤ P_0 P_1)]
   
   ;; TODO
   ;[(⊑/subject named ⊤) #t]
@@ -457,7 +471,15 @@
   [(subst/ x any (Λ x C)) (Λ x M)]
   [(subst/ x any (Λ y C)) (Λ y (subst/ x any C))]
   [(subst/ x any ...) (subst x any ...)])
-  
+
+
+(define-metafunction λCon
+  eval/ : (M ...) V -> boolean
+  [(eval/ () V) #t]
+  [(eval/ (λ x M) V) ,(with-handlers ([(λ x #t) (lambda (exn) (term #f))]) (evaluate (term (M V))))]
+  [(eval/ (M_0 M_1 ...)) ,(and (term (eval/ M_0)) (term (eval/ M_1 ...)))]
+  [(eval/ x any ...) (subst x any ...)])
+
 #|
  ___        _         _   _          
 | _ \___ __| |_  _ __| |_(_)___ _ _  
@@ -480,8 +502,11 @@
         (in-hole E (V @ (eval ,(with-handlers 
                                    ([(λ x #t) (lambda (exn) (term #f))])
                                  (evaluate (term (M V)))))))
-        ;(in-hole E (V @ (eval (M V))))
         "Flat")
+   
+   (--> (in-hole E (V @ P))
+        (in-hole E (V @ (eval (eval/ (Σ P) V))))
+        "Refinement")
    
    (--> (in-hole E (V @ (eval W)))
         (in-hole E V)
@@ -529,18 +554,18 @@
 (define
   (evaluate M)
   (car (apply-reduction-relation* λCon-reduction M)))
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
 (define-metafunction λCon
   lookup : named -> (flat M)
   

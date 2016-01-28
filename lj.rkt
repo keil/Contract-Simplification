@@ -71,14 +71,12 @@
   [(subst x any x) any]
   [(subst x any y) y]
   [(subst x any_1 (any_2 ...)) ((subst x any_1 any_2) ...)]
-  [(subst x any_1 any_2) any_2]
-  )
+  [(subst x any_1 any_2) any_2])
 
 (define namespace (make-base-namespace))
 (define-metafunction λJ
   δ : op K ... -> K
-  [(δ op K ...) ,(eval (term (op K ...)) namespace)]
-  )
+  [(δ op K ...) ,(eval (term (op K ...)) namespace)])
 
 (define λJ-reduction
   (reduction-relation
@@ -102,7 +100,6 @@
         (side-condition (false? (term V))))
    ))
 
-
 (define-metafunction λJ
   free? : x any -> (x ...)
   ;; Check for free valriables
@@ -112,8 +109,7 @@
   ;; Continue on the structure of M
   [(free? x (any ...)) (or (free? x any) ...)]
   ;; Return false if none of the previous rules match
-  [(free? x any) #f]
-  )
+  [(free? x any) #f])
 
 (define-metafunction λJ
   bound? : x any -> boolean
@@ -123,5 +119,4 @@
   ;; Continue on the structure of M
   [(bound? x (any ...)) (or (bound? x any) ...)]
   ;; Return false if none of the previous rules match
-  [(bound? x any) #f]
-  )
+  [(bound? x any) #f])
