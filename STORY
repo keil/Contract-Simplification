@@ -88,6 +88,17 @@ The result could be Bool \vee Num
 ;; which is another predicate
 
 
+; make it with \ x x and nested contracts
+
+;; this example open another interesting question:
+;; When writing the term ((¿ x 1) @ (Num? ¿ Num?)) a developer
+;; restricts the domain to number values.
+;; But, baseline reduction reduces the contract. because the arument
+;; is never used. Thus, the initial semantics changed because the contract is
+;; removed.
+;; e.g. say that I on the domain are not part of the canonical contrats
+
+
 
 
 Predicate Refinements

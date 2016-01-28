@@ -1,8 +1,6 @@
 #lang racket
 (require redex)
 
-(require "../lj.rkt")
-(require "../lcon.rkt")
 (require "../baseline.rkt")
 
 (provide (all-defined-out))

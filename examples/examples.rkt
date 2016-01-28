@@ -99,7 +99,17 @@
   example:unroll/2
   (term ((λ x (+ (x 1) (x 2))) ((λ x (+ x 1)) @ (Num? → Num?)))))
 
+(define 
+  example:unroll/subject/0
+  (term ((λ f (f 1)) ((λ x 1) @ (Num? → Num?)))))
 
+(define 
+  example:unroll/subject/1
+  (term ((λ x (x 1)) ((λ x x) @ (Num? → Num?)))))
+
+(define 
+  example:unroll/subject/2
+  (term ((λ f (f 1)) ((λ x x) @ ((Num? → Num?) → (Num? → Num?))))))
 
 ;; Examples: Unfold
 ;; ================
