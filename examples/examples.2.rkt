@@ -139,13 +139,38 @@
   example:inc/0
   (term ((λ f (λ x (f x))) ((λ x (λ y (+ x y))) @ (Num? → (Num? → Num?))))))
 
-(traces Baseline-reduction example:inc/0)
+;(traces Baseline-reduction example:inc/0)
 
 (test-->>
  Baseline-reduction
  example:inc/0
  (term (((λ f (λ x (f x))) (λ x (λ y (+ x y)))) @ (Num? → (Num? → Num?)))))
  
+
+
+(define 
+  example:inc/1
+  (term ((λ f (λ x (λ y ((f x) y)))) ((λ x (λ y (+ x y))) @ (Num? → (Num? → Num?))))))
+
+(traces Baseline-reduction example:inc/1)
+
+(test-->>
+ Baseline-reduction
+ example:inc/1
+ (term ((λ f (λ x (λ y ((f (x @ Num?)) y)))) ((λ x (λ y (+ x y))) @ (⊤ → (Num? → Num?))))))
+
+
+
+(define 
+  example:inc/2
+  (term ((λ f (λ x (λ y ((f y) x)))) ((λ x (λ y (+ x y))) @ (Num? → (Num? → Num?))))))
+
+(traces Baseline-reduction example:inc/2)
+
+(test-->>
+ Baseline-reduction
+ example:inc/2
+ (term ((λ f (λ x (λ y ((f y) (x @ Num?))))) ((λ x (λ y (+ x y))) @ (⊤ → (Num? → Num?))))))
 
 ;; Print summary
 (test-results)

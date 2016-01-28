@@ -66,7 +66,8 @@
   ;; Execution Body (name?)
   ;; Function Body
   (a K x (a_1 a_2) (op a ...)) ;; Contracts a @ C
-  (H hole (op a ... F M ...) (F M) (a F) (F @ C)) ;; Todo (H @ Q)
+  ;(H hole (op a ... F M ...) (F M) (a F) (F @ C)) ;; Todo (H @ Q)
+  (H hole (op a ... H M ...) (H M) (a H) (H @ C)) ;; Todo (H @ Q)
   ;;;(A hole (op a ... A M ...) (A M) (a A) (A @ C)) ;; Todo (H @ Q)
   
   ;; Extend contracts
