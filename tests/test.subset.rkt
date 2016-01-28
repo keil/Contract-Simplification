@@ -85,9 +85,6 @@
  (term (≤ Positive? Natural?))
  #t)
 
-
-
-
 (check-eq?
  (term (≤ Odd? Real?))
  #t)
@@ -148,159 +145,159 @@
  #t)
 
 (check-eq?
- (term (⊑ Num? Num?))
+ (term (⊑ Number? Number?))
  #t)
 
 (check-eq?
- (term (⊑ Nat? Num?))
+ (term (⊑ Natural? Number?))
  #t)
 
 ;; Function 
 ;; --------
 
 (check-eq?
- (term (⊑ (Num? → Num?) (Num? → Num?)))
+ (term (⊑ (Number? → Number?) (Number? → Number?)))
  #t)
 
 (check-eq?
- (term (⊑ (Nat? → Num?) (Num? → Num?)))
+ (term (⊑ (Natural? → Number?) (Number? → Number?)))
  #t)
 
 (check-eq?
- (term (⊑ (Num? → Nat?) (Num? → Num?)))
+ (term (⊑ (Number? → Natural?) (Number? → Number?)))
  #t)
 
 (check-eq?
- (term (⊑ (Nat? → Nat?) (Num? → Num?)))
+ (term (⊑ (Natural? → Natural?) (Number? → Number?)))
  #t)
 
 (check-eq?
- (term (⊑ (Num? → Num?) (Nat? → Num?)))
+ (term (⊑ (Number? → Number?) (Natural? → Number?)))
  #f)
 
 (check-eq?
- (term (⊑ (Num? → Num?) (Num? → Nat?)))
+ (term (⊑ (Number? → Number?) (Number? → Natural?)))
  #f)
 
 (check-eq?
- (term (⊑ (Num? → Num?) (Nat? → Nat?)))
+ (term (⊑ (Number? → Number?) (Natural? → Natural?)))
  #f)
 
 ;; Intersection 
 ;; ------------
 
 (check-eq?
- (term (⊑ (Num? → Num?) ((Num? → Num?) ∩ (Num? → Num?)))) 
+ (term (⊑ (Number? → Number?) ((Number? → Number?) ∩ (Number? → Number?)))) 
  #t)
 
 (check-eq?
- (term (⊑ (Num? → Num?) ((Num? → Num?) ∩ (Str? → Str?)))) 
+ (term (⊑ (Number? → Number?) ((Number? → Number?) ∩ (String? → String?)))) 
  #t)
 
 (check-eq?
- (term (⊑ (Nat? → Nat?) ((Num? → Num?) ∩ (Str? → Str?)))) 
+ (term (⊑ (Natural? → Natural?) ((Number? → Number?) ∩ (String? → String?)))) 
  #t)
 
 (check-eq?
- (term (⊑ (Nat? → Nat?) ((Nat? → Num?) ∩ (Str? → Str?)))) 
+ (term (⊑ (Natural? → Natural?) ((Natural? → Number?) ∩ (String? → String?)))) 
  #t)
 
 (check-eq?
- (term (⊑ (Nat? → Nat?) ((Num? → Nat?) ∩ (Str? → Str?)))) 
+ (term (⊑ (Natural? → Natural?) ((Number? → Natural?) ∩ (String? → String?)))) 
  #t)
 
 (check-eq?
- (term (⊑ (Num? → Num?) ((Nat? → Nat?) ∩ (Str? → Str?)))) 
+ (term (⊑ (Number? → Number?) ((Natural? → Natural?) ∩ (String? → String?)))) 
  #f)
 
 (check-eq?
- (term (⊑ (Nat? → Num?) ((Nat? → Nat?) ∩ (Str? → Str?)))) 
+ (term (⊑ (Natural? → Number?) ((Natural? → Natural?) ∩ (String? → String?)))) 
  #f)
 
 (check-eq?
- (term (⊑ (Num? → Nat?) ((Nat? → Nat?) ∩ (Str? → Str?)))) 
+ (term (⊑ (Number? → Natural?) ((Natural? → Natural?) ∩ (String? → String?)))) 
  #f)
 
 (check-eq?
- (term (⊑ (Nat? → Nat?) ((Nat? → Nat?) ∩ (Nat? → Str?)))) 
+ (term (⊑ (Natural? → Natural?) ((Natural? → Natural?) ∩ (Natural? → String?)))) 
  #f) 
 
 (check-eq?
- (term (⊑ ((Num? → Num?) ∩ (Num? → Num?)) (Num? → Num?)))
+ (term (⊑ ((Number? → Number?) ∩ (Number? → Number?)) (Number? → Number?)))
  #t)
 
 (check-eq?
- (term (⊑ ((Nat? → Nat?) ∩ (Num? → Num?)) (Num? → Num?)))
+ (term (⊑ ((Natural? → Natural?) ∩ (Number? → Number?)) (Number? → Number?)))
  #t)
 
 (check-eq?
- (term (⊑ ((Num? → Num?) ∩ (Str? → Str?)) (Num? → Num?)))
+ (term (⊑ ((Number? → Number?) ∩ (String? → String?)) (Number? → Number?)))
  #f)
 
 (check-eq?
- (term (⊑ ((Nat? → Nat?) ∩ (Str? → Str?)) (Num? → Num?)))
+ (term (⊑ ((Natural? → Natural?) ∩ (String? → String?)) (Number? → Number?)))
  #f)
 
 (check-eq?
- (term (⊑ ((Num? → Num?) ∩ (Num? → Str?)) (Num? → Num?)))
+ (term (⊑ ((Number? → Number?) ∩ (Number? → String?)) (Number? → Number?)))
  #t)
 
 (check-eq?
- (term (⊑ ((Nat? → Nat?) ∩ (Pos? → Pos?)) (Pos? → Pos?))) 
+ (term (⊑ ((Natural? → Natural?) ∩ (Pos? → Pos?)) (Pos? → Pos?))) 
  #f)
 
 (check-eq?
- (term (⊑ (⊤ → Nat?) ((⊤ → Nat?) ∩ (⊤ → Str?)))) 
+ (term (⊑ (⊤ → Natural?) ((⊤ → Natural?) ∩ (⊤ → String?)))) 
  #f)
 
 (check-eq?
- (term (⊑ (⊤ → Nat?) ((⊤ → Num?) ∩ (⊤ → Str?)))) 
+ (term (⊑ (⊤ → Natural?) ((⊤ → Number?) ∩ (⊤ → String?)))) 
  #f)
 
 (check-eq?
- (term (⊑ (⊤ → Num?) ((⊤ → Nat?) ∩ (⊤ → Str?)))) 
+ (term (⊑ (⊤ → Number?) ((⊤ → Natural?) ∩ (⊤ → String?)))) 
  #f)
 
 (check-eq?
- (term (⊑ ((⊤ → Num?) ∩ (⊤ → Str?)) (⊤ → Num?))) 
+ (term (⊑ ((⊤ → Number?) ∩ (⊤ → String?)) (⊤ → Number?))) 
  #t)
 
 (check-eq?
- (term (⊑ ((⊤ → Num?) ∩ (⊤ → Str?)) (⊤ → Nat?))) 
+ (term (⊑ ((⊤ → Number?) ∩ (⊤ → String?)) (⊤ → Natural?))) 
  #f)
 
 (check-eq?
- (term (⊑ ((⊤ → Nat?) ∩ (⊤ → Str?)) (⊤ → Num?))) 
+ (term (⊑ ((⊤ → Natural?) ∩ (⊤ → String?)) (⊤ → Number?))) 
  #t)
 
 (check-eq?
- (term (⊑ (Nat? → ⊤) ((Nat? → ⊤) ∩ (Str? → ⊤)))) 
+ (term (⊑ (Natural? → ⊤) ((Natural? → ⊤) ∩ (String? → ⊤)))) 
  #t)
 
 (check-eq?
- (term (⊑ (Num? → ⊤) ((Nat? → ⊤) ∩ (Str? → ⊤)))) 
+ (term (⊑ (Number? → ⊤) ((Natural? → ⊤) ∩ (String? → ⊤)))) 
  #f)
 
 (check-eq?
- (term (⊑ (Nat? → ⊤) ((Num? → ⊤) ∩ (Str? → ⊤)))) 
+ (term (⊑ (Natural? → ⊤) ((Number? → ⊤) ∩ (String? → ⊤)))) 
  #t)
 
 (check-eq?
- (term (⊑ ((Num? → ⊤) ∩ (Str? → ⊤)) (Num? → ⊤))) 
+ (term (⊑ ((Number? → ⊤) ∩ (String? → ⊤)) (Number? → ⊤))) 
  #f)
 
 (check-eq?
- (term (⊑ ((Num? → ⊤) ∩ (Str? → ⊤)) (Nat? → ⊤))) 
+ (term (⊑ ((Number? → ⊤) ∩ (String? → ⊤)) (Natural? → ⊤))) 
  #f)
 
 (check-eq?
- (term (⊑ ((Nat? → ⊤) ∩ (Str? → ⊤)) (Num? → ⊤))) 
+ (term (⊑ ((Natural? → ⊤) ∩ (String? → ⊤)) (Number? → ⊤))) 
  #f)
 
 (check-eq?
- (term (⊑ (Num? → ⊤) (⊤ → Num?))) 
+ (term (⊑ (Number? → ⊤) (⊤ → Number?))) 
  #f)
 
 (check-eq?
- (term (⊑ (⊤ → Num?) (Num? → ⊤))) 
+ (term (⊑ (⊤ → Number?) (Number? → ⊤))) 
  #f)

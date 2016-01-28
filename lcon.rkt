@@ -65,6 +65,7 @@
   ; Immediate Contracts
   ((I J) 
    (flat M) named ;; TODO
+   P ;; TODO
    (flat P))
   
   ; Delayed Contracts
@@ -183,6 +184,8 @@
 
 ;; Term Subset (≼)
 ;; ---------------
+;; This meta function models the implicite assertions of predicates. Some of the 
+;; realtions could be might be determinable by unsing a SAT solvers.
 ;; Returns true if the left term is subset or equals to the reight term, 
 ;; false otherwise.
 
@@ -229,9 +232,9 @@
 
 
 
-
-
-
+;; Sum (Σ)
+;; ---------------------------------
+;; Summarizes the patricular predicates of a refinement.
 
 (define-metafunction λCon
   ⊕ : (M ...) (M ...) -> (M ...)
@@ -268,24 +271,28 @@
 
 
 
-(define-metafunction λCon
-  ∈ : P (P_0 ...) -> boolean
-  [(∈ P (P_0 P_1 ...)) ,(or (term (≤ P P_0)) (term (∈ P (P_1 ...))))]
-  [(∈ P ()) #f])
+;(define-metafunction λCon
+;  ∈ : P (P_0 ...) -> boolean
+;  [(∈ P (P_0 P_1 ...)) ,(or (term (≤ P P_0)) (term (∈ P (P_1 ...))))]
+;  [(∈ P ()) #f])
 
-(define-metafunction λCon
-  ≤/ : (P ...) (P ...) -> boolean
-  [(≤/ (P_0 P_1 ...) (P ...)) ,(and (term (∈ P_0 (P ...))) (term (≤/ (P_1 ...) (P ...))))]
-  [(≤/ () (P ...)) #t]
-  )
+;(define-metafunction λCon
+;  ≤/ : (P ...) (P ...) -> boolean
+;  [(≤/ (P_0 P_1 ...) (P ...)) ,(and (term (∈ P_0 (P ...))) (term (≤/ (P_1 ...) (P ...))))]
+;  [(≤/ () (P ...)) #t]
+;  )
 
-(define-metafunction λCon
-  ⊑/flat : (flat P ...) (flat P ...) -> boolean
-  [(⊑/flat (flat P_0 ...) (flat P_1 ...)) (≤ (P_0 ...) (P_0 ...))]
-  )
+;(define-metafunction λCon
+;  ⊑/flat : (flat P ...) (flat P ...) -> boolean
+;  [(⊑/flat (flat P_0 ...) (flat P_1 ...)) (≤ (P_0 ...) (P_0 ...))]
+;  )
 
-;; Naive Subsets of Contracts
-;; ==========================
+
+
+
+
+;; Naive Subsets of Contracts (⊆)
+;; ==============================
 
 ;; A contract C is subset of contract D iff
 ;; C is more restrictive than D.
@@ -306,22 +313,27 @@
 
 (define-metafunction λCon
   ⊑ : C D -> boolean
-  [(⊑ C D) ,(and (term (⊑/context C D)) (term (⊑/subject C D)))])
+  [(⊑ C D) ,(and (term (⊑/context C D)) (term (⊑/subject C D)))]
+  [(⊑ any ...) #f])
 
 (define-metafunction λCon
   ⊑/context : C D -> boolean
   ;; Immediate Contracts
   [(⊑/context I J) #t]  
+  ;; Abstraction
+  [(⊑/context (Λ x C) (Λ x D)) (⊑/context C D)]
   ;; Function Contract
   [(⊑/context (C_0 → D_0) (C_1 → D_1)) ,(and (term (⊑/subject C_0 C_1)) (term (⊑/context D_0 D_1)))]
+  ;; Dependent Contract
+  [(⊑/context (x → A_0) (x → A_1)) (⊑/context A_0 A_1)]
   ;; Intersection Contract
   [(⊑/context (C_0 ∩ D_0) C_1) ,(and (term (⊑/context C_0 C_1)) (term (⊑/context D_0 C_1)))]
   [(⊑/context C_0 (C_1 ∩ D_1)) ,(or (term (⊑/context C_0 C_1)) (term (⊑/context C_0 D_1)))]
   ;; Union Contract
   [(⊑/context (C_0 ∪ D_0) C_1) ,(or (term (⊑/context C_0 C_1)) (term (⊑/context D_0 C_1)))]
   [(⊑/context C_0 (C_1 ∪ D_1)) ,(and (term (⊑/context C_0 C_1)) (term (⊑/context C_0 D_1)))]
-  ;; Dependent
-  ;; TODO
+  ;; If not otherwise mentioned
+  [(⊑/context any ...) #f]
   )
 
 (define-metafunction λCon
@@ -330,26 +342,52 @@
   [(⊑/subject (flat M) (flat M)) #t]
   [(⊑/subject (flat M) (flat N)) #f]
   ;; Predefined Contracts
+   [(⊑/subject P_0 P_1) (≤ P_0 P_1)]
+  
   ;; TODO
-  [(⊑/subject named ⊤) #t]
-  [(⊑/subject ⊥ named) #t]
-  [(⊑/subject named named) #t]
-  [(⊑/subject named named) #t]
-  [(⊑/subject Nat? Num?) #t]
-  [(⊑/subject Pos? Nat?) #t]
-  [(⊑/subject Pos? Num?) #t]
-  [(⊑/subject named_0 named_1) #f]
+  ;[(⊑/subject named ⊤) #t]
+  ;[(⊑/subject ⊥ named) #t]
+  ;[(⊑/subject named named) #t]
+  ;[(⊑/subject named named) #t]
+  ;[(⊑/subject Nat? Num?) #t]
+  ;[(⊑/subject Pos? Nat?) #t]
+  ;[(⊑/subject Pos? Num?) #t]
+  ;[(⊑/subject named_0 named_1) #f]
+  
+  ;; Abstraction
+  [(⊑/subject (Λ x C) (Λ x D)) (⊑/subject C D)]
   ;; Function Contract
   [(⊑/subject (C_0 → D_0) (C_1 → D_1)) ,(and (term (⊑/context C_0 C_1)) (implies (term (⊑/subject C_0 C_1)) (term (⊑/subject D_0 D_1))))]
+  ;; Dependent Contract
+  [(⊑/subject (x → A_0) (x → A_1)) (⊑/subject A_0 A_1)]
   ;; Intersection Contract
   [(⊑/subject (C_0 ∩ D_0) C_1) ,(or (term (⊑/subject C_0 C_1)) (term (⊑/subject D_0 C_1)))]
   [(⊑/subject C_0 (C_1 ∩ D_1)) ,(and (term (⊑/subject C_0 C_1)) (term (⊑/subject C_0 D_1)))]
   ;; Union Contract
   [(⊑/subject (C_0 ∪ D_0) C_1) ,(and (term (⊑/subject C_0 C_1)) (term (⊑/subject D_0 C_1)))]
   [(⊑/subject C_0 (C_1 ∪ D_1)) ,(or (term (⊑/subject C_0 C_1)) (term (⊑/subject C_0 D_1)))]
-  ;; Dependent Contract
-  ;; TODO
+  ;; If not otherwise mentioned
+  [(⊑/subject any ...) #f]
   )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
