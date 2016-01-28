@@ -41,15 +41,8 @@
  (term (≼ (λ x (real? x)) (λ y (number? y))))
  #t)
 
-
-
-
-
-
-
-
-;; Predicate Containment
-;; =====================
+;; Predicate Containment (≤)
+;; =========================
 
 (check-eq?
  (term (≤ Number? Number?))
@@ -63,15 +56,13 @@
  (term (≤ ⊤ Number?))
  #f)
 
-
-
 (check-eq?
  (term (≤ Real? ⊤))
  #t)
 
 (check-eq?
  (term (≤ Real? Number?))
- #f) ;; TODO
+ #t)
 
 
 (check-eq?
@@ -84,7 +75,7 @@
 
 (check-eq?
  (term (≤ Natural? Number?))
- #f) ;; TODO
+ #t)
 
 (check-eq?
  (term (≤ Natural? Real?))
@@ -92,7 +83,7 @@
 
 (check-eq?
  (term (≤ Positive? Natural?))
- #f) ; TODO
+ #t)
 
 
 

@@ -149,12 +149,10 @@
   [(lookup/ Odd?)  (Integer? / (λ x (odd? x)))]
   
   ;; Third Level
-  [(lookup/ NEven?) (Natural? / (λ x (even? x)))]
-  [(lookup/ NPOdd?) (Natural? / (λ x (odd? x)))]
+  [(lookup/ NatEven?) (Natural? / (λ x (even? x)))]
+  [(lookup/ NatOdd?) (Natural? / (λ x (odd? x)))]
   
   )
-
-;(variable-not-in (term ((λ x M) (λ x1 N))) (term x))
 
 
 
@@ -205,12 +203,21 @@
   [(≤ P P) #t]
   [(≤ P ⊤) #t]
   [(≤ ⊥ P) #t]
-  ;; Chain Lookup
-  [(≤ (P / M) P) #t] ;; or M is a refinement 
-  [(≤ predefined P) (≤ (lookup/ predefined) P)] ;; or M is a refinement 
-  ;[(≤ (P_m / M) (P_n / N)) (and (≤ P_m P_n) (≼ M N))]
+  ;; Chain Lookup  
+  [(≤ (P_M / M) (P_N / N)) ,(or
+                             (term (≤ P_M (P_N / N)))
+                             (and
+                              (term (≤ P_M P_N))
+                              (term (≼ M N))))]  
+  ;; Unroll predefined predicates
+  [(≤ predefined P) (≤ (lookup/ predefined) P)]
+  [(≤ P predefined) (≤ P (lookup/ predefined))]
   ;; End
   [(≤ any ...) #f])
+
+
+
+
 
 
 
