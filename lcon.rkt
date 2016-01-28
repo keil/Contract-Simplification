@@ -156,43 +156,48 @@
 
 ;(variable-not-in (term ((λ x M) (λ x1 N))) (term x))
 
+
+
 ;; Predicates containment
 ;; ======================
 
+;; Term Equivalence (≡)
+;; --------------------
+;; Returns true if both terms are syntactically identical (after α conversion), 
+;; false otherwise.
+
 (define-metafunction λCon
-  ≼ : (λ x M) (λ x M) -> boolean
-  [(≼ (λ x M) (λ x M)) #t]
-  [(≼ (λ x M) (λ x N)) #f]
-  [(≼ (λ x M) (λ y N)) (≼ (λ z (subst x z M)) (λ z (subst y z N)))
+  ≡ : (λ x M) (λ x M) -> boolean
+  [(≡ (λ x M) (λ x M)) #t]
+  [(≡ (λ x M) (λ x N)) #f]
+  [(≡ (λ x M) (λ y N)) (≼ (λ z (subst x z M)) (λ z (subst y z N)))
                        (where z ,(variable-not-in (term ((λ x M) (λ y N))) (term z)))]
   ;; Otherwise
-  [(≼ any ...) #f]
-  )
+  [(≡ any ...) #f])
+
+
+
+;; Term Subset (≼)
+;; ---------------
+;; Returns true if the left term is subset or equals to the reight term, 
+;; false otherwise.
 
 (define-metafunction λCon
-  ≼/ : (λ x M) (λ x M) -> boolean
-
-  [(≼/ Real? Nummber?) #t]
-  [(≼/ Rational? Real?) #t]
-  [(≼/ Integer? Rational?) #t]
-  [(≼/ Positive? Natatural?) #t]
-
-  
-  
+  ≼ : (λ x M) (λ x M) -> boolean
+  [(≼ (λ x (complex? x))  (λ x (number? x)))   #t]
+  [(≼ (λ x (real? x))     (λ x (number? x)))   #t]
+  [(≼ (λ x (rational? x)) (λ x (real? x)))     #t]
+  [(≼ (λ x (integer? x))  (λ x (rational? x))) #t]
+  [(≼ (λ x (positive? x)) (λ x (<= x 0)))      #t]
   ;; Otherwise
-  [(≼/ any ..) (≼ any ..)])
-;)
+  [(≼ any ...) (≡ any ...)])
 
-;(define-metafunction λCon
-;  ≼ : P P -> boolean?
-;  [(≼ Complex? Nummber?) #t]
-;  [(≼ Real? Nummber?) #t]
-;  [(≼ Rational? Real?) #t]
-;  [(≼ Integer? Rational?) #t]
-;  [(≼ Positive? Natatural?) #t]
-;  ;; Default Case
-;  [(≼ any_0 any_1) #f]
-;)
+
+
+;; Predicate (Refinement) Subset (≤)
+;; ---------------------------------
+;; Returns true if the left predicate is subset or equals to the reight predicate, 
+;; false otherwise.
 
 (define-metafunction λCon
   ≤ : P P -> boolean

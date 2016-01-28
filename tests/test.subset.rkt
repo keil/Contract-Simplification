@@ -14,8 +14,8 @@
                     
 |#
 
-;; Predicate Containment (≼)
-;; =========================
+;; Term Containment (≼)
+;; ====================
 
 (check-eq?
  (term (≼ (λ x (< x 0)) (λ x (< x 0))))
@@ -32,6 +32,20 @@
 (check-eq?
  (term (≼ (λ x (< x 0)) (λ y (<= y 0))))
  #f)
+
+(check-eq?
+ (term (≼ (λ x (number? x)) (λ y (real? y))))
+ #f)
+
+(check-eq?
+ (term (≼ (λ x (real? x)) (λ y (number? y))))
+ #t)
+
+
+
+
+
+
 
 
 ;; Predicate Containment
