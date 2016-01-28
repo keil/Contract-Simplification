@@ -44,15 +44,17 @@
    )
   
   ;; Final Terms
-  (final B ) ; (B @ Q)
+  (final B (B @ C)) ; (B @ Q) (B @ I) --> ()
+  ;; Empty contracts
+  (true T (true → true))
   
   ;; Baseline Reduction Context
   ;; reame to F
-  (H hole (λ x H) (H M) (B H) (op B ... H M ...) (H @ C))
+  (F hole (λ x F) (F M) (B F) (op B ... F M ...) (F @ C))
+  ;(if F M N) (if B F N) (if B F N)) ;; TODO, if
   
   
-    ;; restrict to flat contracts instead of I
-  
+  ;; restrict to flat contracts instead of I
   ;; pre-evaluated contracts
   ;(Qc (Dc → Rc))
   ;; Domain contracts
@@ -60,11 +62,11 @@
   ;; Range contracts
   ;(Rc ⊤ (Dc → Rc))
   
-
+  
   ;; Execution Body (name?)
   ;; Function Body
   (a K x (a_1 a_2) (op a ...)) ;; Contracts a @ C
-  (G hole (op a ... H M ...) (H M) (a H) (H @ C)) ;; Todo (H @ Q)
+  (H hole (op a ... F M ...) (F M) (a F) (F @ C)) ;; Todo (H @ Q)
   ;;;(A hole (op a ... A M ...) (A M) (a A) (A @ C)) ;; Todo (H @ Q)
   
   ;; Extend contracts
@@ -72,13 +74,11 @@
   
   
   ;; Canonical Contract
+  ;(QC (DC → RC))
+  ;(DC ⊤ ⊥ I (RC → DC))
+  ;(RC ⊤ ⊥ (DC → RC))
   
-  (QC (DC → RC))
-  (DC ⊤ ⊥ I (RC → DC))
-  (RC ⊤ ⊥ (DC → RC))
-  
-
-)
+  )
 
 (define 
   (canonical? C)
@@ -113,58 +113,38 @@
 
 (define Pre-evaluation
   (reduction-relation
-   λCon-Baseline
+   λCon-Baseline 
    
-   ;; ++++++++++++++++++++++++++++++++++++++++++++++++++
-   
-   ;; remve this rules
-   ;; use a sprecual syntact for empty contracts
-   ;; (empty T (empty → empty) ...
-   
-   ;(--> (in-hole H (M @ ⊤))
-   ;     (in-hole H M)
-   ;     "Remove/Top"
-   ;)
-   
-   ;(--> (in-hole H (M @ (⊤ → ⊤)))
-   ;     (in-hole H M)
-   ;     "Reduce/Top2"
-   ;)
-   
-   ;; ++++++++++++++++++++++++++++++++++++++++++++++++++
-   
-   
-   (--> (in-hole H (V @ I))
-        (in-hole H ,(car (apply-reduction-relation* λCon-reduction (term (V @ I)))))
+   (--> (in-hole F (V @ I))
+        (in-hole F ,(car (apply-reduction-relation* λCon-reduction (term (V @ I)))))
         "Verify"
-   )
+        )
    
-   (--> (in-hole H (K @ Q))
-        (in-hole H K)
+   (--> (in-hole F (K @ Q))
+        (in-hole F K)
         "Skip/Constant"
-   )
+        )
    
-   (--> (in-hole H ((op M ...) @ Q))
-        (in-hole H (op M ...))
+   (--> (in-hole F ((op M ...) @ Q))
+        (in-hole F (op M ...))
         "Skip/Operation"
-   )
-      
-   (--> (in-hole H (M @ (C ∪ D)))
-        (in-hole H ((M @ C) @ D))
-        "Reduce/Union"
-   )
+        )
    
-   (--> (in-hole H (M @ (I ∩ C)))
-        (in-hole H ((M @ I) @ C))
+   (--> (in-hole F (M @ (C ∪ D)))
+        (in-hole F ((M @ C) @ D))
+        "Reduce/Union"
+        )
+   
+   (--> (in-hole F (M @ (I ∩ C)))
+        (in-hole F ((M @ I) @ C))
         "Reduce/Intersection"
-   )
-
-   ; Not required because of [Verify]
-   ;(--> (in-hole H (R @ ⊤))
-   ;     (in-hole H R)
-   ;     "Reduce"
-   ;)
-))
+        )
+   
+   (--> (in-hole F (V @ true))
+        (in-hole F V)
+        "Reduce/True"
+        )
+   ))
 
 ;; Function unroll : x Q M -> N
 ;; ----------------------------
@@ -182,14 +162,14 @@
   
   ;; Put contract to the usage of x
   [(unroll x Q x) (x @ Q)]
-
+  
   ;; Continue unrollong on the structure of M
   [(unroll x Q (any ...)) ((unroll x Q any) ...)]
   
   ;; Return the target expression M if
   ;; none of the previous rules match
   [(unroll x Q any) any]
-)
+  )
 
 ;; Contract Propagration
 ;; ----------------------------
@@ -200,102 +180,48 @@
 ;; Lift: All types of contracts? .. generalize λ y M to M
 
 (define Baseline-reduction
-  (extend-reduction-relation Pre-evaluation
+  (extend-reduction-relation
+   Pre-evaluation
    λCon-Baseline
    
    ;; Unroll
-   (--> (in-hole H ((λ x M) (B @ Q))) ;; before Q now Qc (V @ C)
-        (in-hole H ((λ x (unroll x Q M)) B))
-        "Unroll"
-        ;(side-condition (canonical? (term Q))) ;; XXX
-   )
-
-   ;; any intersection needs to be unrolled before
-   ;; lift is only allowed to lift Cx contracts
+   ;; ------
+   ;; Rule [Unroll] unrolles the contract of a contracted argument 
+   ;; to all uses of the argument.
    
-   ;; ??
-   ;; need to guarantee that I do not call this function again aufter lifting
-   ;; otherwise use the speil operator from Dimulas
-;   (--> (in-hole H ((λ x M) @ (Q → C)))
-;        (in-hole H ((λ x (unroll x Q M)) @ (⊤ → C)))
-;        "Unroll/Subject/Domain"
-;        (side-condition (not (canonical? (term (Q → D)))))
-;   )
-;   (--> (in-hole H ((λ x M) @ (Dc → D)))
-;        (in-hole H (λ x (M @ D)))
-;        "Unroll/Subject/Range"
-;        (side-condition (not (canonical? (term (Dc → D)))))
-;   )
-   
-
-   
-   ;; what happens if (λ x M) is also contracted?
-   ;; can we say that (λ x M) needs to be unrolled before
-   ;;: this merans onbe part is alredy inside of m, ans the other part on V
-   ;; onlzy V or is also M @ Qx allowed
+   (--> (in-hole F ((λ x M) (B @ Q)))
+        (in-hole F ((λ x (unroll x Q M)) B))
+        "Unroll")
    
    ;; Unfold
-   (--> (in-hole H ((B @ (C → D)) M))
-        (in-hole H ((B (M @ C)) @ D))
-        "Unfold/Function"
-   )
-   (--> (in-hole H ((B @ (Q ∩ R)) M))
-        (in-hole H (((B @ Q) @ R) M))
-        "Unfold/Intersection"
-   )
-
-   ;; TODO, shoudl this be a canonical contract
-   ;; Qc are either (⊤ → Qc) or (Qc ∩ Qc)?
-   ;; or (Qc → Qc)
-   ;; also in 
+   ;; ------
+   ;; Rule [Unfold] unfolds a function contract (intersection contract).
+   
+   (--> (in-hole F ((B @ (C → D)) M))
+        (in-hole F ((B (M @ C)) @ D))
+        "Unfold/Function")
+   
+   (--> (in-hole F ((B @ (Q ∩ R)) M))
+        (in-hole F (((B @ Q) @ R) M))
+        "Unfold/Intersection")
    
    ;; Lower (down)
-   (--> (in-hole H (λ x (B @ C))) ;; C before, now Q
-        (in-hole H ((λ x B) @ (⊤ → C)))
-        "Lower"
-        ;(side-condition (not (redex-match? λCon-Baseline V (term B)))) ;; XXX
-   )
-
+   ;; ------------
+   ;; Rule [Lower] creates a new function cntract from the 
+   ;; contract of the function's body
+   
+   (--> (in-hole F (λ x (B @ C)))
+        (in-hole F ((λ x B) @ (⊤ → C)))
+        "Lower")
+   
    ;; Lift (up) Contract
    ;; ------------------
    ;; Rule [Lift] lifts an immediate contract I
    ;; on argument x and creates a new function contract.
    
-   (--> (in-hole H (λ x (in-hole G (x @ I)))) ;; ? all contracts?
-        (in-hole H ((λ x (in-hole G x)) @ (I → ⊤)))
-        "Lift"
-   )
-   
-   
-   ;; Deconstruct/ Reconstruct Contract
-   ;; ---------------------------------
-   
-;   (--> (in-hole H ((λ x (in-hole A (x M))) @ (Q → D))) ;; ? all contracts? ;; every context
-;        (in-hole H ((λ x (in-hole A ((x @ Q) M))) @ (⊤ → D)))
-;        "Deconstruct/Domain"
-;        (side-condition (not (canonical? (term (Q → D)))))
-        ;; side condition: contract not in canonical form
-;   )
-   
-;   (--> (in-hole H ((λ x V) @ (C → D))) ;; ? all contracts?
-;        (in-hole H ((λ x (V @ D)) @ (C → ⊤))) ;; ? all contracts?
-;        "Deconstruct/Range"
-        ;; cicle
-;        (side-condition (not (canonical? (term (C → D)))))
-        ;; side condition: contract not in canonical form
-;   )
-   
-  ; (--> (in-hole H ((λ x V) @ (C → I))) ;; ? all contracts?
-  ;      (in-hole H ((λ x (V @ I)) @ (C → ⊤))) ;; ? all contracts?
-  ;      "Deconstruct/Range2"
-  ;      (side-condition (not (canonical? (term (C → I)))))
-        ;; cicle
-        ;; side condition: contract not in canonical form
-  ; )
-
-   
-   
-   
+   (--> (in-hole F (λ x (in-hole H (x @ I)))) ;; ? all contracts?
+        (in-hole F ((λ x (in-hole H x)) @ (I → ⊤)))
+        "Lift")
    
    ;; Collapse
    ;; --------
@@ -311,17 +237,28 @@
    ;     (in-hole H (S @ (collapse C D)))
    ;     "Collaps"
    ;)
-   (--> (in-hole H ((S @ C) @ D))
-        (in-hole H (S @ (collapse C D)))
-        "Collaps"
-   )
-   ; Reverse
-   (--> (in-hole H ((V @ Q) @ I))
-        (in-hole H ((V @ I) @ Q))
+   (--> (in-hole F ((S @ Q) @ R))
+        (in-hole F (S @ (collapse Q R)))
+        "Collaps/Delayed")
+   
+   (--> (in-hole F ((S @ I) @ J))
+        (in-hole F (S @ (collapse I J)))
+        "Collaps/Immediate")
+   
+   ;; Reverse
+   ;; -------
+   ;; Rule [Reverse] moves delayed contracts to the outer possition.
+   ;; This enables to unfold the contract on the outer position.
+   ;; Hint: This rules changes the blame-semantcs 
+   
+   (--> (in-hole F ((M @ Q) @ I))
+        (in-hole F ((M @ I) @ Q))
         "Reverse"
-   )
- 
-))
+        (side-condition (not (λCon-value? (term (M @ Q))))))
+   
+   ))
+
+
 
 
 
@@ -361,7 +298,7 @@
   ;; to remain the sequential assertion @ C @ D
   [(collapse C C) C]
   [(collapse C D) (C • D)]
-)
+  )
 
 
 

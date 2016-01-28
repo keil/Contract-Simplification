@@ -97,4 +97,13 @@
  (term ((λ f (f 1)) ((λ x (+ x 1)) @ (Num? → Num?))))
  (term (((λ f (f 1)) (λ x (+ x 1))) @ Num?)))
 
+;; Test: Collapse
+;; ==============
+
+(test-->>
+ Baseline-reduction
+ (term (((λ x (+ 1 1)) @ (Num? → Num?)) @ Num?))
+ (term ((λ x (+ 1 1)) @ (Num? → Num?))))
+
+
 (test-results)
