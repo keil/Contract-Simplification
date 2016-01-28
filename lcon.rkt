@@ -92,7 +92,7 @@
   ((L M N) .... (M @ C) blame)
   
   ;; Contexts
-  ((E F) .... (E @ C) (V @ (eval E)))
+  (E .... (E @ C) (V @ (eval E)))
   
   
   

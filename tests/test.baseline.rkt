@@ -1,11 +1,11 @@
 #lang racket
 (require redex)
 
-(require "lj.rkt")
-(require "lcon.rkt")
-(require "baseline.rkt")
+;(require "../lj.rkt")
+;(require "../lcon.rkt")
+(require "../baseline.rkt")
 
-(require "examples.rkt")
+(require "../examples/examples.rkt")
 
 #|
  _____       _      

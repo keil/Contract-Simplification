@@ -46,7 +46,8 @@
   (final B)
   
   ;; Baseline Reduction Context
-  ((G H) hole (λ x H) (H M) (B H) (op B ... H M ...) (H @ C))
+  ;; reame to F
+  (H hole (λ x H) (H M) (B H) (op B ... H M ...) (H @ C))
   
   
     ;; restrict to flat contracts instead of I
@@ -62,7 +63,8 @@
   ;; Execution Body (name?)
   ;; Function Body
   (a K x (a_1 a_2) (op a ...)) ;; Contracts a @ C
-  (A hole (op a ... H M ...) (H M) (a H) (H @ C)) ;; Todo (H @ Q)
+  (G hole (op a ... H M ...) (H M) (a H) (H @ C)) ;; Todo (H @ Q)
+  ;;;(A hole (op a ... A M ...) (A M) (a A) (A @ C)) ;; Todo (H @ Q)
   
   ;; Extend contracts
   ((C D) .... (C • D))
@@ -258,8 +260,8 @@
    ;; Rule [Lift] lifts an immediate contract I
    ;; on argument x and creates a new function contract.
    
-   (--> (in-hole H (λ x (in-hole A (x @ I)))) ;; ? all contracts?
-        (in-hole H ((λ x (in-hole A x)) @ (I → ⊤)))
+   (--> (in-hole H (λ x (in-hole G (x @ I)))) ;; ? all contracts?
+        (in-hole H ((λ x (in-hole G x)) @ (I → ⊤)))
         "Lift"
    )
    
