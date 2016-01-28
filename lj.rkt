@@ -47,8 +47,7 @@
   (false #f 0 "")
   
   ;; Evaluation Contexts
-  (E hole (E N) (V E) (op V ... E M ...) (if E M N))
-  )
+  (E hole (E N) (V E) (op V ... E M ...) (if E M N)))
 
 (define λJ-value?
   (redex-match? λJ V))

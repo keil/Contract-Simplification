@@ -22,16 +22,17 @@
 (define-extended-language λCon-Baseline λCon
   
   ;; Contract-free terms (λJ terms)
-  ((S T) K x (λ x T) (S T) (op T ...))
+  ;; ------------------------------
+  ((S T) K x (λ x T) (S T) (op T ...) (if S T_0 T_1))
   
   ;; Final terms (only top-level contracted)
+  ;; ---------------------------------------
   (B 
    ;; Contract-free terms
    T
    ;; Imemdiate Contracts
    ((op S ...) @ I)
    ((S T) @ I)
-   
    ;; Delayed Contracts
    ;((λ x T) @ Q)
    ;(x @ Q)
@@ -43,7 +44,7 @@
    )
   
   ;; Final Terms
-  (final B)
+  (final B ) ; (B @ Q)
   
   ;; Baseline Reduction Context
   ;; reame to F

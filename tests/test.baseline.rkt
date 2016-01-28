@@ -31,7 +31,7 @@
 ; Baseline-reduction
 ; example:term/1
 ; (term (((λ x (+ x 1)) @ (⊤ → Num?)) @ (⊤ → Pos?))))
- 
+
 ;(test-->>
 ; Baseline-reduction
 ; example:term/2
@@ -65,7 +65,7 @@
 (test-->
  Baseline-reduction
  example:unfold/1
-  (term ((λ x (+ 1 ((x (2 @ Num?)) @ Num?))) (λ x (+ x 1)))))
+ (term ((λ x (+ 1 ((x (2 @ Num?)) @ Num?))) (λ x (+ x 1)))))
 
 (test-->
  Baseline-reduction
@@ -86,5 +86,15 @@
  Baseline-reduction
  (term ((λ x (+ ((x 1) @ Num?) ((x (2 @ Num?)) @ Num?))) (λ x (+ x 1))))
  (term ((λ x (+ ((x 1) @ Num?) ((x 2) @ Num?))) (λ x (+ x 1)))))
+
+(test-->
+ Baseline-reduction
+ (term ((λ f (f 1)) ((λ x (+ x 1)) @ (Num? → Num?))))
+ (term ((λ f ((f @ (Num? → Num?)) 1)) (λ x (+ x 1)))))
+
+(test-->>
+ Baseline-reduction
+ (term ((λ f (f 1)) ((λ x (+ x 1)) @ (Num? → Num?))))
+ (term (((λ f (f 1)) (λ x (+ x 1))) @ Num?)))
 
 (test-results)
