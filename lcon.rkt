@@ -23,7 +23,7 @@
   ;; Predicates
   ;; ==========
   
-  (P ⊤ (P / M) predefined)
+  (P ⊤ ⊥ (P / M) predefined)
   
   (predefined 
    ;⊤
@@ -119,14 +119,7 @@
   
   ;; Solution (context/ subject)
   (ω (B_0 ∘ B_1))
-  
-  
-  
-  ;; TODO, only for testing
-  ;(named Any? ⊤ None? ⊥ Num?
-  ;       Str? Bool? Pos? Neg? Nat?
-  ;       )
-  
+   
   )
 
 ;; Predefined Predicates
@@ -259,8 +252,9 @@
 
 (define-metafunction λCon
   Σ : P -> (M ...)
-  [(Σ T) ()]
-  [(Σ (⊤ / M)) (M)]
+  [(Σ ⊤) ((λ x #t))]
+  [(Σ ⊥) ((λ x #f))]
+  ;[(Σ (⊤ / M)) (M)]
   [(Σ (P / M)) (⊕ (Σ P) (M))]
   [(Σ predefined) (Σ (lookup/ predefined))]
   )
@@ -476,9 +470,11 @@
 (define-metafunction λCon
   eval/ : (M ...) V -> boolean
   [(eval/ () V) #t]
+  [(eval/ (⊤) V) #t]
+  [(eval/ (⊥) V) #f]
   [(eval/ (λ x M) V) ,(with-handlers ([(λ x #t) (lambda (exn) (term #f))]) (evaluate (term (M V))))]
   [(eval/ (M_0 M_1 ...)) ,(and (term (eval/ M_0)) (term (eval/ M_1 ...)))]
-  [(eval/ x any ...) (subst x any ...)])
+  [(eval/ any ...) #f])
 
 #|
  ___        _         _   _          
