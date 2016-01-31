@@ -470,11 +470,13 @@
 (define-metafunction λCon
   eval/ : (M ...) V -> boolean
   [(eval/ () V) #t]
-  [(eval/ (⊤) V) #t]
-  [(eval/ (⊥) V) #f]
-  [(eval/ (λ x M) V) ,(with-handlers ([(λ x #t) (lambda (exn) (term #f))]) (evaluate (term (M V))))]
-  [(eval/ (M_0 M_1 ...)) ,(and (term (eval/ M_0)) (term (eval/ M_1 ...)))]
-  [(eval/ any ...) #f])
+;  [(eval/ (⊤) V) #t]
+;  [(eval/ (⊥) V) #f]
+  [(eval/ (M) V) ,(with-handlers ([(λ x #t) (lambda (exn) (term #f))]) (evaluate (term (M V))))]
+;  [(eval/ (M_0 M_1 ... M_n) V) ,(and (term (eval/ M_n V)))]
+   [(eval/ (M_0 M_1 ...) V) ,(and (term (eval/ (M_0) V)) (term (eval/ (M_1 ...) V)))]
+  [(eval/ any ...) #f]
+)
 
 #|
  ___        _         _   _          
@@ -537,14 +539,18 @@
    
    
    ;; Lookup
-   (--> (in-hole E (V @ named))
-        (in-hole E (V @ (lookup named)))
-        "Lookup") ;; TODO
+   ;(--> (in-hole E (V @ named))
+   ;     (in-hole E (V @ (lookup named)))
+   ;     "Lookup") ;; TODO
+   ;
+   ;(--> (in-hole E (V @ predefined))
+   ;     (in-hole E (V @ (lookup/ predefined)))
+   ;     "Lookup/")
+  ; 
    
-   (--> (in-hole E (V @ predefined))
-        (in-hole E (V @ (lookup/ predefined)))
-        "Lookup/")
-   
+      (--> (in-hole E (V @ ⊤))
+        (in-hole E V)
+        "⊤")
    ))
 
 (define

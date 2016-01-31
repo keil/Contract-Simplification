@@ -29,7 +29,7 @@
            (variable-prefix f) (variable-prefix g) (variable-prefix h))
   
   ;; Primitive Operations
-  (op predicates logical numeric relational)
+  (op predicates logical numeric relational string-append)
   
   ;; TypeOf Predicates
   (predicates number? complex? real? rational? integer? string? boolean?
@@ -65,8 +65,8 @@
 
 (define-metafunction λJ
   subst : x any any -> any
-  [(subst x any (λ x M)) (λ x M)]
-  [(subst x any (λ y M)) (λ y (subst x any M))]
+  [(subst x any_1 (λ x any_2)) (λ x any_2)]
+  [(subst x any_1 (λ y any_2)) (λ y (subst x any_1 any_2))]
   [(subst x any x) any]
   [(subst x any y) y]
   [(subst x any_1 (any_2 ...)) ((subst x any_1 any_2) ...)]
