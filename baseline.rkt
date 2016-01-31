@@ -328,6 +328,25 @@
 
 
 
+(define 
+  example/addone/0
+  (term (((λ f (λ x ((f 1) x))) (λ x (λ y (+ x y)))) 1)))
+
+(redex-match? λCon M example/addone/0)
+;(traces λCon-reduction example/addone/0) ;; reduction steps: 6
+
+(define 
+  example/addone/1
+  (term (((λ f (λ x ((f 1) x))) ((λ x (λ y (+ x y))) @ (Num? → (Num? → Num?)))) 1)))
+
+(redex-match? λCon M example/addone/1)
+;(traces λCon-reduction example/addone/1) ;; reduction steps: 14
+
+(reduce example/addone/1)
+;(traces Baseline-reduction example/addone/1)
+;(traces λCon-reduction (reduce example/addone/1)) ;; reduction steps: 8
+
+
 
 (define 
   example-4
