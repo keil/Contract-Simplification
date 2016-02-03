@@ -70,6 +70,9 @@
   (H hole (op a ... H M ...) (H M) (a H) (H @ C)) ;; Todo (H @ Q)
   ;;;(A hole (op a ... A M ...) (A M) (a A) (A @ C)) ;; Todo (H @ Q)
   
+  (HH )
+  
+  
   ;; Extend contracts
   ((C D) .... (C • D))
   
@@ -329,6 +332,38 @@
 
 
 (define 
+  example:inc/1
+  (term ((λ f (λ x (λ y ((f x) y)))) ((λ x (λ y (+ x y))) @ (Num? → (Num? → Num?))))))
+
+(traces Baseline-reduction example:inc/1)
+
+(test-->>
+ Baseline-reduction
+ example:inc/1
+ (term ((λ f (λ x (λ y ((f (x @ Num?)) y)))) ((λ x (λ y (+ x y))) @ (⊤ → (Num? → Num?))))))
+
+
+
+(define 
+  example:inc/2
+  (term ((λ f (λ x (λ y ((f y) x)))) ((λ x (λ y (+ x y))) @ (Num? → (Num? → Num?))))))
+
+;(traces Baseline-reduction example:inc/2)
+
+(test-->>
+ Baseline-reduction
+ example:inc/2
+ (term ((λ f (λ x (λ y ((f y) (x @ Num?))))) ((λ x (λ y (+ x y))) @ (⊤ → (Num? → Num?))))))
+
+
+
+
+
+
+
+
+
+(define 
   example/addone/0
   (term (((λ f (λ x ((f 1) x))) (λ x (λ y (+ x y)))) 1)))
 
@@ -342,7 +377,7 @@
 (redex-match? λCon M example/addone/1)
 ;(traces λCon-reduction example/addone/1) ;; reduction steps: 14
 
-(reduce example/addone/1)
+;(reduce example/addone/1)
 ;(traces Baseline-reduction example/addone/1)
 ;(traces λCon-reduction (reduce example/addone/1)) ;; reduction steps: 8
 
