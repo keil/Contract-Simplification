@@ -19,41 +19,43 @@
 (define-language λJ
   
   ;; Terms
+  ;; -----
   ((L M N) K x (λ x M) (M N) (op M ...) (if L M N))
   
   ;; Constants 
+  ;; ---------
   (K number boolean string)
   
   ;; Variables
+  ;; ---------
   ((x y z) (variable-prefix x) (variable-prefix y) (variable-prefix z)
            (variable-prefix f) (variable-prefix g) (variable-prefix h))
   
   ;; Primitive Operations
-  (op predicates logical numeric relational string-append)
+  ;; --------------------
+  (op predicates logicals numerics relationals strings)
   
-  ;; TypeOf Predicates
   (predicates number? complex? real? rational? integer? string? boolean?
               exact? inexact? zero? positive? negative? even? odd?)
-  ;; Logical Operators
-  (logical and or not)
-  ;; Numeric Operators
-  (numeric + * - /)
-  ;; Relational Operators
-  (relational < > = <= >=)
+  
+  (logicals and or not)
+  
+  (numerics + * - /)
+  
+  (relationals < > = <= >=)
+  
+  (strings string-append)
   
   ;; Values
+  ;; ------
   ((U V W) K (λ x M))
+  
   ;; False Values
   (false #f 0 "")
   
   ;; Evaluation Contexts
+  ;; -------------------
   (E hole (E N) (V E) (op V ... E M ...) (if E M N)))
-
-(define λJ-value?
-  (redex-match? λJ V))
-
-(define false? 
-  (redex-match? λJ false))
 
 #|
  ___        _         _   _          
@@ -62,20 +64,6 @@
 |_|_\___\__,_|\_,_\__|\__|_\___/_||_|
                                      
 |#
-
-(define-metafunction λJ
-  subst : x any any -> any
-  [(subst x any_1 (λ x any_2)) (λ x any_2)]
-  [(subst x any_1 (λ y any_2)) (λ y (subst x any_1 any_2))]
-  [(subst x any x) any]
-  [(subst x any y) y]
-  [(subst x any_1 (any_2 ...)) ((subst x any_1 any_2) ...)]
-  [(subst x any_1 any_2) any_2])
-
-(define namespace (make-base-namespace))
-(define-metafunction λJ
-  δ : op K ... -> K
-  [(δ op K ...) ,(eval (term (op K ...)) namespace)])
 
 (define λJ-reduction
   (reduction-relation
@@ -99,23 +87,71 @@
         (side-condition (false? (term V))))
    ))
 
+#|
+ __  __     _            ___             _   _             
+|  \/  |___| |_ __ _ ___| __|  _ _ _  __| |_(_)___ _ _  ___
+| |\/| / -_)  _/ _` |___| _| || | ' \/ _|  _| / _ \ ' \(_-<
+|_|  |_\___|\__\__,_|   |_| \_,_|_||_\__|\__|_\___/_||_/__/
+
+|#
+
+;; Substitution (subst)
+;; --------------------
+(define-metafunction λJ
+  subst : x any any -> any
+  [(subst x any_1 (λ x any_2)) (λ x any_2)]
+  [(subst x any_1 (λ y any_2)) (λ y (subst x any_1 any_2))]
+  [(subst x any x) any]
+  [(subst x any y) y]
+  [(subst x any_1 (any_2 ...)) ((subst x any_1 any_2) ...)]
+  [(subst x any_1 any_2) any_2])
+
+;; Delta (δ)
+;; ---------
+(define namespace (make-base-namespace))
+(define-metafunction λJ
+  δ : op K ... -> K
+  [(δ op K ...) ,(eval (term (op K ...)) namespace)])
+
+
+;; Free Variables (free?)
+;; ----------------------
 (define-metafunction λJ
   free? : x any -> (x ...)
-  ;; Check for free valriables
   [(free? x x) #t] 
   [(free? x (λ x M)) #f]
   [(free? x (λ y M)) (free x M)]
-  ;; Continue on the structure of M
   [(free? x (any ...)) (or (free? x any) ...)]
-  ;; Return false if none of the previous rules match
   [(free? x any) #f])
 
+;; Bound Variables (bound?)
+;; ------------------------
 (define-metafunction λJ
   bound? : x any -> boolean
-  ;; Check for bound variables
   [(bound? x (λ x M)) #t]
   [(bound? x (λ y M)) (bound? x M)]
-  ;; Continue on the structure of M
   [(bound? x (any ...)) (or (bound? x any) ...)]
-  ;; Return false if none of the previous rules match
   [(bound? x any) #f])
+
+#|
+ ___            _ _         _          
+| _ \_ _ ___ __| (_)__ __ _| |_ ___ ___
+|  _/ '_/ -_) _` | / _/ _` |  _/ -_|_-<
+|_| |_| \___\__,_|_\__\__,_|\__\___/__/
+
+|#
+
+;; λJ-Value (λJ-value?)
+;; --------------------
+(define λJ-value?
+  (redex-match? λJ V))
+
+;; λJ-Term (λJ-term?)
+;; ------------------
+(define λJ-term?
+  (redex-match? λJ M))
+
+;; False-Values (false?)
+;; ---------------------
+(define false? 
+  (redex-match? λJ false))
