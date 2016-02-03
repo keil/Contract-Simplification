@@ -20,46 +20,19 @@
 
 (define-extended-language λCon λJ
   
-  ;; Predicates
-  ;; ==========
+  ;; Predicates (Refienments)
+  ;; ------------------------
+  (P ⊤ (P / M) predefined)
   
-  (P ⊤ ⊥ (P / M) predefined)
+  (predefined %Number %Complex %Real %Rational %Integer %String %Boolean
+              %Exact %Inexact %Zero  
+              %Positive %Negative %Even %Odd %Natural  
+              %UInteger %UEven %UOdd)
   
-  (predefined 
-   ;⊤
-   ;⊥
-   
-   ;; +++++++++++++++++++++++++
-   ;; OLD named Predica
-   Num? Str? Bool? Pos? Neg? Nat?
-   ;; +++++++++++++++++++++++++
-   
-   Number?
-   Complex?
-   Real?
-   Rational?
-   Integer?
-   String?
-   Boolean?
-   
-   Exact?
-   Inexact?
-   Zero?
-   
-   Positive?
-   Negative?
-   Even?
-   Odd?
-   Natural?
-   
-   UInteger?
-   UEven?
-   UOdd?
-   
-   )
+  
   
   ;; Contracts
-  ;; =========
+  ;; ---------
   
   ;; Contracts
   ((C D) I Q A (C ∪ D) (I ∩ C))
@@ -68,19 +41,15 @@
   (A (Λ x C))
   
   ; Immediate Contracts
-  ((I J) 
-   (flat M) 
-   ;named ;; TODO
-   P ;; TODO
-   (flat P))
+  ((I J) (flat P ...))
   
   ; Delayed Contracts
-  ((Q R) (C → D) (x → A) (Q ∩ R))
+  ((Q R) (C → D) (x ↦ (A x)) (Q ∩ R))
   
   
   
   ;; λCon Extention
-  ;; ==============
+  ;; --------------
   
   ;; Blame
   (blame +blame -blame)
@@ -97,7 +66,7 @@
   
   
   ;; Blame Constraints
-  ;; =================
+  ;; -----------------
   
   ;; blame labels
   (♭ (variable-prefix ♭))
@@ -118,60 +87,158 @@
   (ς · ((b ◃ κ) ς))
   
   ;; Solution (context/ subject)
-  (ω (B_0 ∘ B_1))
-   
-  )
+  (ω (B_0 ∘ B_1)))
 
-;; Predefined Predicates
-;; =====================
+#|
+ ___        _         _   _          
+| _ \___ __| |_  _ __| |_(_)___ _ _  
+|   / -_) _` | || / _|  _| / _ \ ' \ 
+|_|_\___\__,_|\_,_\__|\__|_\___/_||_|
+                                     
+|#
+
+(define λCon-reduction
+  (extend-reduction-relation 
+   λJ-reduction
+   λCon
+   ;; Contract Assertion
+   ;(--> (in-hole E (assert v C))
+   ;     (in-hole E (v @ C))
+   ;     "Assert"
+   ;)
+   ;; Immediate Contarcts
+   (--> (in-hole E (V @ (flat M)))
+        (in-hole E (V @ (eval ,(with-handlers 
+                                   ([(λ x #t) (lambda (exn) (term #f))])
+                                 (evaluate (term (M V)))))))
+        "Flat")
+   
+   (--> (in-hole E (V @ P))
+        (in-hole E (V @ (eval (eval/ (Σ P) V))))
+        "Refinement")
+   
+   (--> (in-hole E (V @ (eval W)))
+        (in-hole E V)
+        "Unit"
+        (side-condition (not (false? (term W)))))
+   
+   (--> (in-hole E (V @ (eval W)))
+        (in-hole E V) ;; TODO
+        "Blame"
+        (side-condition (false? (term W))))
+   
+   (--> (in-hole E (V @ (C ∪ D)))
+        (in-hole E ((V @ C) @ D))
+        "Union")
+   
+   (--> (in-hole E (V @ (I ∩ C)))
+        (in-hole E ((V @ I) @ C))
+        "Intersection")
+   
+   ;; Delayed Contarcts
+   (--> (in-hole E ((V @ (C → D)) W))
+        (in-hole E ((V (W @ C)) @ D))
+        "D-Function")
+   
+   (--> (in-hole E ((V @ (x → (Λ x C))) W))
+        (in-hole E ((V W) @ (subst/ x W C)))
+        "D-Dependent")
+   
+   (--> (in-hole E ((V @ (Q ∩ R)) W))
+        (in-hole E (((V @ Q) @ R) W))
+        "D-Intersection")
+   
+   
+   ;; Lookup
+   ;(--> (in-hole E (V @ named))
+   ;     (in-hole E (V @ (lookup named)))
+   ;     "Lookup") ;; TODO
+   ;
+   ;(--> (in-hole E (V @ predefined))
+   ;     (in-hole E (V @ (lookup/ predefined)))
+   ;     "Lookup/")
+   ; 
+   
+   (--> (in-hole E (V @ ⊤))
+        (in-hole E V)
+        "⊤")
+   ))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#|
+ ___            _      __ _             _ 
+| _ \_ _ ___ __| |___ / _(_)_ _  ___ __| |
+|  _/ '_/ -_) _` / -_)  _| | ' \/ -_) _` |
+|_| |_| \___\__,_\___|_| |_|_||_\___\__,_|
+                                          
+ ___            _ _         _          
+| _ \_ _ ___ __| (_)__ __ _| |_ ___ ___
+|  _/ '_/ -_) _` | / _/ _` |  _/ -_|_-<
+|_| |_| \___\__,_|_\__\__,_|\__\___/__/
+                                                     
+|#
+
+;; Lookup (Predefined Predicates)
+;; ==============================
 
 (define-metafunction λCon
-  lookup/ : predefined -> P
-  
-  ;; Top/Bottom
-  ;[(lookup/ ⊤)  (⊤ / (λ x #t))]
-  ;[(lookup/ ⊥)  (⊤ / (λ x #f))]
+  lookup : predefined -> P
   
   ;; First Level
-  [(lookup/ Number?)  (⊤ / (λ x (number? x)))]
-  [(lookup/ Complex?)  (⊤ / (λ x (complex? x)))]
-  [(lookup/ Real?)     (⊤ / (λ x (real? x)))]
-  [(lookup/ Rational?) (⊤ / (λ x (rational? x)))]
-  [(lookup/ Integer?)  (⊤ / (λ x (integer? x)))]
+  [(lookup %Number)   (⊤ / (λ x (number? x)))]
+  [(lookup %Complex)  (⊤ / (λ x (complex? x)))]
+  [(lookup %Real)     (⊤ / (λ x (real? x)))]
+  [(lookup %Rational) (⊤ / (λ x (rational? x)))]
+  [(lookup %Integer)  (⊤ / (λ x (integer? x)))]
   
-  [(lookup/ String?)   (⊤ / (λ x (string? x)))]
-  [(lookup/ Boolean?)  (⊤ / (λ x (boolean? x)))]
+  [(lookup %String)   (⊤ / (λ x (string? x)))]
+  [(lookup %Boolean)  (⊤ / (λ x (boolean? x)))]
   
   ;; Second Level
-  [(lookup/ Exact?)   (Number? / (λ x (exact? x)))]
-  [(lookup/ Inexact?) (Number? / (λ x (inexact? x)))]
-  [(lookup/ Zero?)    (Number? / (λ x (zero? x)))]
+  [(lookup %Exact)   (Number? / (λ x (exact? x)))]
+  [(lookup %Inexact) (Number? / (λ x (inexact? x)))]
+  [(lookup %Zero)    (Number? / (λ x (zero? x)))]
   
-  [(lookup/ Positive?) (Real? / (λ x (positive? x)))]
-  [(lookup/ Negative?) (Real? / (λ x (negative? x)))]
-  [(lookup/ Natural?)  (Real? / (λ x (<= x 0)))]
+  [(lookup %Positive) (Real? / (λ x (positive? x)))]
+  [(lookup %Negative) (Real? / (λ x (negative? x)))]
+  [(lookup %Natural)  (Real? / (λ x (<= x 0)))]
   
-  [(lookup/ Even?) (Integer? / (λ x (even? x)))]
-  [(lookup/ Odd?)  (Integer? / (λ x (odd? x)))]
-  [(lookup/ UInteger?)  (Integer? / (λ x (<= x 0)))]
+  [(lookup %Even)     (Integer? / (λ x (even? x)))]
+  [(lookup %Odd)      (Integer? / (λ x (odd? x)))]
+  [(lookup %UInteger) (Integer? / (λ x (<= x 0)))]
   
   ;; Third Level
-  [(lookup/ UEven?) (UInteger? / (λ x (even? x)))]
-  [(lookup/ UOdd?)  (UInteger? / (λ x (odd? x)))]
-  
-  
-  ;; OLD named flat contracts
-  [(lookup/ Num?) Number?]
-  [(lookup/ Bool?) Boolean?]
-  [(lookup/ Str?) String?]
-  [(lookup/ Neg?) Negative?]
-  [(lookup/ Pos?) Positive?]
-  [(lookup/ Nat?) Natural?]
-  
-  )
+  [(lookup %UEven) (UInteger? / (λ x (even? x)))]
+  [(lookup %UOdd)  (UInteger? / (λ x (odd? x)))])
 
-;; Predicates containment
-;; ======================
+
+
+#|
+ ___                     _   _         _ 
+/ __| ___ _ __  __ _ _ _| |_(_)__ __ _| |
+\__ \/ -_) '  \/ _` | ' \  _| / _/ _` | |
+|___/\___|_|_|_\__,_|_||_\__|_\__\__,_|_|
+                                         
+  ___         _        _                    _   
+ / __|___ _ _| |_ __ _(_)_ _  _ __  ___ _ _| |_ 
+| (__/ _ \ ' \  _/ _` | | ' \| '  \/ -_) ' \  _|
+ \___\___/_||_\__\__,_|_|_||_|_|_|_\___|_||_\__|
+                                                
+|#
 
 ;; Term Equivalence (≡)
 ;; --------------------
@@ -470,88 +537,15 @@
 (define-metafunction λCon
   eval/ : (M ...) V -> boolean
   [(eval/ () V) #t]
-;  [(eval/ (⊤) V) #t]
-;  [(eval/ (⊥) V) #f]
+  ;  [(eval/ (⊤) V) #t]
+  ;  [(eval/ (⊥) V) #f]
   [(eval/ (M) V) ,(with-handlers ([(λ x #t) (lambda (exn) (term #f))]) (evaluate (term (M V))))]
-;  [(eval/ (M_0 M_1 ... M_n) V) ,(and (term (eval/ M_n V)))]
-   [(eval/ (M_0 M_1 ...) V) ,(and (term (eval/ (M_0) V)) (term (eval/ (M_1 ...) V)))]
+  ;  [(eval/ (M_0 M_1 ... M_n) V) ,(and (term (eval/ M_n V)))]
+  [(eval/ (M_0 M_1 ...) V) ,(and (term (eval/ (M_0) V)) (term (eval/ (M_1 ...) V)))]
   [(eval/ any ...) #f]
-)
+  )
 
-#|
- ___        _         _   _          
-| _ \___ __| |_  _ __| |_(_)___ _ _  
-|   / -_) _` | || / _|  _| / _ \ ' \ 
-|_|_\___\__,_|\_,_\__|\__|_\___/_||_|
-                                     
-|#
 
-(define λCon-reduction
-  (extend-reduction-relation 
-   λJ-reduction
-   λCon
-   ;; Contract Assertion
-   ;(--> (in-hole E (assert v C))
-   ;     (in-hole E (v @ C))
-   ;     "Assert"
-   ;)
-   ;; Immediate Contarcts
-   (--> (in-hole E (V @ (flat M)))
-        (in-hole E (V @ (eval ,(with-handlers 
-                                   ([(λ x #t) (lambda (exn) (term #f))])
-                                 (evaluate (term (M V)))))))
-        "Flat")
-   
-   (--> (in-hole E (V @ P))
-        (in-hole E (V @ (eval (eval/ (Σ P) V))))
-        "Refinement")
-   
-   (--> (in-hole E (V @ (eval W)))
-        (in-hole E V)
-        "Unit"
-        (side-condition (not (false? (term W)))))
-   
-   (--> (in-hole E (V @ (eval W)))
-        (in-hole E V) ;; TODO
-        "Blame"
-        (side-condition (false? (term W))))
-   
-   (--> (in-hole E (V @ (C ∪ D)))
-        (in-hole E ((V @ C) @ D))
-        "Union")
-   
-   (--> (in-hole E (V @ (I ∩ C)))
-        (in-hole E ((V @ I) @ C))
-        "Intersection")
-   
-   ;; Delayed Contarcts
-   (--> (in-hole E ((V @ (C → D)) W))
-        (in-hole E ((V (W @ C)) @ D))
-        "D-Function")
-   
-   (--> (in-hole E ((V @ (x → (Λ x C))) W))
-        (in-hole E ((V W) @ (subst/ x W C)))
-        "D-Dependent")
-   
-   (--> (in-hole E ((V @ (Q ∩ R)) W))
-        (in-hole E (((V @ Q) @ R) W))
-        "D-Intersection")
-   
-   
-   ;; Lookup
-   ;(--> (in-hole E (V @ named))
-   ;     (in-hole E (V @ (lookup named)))
-   ;     "Lookup") ;; TODO
-   ;
-   ;(--> (in-hole E (V @ predefined))
-   ;     (in-hole E (V @ (lookup/ predefined)))
-   ;     "Lookup/")
-  ; 
-   
-      (--> (in-hole E (V @ ⊤))
-        (in-hole E V)
-        "⊤")
-   ))
 
 (define
   (evaluate M)
