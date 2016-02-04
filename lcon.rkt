@@ -198,21 +198,17 @@
         (fresh ι1 ι2)
         (side-condition (not (term (is-blame-state? ς)))))
    
-   
+   ;; Blame
    (--> (ς
          any)
         (ς
-         (+blame ♭))
+         (blame ♭))
         "Blame"
         (side-condition (not (blame? (term any))))
-        (side-condition (term (is-blame-state? ς))
+        (side-condition (term (is-blame-state? ς)))
+        (where (blame ♭) (produce-blame  ς)))
                         
-                        )
-        
-        
-        )
-   
-   
+  
    ))
 
 ;; TODO, abstraction
@@ -366,11 +362,6 @@
   context : ω -> B
   [(context (B_0 ∘ B_1)) B_0])
 
-
-
-
-
-
 ;; Labels
 ;; --------
 ;; Retuns all blame labels of a constraint set ς.
@@ -380,6 +371,13 @@
   [(labels ((ι ◃ κ) ς)) (labels ς)]
   [(labels ·) ()])
 
+#|
+ ___ _                  ___ _        _       
+| _ ) |__ _ _ __  ___  / __| |_ __ _| |_ ___ 
+| _ \ / _` | '  \/ -_) \__ \  _/ _` |  _/ -_)
+|___/_\__,_|_|_|_\___| |___/\__\__,_|\__\___|
+                                             
+|#
 
 ;; Is Blame State
 ;; --------------
@@ -402,86 +400,46 @@
 ;; Checks if ς is a blame state for ♭.
 (define-metafunction λCon
   is-blame-state-for? : ς ♭ -> boolean
-  [(is-blame-state-for? ς ♭) (is-false? (μ ς ♭))])
-
-
-
-
-
-
-(define-metafunction λCon
-  check-blame-state : ς (♭ ...) -> any
-  ;[(check-blame-state ς ()) ]
-  [(check-blame-state ς (♭_0 ♭_1 ...)) ,(if (term (is-false? (μ ς ♭_0)))
-                                         (term ((μ ς ♭_0) ♭_0))
-                                         (term (check-blame-state ς (♭_1 ...)))
-                                         )])
-
-
-
-
-
-
-
-;(define-metafunction λCon
-;  is-blame-state-for? : ς (♭ ...) -> boolean
-;  [(is-blame-state-for? ς ()) #f]
-;  [(is-blame-state-for? ς (♭_0 ♭_1 ...)) ,(or 
-;                                           (term (is-false? (μ ς ♭_0)))
-;                                           (term (is-blame-state-for? ς (♭_1 ...))))])
-
-;(define-metafunction λCon
-;  is-blame-state-of? : ς (♭ ...) -> (any any)
-;  
-;  [(in-blame-state? ς (♭_0 b_1 ...)) ,
-;                                     (if (term (is-false? (μ ς ♭_0)))
-;                                         (term ((μ ς ♭_0) ♭_0))
-;                                         (term (in-blame-state? ς (b_1 ...)))
-;                                         )])
-
-;(define-metafunction λCon
-;  in-blame-state? : ς -> boolean
-;  [(in-blame-state? ς) (check-labels ς (labels ς))])
-
-;(define-metafunction λCon
-;  in-blame-state? : ς (♭ ...) -> boolean
-;  [(is-blame-state-for? ς ()) #f]
-;  [(is-blame-state-for? ς (♭_0 ♭_1 ...)) ,(or 
-;                                           (term (is-false? (μ ς ♭_0)))
-;                                           (term (is-blame-state-for? ς (♭_1 ...))))])
-
-
-
-
+  [(is-blame-state-for? ς ♭) (maps-to-false? (μ ς ♭))])
 
 ;; Is False
 ;; --------
 ;; Checks if a solution maps to false.
 (define-metafunction λCon
-  is-false? : ω -> boolean
-  [(is-false? (B_0 ∘ B_1)) ,(nand (term B_0) (term B_1))])
+  maps-to-false? : ω -> boolean
+  [(maps-to-false? (B_0 ∘ B_1)) ,(nand (term B_0) (term B_1))])
 
-;; Blame of
-;; --------
-;; Returns the blame for a solution
+#|
+ ___             _               ___ _                
+| _ \_ _ ___  __| |_  _ __ ___  | _ ) |__ _ _ __  ___ 
+|  _/ '_/ _ \/ _` | || / _/ -_) | _ \ / _` | '  \/ -_)
+|_| |_| \___/\__,_|\_,_\__\___| |___/_\__,_|_|_|_\___|
+     
+|#
+
+;; Produce Blame
+;; -------------
+;; Produces a source blame from a state (in blame state).
 (define-metafunction λCon
-  blameOf : ω -> blame
-  [(blameOf (#f ∘ B)) -blame]
-  [(blameOf (B ∘ #f)) +blame])
+  produce-blame : ς -> any
+  [(produce-blame ς) (to-blame ς (labels ς))])
 
+;; To Blame
+;; --------
+;; Looks for a label to blame.
+(define-metafunction λCon
+  to-blame : ς (♭ ...) -> any
+  [(to-blame ς (♭_0 ♭_1 ...)) ,(if (term (is-blame-state-for? ς ♭_0))
+                                   (term (produce-blame-for (μ ς ♭_0) ♭_0))
+                                   (term (to-blame ς (♭_1 ...))))])
 
-
-
-
-
-
-
-
-
-
-
-
-
+;; Produce Balme
+;; -------------
+;; Converts a solution and a blame lable to a source blame.
+(define-metafunction λCon
+  produce-blame-for : ω ♭ -> (blame ♭)
+  [(produce-blame-for (#f ∘ B) ♭) (-blame ♭)]
+  [(produce-blame-for (B ∘ #f) ♭) (+blame ♭)])
 
 #|
   ___             _            _     _   
@@ -496,53 +454,48 @@
                                                
 |#
 
-(define-metafunction λCon
-  μ : ς b -> ω
-  [(μ ς b) (solve ς (π ς b))])
-
-;  [(μ ((b ◃ κ) ς) b) (solve ((b ◃ κ) ς) κ)]
-;  [(μ ((b_0 ◃ κ) ς) b_1) (μ ς b_1)]
-;[(μ ((b_0 ◃ κ) ς) b_1) (μ ς b_1)] 
-;  )
-
-
+;; Constraint Lookup
+;; ----------------
 (define-metafunction λCon
   π : ς b -> κ
   [(π ((b_0 ◃ κ) ς) b_0) κ]
   [(π ((b_0 ◃ κ) ς) b_1) (π ς b_1)]
+  [(π any ...) (#t ∘ #t)]
   )
 
+;; Compute Solution
+;; ----------------
+(define-metafunction λCon
+  μ : ς b -> ω
+  [(μ ς b) (solve ς (π ς b))])
 
-
+;; Solve Constraint
+;; ----------------
 (define-metafunction λCon
   solve : ς κ -> ω
-  
   [(solve ς (ι_0 → ι_1)) (solve/→ (μ ς ι_0) (μ ς ι_1))]
   [(solve ς (ι_0 ∩ ι_1)) (solve/∩ (μ ς ι_0) (μ ς ι_1))]
   [(solve ς (ι_0 ∪ ι_1)) (solve/∪ (μ ς ι_0) (μ ς ι_1))]
-  
   [(solve ς ι) (μ ς ι)]
-  [(solve ς ω) ω];; TODO ;;[(solve ς B) (τ B)];;
-  )
+  [(solve ς ω) ω])
 
+;; Solve Function
+;; --------------
 (define-metafunction λCon
   solve/→ : ω ω -> ω
   [(solve/→ ω_0 ω_1) (,(and (term (subject ω_0)) (term (context ω_1))) ∘ ,(and (term (context ω_0)) (implies (term (subject ω_0)) (term (subject ω_1)))))])
 
-(define-metafunction λCon
-  solve/∩ : ω ω -> ω
-  [(solve/∩ ω_0 ω_1) (,(or (term (context ω_0)) (term (context ω_1))) ∘ ,(and (term (subject ω_0)) (term (subject ω_1))))])
-
+;; Solve Union
+;; -----------
 (define-metafunction λCon
   solve/∪ : ω ω -> ω
   [(solve/∪ ω_0 ω_1) (,(and (term (context ω_0)) (term (context ω_1))) ∘ ,(or (term (subject ω_0)) (term (subject ω_1))))])
 
-
-
-
-
-
-
+;; Solve Intersection
+;; ------------------
+(define-metafunction λCon
+  solve/∩ : ω ω -> ω
+  [(solve/∩ ω_0 ω_1) (,(or (term (context ω_0)) (term (context ω_1))) ∘ ,(and (term (subject ω_0)) (term (subject ω_1))))])
 
 #|
  ___      _       _   _ _        _   _          

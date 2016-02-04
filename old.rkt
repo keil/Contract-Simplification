@@ -1,5 +1,13 @@
 #lang racket
 
+### 
+TODO
+own test and traces function that previsouly checks the syntax
+
+make a reduction function which immediately un-packs the confoguration
+Test for each contarct
+
+
   [(is-blame-state? ((♭ ◃ κ) ς)) (or (μ ((♭ ◃ κ) ς) ♭) (is-blame-state? ς))]
   [(is-blame-state? ((ι ◃ κ) ς)) (is-blame-state? ς)]
   [(is-blame-state? ·) #f])
@@ -9,6 +17,73 @@
 (define
   (evaluate M)
   (car (apply-reduction-relation* λCon-reduction M)))
+
+
+
+
+
+;(define-metafunction λCon
+;  check-blame-state : ς (♭ ...) -> any
+;  ;[(check-blame-state ς ()) ]
+;  [(check-blame-state ς (♭_0 ♭_1 ...)) ,(if (term (is-false? (μ ς ♭_0)))
+;                                            (term ((μ ς ♭_0) ♭_0))
+;                                            (term (check-blame-state ς (♭_1 ...)))
+;                                            )])
+
+
+;; Blame of
+;; --------
+;; Returns the blame for a solution
+;(define-metafunction λCon
+;  blameOf : ω -> blame
+;  [(blameOf ) -blame]
+;  [(blameOf (B ∘ #f)) +blame])
+
+
+
+
+
+
+
+;(define-metafunction λCon
+;  is-blame-state-for? : ς (♭ ...) -> boolean
+;  [(is-blame-state-for? ς ()) #f]
+;  [(is-blame-state-for? ς (♭_0 ♭_1 ...)) ,(or 
+;                                           (term (is-false? (μ ς ♭_0)))
+;                                           (term (is-blame-state-for? ς (♭_1 ...))))])
+
+;(define-metafunction λCon
+;  is-blame-state-of? : ς (♭ ...) -> (any any)
+;  
+;  [(in-blame-state? ς (♭_0 b_1 ...)) ,
+;                                     (if (term (is-false? (μ ς ♭_0)))
+;                                         (term ((μ ς ♭_0) ♭_0))
+;                                         (term (in-blame-state? ς (b_1 ...)))
+;                                         )])
+
+;(define-metafunction λCon
+;  in-blame-state? : ς -> boolean
+;  [(in-blame-state? ς) (check-labels ς (labels ς))])
+
+;(define-metafunction λCon
+;  in-blame-state? : ς (♭ ...) -> boolean
+;  [(is-blame-state-for? ς ()) #f]
+;  [(is-blame-state-for? ς (♭_0 ♭_1 ...)) ,(or 
+;                                           (term (is-false? (μ ς ♭_0)))
+;                                           (term (is-blame-state-for? ς (♭_1 ...))))])
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
