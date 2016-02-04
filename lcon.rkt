@@ -129,63 +129,64 @@
          (in-hole E N))
         "if/false"
         (side-condition (false? (term V))))
-  
-  ;; Contract Assertion
-  (--> (ς
-        (in-hole E (V @ C)))
-       (ς
-        (in-hole E (V @ ♭ C)))
-       "Assert")
-  
-  ;; Immediate Contarcts
-  (--> (ς
-        (in-hole E (V @ b (flat P ...))))
-       (ς
-        (in-hole E (V @ b (eval (Σ P ...) V))))
-       "Flat")
-  
-  (--> (ς
-        (in-hole E (V @ b W)))
-       (((b ◃ (π W)) ς)
-        (in-hole E V))
-       "Unit")
-  
-  (--> (ς 
-        (in-hole E (V @ b (C ∪ D))))
-       (((b ◃ (ι1 ∪ ι2)) ς)
-        (in-hole E ((V @ ι1 C) @ ι2 D)))
-       "Union"
-       (fresh ι1 ι2))
-  
-  (--> (ς
-        (in-hole E (V @ b (I ∩ C))))
-       (((b ◃ (ι1 ∩ ι2)) ς)
-        (in-hole E ((V @ ι1 I) @ ι2 C)))
-       "Intersection"
-       (fresh ι1 ι2))
-  
-  ;; Delayed Contarcts
-  (--> (ς
-        (in-hole E ((V @ b (C → D)) W)))
-       (((b ◃ (ι1 → ι2)) ς)
-        (in-hole E ((V (W @ ι1 C)) @ ι2 D)))
-       "D-Function"
-       (fresh ι1 ι2))
-  
-  (--> (ς
-        (in-hole E ((V @ b (x → (Λ x C))) W)))
-       (ς
-        (in-hole E ((V W) @ b (subst/ x W C))))
-       "D-Dependent")
-  
-  (--> (ς
-        (in-hole E ((V @ b (Q ∩ R)) W)))
-       (((b ◃ (ι1 ∩ ι2)) ς)
-        (in-hole E (((V @ ι1 Q) @ ι2 R) W)))
-       "D-Intersection"
-       (fresh ι1 ι2))
-  
-  ))
+   
+   ;; Contract Assertion
+   (--> (ς
+         (in-hole E (V @ C)))
+        (ς
+         (in-hole E (V @ ♭ C)))
+        "Assert"
+        (fresh ♭))
+   
+   ;; Immediate Contarcts
+   (--> (ς
+         (in-hole E (V @ b (flat P ...))))
+        (ς
+         (in-hole E (V @ b (eval (Σ P ...) V))))
+        "Flat")
+   
+   (--> (ς
+         (in-hole E (V @ b W)))
+        (((b ◃ (τ W)) ς)
+         (in-hole E V))
+        "Unit")
+   
+   (--> (ς 
+         (in-hole E (V @ b (C ∪ D))))
+        (((b ◃ (ι1 ∪ ι2)) ς)
+         (in-hole E ((V @ ι1 C) @ ι2 D)))
+        "Union"
+        (fresh ι1 ι2))
+   
+   (--> (ς
+         (in-hole E (V @ b (I ∩ C))))
+        (((b ◃ (ι1 ∩ ι2)) ς)
+         (in-hole E ((V @ ι1 I) @ ι2 C)))
+        "Intersection"
+        (fresh ι1 ι2))
+   
+   ;; Delayed Contarcts
+   (--> (ς
+         (in-hole E ((V @ b (C → D)) W)))
+        (((b ◃ (ι1 → ι2)) ς)
+         (in-hole E ((V (W @ ι1 C)) @ ι2 D)))
+        "D-Function"
+        (fresh ι1 ι2))
+   
+   (--> (ς
+         (in-hole E ((V @ b (x → (Λ x C))) W)))
+        (ς
+         (in-hole E ((V W) @ b (subst/ x W C))))
+        "D-Dependent")
+   
+   (--> (ς
+         (in-hole E ((V @ b (Q ∩ R)) W)))
+        (((b ◃ (ι1 ∩ ι2)) ς)
+         (in-hole E (((V @ ι1 Q) @ ι2 R) W)))
+        "D-Intersection"
+        (fresh ι1 ι2))
+   
+   ))
 ;  (--> (ς
 ;        (in-hole E (V @ (eval W))))
 ;       (ς
@@ -323,13 +324,13 @@
                                                                   
 |#
 
-;; Solution (π)
+;; Solution (τ)
 ;; ------------
-;; Function π mapps boolean values to a solution (context ∘ subject).
+;; Function τ mapps boolean values to a solution (context ∘ subject).
 (define-metafunction λCon
-  π : B -> ω
-  [(π #t) (#t ∘ #t)]
-  [(π #f) (#t ∘ #f)])
+  τ : B -> ω
+  [(τ #t) (#t ∘ #t)]
+  [(τ #f) (#t ∘ #f)])
 
 ;; Subject
 ;; -------
@@ -349,43 +350,78 @@
 
 
 
+(define-metafunction λCon
+  labels : ς -> (♭ ...)
+  [(labels ((♭ ◃ κ) ς)) (⊕ (♭) (labels ς))]
+  [(labels ((ι ◃ κ) ς)) (labels ς)]
+  [(labels ·) ()])
 
 
+
+(define-metafunction λCon
+  is-blame-state? : ς -> boolean
+  [(is-blame-state? ς) (is-blame-state-for? ς (labels ς))])
+
+(define-metafunction λCon
+  is-blame-state-for? : ς (♭ ...) -> boolean
+  [(is-blame-state-for? ς ()) #f]
+  [(is-blame-state-for? ς (♭_0 ♭_1 ...)) ,(or 
+                                           (term (is-false? (μ ς ♭_0)))
+                                           (term (is-blame-state-for? ς (♭_1 ...))))])
+
+(define-metafunction λCon
+  is-false? : ω -> boolean
+  [(is-false? (B_0 ∘ B_1)) ,(nand (term B_0) (term B_1))])
+
+
+
+
+
+(define-metafunction λCon
+  π : ς b -> κ
+  [(π ((b_0 ◃ κ) ς) b_0) κ]
+  [(π ((b_0 ◃ κ) ς) b_1) (π ς b_1)]
+;  [(π · b) (π ς b_1)]
+  )
 
 
 (define-metafunction λCon
   μ : ς b -> ω
-  [(μ ((b_0 ◃ κ) ς) b_0) (solve ((b_0 ◃ κ) ς) κ)]
-  [(μ ((b_0 ◃ κ) ς) b_1) (μ ς b_1)])
+  [(μ ς b) (solve ς (π ς b))])
+  
+;  [(μ ((b ◃ κ) ς) b) (solve ((b ◃ κ) ς) κ)]
+;  [(μ ((b_0 ◃ κ) ς) b_1) (μ ς b_1)]
+  ;[(μ ((b_0 ◃ κ) ς) b_1) (μ ς b_1)] 
+;  )
+
 
 (define-metafunction λCon
   solve : ς κ -> ω
   
-  [(solve ς (ι_0 → ι_1)) (solve/→ (μ ι_0) (μ ι_1))]
-  [(solve ς (ι_0 ∩ ι_1)) (solve/∩ (μ ι_0) (μ ι_1))]
-  [(solve ς (ι_0 ∪ ι_1)) (solve/∪ (μ ι_0) (μ ι_1))]
+  [(solve ς (ι_0 → ι_1)) (solve/→ (μ ς ι_0) (μ ς ι_1))]
+  [(solve ς (ι_0 ∩ ι_1)) (solve/∩ (μ ς ι_0) (μ ς ι_1))]
+  [(solve ς (ι_0 ∪ ι_1)) (solve/∪ (μ ς ι_0) (μ ς ι_1))]
   
-  [(solve ς ι) (μ ι)]
-  [(solve ς B) (π B)]
+  [(solve ς ι) (μ ς ι)]
+  [(solve ς ω) ω];; TODO ;;[(solve ς B) (τ B)];;
   )
 
 (define-metafunction λCon
   solve/→ : ω ω -> ω
-  [(solve/→ ω_0 ω_1) ((and (subject ω_0) (context ω_1)) ∘ (and (context ω_0) (implies (subject ω_0) (subject ω_1))))])
+  [(solve/→ ω_0 ω_1) (,(and (term (subject ω_0)) (term (context ω_1))) ∘ ,(and (term (context ω_0)) (implies (term (subject ω_0)) (term (subject ω_1)))))])
 
 (define-metafunction λCon
   solve/∩ : ω ω -> ω
-  [(solve/∩ ω_0 ω_1) ((or (context ω_0) (context ω_1)) ∘ (and (subject ω_0) (subject ω_1)))])
+  [(solve/∩ ω_0 ω_1) (,(or (term (context ω_0)) (term (context ω_1))) ∘ ,(and (term (subject ω_0)) (term (subject ω_1))))])
 
 (define-metafunction λCon
   solve/∪ : ω ω -> ω
-  [(solve/∪ ω_0 ω_1) ((and (context ω_0) (context ω_1)) ∘ (or (subject ω_0) (subject ω_1)))])
+  [(solve/∪ ω_0 ω_1) (,(and (term (context ω_0)) (term (context ω_1))) ∘ ,(or (term (subject ω_0)) (term (subject ω_1))))])
 
-(define-metafunction λCon
-  is-blame-state? : ς -> B
-  [(is-blame-state? ((♭ ◃ κ) ς)) (or (μ ((♭ ◃ κ) ς) ♭) (is-blame-state? ς))]
-  [(is-blame-state? ((ι ◃ κ) ς)) (is-blame-state? ς)]
-  [(is-blame-state? ·) #f])
+
+
+
+
 
 
 
