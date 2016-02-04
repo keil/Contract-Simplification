@@ -58,7 +58,7 @@
   ((U V W) .... ((λ x M) @ b Q) (blame ♭))
   
   ;; Terms
-  ((L M N) .... (M @ C) (M @ b C) blame)
+  ((L M N) .... (M @ C) (M @ b C))
   
   ;; Contexts
   (E .... (E @ C) (E @ b C))
@@ -108,27 +108,31 @@
          (in-hole E (op V ...)))
         (ς
          (in-hole E (δ op V ...)))
-        "δ")
+        "δ"
+        (side-condition (not (term (is-blame-state? ς)))))
    
    (--> (ς
          (in-hole E ((λ x M) V)))
         (ς
          (in-hole E (subst x V M)))
-        "β")
+        "β"
+        (side-condition (not (term (is-blame-state? ς)))))
    
    (--> (ς
          (in-hole E (if V M N)))
         (ς
          (in-hole E M))
         "if/true"
-        (side-condition (not (false? (term V)))))
+        (side-condition (not (false? (term V))))
+        (side-condition (not (term (is-blame-state? ς)))))
    
    (--> (ς
          (in-hole E (if V M N)))
         (ς
          (in-hole E N))
         "if/false"
-        (side-condition (false? (term V))))
+        (side-condition (false? (term V)))
+        (side-condition (not (term (is-blame-state? ς)))))
    
    ;; Contract Assertion
    (--> (ς
@@ -136,34 +140,39 @@
         (ς
          (in-hole E (V @ ♭ C)))
         "Assert"
-        (fresh ♭))
+        (fresh ♭)
+        (side-condition (not (term (is-blame-state? ς)))))
    
    ;; Immediate Contarcts
    (--> (ς
          (in-hole E (V @ b (flat P ...))))
         (ς
          (in-hole E (V @ b (eval (Σ P ...) V))))
-        "Flat")
+        "Flat"
+        (side-condition (not (term (is-blame-state? ς)))))
    
    (--> (ς
          (in-hole E (V @ b W)))
         (((b ◃ (τ W)) ς)
          (in-hole E V))
-        "Unit")
+        "Unit"
+        (side-condition (not (term (is-blame-state? ς)))))
    
    (--> (ς 
          (in-hole E (V @ b (C ∪ D))))
         (((b ◃ (ι1 ∪ ι2)) ς)
          (in-hole E ((V @ ι1 C) @ ι2 D)))
         "Union"
-        (fresh ι1 ι2))
+        (fresh ι1 ι2)
+        (side-condition (not (term (is-blame-state? ς)))))
    
    (--> (ς
          (in-hole E (V @ b (I ∩ C))))
         (((b ◃ (ι1 ∩ ι2)) ς)
          (in-hole E ((V @ ι1 I) @ ι2 C)))
         "Intersection"
-        (fresh ι1 ι2))
+        (fresh ι1 ι2)
+        (side-condition (not (term (is-blame-state? ς)))))
    
    ;; Delayed Contarcts
    (--> (ς
@@ -171,29 +180,34 @@
         (((b ◃ (ι1 → ι2)) ς)
          (in-hole E ((V (W @ ι1 C)) @ ι2 D)))
         "D-Function"
-        (fresh ι1 ι2))
+        (fresh ι1 ι2)
+        (side-condition (not (term (is-blame-state? ς)))))
    
    (--> (ς
          (in-hole E ((V @ b (x → (Λ x C))) W)))
         (ς
          (in-hole E ((V W) @ b (subst/ x W C))))
-        "D-Dependent")
+        "D-Dependent"
+        (side-condition (not (term (is-blame-state? ς)))))
    
    (--> (ς
          (in-hole E ((V @ b (Q ∩ R)) W)))
         (((b ◃ (ι1 ∩ ι2)) ς)
          (in-hole E (((V @ ι1 Q) @ ι2 R) W)))
         "D-Intersection"
-        (fresh ι1 ι2))
+        (fresh ι1 ι2)
+        (side-condition (not (term (is-blame-state? ς)))))
+   
+   
+   (--> (ς
+         M)
+        (ς
+         +blame)
+        "Blame"
+        (side-condition (term (is-blame-state? ς))))
+   
    
    ))
-;  (--> (ς
-;        (in-hole E (V @ (eval W))))
-;       (ς
-;        (in-hole E V))
-;       "Blame"
-;       (side-condition (false? (term W))))
-
 
 ;; TODO, abstraction
 
@@ -405,7 +419,16 @@
 ;                                         (term (in-blame-state? ς (b_1 ...)))
 ;                                         )])
 
+;(define-metafunction λCon
+;  in-blame-state? : ς -> boolean
+;  [(in-blame-state? ς) (check-labels ς (labels ς))])
 
+;(define-metafunction λCon
+;  in-blame-state? : ς (♭ ...) -> boolean
+;  [(is-blame-state-for? ς ()) #f]
+;  [(is-blame-state-for? ς (♭_0 ♭_1 ...)) ,(or 
+;                                           (term (is-false? (μ ς ♭_0)))
+;                                           (term (is-blame-state-for? ς (♭_1 ...))))])
 
 
 

@@ -40,11 +40,11 @@
  #t)
 
 (check-eq?
- (redex-match? λCon M (term ((λ x 1) +blame)))
+ (redex-match? λCon M (term ((λ x 1) 1)))
  #t)
 
 (check-eq?
- (redex-match? λCon M (term ((λ x 1) -blame)))
+ (redex-match? λCon M (term ((λ x 1) #t)))
  #t)
 
 ;; Test λCon/ Reduction
