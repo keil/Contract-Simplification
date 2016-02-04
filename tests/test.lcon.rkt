@@ -83,16 +83,16 @@
 (test-->> 
  λCon-reduction 
  (term (· ((((λ x (λ y (+ x y))) @ ((flat %Positive) → ((flat %Positive) → (flat %Positive)))) 1) 1)))
- (term (any 2)))
+ (term (((ι4 ◃ (#t ∘ #t)) ((ι3 ◃ (#t ∘ #t)) ((ι2 ◃ (ι3 → ι4)) ((ι1 ◃ (#t ∘ #t)) ((♭ ◃ (ι1 → ι2)) ·))))) 2)))
 
 (test-->> 
  λCon-reduction 
  (term (· ((λ x (x 1)) ((λ x (+ x 1)) @ ((flat %Positive) → (flat %Positive))))))
- (term (any 2)))
+ (term (((ι2 ◃ (#t ∘ #t)) ((ι1 ◃ (#t ∘ #t)) ((♭ ◃ (ι1 → ι2)) ·))) 2)))
 
 (test-->> 
  λCon-reduction 
  (term (· ((((λ y (λ x ((y x) 1))) @ (((flat %Positive) → ((flat %Positive) → (flat %Positive))) → ((flat %Positive) → (flat %Positive)))) (λ x (λ y (+ x y)))) 1)))
- (term 2))
+ (term (((ι4 ◃ (#t ∘ #t)) ((ι8 ◃ (#t ∘ #t)) ((ι7 ◃ (#t ∘ #t)) ((ι6 ◃ (ι7 → ι8)) ((ι5 ◃ (#t ∘ #t)) ((ι1 ◃ (ι5 → ι6)) ((ι3 ◃ (#t ∘ #t)) ((ι2 ◃ (ι3 → ι4)) ((♭ ◃ (ι1 → ι2)) ·))))))))) 2)))
 
 (test-results)

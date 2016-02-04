@@ -55,10 +55,10 @@
   (blame +blame -blame)
   
   ;; Values
-  ((U V W) .... ((λ x M) @ ι Q) (blame ♭))
+  ((U V W) .... ((λ x M) @ b Q) (blame ♭))
   
   ;; Terms
-  ((L M N) .... (M @ C) blame)
+  ((L M N) .... (M @ C) (M @ b C) blame)
   
   ;; Contexts
   (E .... (E @ C) (E @ b C))
@@ -170,7 +170,7 @@
        (((b ◃ (ι1 → ι2)) ς)
         (in-hole E ((V (W @ ι1 C)) @ ι2 D)))
        "D-Function"
-       (fresh (ι1 ι2) (ι1 ι2))) ;; TODO
+       (fresh ι1 ι2))
   
   (--> (ς
         (in-hole E ((V @ b (x → (Λ x C))) W)))
