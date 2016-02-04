@@ -350,6 +350,10 @@
 
 
 
+
+;; Labels
+;; --------
+;; Retuns all blame labels of a constraint set ς.
 (define-metafunction λCon
   labels : ς -> (♭ ...)
   [(labels ((♭ ◃ κ) ς)) (⊕ (♭) (labels ς))]
@@ -357,21 +361,73 @@
   [(labels ·) ()])
 
 
-
+;; Is Blame State
+;; --------------
+;; Checks if there exists any blame label ♭ such that ς
+;; is a blame state for ♭.
 (define-metafunction λCon
   is-blame-state? : ς -> boolean
-  [(is-blame-state? ς) (is-blame-state-for? ς (labels ς))])
+  [(is-blame-state? ς) (check-labels ς (labels ς))])
 
+;; Check Label
+;; -----------
+;; Checks the Blame State for a set of labels.
 (define-metafunction λCon
-  is-blame-state-for? : ς (♭ ...) -> boolean
-  [(is-blame-state-for? ς ()) #f]
-  [(is-blame-state-for? ς (♭_0 ♭_1 ...)) ,(or 
-                                           (term (is-false? (μ ς ♭_0)))
-                                           (term (is-blame-state-for? ς (♭_1 ...))))])
+  check-labels : ς (♭ ...) -> boolean
+  [(check-labels ς ()) #f]
+  [(check-labels ς (♭_0 ♭_1 ...)) ,(or (term (is-blame-state-for? ς ♭_0))
+                                       (term (check-labels ς (♭_1 ...))))])
+;; Is Blame State For
+;; ------------------
+;; Checks if ς is a blame state for ♭.
+(define-metafunction λCon
+  is-blame-state-for? : ς ♭ -> boolean
+  [(is-blame-state-for? ς ♭) (is-false? (μ ς ♭))])
 
+
+
+
+
+
+;(define-metafunction λCon
+;  is-blame-state-for? : ς (♭ ...) -> boolean
+;  [(is-blame-state-for? ς ()) #f]
+;  [(is-blame-state-for? ς (♭_0 ♭_1 ...)) ,(or 
+;                                           (term (is-false? (μ ς ♭_0)))
+;                                           (term (is-blame-state-for? ς (♭_1 ...))))])
+
+;(define-metafunction λCon
+;  is-blame-state-of? : ς (♭ ...) -> (any any)
+;  
+;  [(in-blame-state? ς (♭_0 b_1 ...)) ,
+;                                     (if (term (is-false? (μ ς ♭_0)))
+;                                         (term ((μ ς ♭_0) ♭_0))
+;                                         (term (in-blame-state? ς (b_1 ...)))
+;                                         )])
+
+
+
+
+
+;; Is False
+;; --------
+;; Checks if a solution maps to false.
 (define-metafunction λCon
   is-false? : ω -> boolean
   [(is-false? (B_0 ∘ B_1)) ,(nand (term B_0) (term B_1))])
+
+;; Blame of
+;; --------
+;; Returns the blame for a solution
+(define-metafunction λCon
+  blameOf : ω -> blame
+  [(blameOf (#f ∘ B)) -blame]
+  [(blameOf (B ∘ #f)) +blame])
+
+
+
+
+
 
 
 
@@ -381,17 +437,17 @@
   π : ς b -> κ
   [(π ((b_0 ◃ κ) ς) b_0) κ]
   [(π ((b_0 ◃ κ) ς) b_1) (π ς b_1)]
-;  [(π · b) (π ς b_1)]
+  ;  [(π · b) (π ς b_1)]
   )
 
 
 (define-metafunction λCon
   μ : ς b -> ω
   [(μ ς b) (solve ς (π ς b))])
-  
+
 ;  [(μ ((b ◃ κ) ς) b) (solve ((b ◃ κ) ς) κ)]
 ;  [(μ ((b_0 ◃ κ) ς) b_1) (μ ς b_1)]
-  ;[(μ ((b_0 ◃ κ) ς) b_1) (μ ς b_1)] 
+;[(μ ((b_0 ◃ κ) ς) b_1) (μ ς b_1)] 
 ;  )
 
 
