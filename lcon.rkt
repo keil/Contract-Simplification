@@ -61,7 +61,7 @@
   ((L M N) .... (M @ C) blame)
   
   ;; Contexts
-  (E .... (E @ b C))
+  (E .... (E @ C) (E @ b C))
   
   
   
@@ -72,7 +72,7 @@
   (♭ (variable-prefix ♭))
   
   ;; blame variales
-  (ι (variable-prefix ♭))
+  (ι (variable-prefix ι))
   
   ;; blame identifiers
   (b ♭ ι)
@@ -101,64 +101,91 @@
   (extend-reduction-relation 
    λJ-reduction
    λCon
-   #:domain (ς M)
+   #:domain (ς any)
    
-   ;; Contract Assertion
+   ;; λJ Reduction
    (--> (ς
-         (in-hole E (V @ C)))
+         (in-hole E (op V ...)))
         (ς
-         (in-hole E (V @ ♭ C)))
-        "Assert")
+         (in-hole E (δ op V ...)))
+        "δ")
    
-   ;; Immediate Contarcts
    (--> (ς
-         (in-hole E (V @ b (flat P ...))))
+         (in-hole E ((λ x M) V)))
         (ς
-         (in-hole E (V @ b (eval (Σ P ...) V))))
-        "Flat")
+         (in-hole E (subst x V M)))
+        "β")
    
    (--> (ς
-         (in-hole E (V @ b W)))
-        (((b ◃ (π W)) ς)
-         (in-hole E V))
-        "Unit")
-   
-   (--> (ς 
-         (in-hole E (V @ b (C ∪ D))))
-        (((b ◃ (ι_1 ∪ ι_2)) ς)
-         (in-hole E ((V @ ι_1 C) @ ι_2 D)))
-        "Union"
-        (fresh ι_1 ι_2)) ;; TODO
-   
-   (--> (ς
-         (in-hole E (V @ b (I ∩ C))))
-        (((b ◃ (ι_1 ∩ ι_2)) ς)
-         (in-hole E ((V @ ι_1 I) @ ι_2 C)))
-        "Intersection"
-        (fresh ι_1 ι_2)) ;; TODO
-   
-   ;; Delayed Contarcts
-   (--> (ς
-         (in-hole E ((V @ b (C → D)) W)))
-        (((b ◃ (ι_1 → ι_2)) ς)
-         (in-hole E ((V (W @ ι_1 C)) @ ι_2 D)))
-        "D-Function"
-        (fresh ι_1 ι_2)) ;; TODO
-   
-   (--> (ς
-         (in-hole E ((V @ b (x → (Λ x C))) W)))
+         (in-hole E (if V M N)))
         (ς
-         (in-hole E ((V W) @ b (subst/ x W C))))
-        "D-Dependent")
+         (in-hole E M))
+        "if/true"
+        (side-condition (not (false? (term V)))))
    
    (--> (ς
-         (in-hole E ((V @ b (Q ∩ R)) W)))
-        (((b ◃ (ι_1 ∩ ι_2)) ς)
-         (in-hole E (((V @ ι_1 Q) @ ι_2 R) W)))
-        "D-Intersection"
-        (fresh ι_1 ι_2)) ;; TODO
-   
-   ))
+         (in-hole E (if V M N)))
+        (ς
+         (in-hole E N))
+        "if/false"
+        (side-condition (false? (term V))))
+  
+  ;; Contract Assertion
+  (--> (ς
+        (in-hole E (V @ C)))
+       (ς
+        (in-hole E (V @ ♭ C)))
+       "Assert")
+  
+  ;; Immediate Contarcts
+  (--> (ς
+        (in-hole E (V @ b (flat P ...))))
+       (ς
+        (in-hole E (V @ b (eval (Σ P ...) V))))
+       "Flat")
+  
+  (--> (ς
+        (in-hole E (V @ b W)))
+       (((b ◃ (π W)) ς)
+        (in-hole E V))
+       "Unit")
+  
+  (--> (ς 
+        (in-hole E (V @ b (C ∪ D))))
+       (((b ◃ (ι_1 ∪ ι_2)) ς)
+        (in-hole E ((V @ ι_1 C) @ ι_2 D)))
+       "Union"
+       (fresh ι_1 ι_2)) ;; TODO
+  
+  (--> (ς
+        (in-hole E (V @ b (I ∩ C))))
+       (((b ◃ (ι_1 ∩ ι_2)) ς)
+        (in-hole E ((V @ ι_1 I) @ ι_2 C)))
+       "Intersection"
+       (fresh ι_1 ι_2)) ;; TODO
+  
+  ;; Delayed Contarcts
+  (--> (ς
+        (in-hole E ((V @ b (C → D)) W)))
+       (((b ◃ (ι1 → ι2)) ς)
+        (in-hole E ((V (W @ ι1 C)) @ ι2 D)))
+       "D-Function"
+       (fresh (ι1 ι2) (ι1 ι2))) ;; TODO
+  
+  (--> (ς
+        (in-hole E ((V @ b (x → (Λ x C))) W)))
+       (ς
+        (in-hole E ((V W) @ b (subst/ x W C))))
+       "D-Dependent")
+  
+  (--> (ς
+        (in-hole E ((V @ b (Q ∩ R)) W)))
+       (((b ◃ (ι_1 ∩ ι_2)) ς)
+        (in-hole E (((V @ ι_1 Q) @ ι_2 R) W)))
+       "D-Intersection"
+       (fresh ι_1 ι_2)) ;; TODO
+  
+  ))
 ;  (--> (ς
 ;        (in-hole E (V @ (eval W))))
 ;       (ς
@@ -178,13 +205,6 @@
 ;     (in-hole E (V @ (lookup/ predefined)))
 ;     "Lookup/")
 ; 
-
-;(--> (in-hole E (V @ ⊤))
-;     (in-hole E V)
-;     "⊤")
-;)
-
-
 
 
 
@@ -218,21 +238,21 @@
   [(lookup %Boolean)  (⊤ / (λ x (boolean? x)))]
   
   ;; Second Level
-  [(lookup %Exact)   (Number? / (λ x (exact? x)))]
-  [(lookup %Inexact) (Number? / (λ x (inexact? x)))]
-  [(lookup %Zero)    (Number? / (λ x (zero? x)))]
+  [(lookup %Exact)   (%Number / (λ x (exact? x)))]
+  [(lookup %Inexact) (%Number / (λ x (inexact? x)))]
+  [(lookup %Zero)    (%Number / (λ x (zero? x)))]
   
-  [(lookup %Positive) (Real? / (λ x (positive? x)))]
-  [(lookup %Negative) (Real? / (λ x (negative? x)))]
-  [(lookup %Natural)  (Real? / (λ x (<= x 0)))]
+  [(lookup %Positive) (%Real / (λ x (positive? x)))]
+  [(lookup %Negative) (%Real / (λ x (negative? x)))]
+  [(lookup %Natural)  (%Real / (λ x (<= x 0)))]
   
-  [(lookup %Even)     (Integer? / (λ x (even? x)))]
-  [(lookup %Odd)      (Integer? / (λ x (odd? x)))]
-  [(lookup %UInteger) (Integer? / (λ x (<= x 0)))]
+  [(lookup %Even)     (%Integer / (λ x (even? x)))]
+  [(lookup %Odd)      (%Integer / (λ x (odd? x)))]
+  [(lookup %UInteger) (%Integer / (λ x (<= x 0)))]
   
   ;; Third Level
-  [(lookup %UEven) (UInteger? / (λ x (even? x)))]
-  [(lookup %UOdd)  (UInteger? / (λ x (odd? x)))])
+  [(lookup %UEven) (%UInteger / (λ x (even? x)))]
+  [(lookup %UOdd)  (%UInteger / (λ x (odd? x)))])
 
 #|
  ___            _ _         _         ___          _           _   _          
@@ -257,9 +277,9 @@
 ;; Evaluates a set oof predicates and
 ;; returns the conjunction of the results.
 (define-metafunction λCon
-  eval : (M ...) V -> boolean
+  eval : (M ...) V -> V
   [(eval () V) #t]
-  [(eval (M) V) ,(with-handlers ([(λ x #t) (lambda (exn) (term #f))]) (λCon-->* (term (M V))))]
+  [(eval (M) V) (↓ ,(with-handlers ([(λ x #t) (lambda (exn) (term #f))]) (λCon-->* (term (M V)))))]
   [(eval (M_0 M_1 ...) V) ,(and (term (eval (M_0) V)) (term (eval (M_1 ...) V)))]
   [(eval any ...) #f])
 
@@ -286,7 +306,14 @@
   [(⊕ (any ...) ()) (any ...)]
   [(⊕ () (any ...)) (any ...)]
   [(⊕ (any_0 ... any_i any_n ...) (any_i any_m ...)) (⊕ (any_0 ... any_i any_n ...) (any_m ...))]
-  [(⊕ (any_0 ...) (any_i any_m ...)) (⊕ (any_0 ... any_n) (any_m ...))])
+  [(⊕ (any_0 ...) (any_i any_m ...)) (⊕ (any_0 ... any_i) (any_m ...))])
+
+;; Term of (↓)
+;; -----------
+;; Returns the term contain in a configuration.
+(define-metafunction λCon
+  ↓ : (ς M) -> M
+  [(↓ (ς M)) M])
 
 #|
  ___ _                   ___      _         _      _   _          
@@ -385,7 +412,6 @@
 
 
 
-
 #|
  ___            _ _         _                         _ 
 | _ \_ _ ___ __| (_)__ __ _| |_ ___ ___  __ _ _ _  __| |
@@ -413,10 +439,10 @@
 ;; ------------------------
 (define
   (λCon--> M)
-  (car (apply-reduction-relation λCon-reduction (term (· M)))))
+  (car (apply-reduction-relation λCon-reduction (term (· ,M)))))
 
 ;; λCon Reduction (λCon-->*)
 ;; -------------------------
 (define
   (λCon-->* M)
-  (car (apply-reduction-relation* λCon-reduction (term (· M)))))
+  (car (apply-reduction-relation* λCon-reduction (term (· ,M)))))

@@ -16,27 +16,27 @@
 ;; =================
 
 (check-eq?
- (redex-match? λCon M (term (1 @ (flat 1))))
+ (redex-match? λCon M (term (1 @ (flat ⊤))))
  #t)
 
 (check-eq?
- (redex-match? λCon M (term ((+ 1 2) @ (flat 1))))
+ (redex-match? λCon M (term ((+ 1 2) @ (flat ⊤))))
  #t)
 
 (check-eq?
- (redex-match? λCon M (term (1 @ (flat (+ 1 1)))))
+ (redex-match? λCon M (term (1 @ (flat (⊤ / (λ x (+ 1 1)))))))
  #t)
 
 (check-eq?
- (redex-match? λCon M (term ((+ 1 2) @ (flat (+ 1 1)))))
+ (redex-match? λCon M (term ((+ 1 2) @ (flat (⊤ / (λ x (+ 1 1)))))))
  #t)
 
 (check-eq?
- (redex-match? λCon M (term ((λ x (+ x 1)) @ ((flat 1) → (flat 1)))))
+ (redex-match? λCon M (term ((λ x (+ x 1)) @ ((flat ⊤) → (flat ⊤)))))
  #t)
 
 (check-eq?
- (redex-match? λCon M (term (((λ x (+ x 1)) @ ((flat 1) → (flat 1))) 1)))
+ (redex-match? λCon M (term (((λ x (+ x 1)) @ ((flat ⊤) → (flat ⊤))) 1)))
  #t)
 
 (check-eq?
@@ -52,47 +52,47 @@
 
 (test-->> 
  λCon-reduction 
- (term ((+ 1 2) @ (flat (λ x 1)))) 
- (term 3))
+ (term (· ((+ 1 2) @ (flat ⊤))))
+ (term (((♭ ◃ (#t ∘ #t)) ·) 3)))
 
 (test-->> 
  λCon-reduction 
- (term ((+ 1 2) @ ⊤)) 
- (term 3))
+ (term (· ((+ 1 2) @ (flat ⊤))))
+ (term (((♭ ◃ (#t ∘ #t)) ·) 3)))
 
 (test-->> 
  λCon-reduction 
- (term ((+ 1 2) @ ⊥)) 
- (term +blame))
+ (term (· ((+ 1 2) @ (flat %Boolean))))
+ (term (((♭ ◃ (#t ∘ #f)) ·) 3)))
 
 (test-->> 
  λCon-reduction 
- (term (((λ x (+ x 1)) @ (Nat? → Nat?)) 1)) 
- (term 2))
+ (term (· (((λ x (+ x 1)) @ ((flat %Number) → (flat %Number))) 1)))
+ (term (((ι2 ◃ (#t ∘ #t)) ((ι1 ◃ (#t ∘ #t)) ((♭ ◃ (ι1 → ι2)) ·))) 2)))
 
 (test-->> 
  λCon-reduction 
- (term (((λ x (+ x 1)) @ (Pos? → Pos?)) 0)) 
- (term -blame))
+ (term (· (((λ x (+ x 1)) @ ((flat %Positive) → (flat %Positive))) 0)))
+ (term (((ι2 ◃ (#t ∘ #t)) ((ι1 ◃ (#t ∘ #f)) ((♭ ◃ (ι1 → ι2)) ·))) 1))) ;; TODO
 
 (test-->> 
  λCon-reduction 
- (term (((λ x (- x 1)) @ (Pos? → Pos?)) 1)) 
- (term +blame))
+ (term (· (((λ x (- x 1)) @ ((flat %Positive) → (flat %Positive))) 1)))
+ (term (((ι2 ◃ (#t ∘ #f)) ((ι1 ◃ (#t ∘ #t)) ((♭ ◃ (ι1 → ι2)) ·))) 0))) ;; TODO
 
 (test-->> 
  λCon-reduction 
- (term ((((λ x (λ y (+ x y))) @ (Pos? → (Pos? → Pos?))) 1) 1)) 
- (term 2))
+ (term (· ((((λ x (λ y (+ x y))) @ ((flat %Positive) → ((flat %Positive) → (flat %Positive)))) 1) 1)))
+ (term (any 2)))
 
 (test-->> 
  λCon-reduction 
- (term ((λ x (x 1)) ((λ x (+ x 1)) @ (Pos? → Pos?)))) 
- (term 2))
+ (term (· ((λ x (x 1)) ((λ x (+ x 1)) @ ((flat %Positive) → (flat %Positive))))))
+ (term (any 2)))
 
 (test-->> 
  λCon-reduction 
- (term ((((λ y (λ x ((y x) 1))) @ ((Pos? → (Pos? → Pos?)) → (Pos? → Pos?))) (λ x (λ y (+ x y)))) 1))
+ (term (· ((((λ y (λ x ((y x) 1))) @ (((flat %Positive) → ((flat %Positive) → (flat %Positive))) → ((flat %Positive) → (flat %Positive)))) (λ x (λ y (+ x y)))) 1)))
  (term 2))
 
 (test-results)
