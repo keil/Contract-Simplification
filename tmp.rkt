@@ -13,7 +13,13 @@
 
 
 
+;(redex-match? λCon ♭ (term ♭1))
+;(variable-not-in (term (+ ♭1 ♭1)) (term ♭))
+;(variable-not-in (term (+ ι y)) (term ι))
+;(fresh (term (+ ι y)))
 
+(define λCon-value?
+  (redex-match? λCon V))
 
 
 
@@ -38,3 +44,8 @@
 
 
 
+      (in-hole E (V @ (eval ,(with-handlers 
+                                    ([(λ x #t) (lambda (exn) (term #f))])
+                                  (evaluate (term (M V))))))))
+
+(side-condition (not (false? (term W))))
