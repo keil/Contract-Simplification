@@ -152,17 +152,17 @@
   
   (--> (ς 
         (in-hole E (V @ b (C ∪ D))))
-       (((b ◃ (ι_1 ∪ ι_2)) ς)
-        (in-hole E ((V @ ι_1 C) @ ι_2 D)))
+       (((b ◃ (ι1 ∪ ι2)) ς)
+        (in-hole E ((V @ ι1 C) @ ι2 D)))
        "Union"
-       (fresh ι_1 ι_2)) ;; TODO
+       (fresh ι1 ι2))
   
   (--> (ς
         (in-hole E (V @ b (I ∩ C))))
-       (((b ◃ (ι_1 ∩ ι_2)) ς)
-        (in-hole E ((V @ ι_1 I) @ ι_2 C)))
+       (((b ◃ (ι1 ∩ ι2)) ς)
+        (in-hole E ((V @ ι1 I) @ ι2 C)))
        "Intersection"
-       (fresh ι_1 ι_2)) ;; TODO
+       (fresh ι1 ι2))
   
   ;; Delayed Contarcts
   (--> (ς
@@ -180,10 +180,10 @@
   
   (--> (ς
         (in-hole E ((V @ b (Q ∩ R)) W)))
-       (((b ◃ (ι_1 ∩ ι_2)) ς)
-        (in-hole E (((V @ ι_1 Q) @ ι_2 R) W)))
+       (((b ◃ (ι1 ∩ ι2)) ς)
+        (in-hole E (((V @ ι1 Q) @ ι2 R) W)))
        "D-Intersection"
-       (fresh ι_1 ι_2)) ;; TODO
+       (fresh ι1 ι2))
   
   ))
 ;  (--> (ς
