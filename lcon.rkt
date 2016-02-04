@@ -200,11 +200,17 @@
    
    
    (--> (ς
-         M)
+         any)
         (ς
-         +blame)
+         (+blame ♭))
         "Blame"
-        (side-condition (term (is-blame-state? ς))))
+        (side-condition (not (blame? (term any))))
+        (side-condition (term (is-blame-state? ς))
+                        
+                        )
+        
+        
+        )
    
    
    ))
@@ -403,6 +409,20 @@
 
 
 
+(define-metafunction λCon
+  check-blame-state : ς (♭ ...) -> any
+  ;[(check-blame-state ς ()) ]
+  [(check-blame-state ς (♭_0 ♭_1 ...)) ,(if (term (is-false? (μ ς ♭_0)))
+                                         (term ((μ ς ♭_0) ♭_0))
+                                         (term (check-blame-state ς (♭_1 ...)))
+                                         )])
+
+
+
+
+
+
+
 ;(define-metafunction λCon
 ;  is-blame-state-for? : ς (♭ ...) -> boolean
 ;  [(is-blame-state-for? ς ()) #f]
@@ -429,6 +449,8 @@
 ;  [(is-blame-state-for? ς (♭_0 ♭_1 ...)) ,(or 
 ;                                           (term (is-false? (μ ς ♭_0)))
 ;                                           (term (is-blame-state-for? ς (♭_1 ...))))])
+
+
 
 
 
@@ -460,7 +482,6 @@
   π : ς b -> κ
   [(π ((b_0 ◃ κ) ς) b_0) κ]
   [(π ((b_0 ◃ κ) ς) b_1) (π ς b_1)]
-  ;  [(π · b) (π ς b_1)]
   )
 
 
@@ -539,6 +560,11 @@
 |_| \_,_|_||_\__|\__|_\___/_||_/__/
                                    
 |#
+
+;; Blame?
+;; ------
+(define blame?
+  (redex-match? λCon (blame ♭)))
 
 ;; λCon-Value (λCon-value?)
 ;; ------------------------
