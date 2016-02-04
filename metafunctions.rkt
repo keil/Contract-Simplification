@@ -203,3 +203,63 @@
     [(≤ P predefined) (≤ P (lookup/ predefined))]
     ;; End
     [(≤ any ...) #f])
+
+
+
+
+
+
+
+#|
+ ___                     _   _         _ 
+/ __| ___ _ __  __ _ _ _| |_(_)__ __ _| |
+\__ \/ -_) '  \/ _` | ' \  _| / _/ _` | |
+|___/\___|_|_|_\__,_|_||_\__|_\__\__,_|_|
+                                         
+  ___         _        _                    _   
+ / __|___ _ _| |_ __ _(_)_ _  _ __  ___ _ _| |_ 
+| (__/ _ \ ' \  _/ _` | | ' \| '  \/ -_) ' \  _|
+ \___\___/_||_\__\__,_|_|_||_|_|_|_\___|_||_\__|
+                                                
+|#
+
+
+;; Term Equivalence (≡)
+;; --------------------
+;; Returns true if both terms are syntactically identical (after α conversion), 
+;; false otherwise.
+
+(define-metafunction λCon
+  ≡ : (λ x M) (λ x M) -> boolean
+  [(≡ (λ x M) (λ x M)) #t]
+  [(≡ (λ x M) (λ x N)) #f]
+  [(≡ (λ x M) (λ y N)) (≼ (λ z (subst x z M)) (λ z (subst y z N)))
+                       (where z ,(variable-not-in (term ((λ x M) (λ y N))) (term z)))]
+  ;; Otherwise
+  [(≡ any ...) #f])
+
+
+
+;; Term Subset (≼)
+;; ---------------
+;; This meta function models the implicite assertions of predicates. Some of the 
+;; realtions could be might be determinable by unsing a SAT solvers.
+;; Returns true if the left term is subset or equals to the reight term, 
+;; false otherwise.
+
+(define-metafunction λCon
+  ≼ : (λ x M) (λ x M) -> boolean
+  [(≼ (λ x (complex? x))  (λ x (number? x)))   #t]
+  [(≼ (λ x (real? x))     (λ x (number? x)))   #t]
+  
+  [(≼ (λ x (rational? x)) (λ x (real? x)))     #t]
+  [(≼ (λ x (rational? x)) (λ x (number? x)))     #t]
+  
+  [(≼ (λ x (integer? x))  (λ x (rational? x))) #t]
+  [(≼ (λ x (integer? x))  (λ x (real? x))) #t]
+  [(≼ (λ x (integer? x))  (λ x (number? x))) #t]
+  
+  [(≼ (λ x (positive? x)) (λ x (<= x 0)))      #t]
+  ;; Otherwise
+  [(≼ any ...) (≡ any ...)])
+

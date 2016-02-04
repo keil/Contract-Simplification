@@ -112,7 +112,7 @@
    
    ;; Immediate Contarcts
    (--> (ς
-         (in-hole E (V @ (flat M))))
+         (in-hole E (V @ (flat P ...))))
         (ς
          (in-hole E (V @ (eval ,(with-handlers 
                                     ([(λ x #t) (lambda (exn) (term #f))])
@@ -127,7 +127,7 @@
    
    (--> (ς
          (in-hole E (V @ (eval W))))
-        ((b ◃ W) ς) ;; TODO
+        (((b ◃ W) ς) ;; TODO
         (in-hole E V))
    "Unit"
    (side-condition (not (false? (term W)))))
@@ -195,18 +195,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 #|
  ___            _      __ _             _ 
 | _ \_ _ ___ __| |___ / _(_)_ _  ___ __| |
@@ -253,96 +241,64 @@
   [(lookup %UEven) (UInteger? / (λ x (even? x)))]
   [(lookup %UOdd)  (UInteger? / (λ x (odd? x)))])
 
+#|
+ ___            _ _         _         ___          _           _   _          
+| _ \_ _ ___ __| (_)__ __ _| |_ ___  | __|_ ____ _| |_  _ __ _| |_(_)___ _ _  
+|  _/ '_/ -_) _` | / _/ _` |  _/ -_) | _|\ V / _` | | || / _` |  _| / _ \ ' \ 
+|_| |_| \___\__,_|_\__\__,_|\__\___| |___|\_/\__,_|_|\_,_\__,_|\__|_\___/_||_|
+                                                                              
+|#
+
+;; Sum (Σ)
+;; -------
+;; Summarizes the patricular predicates of a
+;; refinement chain (P).
+(define-metafunction λCon
+  Σ : P -> (M ...)
+  [(Σ ⊤) ()]
+  [(Σ predefined) (Σ (lookup predefined))]
+  [(Σ (P / M)) (⊕ (Σ P) (M))])
+
+#|
+ __  __     _            ___             _   _             
+|  \/  |___| |_ __ _ ___| __|  _ _ _  __| |_(_)___ _ _  ___
+| |\/| / -_)  _/ _` |___| _| || | ' \/ _|  _| / _ \ ' \(_-<
+|_|  |_\___|\__\__,_|   |_| \_,_|_||_\__|\__|_\___/_||_/__/
+
+|#
+
+;; Union (⊎)
+;; ---------
+;; Merges two sets
+(define-metafunction λCon
+  ⊎ : (any ...) (any ...) -> (any ...)
+  [(⊎ (any_l ...) (any_r ...)) (any_l ... any_r ...)])
+
+;; Set Union (⊕)
+;; ---------
+;; Merges two sets and avoids double entries.
+(define-metafunction λCon
+  ⊕ : (any ...) (any ...) -> (any ...)
+  [(⊕ (any ...) ()) (any ...)]
+  [(⊕ () (any ...)) (any ...)]
+  [(⊕ (any_0 ... any_i any_n ...) (any_i any_m ...)) (⊕ (any_0 ... any_i any_n ...) (any_m ...))]
+  [(⊕ (aby_0 ...) (any_i any_m ...)) (⊕ (any_0 ... any_n) (any_m ...))])
+
+
+
+
+
+
+
 
 
 #|
- ___                     _   _         _ 
-/ __| ___ _ __  __ _ _ _| |_(_)__ __ _| |
-\__ \/ -_) '  \/ _` | ' \  _| / _/ _` | |
-|___/\___|_|_|_\__,_|_||_\__|_\__\__,_|_|
-                                         
-  ___         _        _                    _   
- / __|___ _ _| |_ __ _(_)_ _  _ __  ___ _ _| |_ 
-| (__/ _ \ ' \  _/ _` | | ' \| '  \/ -_) ' \  _|
- \___\___/_||_\__\__,_|_|_||_|_|_|_\___|_||_\__|
-                                                
+ ___ _                   ___      _         _      _   _          
+| _ ) |__ _ _ __  ___   / __|__ _| |__ _  _| |__ _| |_(_)___ _ _  
+| _ \ / _` | '  \/ -_) | (__/ _` | / _| || | / _` |  _| / _ \ ' \ 
+|___/_\__,_|_|_|_\___|  \___\__,_|_\__|\_,_|_\__,_|\__|_\___/_||_|
+                                                                  
 |#
-
-;; Term Equivalence (≡)
-;; --------------------
-;; Returns true if both terms are syntactically identical (after α conversion), 
-;; false otherwise.
-
-(define-metafunction λCon
-  ≡ : (λ x M) (λ x M) -> boolean
-  [(≡ (λ x M) (λ x M)) #t]
-  [(≡ (λ x M) (λ x N)) #f]
-  [(≡ (λ x M) (λ y N)) (≼ (λ z (subst x z M)) (λ z (subst y z N)))
-                       (where z ,(variable-not-in (term ((λ x M) (λ y N))) (term z)))]
-  ;; Otherwise
-  [(≡ any ...) #f])
-
-
-
-;; Term Subset (≼)
-;; ---------------
-;; This meta function models the implicite assertions of predicates. Some of the 
-;; realtions could be might be determinable by unsing a SAT solvers.
-;; Returns true if the left term is subset or equals to the reight term, 
-;; false otherwise.
-
-(define-metafunction λCon
-  ≼ : (λ x M) (λ x M) -> boolean
-  [(≼ (λ x (complex? x))  (λ x (number? x)))   #t]
-  [(≼ (λ x (real? x))     (λ x (number? x)))   #t]
-  
-  [(≼ (λ x (rational? x)) (λ x (real? x)))     #t]
-  [(≼ (λ x (rational? x)) (λ x (number? x)))     #t]
-  
-  [(≼ (λ x (integer? x))  (λ x (rational? x))) #t]
-  [(≼ (λ x (integer? x))  (λ x (real? x))) #t]
-  [(≼ (λ x (integer? x))  (λ x (number? x))) #t]
-  
-  [(≼ (λ x (positive? x)) (λ x (<= x 0)))      #t]
-  ;; Otherwise
-  [(≼ any ...) (≡ any ...)])
-
-
-
-
-
-
-
-;; Sum (Σ)
-;; ---------------------------------
-;; Summarizes the patricular predicates of a refinement.
-
-(define-metafunction λCon
-  ⊕ : (M ...) (M ...) -> (M ...)
-  [(⊕ (M ...) ()) (M ...)]
-  [(⊕ () (M ...)) (M ...)]
-  [(⊕ (M_0 ... M_n M_i ...) (M_n M_m ...)) (⊕ (M_0 ... M_n M_i ...) (M_m ...))]
-  [(⊕ (M_0 ...) (M_n M_m ...)) (⊕ (M_0 ... M_n) (M_m ...))])
-
-(define-metafunction λCon
-  Σ : P -> (M ...)
-  [(Σ ⊤) ((λ x #t))]
-  [(Σ ⊥) ((λ x #f))]
-  ;[(Σ (⊤ / M)) (M)]
-  [(Σ (P / M)) (⊕ (Σ P) (M))]
-  [(Σ predefined) (Σ (lookup/ predefined))]
-  )
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -435,19 +391,50 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+#|
+ ___            _ _         _                         _ 
+| _ \_ _ ___ __| (_)__ __ _| |_ ___ ___  __ _ _ _  __| |
+|  _/ '_/ -_) _` | / _/ _` |  _/ -_|_-< / _` | ' \/ _` |
+|_| |_| \___\__,_|_\__\__,_|\__\___/__/ \__,_|_||_\__,_|
+                                                        
+ ___             _   _             
+| __|  _ _ _  __| |_(_)___ _ _  ___
+| _| || | ' \/ _|  _| / _ \ ' \(_-<
+|_| \_,_|_||_\__|\__|_\___/_||_/__/
+                                   
+|#
+
+;; λCon-Value (λCon-value?)
+;; ------------------------
+(define λCon-value?
+  (redex-match? λCon V))
+
+;; λCon-Term (λCon-term?)
+;; ----------------------
+(define λCon-term?
+  (redex-match? λCon M))
+
+;; λCon Reduction (λCon-->)
+;; ------------------------
 (define
-  (evaluate M)
-  (car (apply-reduction-relation* λCon-reduction M)))
+  (λCon--> M)
+  (car (apply-reduction-relation λCon-reduction (· M))))
 
-
-
-
-
-
-
-
-
-
-
-
-
+;; λCon Reduction (λCon-->*)
+;; -------------------------
+(define
+  (λCon-->* M)
+  (car (apply-reduction-relation* λCon-reduction (· M))))
