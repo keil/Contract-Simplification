@@ -296,7 +296,7 @@
 (define-metafunction λCon
   eval : (M ...) V -> V
   [(eval () V) #t]
-  [(eval (M) V) (↓ ,(with-handlers ([(λ x #t) (lambda (exn) (term #f))]) (λCon-->* (term (M V)))))]
+  [(eval (M) V) (⇓/Term ,(with-handlers ([(λ x #t) (lambda (exn) (term #f))]) (λCon-->* (term (M V)))))]
   [(eval (M_0 M_1 ...) V) ,(and (term (eval (M_0) V)) (term (eval (M_1 ...) V)))]
   [(eval any ...) #f])
 
@@ -325,12 +325,40 @@
   [(⊕ (any_0 ... any_i any_n ...) (any_i any_m ...)) (⊕ (any_0 ... any_i any_n ...) (any_m ...))]
   [(⊕ (any_0 ...) (any_i any_m ...)) (⊕ (any_0 ... any_i) (any_m ...))])
 
-;; Term of (↓)
-;; -----------
-;; Returns the term contain in a configuration.
+;; Term of (⇓/Term)
+;; ----------------
 (define-metafunction λCon
-  ↓ : (ς M) -> M
-  [(↓ (ς M)) M])
+  ⇓/Term : (ς M) -> M
+  [(⇓/Term (ς M)) M])
+
+;; State of (⇓/State)
+;; ------------------
+(define-metafunction λCon
+  ⇓/State : (ς M) -> ς
+  [(⇓/State (ς M)) ς])
+
+;; Number of Blame Labels (count/♭)
+;; --------------------------------
+(define-metafunction λCon
+  count/♭ : ς -> number
+  [(count/♭ ·) 0]
+  [(count/♭ ((♭ ◃ κ) ς)) ,(+ 1 (term (count/♭ ς)))]
+  [(count/♭ ((b ◃ κ) ς)) (count/♭ ς)])
+
+;; Number of Blame Variables (count/ι)
+;; -----------------------------------
+(define-metafunction λCon
+  count/ι : ς -> number
+  [(count/ι ·) 0]
+  [(count/ι ((ι ◃ κ) ς)) ,(+ 1 (term (count/ι ς)))]
+  [(count/ι ((b ◃ κ) ς)) (count/♭ ς)])
+
+;; Number of Blame Identifiers (count/b)
+;; -------------------------------------
+(define-metafunction λCon
+  count/b : ς -> number
+  [(count/b ·) 0]
+  [(count/b ((b ◃ κ) ς)) ,(+ 1 (term (count/b ς)))])
 
 #|
  ___ _                   ___      _         _      _   _          
@@ -555,32 +583,31 @@
       (car (apply-reduction-relation* λCon-reduction (term (· ,M))))
       (error "Invalid λCon-term:" M)))
 
+#|
+ _  _     _                 ___             _   _             
+| || |___| |_ __  ___ _ _  | __|  _ _ _  __| |_(_)___ _ _  ___
+| __ / -_) | '_ \/ -_) '_| | _| || | ' \/ _|  _| / _ \ ' \(_-<
+|_||_\___|_| .__/\___|_|   |_| \_,_|_||_\__|\__|_\___/_||_/__/
+           |_|                                                
 
+|#
 
+(define
+  (λCon-->*/Term M)
+  (term (⇓/Term ,(λCon-->* M))))
 
-(define-metafunction λCon
-  ⇓/Term : (ς M) -> M
-  [(⇓/Term (ς M)) M])
+(define
+  (λCon-->*/State M)
+  (term (⇓/State ,(λCon-->* M))))
 
-(define-metafunction λCon
-  ⇓/State : (ς M) -> M
-  [(⇓/State (ς M)) ς])
+(define
+  (λCon-->/Term M)
+  (term (⇓/Term ,(λCon--> M))))
 
+(define
+  (λCon-->/State M)
+  (term (⇓/State ,(λCon--> M))))
 
-(define-metafunction λCon
-  count/♭ : ς -> number
-  [(count/♭ ·) 0]
-  [(count/♭ ((♭ ◃ κ) ς)) ,(+ 1 (term (count/♭ (ς))))]
-  [(count/♭ ((b ◃ κ) ς)) (term (count/♭ (ς)))])
-
-(define-metafunction λCon
-  count/ι : ς -> number
-  [(count/ι ·) 0]
-  [(count/ι ((ι ◃ κ) ς)) ,(+ 1 (term (count/ι (ς))))]
-  [(count/ι ((b ◃ κ) ς)) (term (count/♭ (ς)))])
-
-(define-metafunction λCon
-  count/b : ς -> number
-  [(count/b ·) 0]
-  [(count/b ((b ◃ κ) ς)) ,(+ 1 (term (count/b (ς))))])
-
+(define
+  (count ς)
+  (term (count/b ,ς)))
