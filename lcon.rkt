@@ -55,7 +55,7 @@
   (blame +blame -blame)
   
   ;; Values
-  ((U V W) .... ((λ x M) @ b Q) (blame ♭))
+  ((U V W) .... (V @ b Q) (blame ♭))
   
   ;; Terms
   ((L M N) .... (M @ C) (M @ b C))
