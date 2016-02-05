@@ -165,10 +165,14 @@
 ;; --------------------
 (define
   (λJ--> M)
-  (car (apply-reduction-relation λJ-reduction M)))
+  (if (redex-match? λJ M M)
+      (car (apply-reduction-relation λJ-reduction M))
+      (error "Invalid λJ-term:" M)))
 
 ;; λJ Reduction (λJ-->*)
 ;; ---------------------
 (define
   (λJ-->* M)
-  (car (apply-reduction-relation* λJ-reduction M)))
+  (if (redex-match? λJ M M)
+      (car (apply-reduction-relation* λJ-reduction M))
+      (error "Invalid λJ-term:" M)))

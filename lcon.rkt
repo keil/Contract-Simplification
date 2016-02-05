@@ -207,8 +207,8 @@
         (side-condition (not (blame? (term any))))
         (side-condition (term (is-blame-state? ς)))
         (where (blame ♭) (produce-blame  ς)))
-                        
-  
+   
+   
    ))
 
 ;; TODO, abstraction
@@ -543,10 +543,44 @@
 ;; ------------------------
 (define
   (λCon--> M)
-  (car (apply-reduction-relation λCon-reduction (term (· ,M)))))
+  (if (redex-match? λCon M M)
+      (car (apply-reduction-relation λCon-reduction (term (· ,M))))
+      (error "Invalid λCon-term:" M)))
 
 ;; λCon Reduction (λCon-->*)
 ;; -------------------------
 (define
   (λCon-->* M)
-  (car (apply-reduction-relation* λCon-reduction (term (· ,M)))))
+  (if (redex-match? λCon M M)
+      (car (apply-reduction-relation* λCon-reduction (term (· ,M))))
+      (error "Invalid λCon-term:" M)))
+
+
+
+
+(define-metafunction λCon
+  ⇓/Term : (ς M) -> M
+  [(⇓/Term (ς M)) M])
+
+(define-metafunction λCon
+  ⇓/State : (ς M) -> M
+  [(⇓/State (ς M)) ς])
+
+
+(define-metafunction λCon
+  count/♭ : ς -> number
+  [(count/♭ ·) 0]
+  [(count/♭ ((♭ ◃ κ) ς)) ,(+ 1 (term (count/♭ (ς))))]
+  [(count/♭ ((b ◃ κ) ς)) (term (count/♭ (ς)))])
+
+(define-metafunction λCon
+  count/ι : ς -> number
+  [(count/ι ·) 0]
+  [(count/ι ((ι ◃ κ) ς)) ,(+ 1 (term (count/ι (ς))))]
+  [(count/ι ((b ◃ κ) ς)) (term (count/♭ (ς)))])
+
+(define-metafunction λCon
+  count/b : ς -> number
+  [(count/b ·) 0]
+  [(count/b ((b ◃ κ) ς)) ,(+ 1 (term (count/b (ς))))])
+
