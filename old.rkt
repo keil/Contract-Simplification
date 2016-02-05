@@ -1,11 +1,6 @@
 #lang racket
 
-### 
-TODO
-own test and traces function that previsouly checks the syntax
 
-make a reduction function which immediately un-packs the confoguration
-Test for each contarct
 
 
   [(is-blame-state? ((♭ ◃ κ) ς)) (or (μ ((♭ ◃ κ) ς) ♭) (is-blame-state? ς))]

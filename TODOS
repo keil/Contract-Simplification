@@ -1,21 +1,17 @@
-Predicates
-==========
-
-- implement setminus
-
-- T--remove/ T->T--remove 
-
-
-\Con
-====
-
-- Implement blame semantics/ callbacks
-- Implement Intersection and Union Contracts
-- (Implement Contract Abstraction/ Dependent Contract)
-
-
 Open Points
 ===========
+
+*** Make own test function that previously checks the syntax.
+
+*** Predefined Contracts
+
+*** Implement Setminus
+*** Naive Subtyping/ Subset/ Collapse
+
+
+
+
+
 
 *** Theorems
 - Simulation
