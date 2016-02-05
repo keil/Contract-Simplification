@@ -35,7 +35,7 @@
   ;; ---------
   
   ;; Contracts
-  ((C D) I Q A (C ∪ D) (I ∩ C))
+  ((C D) I Q (C ∪ D) (I ∩ C))
   
   ;; Contract Abstraction
   (A (Λ x C))
@@ -44,7 +44,7 @@
   ((I J) (flat P ...))
   
   ; Delayed Contracts
-  ((Q R) (C → D) (x ↦ (A x)) (Q ∩ R))
+  ((Q R) (C → D) (x ↦ A) (Q ∩ R))
   
   
   
@@ -184,7 +184,7 @@
         (side-condition (not (term (is-blame-state? ς)))))
    
    (--> (ς
-         (in-hole E ((V @ b (x → (Λ x C))) W)))
+         (in-hole E ((V @ b (x ↦ (Λ x C))) W)))
         (ς
          (in-hole E ((V W) @ b (subst/ x W C))))
         "D-Dependent"
@@ -533,11 +533,11 @@
                                                 
 |#
 
-;(define-metafunction λCon
-;  subst/ : x any any -> any
-;  [(subst/ x any (Λ x C)) (Λ x M)]
-;  [(subst/ x any (Λ y C)) (Λ y (subst/ x any C))]
-;  [(subst/ x any ...) (subst x any ...)])
+(define-metafunction λCon
+  subst/ : x any any -> any
+  [(subst/ x any (Λ x C)) (Λ x M)]
+  [(subst/ x any (Λ y C)) (Λ y (subst/ x any C))]
+  [(subst/ x any ...) (subst x any ...)])
 
 #|
  ___            _ _         _                         _ 
