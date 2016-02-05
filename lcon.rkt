@@ -296,7 +296,7 @@
 (define-metafunction λCon
   eval : (M ...) V -> V
   [(eval () V) #t]
-  [(eval (M) V) (⇓/Term ,(with-handlers ([(λ x #t) (lambda (exn) (term #f))]) (λCon-->* (term (M V)))))]
+  [(eval (M) V) (⇓/Term ,(with-handlers ([(λ x #t) (lambda (exn) (term (· #f)))]) (λCon-->* (term (M V)))))]
   [(eval (M_0 M_1 ...) V) ,(and (term (eval (M_0) V)) (term (eval (M_1 ...) V)))]
   [(eval any ...) #f])
 
