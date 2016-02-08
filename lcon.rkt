@@ -35,10 +35,10 @@
   ;; ---------
   
   ;; Contracts
-  ((C D) I Q (C ∪ D) (I ∩ C))
+  ((C D) I Q A (C ∪ D) (I ∩ C))
   
   ;; Contract Abstraction
-  (A (Λ x C) (Λ x A))
+  (A (Λ x C))
   
   ; Immediate Contracts
   ((I J) (flat P ...))
@@ -154,7 +154,7 @@
    (--> (ς
          (in-hole E (V @ ι (flat P ...))))
         (ς
-         (in-hole E (V @ ι (eval (Σ P ...) V))))
+         (in-hole E (V @ ι (eval (Σ/ P ...) V))))
         "Flat"
         (side-condition (not (term (is-blame-state? ς)))))
    
@@ -294,7 +294,12 @@
   Σ : P -> (M ...)
   [(Σ ⊤) ()]
   [(Σ predefined) (Σ (lookup predefined))]
-  [(Σ (P / M)) (⊕ (Σ P) (M))])
+  [(Σ (P / M)) (⊎ (Σ P) (M))])
+
+(define-metafunction λCon
+  Σ/ : P ... -> (M ...)
+  [(Σ/ ) ()]
+  [(Σ/ P_0 P_1 ...) (⊎ (Σ P_0) (Σ/ P_1 ...))])
 
 ;; Predicate Evaluation (eval)
 ;; ---------------------------
