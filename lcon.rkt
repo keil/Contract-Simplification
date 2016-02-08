@@ -38,7 +38,7 @@
   ((C D) I Q (C ∪ D) (I ∩ C))
   
   ;; Contract Abstraction
-  (A (Λ x C))
+  (A (Λ x C) (Λ x A))
   
   ; Immediate Contracts
   ((I J) (flat P ...))
@@ -58,10 +58,10 @@
   ((U V W) .... (V @ ι Q) (blame ♭))
   
   ;; Terms
-  ((L M N) .... (M @ ♭ C) (V @ ι C))
+  ((L M N) .... A C (M @ ♭ N) (V @ ι C))
   
   ;; Contexts
-  (E .... (E @ b C))
+  (E .... (E @ b N) (V @ b E))
   
   
   
@@ -143,7 +143,14 @@
         (fresh ι)
         (side-condition (not (term (is-blame-state? ς)))))
    
-   ;; Immediate Contarcts
+   (--> (ς
+         (in-hole E ((Λ x M) W)))
+        (ς
+         (in-hole E (subst/ x W M)))
+        "Construct"
+        (side-condition (not (term (is-blame-state? ς)))))
+   
+   ;; Immediate Contarcts   
    (--> (ς
          (in-hole E (V @ ι (flat P ...))))
         (ς
