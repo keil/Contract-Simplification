@@ -55,13 +55,13 @@
   (blame +blame -blame)
   
   ;; Values
-  ((U V W) .... (V @ b Q) (blame ♭))
+  ((U V W) .... (V @ ι Q) (blame ♭))
   
   ;; Terms
-  ((L M N) .... (M @ C) (M @ b C))
+  ((L M N) .... (M @ ♭ C) (V @ ι C))
   
   ;; Contexts
-  (E .... (E @ C) (E @ b C))
+  (E .... (E @ b C))
   
   
   
@@ -136,39 +136,39 @@
    
    ;; Contract Assertion
    (--> (ς
-         (in-hole E (V @ C)))
-        (ς
          (in-hole E (V @ ♭ C)))
+        (((♭ ◃ ι) ς)
+         (in-hole E (V @ ι C)))
         "Assert"
-        (fresh ♭)
+        (fresh ι)
         (side-condition (not (term (is-blame-state? ς)))))
    
    ;; Immediate Contarcts
    (--> (ς
-         (in-hole E (V @ b (flat P ...))))
+         (in-hole E (V @ ι (flat P ...))))
         (ς
-         (in-hole E (V @ b (eval (Σ P ...) V))))
+         (in-hole E (V @ ι (eval (Σ P ...) V))))
         "Flat"
         (side-condition (not (term (is-blame-state? ς)))))
    
    (--> (ς
-         (in-hole E (V @ b W)))
-        (((b ◃ (τ W)) ς)
+         (in-hole E (V @ ι W)))
+        (((ι ◃ (τ W)) ς)
          (in-hole E V))
         "Unit"
         (side-condition (not (term (is-blame-state? ς)))))
    
    (--> (ς 
-         (in-hole E (V @ b (C ∪ D))))
-        (((b ◃ (ι1 ∪ ι2)) ς)
+         (in-hole E (V @ ι (C ∪ D))))
+        (((ι ◃ (ι1 ∪ ι2)) ς)
          (in-hole E ((V @ ι1 C) @ ι2 D)))
         "Union"
         (fresh ι1 ι2)
         (side-condition (not (term (is-blame-state? ς)))))
    
    (--> (ς
-         (in-hole E (V @ b (I ∩ C))))
-        (((b ◃ (ι1 ∩ ι2)) ς)
+         (in-hole E (V @ ι (I ∩ C))))
+        (((ι ◃ (ι1 ∩ ι2)) ς)
          (in-hole E ((V @ ι1 I) @ ι2 C)))
         "Intersection"
         (fresh ι1 ι2)
@@ -176,23 +176,23 @@
    
    ;; Delayed Contarcts
    (--> (ς
-         (in-hole E ((V @ b (C → D)) W)))
-        (((b ◃ (ι1 → ι2)) ς)
+         (in-hole E ((V @ ι (C → D)) W)))
+        (((ι ◃ (ι1 → ι2)) ς)
          (in-hole E ((V (W @ ι1 C)) @ ι2 D)))
         "D-Function"
         (fresh ι1 ι2)
         (side-condition (not (term (is-blame-state? ς)))))
    
    (--> (ς
-         (in-hole E ((V @ b (x ↦ (Λ x C))) W)))
+         (in-hole E ((V @ ι (x ↦ (Λ x C))) W)))
         (ς
-         (in-hole E ((V W) @ b (subst/ x W C))))
+         (in-hole E ((V W) @ ι (subst/ x W C))))
         "D-Dependent"
         (side-condition (not (term (is-blame-state? ς)))))
    
    (--> (ς
-         (in-hole E ((V @ b (Q ∩ R)) W)))
-        (((b ◃ (ι1 ∩ ι2)) ς)
+         (in-hole E ((V @ ι (Q ∩ R)) W)))
+        (((ι ◃ (ι1 ∩ ι2)) ς)
          (in-hole E (((V @ ι1 Q) @ ι2 R) W)))
         "D-Intersection"
         (fresh ι1 ι2)
