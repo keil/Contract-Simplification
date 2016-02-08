@@ -139,9 +139,14 @@
         "Reduce/Union"
         )
    
+   (--> (in-hole F (M @ (I ∩ J)))
+        (in-hole F ((M @ I) @ J))
+        "Reduce/Intersection1"
+        )
+   
    (--> (in-hole F (M @ (I ∩ C)))
         (in-hole F ((M @ I) @ C))
-        "Reduce/Intersection"
+        "Reduce/Intersection2"
         )
    
    (--> (in-hole F (V @ true))

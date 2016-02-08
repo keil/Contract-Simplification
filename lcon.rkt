@@ -35,7 +35,7 @@
   ;; ---------
   
   ;; Contracts
-  ((C D) I Q A (C ∪ D) (I ∩ C))
+  ((C D) I Q (C ∪ D) (I ∩ C))
   
   ;; Contract Abstraction
   (A (Λ x C))
@@ -58,10 +58,10 @@
   ((U V W) .... (V @ ι Q) (blame ♭))
   
   ;; Terms
-  ((L M N) .... A C (M @ ♭ N) (V @ ι C))
+  ((L M N) .... (M @ ♭ C) (V @ ι C))
   
   ;; Contexts
-  (E .... (E @ b N) (V @ b E))
+  (E .... (E @ b C))
   
   
   
@@ -143,13 +143,6 @@
         (fresh ι)
         (side-condition (not (term (is-blame-state? ς)))))
    
-   (--> (ς
-         (in-hole E ((Λ x M) W)))
-        (ς
-         (in-hole E (subst/ x W M)))
-        "Construct"
-        (side-condition (not (term (is-blame-state? ς)))))
-   
    ;; Immediate Contarcts   
    (--> (ς
          (in-hole E (V @ ι (flat P ...))))
@@ -217,20 +210,6 @@
    
    
    ))
-
-;; TODO, abstraction
-
-;; Lookup
-;(--> (in-hole E (V @ named))
-;     (in-hole E (V @ (lookup named)))
-;     "Lookup") ;; TODO
-;
-;(--> (in-hole E (V @ predefined))
-;     (in-hole E (V @ (lookup/ predefined)))
-;     "Lookup/")
-; 
-
-
 
 #|
  ___            _      __ _             _ 
