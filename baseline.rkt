@@ -20,7 +20,7 @@
 |#
 
 (define-extended-language λCon-Baseline λCon
-  
+    
   ;; Contract-free terms (λJ terms)
   ;; ------------------------------
   ((S T) K x (λ x T) (S T) (op T ...) (if S T_0 T_1))
@@ -43,15 +43,25 @@
    
    )
   
-  ;; Final Terms
-  (final B (B @ C)) ; (B @ Q) (B @ I) --> ()
-  ;; Empty contracts
-  (true T (true → true))
   
-  ;; Baseline Reduction Context
+   ;; Baseline Reduction Context
   ;; reame to F
   (F hole (λ x F) (F M) (B F) (op B ... F M ...) (F @ C))
   ;(if F M N) (if B F N) (if B F N)) ;; TODO, if
+  
+  
+  ;; Final Terms
+  (final B (B @ C)) ; (B @ Q) (B @ I) --> ()
+  
+  
+  
+  ;; Miscellaneous
+  ;; -------------
+  
+  ;; True-Contracts
+  (true T (true → true))
+  
+ 
   
   
   ;; restrict to flat contracts instead of I
