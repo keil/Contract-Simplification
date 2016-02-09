@@ -104,7 +104,7 @@
    (--> (ς
          (in-hole E (op V ...)))
         (ς
-         (in-hole E (δ op V ...)))
+         (in-hole E (δ/ op V ...)))
         "δ"
         (side-condition (not (term (is-blame-state? ς)))))
    
@@ -265,6 +265,13 @@
 |_|  |_\___|\__\__,_|   |_| \_,_|_||_\__|\__|_\___/_||_/__/
 
 |#
+
+;; Delta (δ/)
+;; ----------
+(define-metafunction λCon
+  δ/ : op V ... -> V
+  [(δ/ op U ... (V @ ι Q) W ...) (δ/ op U ... V W ...)]
+  [(δ/ op V ... ) (δ op V ...)])
 
 ;; Union (⊎)
 ;; ---------
