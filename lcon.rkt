@@ -52,10 +52,10 @@
   (blame +blame -blame)
   
   ;; Values
-  ((U V W) .... (V @ ι Q) (blame ♭))
+  ((U V W) .... (V @ ι Q))
   
   ;; Terms
-  ((L M N) .... (M @ ♭ C) (V @ ι C))
+  ((L M N) .... (M @ ♭ C) (V @ ι C) (blame ♭))
   
   ;; Contexts
   (E .... (E @ b C) (V @ b (eval E)))
