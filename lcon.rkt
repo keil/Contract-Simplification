@@ -20,15 +20,12 @@
 
 (define-extended-language λCon λJ
   
-  ;; Predicates (Refienments)
-  ;; ------------------------
-  (P ⊤ (P / M) predefined)
-  
-  (predefined %Number %Complex %Real %Rational %Integer %String %Boolean
-              %Exact %Inexact %Zero  
-              %Positive %Negative %Even %Odd %Natural  
-              %UInteger %UEven %UOdd)
-  
+  ;; Predefined Flat Contracts
+  ;; -------------------------
+  (predefined ⊤ ⊥
+              Number? Complex? Real? Rational? Integer? String? Boolean?
+              Exact? Inexact? Zero?  
+              Positive? Negative? Even? Odd? Natural?)
   
   
   ;; Contracts
@@ -41,7 +38,7 @@
   (A (Λ x C))
   
   ; Immediate Contracts
-  ((I J) (flat P ...))
+  ((I J) (flat M) predefined)
   
   ; Delayed Contracts
   ((Q R) (C → D) (x ↦ A) (Q ∩ R))
@@ -61,7 +58,7 @@
   ((L M N) .... (M @ ♭ C) (V @ ι C))
   
   ;; Contexts
-  (E .... (E @ b C))
+  (E .... (E @ b C) (V @ b (eval E)))
   
   
   
@@ -145,14 +142,14 @@
    
    ;; Immediate Contarcts   
    (--> (ς
-         (in-hole E (V @ ι (flat P ...))))
+         (in-hole E (V @ ι (flat M))))
         (ς
-         (in-hole E (V @ ι (eval (Σ/ P ...) V))))
+         (in-hole E (V @ ι (eval (M V)))))
         "Flat"
         (side-condition (not (term (is-blame-state? ς)))))
    
    (--> (ς
-         (in-hole E (V @ ι W)))
+         (in-hole E (V @ ι (eval W))))
         (((ι ◃ (τ W)) ς)
          (in-hole E V))
         "Unit"
@@ -209,6 +206,14 @@
         (where (blame ♭) (produce-blame  ς)))
    
    
+   ;; Lookup
+   (--> (ς
+         (in-hole E (V @ ι predefined)))
+        (ς
+         (in-hole E (V @ ι (lookup predefined))))
+        "Lookup"
+        (side-condition (not (term (is-blame-state? ς)))))
+   
    ))
 
 #|
@@ -224,72 +229,34 @@
                                                      
 |#
 
-;; Lookup (Predefined Predicates)
-;; ==============================
+;; Lookup (Predefined Contracts)
+;; =============================
 
 (define-metafunction λCon
-  lookup : predefined -> P
+  lookup : predefined -> M
   
-  ;; First Level
-  [(lookup %Number)   (⊤ / (λ x (number? x)))]
-  [(lookup %Complex)  (⊤ / (λ x (complex? x)))]
-  [(lookup %Real)     (⊤ / (λ x (real? x)))]
-  [(lookup %Rational) (⊤ / (λ x (rational? x)))]
-  [(lookup %Integer)  (⊤ / (λ x (integer? x)))]
+  [(lookup ⊤)   (flat (λ x #t))]
+  [(lookup ⊥)  (flat (λ x #f))]
   
-  [(lookup %String)   (⊤ / (λ x (string? x)))]
-  [(lookup %Boolean)  (⊤ / (λ x (boolean? x)))]
+  [(lookup Number?)   (flat (λ x (number? x)))]
+  [(lookup Complex?)  (flat (λ x (complex? x)))]
+  [(lookup Real?)     (flat (λ x (real? x)))]
+  [(lookup Rational?) (flat (λ x (rational? x)))]
+  [(lookup Integer?)  (flat (λ x (integer? x)))]
   
-  ;; Second Level
-  [(lookup %Exact)   (%Number / (λ x (exact? x)))]
-  [(lookup %Inexact) (%Number / (λ x (inexact? x)))]
-  [(lookup %Zero)    (%Number / (λ x (zero? x)))]
+  [(lookup String?)   (flat (λ x (string? x)))]
+  [(lookup Boolean?)  (flat (λ x (boolean? x)))]
   
-  [(lookup %Positive) (%Real / (λ x (positive? x)))]
-  [(lookup %Negative) (%Real / (λ x (negative? x)))]
-  [(lookup %Natural)  (%Real / (λ x (<= x 0)))]
+  [(lookup Exact?)   (flat (λ x (exact? x)))]
+  [(lookup Inexact?) (flat (λ x (inexact? x)))]
+  [(lookup Zero?)    (flat (λ x (zero? x)))]
   
-  [(lookup %Even)     (%Integer / (λ x (even? x)))]
-  [(lookup %Odd)      (%Integer / (λ x (odd? x)))]
-  [(lookup %UInteger) (%Integer / (λ x (<= x 0)))]
+  [(lookup Positive?) (flat (λ x (positive? x)))]
+  [(lookup Negative?) (flat (λ x (negative? x)))]
+  [(lookup Natural?)  (flat (λ x (<= x 0)))]
   
-  ;; Third Level
-  [(lookup %UEven) (%UInteger / (λ x (even? x)))]
-  [(lookup %UOdd)  (%UInteger / (λ x (odd? x)))])
-
-#|
- ___            _ _         _         ___          _           _   _          
-| _ \_ _ ___ __| (_)__ __ _| |_ ___  | __|_ ____ _| |_  _ __ _| |_(_)___ _ _  
-|  _/ '_/ -_) _` | / _/ _` |  _/ -_) | _|\ V / _` | | || / _` |  _| / _ \ ' \ 
-|_| |_| \___\__,_|_\__\__,_|\__\___| |___|\_/\__,_|_|\_,_\__,_|\__|_\___/_||_|
-                                                                              
-|#
-
-;; Sum (Σ)
-;; -------
-;; Summarizes the patricular predicates of a
-;; refinement chain (P).
-(define-metafunction λCon
-  Σ : P -> (M ...)
-  [(Σ ⊤) ()]
-  [(Σ predefined) (Σ (lookup predefined))]
-  [(Σ (P / M)) (⊎ (Σ P) (M))])
-
-(define-metafunction λCon
-  Σ/ : P ... -> (M ...)
-  [(Σ/ ) ()]
-  [(Σ/ P_0 P_1 ...) (⊎ (Σ P_0) (Σ/ P_1 ...))])
-
-;; Predicate Evaluation (eval)
-;; ---------------------------
-;; Evaluates a set oof predicates and
-;; returns the conjunction of the results.
-(define-metafunction λCon
-  eval : (M ...) V -> V
-  [(eval () V) #t]
-  [(eval (M) V) (⇓/Term ,(with-handlers ([(λ x #t) (lambda (exn) (term (· #f)))]) (λCon-->* (term (M V)))))]
-  [(eval (M_0 M_1 ...) V) ,(and (term (eval (M_0) V)) (term (eval (M_1 ...) V)))]
-  [(eval any ...) #f])
+  [(lookup Even?)     (flat (λ x (even? x)))]
+  [(lookup Odd?)      (flat (λ x (odd? x)))])
 
 #|
  __  __     _            ___             _   _             

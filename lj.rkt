@@ -110,8 +110,8 @@
 ;; ---------
 (define namespace (make-base-namespace))
 (define-metafunction λJ
-  δ : op K ... -> K
-  [(δ op K ...) ,(eval (term (op K ...)) namespace)])
+  δ : op V ... -> V
+  [(δ op V ...) ,(eval (term (op V ...)) namespace)])
 
 
 ;; Free Variables (free?)
