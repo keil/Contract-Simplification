@@ -21,6 +21,17 @@
 
 (define-extended-language λCon-Baseline λCon
   
+  ;; Immediate Contracts
+  ;; -------------------
+  ((I J) .... ⊥ ⊤) ;; TODO, JCon needs to knwo ⊤/⊥
+  
+  ;; Delayed Contracts
+  ;; -----------------
+  ((Q R) .... (C → ⊤)) ;; TODO (⊤ → C) can be reduces
+  
+  
+  
+  
   ;; Contract-free terms (λJ terms)
   ;; ------------------------------
   ((S T) K x (λ x T) (S T) (op T ...) (if S T_0 T_1))
@@ -141,41 +152,9 @@
         (where W (⇓/Term ,(car (apply-reduction-relation* λCon-reduction (term (· (M V)))))))
         (side-condition (false? (term W))))
    
-;   (--> (ς
-;         (in-hole F (V @ ι (flat M))))
-;        (ς
-;         (in-hole F (V @ ι ⊤))
-;        "Verify/False"
-;        
-;        )
-   
-   
-   
-   
-;   (--> (ς
-;         (in-hole F (V @ ι (flat M))))
-;        ((⇓/State ,(car (apply-reduction-relation* λCon-reduction (term (ς (V @ ι (flat M)))))))
-;         (in-hole F 
-;        "Verify")
-   
-   
-   
-   
-   
-   
-;   (--> (ς
-;         (in-hole F (V @ ι (flat M))))
-;        ((⇓/State ,(car (apply-reduction-relation* λCon-reduction (term (ς (V @ ι (flat M)))))))
-;         (in-hole F (⇓/Term ,(car (apply-reduction-relation* λCon-reduction (term (ς (V @ ι (flat M)))))))))
-        ;"Verify")
-   
-   
-   
-   
-   
-   
    ;; Static Blame
    ;; ------------
+   
    
    
    
@@ -185,11 +164,3 @@
 
 
 
-(traces
- Pre-evaluation
- (term (· ((λ x (+ x (2 @ ♭ Positive?))) 1))))
-
-
-(traces
- Pre-evaluation
- (term (· ((λ x (+ x (0 @ ♭ Positive?))) 1))))

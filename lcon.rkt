@@ -38,7 +38,7 @@
   (A (Λ x C))
   
   ; Immediate Contracts
-  ((I J) (flat M) predefined)
+  ((I J) (flat M) predefined ⊤ ⊥)
   
   ; Delayed Contracts
   ((Q R) (C → D) (x ↦ A) (Q ∩ R))
@@ -205,6 +205,21 @@
         (side-condition (term (is-blame-state? ς)))
         (where (blame ♭) (produce-blame  ς)))
    
+   ;; ⊤/⊥
+   ;; ---
+   (--> (ς
+         (in-hole E (V @ ι ⊤)))
+        (((ι ◃ (τ #t)) ς)
+         (in-hole E V))
+        "⊤"
+        (side-condition (not (term (is-blame-state? ς)))))
+   
+   (--> (ς
+         (in-hole E (V @ ι ⊥)))
+        (((ι ◃ (τ #f)) ς)
+         (in-hole E V))
+        "⊥"
+        (side-condition (not (term (is-blame-state? ς)))))
    
    ;; Lookup
    (--> (ς
