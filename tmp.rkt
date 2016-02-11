@@ -2,59 +2,76 @@
 (require redex)
 (require rackunit)
 
+
+
+
+;; Old verify, update of state not correct beucase it will end in a blame state
+;; and thus no execution would be poissible
+
+(--> (ς
+      (in-hole F (V @ ι (flat M))))
+     ((⇓/State ,(car (apply-reduction-relation* λCon-reduction (term (ς (V @ ι (flat M)))))))
+      (in-hole F (⇓/Term ,(car (apply-reduction-relation* λCon-reduction (term (ς (V @ ι (flat M)))))))))
+     "Verify")
+
+
+
+
+
+
 (require "lcon.rkt")
 
 
-  
-  ;; Execution Body (name?)
-  ;; Function Body
-  (a K x (a_1 a_2) (op a ...)) ;; Contracts a @ C
-  ;(H hole (op a ... F M ...) (F M) (a F) (F @ C)) ;; Todo (H @ Q)
-  (H hole (op a ... H M ...) (H M) (a H) (H @ C)) ;; Todo (H @ Q)
-  ;;;(A hole (op a ... A M ...) (A M) (a A) (A @ C)) ;; Todo (H @ Q)
-  
-  (HH )
 
- 
-   ;; Delayed Contracts
-   ;((λ x T) @ Q)
-   ;(x @ Q)
-   ;(S (T @ Q))
-   ;((S T) @ Q) ;; NOT n element of B, because it is M @ Q
-   
-   ;(M (N @ Q)) (M (N @ Qz))
-   
+;; Execution Body (name?)
+;; Function Body
+(a K x (a_1 a_2) (op a ...)) ;; Contracts a @ C
+;(H hole (op a ... F M ...) (F M) (a F) (F @ C)) ;; Todo (H @ Q)
+(H hole (op a ... H M ...) (H M) (a H) (H @ C)) ;; Todo (H @ Q)
+;;;(A hole (op a ... A M ...) (A M) (a A) (A @ C)) ;; Todo (H @ Q)
+
+(HH )
 
 
-  ;; Final Terms
-  ;(final B (B @ C)) ; (B @ Q) (B @ I) --> ()
-  
-  
-  ;; Final Terms
-  ;(final B (B @ C)) ; (B @ Q) (B @ I) --> ()
-  
-  
+;; Delayed Contracts
+;((λ x T) @ Q)
+;(x @ Q)
+;(S (T @ Q))
+;((S T) @ Q) ;; NOT n element of B, because it is M @ Q
 
-  ;; restrict to flat contracts instead of I
-  ;; pre-evaluated contracts
-  ;(Qc (Dc → Rc))
-  ;; Domain contracts
-  ;(Dc I (Rc → Dc))
-  ;; Range contracts
-  ;(Rc ⊤ (Dc → Rc))
-  
+;(M (N @ Q)) (M (N @ Qz))
+
+
+
+;; Final Terms
+;(final B (B @ C)) ; (B @ Q) (B @ I) --> ()
+
+
+;; Final Terms
+;(final B (B @ C)) ; (B @ Q) (B @ I) --> ()
+
+
+
+;; restrict to flat contracts instead of I
+;; pre-evaluated contracts
+;(Qc (Dc → Rc))
+;; Domain contracts
+;(Dc I (Rc → Dc))
+;; Range contracts
+;(Rc ⊤ (Dc → Rc))
+
 (define 
   (canonical? C)
   (redex-match? λCon-Baseline QC C))
 
-  ;; Extend contracts
-  ((C D) .... (C • D))
-  
-  
-  ;; Canonical Contract
-  ;(QC (DC → RC))
-  ;(DC ⊤ ⊥ I (RC → DC))
-  ;(RC ⊤ ⊥ (DC → RC))
+;; Extend contracts
+((C D) .... (C • D))
+
+
+;; Canonical Contract
+;(QC (DC → RC))
+;(DC ⊤ ⊥ I (RC → DC))
+;(RC ⊤ ⊥ (DC → RC))
 
 
 

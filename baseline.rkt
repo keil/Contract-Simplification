@@ -76,38 +76,22 @@
          (in-hole F (B @ ♭ C)))
         (((♭ ◃ ι) ς)
          (in-hole F (B @ ι C)))
-        "Assert"
+        "Unfold/Assert"
         (fresh ι))
    
    (--> (ς
          (in-hole F (M @ ι (C ∪ D))))
         (((ι ◃ (ι1 ∪ ι2)) ς)
          (in-hole F ((M @ ι1 C) @ ι2 D)))
-        "Union"
+        "Unfold/Union"
         (fresh ι1 ι2))
    
    (--> (ς
          (in-hole F (M @ ι (I ∩ C))))
         (((ι ◃ (ι1 ∩ ι2)) ς)
          (in-hole F ((M @ ι1 I) @ ι2 C)))
-        "Intersection"
+        "Unfold/Intersection"
         (fresh ι1 ι2))
-   
-   ;; Predicaste Verification
-   ;; -----------------------
-   
-   ;; Lookup
-   (--> (ς
-         (in-hole F (V @ ι predefined)))
-        (ς
-         (in-hole F (V @ ι (lookup predefined))))
-        "Lookup")
-   
-   (--> (ς
-         (in-hole F (V @ ι (flat M))))
-        ((⇓/State ,(car (apply-reduction-relation* λCon-reduction (term (ς (V @ ι (flat M)))))))
-         (in-hole F (⇓/Term ,(car (apply-reduction-relation* λCon-reduction (term (ς (V @ ι (flat M)))))))))
-        "Verify")
    
    ;; Valid Contracts
    ;; ---------------
@@ -116,14 +100,52 @@
          (in-hole F (K @ ι Q)))
         (((ι ◃ (τ #t)) ς)
          (in-hole F K))
-        "Skip/Constant")
+        "Reduce/Constant")
    
    (--> (ς
          (in-hole F ((op M ...) @ ι Q)))
         (((ι ◃ (τ #t)) ς)
          (in-hole F (op M ...)))
-        "Skip/Operation")
+        "Redcude/Operation")
    
+   (--> (ς
+         (in-hole F (V @ ι true)))
+        (((ι ◃ (τ #t)) ς)
+         (in-hole F V))
+        "Recude/True")
+   
+   ;; Predicaste Verification
+   ;; -----------------------
+   
+   (--> (ς
+         (in-hole F (V @ ι predefined)))
+        (ς
+         (in-hole F (V @ ι (lookup predefined))))
+        "Lookup")
+   
+   
+      (--> (ς
+         (in-hole F (V @ ι (flat M))))
+        ((⇓/State ,(car (apply-reduction-relation* λCon-reduction (term (ς (V @ ι (flat M)))))))
+         (in-hole F (⇓/Term ,(car (apply-reduction-relation* λCon-reduction (term (ς (V @ ι (flat M)))))))))
+        "Verify")
+   
+   
+   
+   
+   
+   
+   (--> (ς
+         (in-hole F (V @ ι (flat M))))
+        ((⇓/State ,(car (apply-reduction-relation* λCon-reduction (term (ς (V @ ι (flat M)))))))
+         (in-hole F (⇓/Term ,(car (apply-reduction-relation* λCon-reduction (term (ς (V @ ι (flat M)))))))))
+        "Verify")
+   
+   
+   
+   
+   
+      
    ;; Static Blame
    ;; ------------
    
@@ -131,11 +153,11 @@
    
    
    
-   (--> (ς
-         (in-hole F (V @ ι true)))
-        (((ι ◃ (τ #t)) ς)
-         (in-hole F V))
-        "Reduce/True")
    ))
 
 
+
+(traces
+ Pre-evaluation
+ (term (· ((λ x (+ x (0 @ ♭ Positive?))) 1))))
+ 
