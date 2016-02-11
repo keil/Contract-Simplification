@@ -142,7 +142,7 @@
         "Verify/True"
         (where W (⇓/Term ,(car (apply-reduction-relation* λCon-reduction (term (· (M V)))))))
         (side-condition (not (false? (term W)))))
-        
+   
    
    (--> (ς
          (in-hole F (V @ ι (flat M))))
@@ -214,34 +214,39 @@
   ;; Otherwise
   [(≡ any ...) #f])
 
-
-;; Term Subset (≼)
+;; Term Subset (≤)
 ;; ---------------
-;; This meta function models the implicite assertions of predicates. Some of the 
-;; realtions could be might be determinable by unsing a SAT solvers.
+;; This metafunction models subset relations of predicates.
+;; The subset relation of predicates needs to be defined manually (by the developer) as 
+;; the semantical subset of predicates cannot be determines (e.g. positive? ≤ (x <= 0)).
+;; For others, a SAT solver could solve the relation.
+;; ---------------
 ;; Returns true if the left term is subset or equals to the reight term, 
-;; false otherwise.
+;; otherwise false.
 
 (define-metafunction λCon
   ≤ : (λ x M) (λ x M) -> boolean
-  ;; complex? ≤
-  [(≼ (λ x (complex? x))  (λ x (number? x)))   #t]
   
-  [(≼ (λ x (real? x))     (λ x (number? x)))   #t]
+  ;; complex? ≤ number?
+  [(≤ (λ x (complex? x))  (λ x (number? x)))   #t]
   
-  [(≼ (λ x (rational? x)) (λ x (real? x)))     #t]
-  [(≼ (λ x (rational? x)) (λ x (number? x)))   #t]
+  ;; real? ≤ number?
+  [(≤ (λ x (real? x))     (λ x (number? x)))   #t]
   
-  [(≼ (λ x (integer? x))  (λ x (rational? x))) #t]
-  [(≼ (λ x (integer? x))  (λ x (real? x)))     #t]
-  [(≼ (λ x (integer? x))  (λ x (number? x)))   #t]
+  ;; rational? ≤ real? ≤ number?
+  [(≤ (λ x (rational? x)) (λ x (real? x)))     #t]
+  [(≤ (λ x (rational? x)) (λ x (number? x)))   #t]
   
+  ;; integer? ≤ rational? ≤ real? ≤ number?
+  [(≤ (λ x (integer? x))  (λ x (rational? x))) #t]
+  [(≤ (λ x (integer? x))  (λ x (real? x)))     #t]
+  [(≤ (λ x (integer? x))  (λ x (number? x)))   #t]
   
+  ;; positive? ≤ (x <= 0)
+  [(≤ (λ x (positive? x)) (λ x (<= x 0)))      #t]
   
-  
-  [(≼ (λ x (positive? x)) (λ x (<= x 0)))      #t]
   ;; Otherwise
-  [(≼ any ...) (≡ any ...)])
+  [(≤ any ...) (≡ any ...)])
 
 
 
