@@ -1,3 +1,19 @@
+Static Blame State
+==================
+
+- A failing predicate is not allowed to update false, because the current context
+  might never be executed and the state would flip to a blame state.
+
+- Removing the blame label from the state is also not ok because we might have a
+  delayed contract that otherwise would throw a violation elsewhere.
+
+- So, only reduce to (blame b)
+
+
+
+
+
+
 
 
 
