@@ -31,9 +31,9 @@
    ;; Contract-free terms
    T
    ;; Imemdiate Contracts
-   ((A B) @ b I)
-   ((op B ...) @ b I)
-   ((if A B_0 B_1) @ b I)
+   ((A B) @ ι I)
+   ((op B ...) @ ι I)
+   ((if A B_0 B_1) @ ι I)
    
    ;; Blame terms
    (blame ♭))
@@ -46,7 +46,7 @@
   ;; -------------
   
   ;; True-Contracts
-  (true-contrct T (true → true)))
+  (true ⊤ (true → true)))
 
 #|
  ___        _         _   _          
@@ -67,14 +67,34 @@
 (define Pre-evaluation
   (reduction-relation
    λCon-Baseline
-   #:domain (ς M)
+   #:domain (ς any)
+   
+   ;; Constraint Generation
+   ;; --------------------- 
    
    (--> (ς
-         (in-hole F (V @ ♭ C)))
+         (in-hole F (B @ ♭ C)))
         (((♭ ◃ ι) ς)
-         (in-hole F (V @ ι C)))
+         (in-hole F (B @ ι C)))
         "Assert"
         (fresh ι))
+   
+   (--> (ς
+         (in-hole F (M @ ι (C ∪ D))))
+        (((ι ◃ (ι1 ∪ ι2)) ς)
+         (in-hole F ((M @ ι1 C) @ ι2 D)))
+        "Union"
+        (fresh ι1 ι2))
+   
+   (--> (ς
+         (in-hole F (M @ ι (I ∩ C))))
+        (((ι ◃ (ι1 ∩ ι2)) ς)
+         (in-hole F ((M @ ι1 I) @ ι2 C)))
+        "Intersection"
+        (fresh ι1 ι2))
+   
+   ;; Predicaste Verification
+   ;; -----------------------
    
    ;; Lookup
    (--> (ς
@@ -84,10 +104,13 @@
         "Lookup")
    
    (--> (ς
-         (in-hole F (V @ b (flat M))))
-        ((⇓/State ,(car (apply-reduction-relation* λCon-reduction (term (ς (V @ b (flat M)))))))
-         (in-hole F (⇓/Term ,(car (apply-reduction-relation* λCon-reduction (term (ς (V @ b (flat M)))))))))
+         (in-hole F (V @ ι (flat M))))
+        ((⇓/State ,(car (apply-reduction-relation* λCon-reduction (term (ς (V @ ι (flat M)))))))
+         (in-hole F (⇓/Term ,(car (apply-reduction-relation* λCon-reduction (term (ς (V @ ι (flat M)))))))))
         "Verify")
+   
+   ;; Valid Contracts
+   ;; ---------------
    
    (--> (ς
          (in-hole F (K @ ι Q)))
@@ -101,19 +124,12 @@
          (in-hole F (op M ...)))
         "Skip/Operation")
    
-   (--> (ς
-         (in-hole F (M @ ι (C ∪ D))))
-        (((ι ◃ (ι1 ∪ ι2)) ς)
-         (in-hole F ((M @ ι1 C) @ ι2 D)))
-        "Reduce/Union"
-        (fresh ι1 ι2))
+   ;; Static Blame
+   ;; ------------
    
-   (--> (ς
-         (in-hole F (M @ ι (I ∩ C))))
-        (((ι ◃ (ι1 ∩ ι2)) ς)
-         (in-hole F ((M @ ι1 I) @ ι2 C)))
-        "Reduce/Intersection"
-        (fresh ι1 ι2))
+   
+   
+   
    
    (--> (ς
          (in-hole F (V @ ι true)))

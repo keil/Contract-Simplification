@@ -22,39 +22,6 @@
 ; Test are skipped until predicate handling is implemented
 ; ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-;(test-->> 
-; Pre-evaluation
-; (term (assert (assert 0 Pos?) Nat?)) (term +blmae))
-
-;(test-->> 
-; Pre-evaluation
-; (term ((0 @ Nat?) @ Pos?))
-; (term +blame))
-
-(test-->>
- Pre-evaluation
- (term ((λ x (+ x 1)) (1 @ Nat?)))
- (term ((λ x (+ x 1)) 1)))
-
-(test-->>
- Pre-evaluation
- (term ((λ x (+ x (1 @ Nat?))) 1))
- (term ((λ x (+ x 1)) 1)))
-
-(test-->>
- Pre-evaluation
- (term ((λ x (+ (x @ Nat?) 1)) 1))
- (term ((λ x (+ (x @ Nat?) 1)) 1)))
-
-(test-->>
- Pre-evaluation
- (term (1 @ (Nat? → Nat?)))
- (term 1))
-
-(test-->>
- Pre-evaluation
- (term (x @ (Nat? → Nat?)))
- (term (x @ (Nat? → Nat?))))
 
 #|
  _____       _      
