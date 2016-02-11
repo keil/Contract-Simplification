@@ -67,10 +67,10 @@
                                      
 |#
 
-;; Baseline Reduction
-;; ------------------
-;; Verifies all (immediate) contracts 
-;; that can be check at compile time
+;; Pre-evaluation
+;; ==============
+;; Verifies all (immediate) contracts that can be check at compile time
+;; and unroll all intersection/union contracts.
 
 ;; TODO
 ;; implement top-level blame rule
@@ -151,16 +151,65 @@
         "Verify/False"
         (where W (⇓/Term ,(car (apply-reduction-relation* λCon-reduction (term (· (M V)))))))
         (side-condition (false? (term W))))
-   
-   ;; Static Blame
-   ;; ------------
-   
-   
-   
-   
+   ))
+
+
+;; Subset Reduction
+;; ================
+
+
+
+(define Subset-evaluation
+  (reduction-relation
+   λCon-Baseline
+   #:domain (ς any)
    
    
    ))
+
+
+
+;; Baseline Reduction
+;; ------------------
+;; Verifies all (immediate) contracts 
+;; that can be check at compile time
+
+;; TODO
+;; implement top-level blame rule
+
+
+
+
+
+
+
+
+
+
+
+#|
+ ___                     _   _         _ 
+/ __| ___ _ __  __ _ _ _| |_(_)__ __ _| |
+\__ \/ -_) '  \/ _` | ' \  _| / _/ _` | |
+|___/\___|_|_|_\__,_|_||_\__|_\__\__,_|_|
+                                         
+  ___         _        _                    _   
+ / __|___ _ _| |_ __ _(_)_ _  _ __  ___ _ _| |_ 
+| (__/ _ \ ' \  _/ _` | | ' \| '  \/ -_) ' \  _|
+ \___\___/_||_\__\__,_|_|_||_|_|_|_\___|_||_\__|
+                                                
+|#
+
+
+
+
+
+
+
+
+
+
+
 
 
 

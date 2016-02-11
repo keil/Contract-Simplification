@@ -9,6 +9,8 @@ Open Points
 *** Naive Subtyping/ Subset/ Collapse
 
 
+static blame
+- reduction of (\top -> C) to only C
 
 Bugfix \sumOf
 
