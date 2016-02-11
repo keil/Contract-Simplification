@@ -17,6 +17,26 @@
 
 
 
+;(test-->> 
+; Pre-evaluation
+; (term (· ((0 @ ♭ Positive?) @ ♭1 Number?)))
+; (term (((♭ ◃ ι) ·) ((0 @ ι ⊥) @ ♭1 Number?)))) ;; TODO, blame state
+
+
+;; Static Blame
+;; ============
+
+;(test-->>
+; Pre-evaluation
+; (term (· ((λ x (+ x (2 @ ♭ Positive?))) 1)))
+; (term (· ((λ x (+ x (2 @ ♭ Positive?))) 1))))
+
+;(test-->>
+; Pre-evaluation
+; (term (· ((λ x (+ x (0 @ ♭ Positive?))) 1)))
+; (term (· ((λ x (+ x (0 @ ♭ Positive?))) 1))))
+
+
 ; ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ; Note: Matthias Keil
 ; Test are skipped until predicate handling is implemented

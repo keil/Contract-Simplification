@@ -1,5 +1,6 @@
 #lang racket
 (require redex)
+(require rackunit)
 
 (require "../baseline.rkt")
 
@@ -96,11 +97,6 @@
  (term (· ((1 @ ♭ Positive?) @ ♭1 Number?)))
  (term (((ι1 ◃ (#t ∘ #t)) ((♭1 ◃ ι1) ((ι ◃ (#t ∘ #t)) ((♭ ◃ ι) ·)))) 1)))
 
-(test-->> 
- Pre-evaluation
- (term (· ((0 @ ♭ Positive?) @ ♭1 Number?)))
- (term (((♭ ◃ ι) ·) ((0 @ ι ⊥) @ ♭1 Number?)))) ;; TODO, blame state
-
 (test-->>
  Pre-evaluation
  (term (· ((λ x (+ x 1)) (1 @ ♭ Number?))))
@@ -110,21 +106,5 @@
  Pre-evaluation
  (term (· ((λ x (+ (x @ ♭ Number?) 1)) 1)))
  (term (((♭ ◃ ι) ·) ((λ x (+ (x @ ι Number?) 1)) 1))))
-
-
-
-;; Static Blame
-;; ============
-
-;(test-->>
-; Pre-evaluation
-; (term (· ((λ x (+ x (2 @ ♭ Positive?))) 1)))
-; (term (· ((λ x (+ x (2 @ ♭ Positive?))) 1))))
-
-;(test-->>
-; Pre-evaluation
-; (term (· ((λ x (+ x (0 @ ♭ Positive?))) 1)))
-; (term (· ((λ x (+ x (0 @ ♭ Positive?))) 1))))
-
 
 (test-results)

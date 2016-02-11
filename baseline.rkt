@@ -159,13 +159,13 @@
 
 
 
-(define Subset-evaluation
-  (reduction-relation
-   λCon-Baseline
-   #:domain (ς any)
-   
-   
-   ))
+;(define Subset-evaluation
+;  (reduction-relation
+;   λCon-Baseline
+;   #:domain (ς any)
+;   
+;   
+;   ))
 
 
 
@@ -209,17 +209,14 @@
   ≡ : (λ x M) (λ x M) -> boolean
   [(≡ (λ x M) (λ x M)) #t]
   [(≡ (λ x M) (λ x N)) #f]
-  [(≡ (λ x M) (λ y N)) (≼ (λ z (subst x z M)) (λ z (subst y z N)))
+  [(≡ (λ x M) (λ y N)) (≤ (λ z (subst x z M)) (λ z (subst y z N)))
                        (where z ,(variable-not-in (term ((λ x M) (λ y N))) (term z)))]
   ;; Otherwise
   [(≡ any ...) #f])
 
 ;; Term Subset (≤)
 ;; ---------------
-;; This metafunction models subset relations of predicates.
-;; The subset relation of predicates needs to be defined manually (by the developer) as 
-;; the semantical subset of predicates cannot be determines (e.g. positive? ≤ (x <= 0)).
-;; For others, a SAT solver could solve the relation.
+;; This metafunction models subset relations of predicates. The subset relation of predicates needs to be defined manually (by the developer) as the semantical subset of predicates cannot be determines (e.g. positive? ≤ (x <= 0)). For others, a SAT solver could solve the relation.
 ;; ---------------
 ;; Returns true if the left term is subset or equals to the reight term, 
 ;; otherwise false.
@@ -247,6 +244,102 @@
   
   ;; Otherwise
   [(≤ any ...) (≡ any ...)])
+
+
+
+
+
+
+;; Naive Subsets of Contracts (⊑)
+;; ==============================
+
+;; A contract C is subset of contract D iff
+;; C is more restrictive than D.
+
+;; If C ⊑ D then \forall .
+;; * V \in [[C]]+ => V \in [[D]]+
+;; * E \in [[C]]- => E \in [[D]]-
+;; resp.
+;; * V \not\in [[D]]+ => V \not\in [[C]]+
+;; * E \not\in [[D]]- => E \not\in [[C]]-
+
+;; It follows that:
+;;    E[[ M @ D ]] --> +blame/-blame
+;; => E[[ M @ C ]] --> +blame/-blame
+;; resp.
+;;    E[[ M @ C ]] --> V
+;; => E[[ M @ D ]] --> V
+
+(define-metafunction λCon
+  ⊑ : C D -> boolean
+  
+  [(⊑ C ⊤) #t]
+  [(⊑ ⊥ D) #f]
+  
+  [(⊑ C D) ,(and (term (⊑/context C D)) (term (⊑/subject C D)))]
+  [(⊑ any ...) #f])
+
+(define-metafunction λCon
+  ⊑/context : C D -> boolean
+  ;; Immediate Contracts
+  [(⊑/context I J) #t]
+  
+  ;; Abstraction
+  [(⊑/context (Λ x C) (Λ x D)) (⊑/context C D)]
+  
+  ;; Function Contract
+  [(⊑/context (C_0 → D_0) (C_1 → D_1)) ,(and (term (⊑/subject C_0 C_1)) (term (⊑/context D_0 D_1)))]
+  
+  ;; Dependent Contract
+  [(⊑/context (x → A_0) (x → A_1)) (⊑/context A_0 A_1)]
+  
+  ;; Intersection Contract  
+  [(⊑/context C (D_0 ∩ D_1)) ,(or (term (⊑/context C D_0)) (term (⊑/context C D_1)))]
+  [(⊑/context (C_0 ∩ C_1) D) ,(and (term (⊑/context C_0 D)) (term (⊑/context C_1 D)))]
+  
+  ;; Union Contract
+  [(⊑/context (C_0 ∪ C_1) D) ,(or (term (⊑/context C_0 D)) (term (⊑/context C_1 D)))]
+  [(⊑/context C (D_0 ∪ D_1)) ,(and (term (⊑/context C D_0)) (term (⊑/context C D_1)))]
+  
+  ;; If not otherwise mentioned
+  [(⊑/context any ...) #f])
+
+
+(define-metafunction λCon
+  ⊑/subject : C D -> boolean
+  
+  ;; Flat Contracts
+  [(⊑/subject (flat M) (flat N)) (≤ (flat M) (flat N))]
+  
+  ;; Abstraction
+  [(⊑/subject (Λ x C) (Λ x D)) (⊑/subject C D)]
+  
+  ;; Function Contract
+  [(⊑/subject (C_0 → D_0) (C_1 → D_1)) ,(and (term (⊑/context C_0 C_1)) (implies (term (⊑/subject C_0 C_1)) (term (⊑/subject D_0 D_1))))]
+  
+  ;; Dependent Contract
+  [(⊑/subject (x → A_0) (x → A_1)) (⊑/subject A_0 A_1)]
+  
+  ;; Intersection Contract
+  [(⊑/subject C (D_0 ∩ D_1)) ,(and (term (⊑/subject C D_0)) (term (⊑/subject C D_1)))]
+  [(⊑/subject (C_0 ∩ C_1) D) ,(or (term (⊑/subject C_0 D)) (term (⊑/subject C_1 D)))]
+  
+  ;; Union Contract
+  [(⊑/subject (C_0 ∪ C_1) D) ,(and (term (⊑/subject C_0 D)) (term (⊑/subject C_1 D)))]
+  [(⊑/subject C (D_0 ∪ D_1)) ,(or (term (⊑/subject C D_0)) (term (⊑/subject C D_1)))]
+  
+  ;; If not otherwise mentioned
+  [(⊑/subject any ...) #f])
+
+
+
+
+
+
+
+
+
+
 
 
 
