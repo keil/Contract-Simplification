@@ -22,7 +22,7 @@
   
   ;; Predefined Flat Contracts
   ;; -------------------------
-  (predefined ⊤ ⊥
+  (predefined Any?
               Number? Complex? Real? Rational? Integer? String? Boolean?
               Exact? Inexact? Zero?  
               Positive? Negative? Even? Odd? Natural?)
@@ -235,8 +235,7 @@
 (define-metafunction λCon
   lookup : predefined -> M
   
-  [(lookup ⊤)   (flat (λ x #t))]
-  [(lookup ⊥)  (flat (λ x #f))]
+  [(lookup Any?)   (flat (λ x #t))]
   
   [(lookup Number?)   (flat (λ x (number? x)))]
   [(lookup Complex?)  (flat (λ x (complex? x)))]
