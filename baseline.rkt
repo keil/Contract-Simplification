@@ -239,8 +239,39 @@
   [(≤ (λ x (integer? x))  (λ x (real? x)))     #t]
   [(≤ (λ x (integer? x))  (λ x (number? x)))   #t]
   
-  ;; positive? ≤ (x <= 0)
-  [(≤ (λ x (positive? x)) (λ x (<= x 0)))      #t]
+  ;; (x >= 0) ≤ real? ≤ number?
+  [(≤ (λ x (>= x 0)) (λ x (number? x)))        #t]
+  [(≤ (λ x (>= x 0)) (λ x (real? x)))          #t]
+  
+  ;; positive? ≤ (x >= 0) ≤ real? ≤ number?
+  [(≤ (λ x (positive? x)) (λ x (>= x 0)))      #t]
+  [(≤ (λ x (positive? x)) (λ x (number? x)))   #t]
+  [(≤ (λ x (positive? x)) (λ x (real? x)))     #t]
+  
+  ;; negative? ≤ real? ≤ number?
+  [(≤ (λ x (negative? x)) (λ x (number? x)))   #t]
+  [(≤ (λ x (negative? x)) (λ x (real? x)))     #t]
+  
+  ;; zero? ≤ number?
+  [(≤ (λ x (zero? x)) (λ x (number? x)))       #t]
+  
+  ;; exact? ≤ number?
+  [(≤ (λ x (exact x)) (λ x (number? x)))       #t]
+  
+  ;; inexact ≤ number?
+  [(≤ (λ x (inexact x)) (λ x (number? x)))     #t]
+  
+  ;; even? ≤ integer? ≤ rational? ≤ real? ≤ number?
+  [(≤ (λ x (even? x))  (λ x (integer? x)))     #t]
+  [(≤ (λ x (even? x))  (λ x (rational? x)))    #t]
+  [(≤ (λ x (even? x))  (λ x (real? x)))        #t]
+  [(≤ (λ x (even? x))  (λ x (number? x)))      #t]
+  
+  ;; odd? ≤ integer? ≤ rational? ≤ real? ≤ number?
+  [(≤ (λ x (odd? x))  (λ x (integer? x)))      #t]
+  [(≤ (λ x (odd? x))  (λ x (rational? x)))     #t]
+  [(≤ (λ x (odd? x))  (λ x (real? x)))         #t]
+  [(≤ (λ x (odd? x))  (λ x (number? x)))       #t]
   
   ;; Otherwise
   [(≤ any ...) (≡ any ...)])
@@ -281,6 +312,7 @@
 
 (define-metafunction λCon
   ⊑/context : C D -> boolean
+  
   ;; Immediate Contracts
   [(⊑/context I J) #t]
   
@@ -308,8 +340,15 @@
 (define-metafunction λCon
   ⊑/subject : C D -> boolean
   
+  [(⊑/subject C ⊤) #t]
+  [(⊑/subject ⊥ D) #t]
+  
+  ;; Predefined Contracts
+  [(⊑/subject predefined D) (⊑/subject (lookup predefined) D)]
+  [(⊑/subject C predefined) (⊑/subject C (lookup predefined))]
+  
   ;; Flat Contracts
-  [(⊑/subject (flat M) (flat N)) (≤ (flat M) (flat N))]
+  [(⊑/subject (flat M) (flat N)) (≤ M N)]
   
   ;; Abstraction
   [(⊑/subject (Λ x C) (Λ x D)) (⊑/subject C D)]
@@ -336,10 +375,36 @@
 
 
 
+#|
+  ___         _               _   
+ / __|___ _ _| |_ _ _ __ _ __| |_ 
+| (__/ _ \ ' \  _| '_/ _` / _|  _|
+ \___\___/_||_\__|_| \__,_\__|\__|
+                                  
+ ___      _       _               _   _          
+/ __|_  _| |__ __| |_ _ _ __ _ __| |_(_)___ _ _  
+\__ \ || | '_ (_-<  _| '_/ _` / _|  _| / _ \ ' \ 
+|___/\_,_|_.__/__/\__|_| \__,_\__|\__|_\___/_||_|
+                                                 
+|#
+
+
+;; Contract Minus (I \ J)
 
 
 
-
+(define-metafunction λCon
+  \\ : I J -> boolean
+  ;; ⊤ \ J 
+  [(\\ ⊤ J) ⊤]
+  ;; I \ J (e.g. Numer \ Positive) 
+  [(\\ I J) ⊤ (side-condition (term (⊑ J I)))]
+  ;; Right-Intersection
+  [(\\ I (J_0 ∩ J_1)) (\\ (\\ I J_0) J_1)]
+  ;; Left-Intersection
+  [(\\ (I_0 ∩ I_1) J) ((\\ I_0 J) ∩ (\\ I_1 J))]
+  ;; Otherwise
+  [(\\ I J) I])
 
 
 

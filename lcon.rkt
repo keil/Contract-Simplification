@@ -267,7 +267,7 @@
   
   [(lookup Positive?) (flat (λ x (positive? x)))]
   [(lookup Negative?) (flat (λ x (negative? x)))]
-  [(lookup Natural?)  (flat (λ x (<= x 0)))]
+  [(lookup Natural?)  (flat (λ x (>= x 0)))]
   
   [(lookup Even?)     (flat (λ x (even? x)))]
   [(lookup Odd?)      (flat (λ x (odd? x)))])
