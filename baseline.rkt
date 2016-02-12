@@ -166,11 +166,11 @@
    #:domain (ς any)
    
    (--> (ς
-         (in-hole F ((M @ ι_0 C) @ ι_1 D)))
+         (in-hole F ((B @ b_0 C) @ b_1 D)))
         (ς
-         (in-hole F ((M @ (ι_0 ι_1) C) @ ι_1 (\\ C D))))
-        "Subset")
-   
+         (in-hole F ((B @ (b_0 b_1) C) @ b_1 (\\ C D))))
+        "Subset"
+        (side-condition (not (λCon-value? (term B)))))
    ))
 
 
