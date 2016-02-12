@@ -9,5 +9,3 @@
 ; λCon-reduction 
 ; (term (· ((+ 1 2) @ ♭ (((Λ x (Λ y (flat (λ z (and (<= x z) (>= y z)))))) 0) 2))))
 ; (term (((ι ◃ (#t ∘ #f)) ((♭ ◃ ι) ·)) (+blame ♭))))
-
-
