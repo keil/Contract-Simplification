@@ -280,6 +280,19 @@
 
 
 
+;; Semantics Subsets of Contracts (⊑)
+;; ==================================
+
+(define-metafunction λCon
+  ⊑/semantic : C D -> boolean
+  
+  [(⊑/semantic C ⊤) #t]
+  [(⊑/semantic ⊥ D) #f]
+  
+  [(⊑/semantic C D) ,(and (term (⊑/context D C)) (term (⊑/subject C D)))]
+  [(⊑/semantic any ...) #f])
+
+
 
 ;; Naive Subsets of Contracts (⊑)
 ;; ==============================
@@ -421,7 +434,7 @@
 ;; --------------------------
 
 (define-metafunction λCon
-  ≈/ : C -> 
+  ≈/ : C -> C
   [(≈/ (C ∩ D)) (≈ ((≈/ C) ∩ (≈/ D)))]
   [(≈/ (C ∪ D)) (≈ ((≈/ C) ∪ (≈/ D)))]
   [(≈/ (C → D)) (≈ ((≈/ C) → (≈/ D)))]
@@ -433,18 +446,25 @@
   [(≈ (I ∩ ⊥)) ⊥]
   [(≈ (⊥ ∩ J)) ⊥]
   [(≈ (I ∩ ⊤)) I]
-  [(≈ (⊤ ∩ C)) J]
+  [(≈ (⊤ ∩ J)) J]
   
   [(≈ (I ∪ ⊥)) I]
   [(≈ (⊥ ∪ J)) J]
   [(≈ (I ∪ ⊤)) ⊤]
   [(≈ (⊤ ∪ J)) ⊤]
-  
+    
   [(≈ (C ∩ ⊥)) ⊥]
-  [(≈ (⊥ ∩ C)) ⊥]
+  [(≈ (⊥ ∩ D)) ⊥]
   
   [(≈ (C ∪ ⊥)) C]
-  [(≈ (⊥ ∪ C)) C]
+  [(≈ (⊥ ∪ D)) D]
+  
+  
+  [(≈ (C ∩ D)) C (side-condition (term (⊑/semantic C D)))]
+  [(≈ (C ∩ D)) D (side-condition (term (⊑/semantic D C)))]
+  
+  [(≈ (C ∪ D)) D (side-condition (term (⊑/semantic C D)))]
+  [(≈ (C ∪ D)) C (side-condition (term (⊑/semantic D C)))]
   
   [(≈ C) C])
 
