@@ -23,11 +23,11 @@
   
   ;; Immediate Contracts
   ;; -------------------
-  ((I J) .... ⊥ ⊤) ;; TODO, JCon needs to knwo ⊤/⊥
+  ((I J) .... (I ∩ J)) ;; TODO, JCon needs to knwo ⊤/⊥
   
   ;; Delayed Contracts
   ;; -----------------
-  ((Q R) .... (C → ⊤)) ;; TODO (⊤ → C) can be reduces
+  ((Q R) .... (C → ⊤) (⊤ → C)) ;; TODO (⊤ → C) can be reduces
   
   
   
@@ -157,15 +157,21 @@
 ;; Subset Reduction
 ;; ================
 
+;; is it possible to reuse teh same context ?
 
-
-;(define Subset-evaluation
-;  (reduction-relation
-;   λCon-Baseline
-;   #:domain (ς any)
-;   
-;   
-;   ))
+(define Subset-reduction
+  (extend-reduction-relation
+   Pre-evaluation
+   λCon-Baseline
+   #:domain (ς any)
+   
+   (--> (ς
+         (in-hole F ((M @ ι_0 C) @ ι_1 D)))
+        (ς
+         (in-hole F ((M @ (ι_0 ι_1) C) @ ι_1 (\\ C D))))
+        "Subset")
+   
+   ))
 
 
 
@@ -408,24 +414,24 @@
 ;; Contract Difference (\\)
 ;; ------------------------
 
-(define-metafunction λCon
+(define-metafunction λCon-Baseline
   \\ : C D -> C
   
   ;; ⊤ \ J 
   [(\\ ⊤ D) ⊤]
   ;; I \ J (e.g. Numer \ Positive) 
-  [(\\ I J) ⊤ (side-condition (term (⊑ J I)))]
+  [(\\ C D) ⊤ (side-condition (term (⊑ D C)))]
   
   ;; Right-Intersection
   [(\\ C (D_0 ∩ D_1)) (≈/ ((\\ C D_0) ∪ (\\ C D_1)))]
   ;; Right-Union
   [(\\ C (D_0 ∪ D_1)) (≈/ ((\\ C D_0) ∩ (\\ C D_1)))]
-
+  
   ;; Left-Intersection
   [(\\ (C_0 ∩ C_1) D) (≈/ ((\\ C_0 D) ∩ (\\ C_1 D)))]
   ;; Left-Union
   [(\\ (C_0 ∪ C_1) D) (≈/ ((\\ C_0 D) ∪ (\\ C_1 D)))]
-
+  
   ;; Otherwise
   [(\\ C D) C])
 
@@ -433,14 +439,14 @@
 ;; Contract Normalization (≈)
 ;; --------------------------
 
-(define-metafunction λCon
+(define-metafunction λCon-Baseline
   ≈/ : C -> C
   [(≈/ (C ∩ D)) (≈ ((≈/ C) ∩ (≈/ D)))]
   [(≈/ (C ∪ D)) (≈ ((≈/ C) ∪ (≈/ D)))]
   [(≈/ (C → D)) (≈ ((≈/ C) → (≈/ D)))]
   [(≈/ any) (≈ any)])
-  
-(define-metafunction λCon
+
+(define-metafunction λCon-Baseline
   ≈ : C -> C
   
   [(≈ (I ∩ ⊥)) ⊥]
@@ -452,7 +458,7 @@
   [(≈ (⊥ ∪ J)) J]
   [(≈ (I ∪ ⊤)) ⊤]
   [(≈ (⊤ ∪ J)) ⊤]
-    
+  
   [(≈ (C ∩ ⊥)) ⊥]
   [(≈ (⊥ ∩ D)) ⊥]
   
