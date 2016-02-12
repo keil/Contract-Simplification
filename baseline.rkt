@@ -392,25 +392,60 @@
 ;; Contract Minus (I \ J)
 
 
+;; Contract Difference (\\)
+;; ------------------------
 
 (define-metafunction λCon
   \\ : C D -> C
+  
   ;; ⊤ \ J 
   [(\\ ⊤ D) ⊤]
   ;; I \ J (e.g. Numer \ Positive) 
   [(\\ I J) ⊤ (side-condition (term (⊑ J I)))]
+  
   ;; Right-Intersection
-  [(\\ C (D_0 ∩ D_1)) (\\ (\\ C D_0) D_1)]
+  [(\\ C (D_0 ∩ D_1)) (≈/ ((\\ C D_0) ∪ (\\ C D_1)))]
+  ;; Right-Union
+  [(\\ C (D_0 ∪ D_1)) (≈/ ((\\ C D_0) ∩ (\\ C D_1)))]
+
   ;; Left-Intersection
-  [(\\ (C_0 ∩ C_1) D) ((\\ C_0 D) ∩ (\\ C_1 D))]
+  [(\\ (C_0 ∩ C_1) D) (≈/ ((\\ C_0 D) ∩ (\\ C_1 D)))]
+  ;; Left-Union
+  [(\\ (C_0 ∪ C_1) D) (≈/ ((\\ C_0 D) ∪ (\\ C_1 D)))]
+
   ;; Otherwise
   [(\\ C D) C])
 
 
+;; Contract Normalization (≈)
+;; --------------------------
 
-
-
-
-
+(define-metafunction λCon
+  ≈/ : C -> 
+  [(≈/ (C ∩ D)) (≈ ((≈/ C) ∩ (≈/ D)))]
+  [(≈/ (C ∪ D)) (≈ ((≈/ C) ∪ (≈/ D)))]
+  [(≈/ (C → D)) (≈ ((≈/ C) → (≈/ D)))]
+  [(≈/ any) (≈ any)])
+  
+(define-metafunction λCon
+  ≈ : C -> C
+  
+  [(≈ (I ∩ ⊥)) ⊥]
+  [(≈ (⊥ ∩ J)) ⊥]
+  [(≈ (I ∩ ⊤)) I]
+  [(≈ (⊤ ∩ C)) J]
+  
+  [(≈ (I ∪ ⊥)) I]
+  [(≈ (⊥ ∪ J)) J]
+  [(≈ (I ∪ ⊤)) ⊤]
+  [(≈ (⊤ ∪ J)) ⊤]
+  
+  [(≈ (C ∩ ⊥)) ⊥]
+  [(≈ (⊥ ∩ C)) ⊥]
+  
+  [(≈ (C ∪ ⊥)) C]
+  [(≈ (⊥ ∪ C)) C]
+  
+  [(≈ C) C])
 
 
