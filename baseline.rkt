@@ -394,17 +394,17 @@
 
 
 (define-metafunction λCon
-  \\ : I J -> boolean
+  \\ : C D -> C
   ;; ⊤ \ J 
-  [(\\ ⊤ J) ⊤]
+  [(\\ ⊤ D) ⊤]
   ;; I \ J (e.g. Numer \ Positive) 
   [(\\ I J) ⊤ (side-condition (term (⊑ J I)))]
   ;; Right-Intersection
-  [(\\ I (J_0 ∩ J_1)) (\\ (\\ I J_0) J_1)]
+  [(\\ C (D_0 ∩ D_1)) (\\ (\\ C D_0) D_1)]
   ;; Left-Intersection
-  [(\\ (I_0 ∩ I_1) J) ((\\ I_0 J) ∩ (\\ I_1 J))]
+  [(\\ (C_0 ∩ C_1) D) ((\\ C_0 D) ∩ (\\ C_1 D))]
   ;; Otherwise
-  [(\\ I J) I])
+  [(\\ C D) C])
 
 
 
