@@ -167,3 +167,23 @@ Paper
   ii) may be placed at unusual/inefficient places as developers add
   checks/contracts to sensitive data 
 - contracts/predicates may, knowingly or unknowingly, check redundant part
+
+
+
+Related Work
+============
+
+*** Difference to Symbolic Execution
+
+- The symbolic execution only runs a static analysis, which is able to verify
+  certain contracts or to throw a static blame. But, if a contract is
+  verifiable, e.g. because some values are not available, the symbolic execution
+  stops.
+
+- Summarizing, the symbolic execution is no code transformation. Not-verified
+  contracts remain in its original "position". Sugar, in contrast, first removes
+  and unrolls contracts as much as possible until only uncheckable parts remain
+  in the execution. It later on uses a symbolic executer to shrink the remaining
+  contracts based on observed information.
+
+

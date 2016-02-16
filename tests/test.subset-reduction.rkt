@@ -17,15 +17,26 @@
 (test-->>
  Subset-reduction
  (term (· ((x @ ♭ (Positive? ∩ Even?)) @ ♭1 Number?)))
- (term (((♭ ◃ ι) ·) ((1 @ ι ⊤) @ ♭1 Number?))))
+ (term (((♭1 ◃ ι1) ((♭ ◃ ι) ·)) ((x @ (ι ι1) (Positive? ∩ Even?)) @ ι1 ⊤))))
 
 (test-->>
  Subset-reduction
  (term (· ((x @ ♭ Positive?) @ ♭1 (Number? ∩ Odd?))))
- (term (((♭ ◃ ι) ·) ((1 @ ι ⊤) @ ♭1 Number?))))
+ (term (((♭1 ◃ ι1) ((♭ ◃ ι) ·)) ((x @ (ι ι1) Positive?) @ ι1 Odd?))))
  
-(traces
+(test-->>
  Subset-reduction
-(term (· ((x @ ♭ (Positive? ∩ Even?)) @ ♭1 Number?))))
+ (term (· ((x @ ♭ (Positive? ∩ Even?)) @ ♭1 (Number? ∩ Even?))))
+ (term (((♭1 ◃ ι1) ((♭ ◃ ι) ·)) ((x @ (ι ι1) (Positive? ∩ Even?)) @ ι1 ⊤))))
+
+(test-->>
+ Subset-reduction
+ (term (· ((x @ ♭ (Positive? ∩ Even?)) @ ♭1 (Number? ∪ Even?))))
+ (term (((♭1 ◃ ι1) ((♭ ◃ ι) ·)) ((x @ (ι ι1) (Positive? ∩ Even?)) @ ι1 ⊤))))
+
+(test-->>
+ Subset-reduction
+ (term (· ((x @ ♭ (Positive? ∪ Even?)) @ ♭1 (Number? ∩ Even?))))
+ (term (((ι ◃ (ι1 ∪ ι2)) ((♭ ◃ ι) ·)) (((x @ (ι1 ι2) Positive?) @ ι2 Even?) @ ♭1 (Number? ∩ Even?)))))
 
 (test-results)
