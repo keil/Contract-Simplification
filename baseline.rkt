@@ -178,7 +178,7 @@
    (--> (ς
          (in-hole F ((B @ ι_0 C) @ ι_1 D)))
         (ς
-         (in-hole F ((B @ (ι_0 ι_1) C) @ ι_1 (\\ C D))))
+         (in-hole F ((B @ (ι_0 ι_1) C) @ ι_1 (\\ D C))))
         "Subset"
         (side-condition (not (λCon-value? (term B)))))
    
