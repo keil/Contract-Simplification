@@ -23,14 +23,14 @@
   
   ;; Immediate Contracts
   ;; -------------------
-  ((I J) .... (I ∩ J)) ;; TODO, JCon needs to knwo ⊤/⊥
+  ((I J) .... (I ∩ J))
   
   ;; Delayed Contracts
   ;; -----------------
-  ((Q R) .... (C → ⊤) (⊤ → C)) ;; TODO (⊤ → C) can be reduces
+  ((Q R) .... (C → ⊤) (⊤ → C))
   
   
-  
+  ;; TODO, A has to meanigns, abstraction and term
   
   ;; Contract-free terms (λJ terms)
   ;; ------------------------------
@@ -38,20 +38,20 @@
   
   ;; Non-reducable terms (stucked assertions)
   ;; ----------------------------------------
-  ((A B) 
+  (B
    ;; Contract-free terms
    T
    ;; Imemdiate Contracts
-   ((A B) @ ι I)
+   ((B_0 B_1) @ ι I)
    ((op B ...) @ ι I)
-   ((if A B_0 B_1) @ ι I)
+   ((if B_0 B_1 B_2) @ ι I)
    
    ;; Blame terms
    (blame ♭))
   
   ;; Baseline Reduction Context
   ;; --------------------------
-  (F hole (λ x F) (F M) (B F) (op B ... F M ...) (if F M N) (if A F N) (if A B F) (F @ b C)) 
+  (F hole (λ x F) (F M) (B F) (op B ... F M ...) (if F M N) (if B_0 F N) (if B_0 B_1 F) (F @ b C)) 
   
   ;; Miscellaneous
   ;; -------------
@@ -91,7 +91,7 @@
         (fresh ι))
    
    (--> (ς
-         (in-hole F (M @ ι (C ∪ D))))
+         (in-hole F (M @ ι (C ∪ D)))) ;; shoudl this be B
         (((ι ◃ (ι1 ∪ ι2)) ς)
          (in-hole F ((M @ ι1 C) @ ι2 D)))
         "Unfold/Union"
@@ -107,17 +107,17 @@
    ;; Valid Contracts
    ;; ---------------
    
-   (--> (ς
-         (in-hole F (K @ ι Q)))
-        (((ι ◃ (τ #t)) ς)
-         (in-hole F K))
-        "Reduce/Constant")
+   ;(--> (ς
+   ;      (in-hole F (K @ ι Q)))
+   ;     (((ι ◃ (τ #t)) ς)
+   ;      (in-hole F K))
+   ;     "Reduce/Constant")
    
-   (--> (ς
-         (in-hole F ((op M ...) @ ι Q)))
-        (((ι ◃ (τ #t)) ς)
-         (in-hole F (op M ...)))
-        "Redcude/Operation")
+   ;(--> (ς
+   ;      (in-hole F ((op M ...) @ ι Q)))
+   ;     (((ι ◃ (τ #t)) ς)
+   ;      (in-hole F (op M ...)))
+   ;     "Redcude/Operation")
    
    (--> (ς
          (in-hole F (V @ ι true)))

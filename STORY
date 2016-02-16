@@ -1,3 +1,17 @@
+Function Contracts on Primitive Values
+======================================
+
+Following [KeilThiemann2015], a primitive value can never violate a function
+contract. This is true for the subject (value), and whenever the program is
+valid. However, a contract can violate the context portion of such a function
+contract. Thus, only removing such a contract is not a valid transformation
+step.
+
+However, all those contracts are uncritical. Rule-op/if removes delayed contracts
+before performing the corresponding operation. Otherwise, an execution gets
+stuck and the range portion is never asserted. 
+
+
 Static Blame State
 ==================
 
