@@ -101,7 +101,7 @@
         (fresh ι1 ι2))
    
    (--> (ς
-         (in-hole F (M @ ι (I ∩ C))))
+         (in-hole F (M @ ι (I ∩ Q)))) ;; TODO ((I ∩ C) -- but neither (Q ∩ R) not (I ∩ J) should be unrolled
         (((ι ◃ (ι1 ∩ ι2)) ς)
          (in-hole F ((M @ ι1 I) @ ι2 C)))
         "Unfold/Intersection"
