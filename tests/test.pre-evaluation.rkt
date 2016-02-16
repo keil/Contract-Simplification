@@ -54,15 +54,15 @@
 ;; Valid Contracts
 ;; ===============
 
-(test-->>
- Pre-evaluation
- (term (· ((λ x ((+ x 1) @ ♭ (Number? → Number?))) 1)))
- (term (((ι ◃ (#t ∘ #t)) ((♭ ◃ ι) ·)) ((λ x (+ x 1)) 1))))
+;(test-->>
+; Pre-evaluation
+; (term (· ((λ x ((+ x 1) @ ♭ (Number? → Number?))) 1)))
+; (term (((ι ◃ (#t ∘ #t)) ((♭ ◃ ι) ·)) ((λ x (+ x 1)) 1))))
 
-(test-->>
- Pre-evaluation
- (term (· ((λ x (+ x 1)) (1 @ ♭ (Number? → Number?)))))
- (term (((ι ◃ (#t ∘ #t)) ((♭ ◃ ι) ·)) ((λ x (+ x 1)) 1))))
+;(test-->>
+; Pre-evaluation
+; (term (· ((λ x (+ x 1)) (1 @ ♭ (Number? → Number?)))))
+; (term (((ι ◃ (#t ∘ #t)) ((♭ ◃ ι) ·)) ((λ x (+ x 1)) 1))))
 
 (test-->>
  Pre-evaluation
