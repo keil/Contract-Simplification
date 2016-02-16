@@ -42,9 +42,12 @@
    ;; Contract-free terms
    T
    ;; Imemdiate Contracts
+   (x @ ι I) ;; TODO
    ((B_0 B_1) @ ι I)
    ((op B ...) @ ι I)
    ((if B_0 B_1 B_2) @ ι I)
+   
+   ;; Delayed Contracts
    
    ;; Blame terms
    (blame ♭))
@@ -57,7 +60,7 @@
   ;; -------------
   
   ;; True-Contracts
-  (true ⊤ (true → true)))
+  (True ⊤ (True → True)))
 
 #|
  ___        _         _   _          
@@ -120,9 +123,10 @@
    ;     "Redcude/Operation")
    
    (--> (ς
-         (in-hole F (V @ ι true)))
+         (in-hole F (M @ ι True)))
         (((ι ◃ (τ #t)) ς)
-         (in-hole F V))
+         ⊤)
+         ;(in-hole F M))
         "Recude/True")
    
    ;; Predicaste Verification
@@ -166,11 +170,18 @@
    #:domain (ς any)
    
    (--> (ς
-         (in-hole F ((B @ b_0 C) @ b_1 D)))
+         (in-hole F ((M @ ι_0 I) @ ι_1 Q)))
         (ς
-         (in-hole F ((B @ (b_0 b_1) C) @ b_1 (\\ C D))))
+         (in-hole F ((M @ ι_1 Q) @ ι_0 I)))
+        "Switch")
+   
+   (--> (ς
+         (in-hole F ((B @ ι_0 C) @ ι_1 D)))
+        (ς
+         (in-hole F ((B @ (ι_0 ι_1) C) @ ι_1 (\\ C D))))
         "Subset"
         (side-condition (not (λCon-value? (term B)))))
+   
    ))
 
 
