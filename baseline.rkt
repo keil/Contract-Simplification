@@ -169,6 +169,10 @@
    
    ))
 
+;; reduction when in pos in pos cap even
+
+
+
 
 
 ;; Baseline Reduction
@@ -405,6 +409,11 @@
 
 
 ;; Contract Minus (I \ J)
+
+
+;; Predicate Containment (∈)
+;; ------------------------
+
 
 
 ;; Contract Difference (\\)
