@@ -146,6 +146,8 @@
 ;; Subset Reduction
 ;; ================
 
+;; or callit predicate redution
+
 ;; is it possible to reuse teh same context ?
 
 (define Subset-reduction
@@ -182,6 +184,137 @@
 
 ;; TODO
 ;; implement top-level blame rule
+
+
+;; Contract Propagation
+
+
+
+(define Baseline-reduction
+  (extend-reduction-relation
+   Subset-reduction
+   λCon-Baseline
+   #:domain (ς any)
+
+   ;; Unroll
+   ;; ------
+   ;; Rule [Unroll] unrolles the contract of a contracted argument 
+   ;; to all uses of the argument.
+   
+   (--> (ς
+         (in-hole F ((λ x M) (B @ ι Q))))
+        (ς
+         (in-hole F ((λ x (unroll x Q ι M)) B)))
+        "Unroll")
+   
+   ;; Unfold
+   ;; ------
+   ;; Rule [Unfold] unfolds a function contract (intersection contract).
+   
+   (--> (ς
+         (in-hole F ((B @ ι (C → D)) M)))
+        (((ι ◃ (ι1 → ι2)) ς)
+         (in-hole F ((B (M @ ι1 C)) @ ι2 D)))
+        "Unfold/Function"
+        (fresh ι1 ι2))
+   
+   (--> (ς
+         (in-hole F ((B @ ι (Q ∩ R)) M)))
+        (((ι ◃ (ι1 ∩ ι2)) ς)
+         (in-hole F (((B @ ι Q) @ ι R) M)))
+        "Unfold/Intersection"
+        (fresh ι1 ι2))
+   
+   ;; Lower (down)
+   ;; ------------
+   ;; Rule [Lower] creates a new function cntract from the 
+   ;; contract of the function's body
+   
+   (--> (ς
+         (in-hole F (λ x (B @ ι C))))
+        (ς
+         (in-hole F ((λ x B) @ ι (⊤ → C))))
+        "Lower")
+   
+   ;; Lift (up) Contract
+   ;; ------------------
+   ;; Rule [Lift] lifts an immediate contract I
+   ;; on argument x and creates a new function contract.
+   
+   (--> (ς
+         (in-hole F (λ x (in-hole F (x @ ι I))))) ;; ? all contracts? ;; use special context
+        (((ι ◃ (ι1 ∩ ι2)) ς)
+         (in-hole F ((λ x (in-hole F (x @ ι2 ⊤))) @ ι1 (I → ⊤))))
+        "Lift"
+        (fresh ι1 ι2))
+   
+   ;; Collapse
+   ;; --------
+   
+   ;; TODO, what kind of contracts should be collapsed?
+   ;; For example:
+   ;; - Flat contarcts: (flat M) • (flat N) --> (flat (M • N))
+   ;; - Function contracts: (⊤ → Num) • (Num → ⊤) --> (Num → Num)
+   ;; - Function contracts: (⊤ → Num) • (⊤ → Pos) --> (⊤ → (Num • Pos))
+   
+   ; Collapse
+   ;(--> (in-hole H ((S @ C) @ D))
+   ;     (in-hole H (S @ (collapse C D)))
+   ;     "Collaps"
+   ;)
+   ;(--> (ς
+   ;      (in-hole F ((S @ Q) @ R)))
+   ;     (ς
+   ;      (in-hole F (S @ (collapse Q R))))
+   ;     "Collaps/Delayed")
+   
+   ;(--> (ς
+   ;      (in-hole F ((S @ I) @ J)))
+   ;     (ς
+   ;      (in-hole F (S @ (collapse I J))))
+   ;     "Collaps/Immediate")
+   
+   ;; Swap
+   ;; -------
+   ;; Rule [Swap] moves delayed contracts to the outer possition.
+   ;; This enables to unfold the contract on the outer position.
+   ;; Hint: This rules changes the blame-semantcs 
+   
+   (--> (ς
+         (in-hole F ((M @ ι_0 Q) @ ι_1 I)))
+        (ς
+         (in-hole F ((M @ ι_1 I) @ ι_0 Q)))
+        "Swap"
+        (side-condition (not (λCon-value? (term (M @ ι_0 Q))))))
+   
+   ))
+
+
+
+
+;; Function unroll : x Q M -> N
+;; ----------------------------
+;; Unrolls a delayed contract Q of function x 
+;; to all uses of x
+
+(define-metafunction λCon-Baseline
+  unroll : x Q b any -> any
+  
+  ;; Don't continue if x is bound λ's body
+  [(unroll x Q b (λ x M)) (λ x M)]
+  
+  ;; Continue unrollong on λ's body
+  [(unroll x Q b (λ y M)) (λ y (unroll x Q b M))]
+  
+  ;; Put contract to the usage of x
+  [(unroll x Q b x) (x @ b Q)]
+  
+  ;; Continue unrollong on the structure of M
+  [(unroll x Q b (any ...)) ((unroll x Q b any) ...)]
+  
+  ;; Return the target expression M if
+  ;; none of the previous rules match
+  [(unroll x Q b any) any])
 
 
 

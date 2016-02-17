@@ -37,3 +37,9 @@
 ;; -------------------------
 
 ;(require "tests/test.subset-reduction.rkt")
+
+
+;; Baseline/Baseline-reduction
+;; ---------------------------
+
+(require "tests/test.baseline-reduction.rkt")

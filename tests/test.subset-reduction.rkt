@@ -4,6 +4,14 @@
 
 (require "../baseline.rkt")
 
+#|
+ _____       _      
+|_   _|__ __| |_ ___
+  | |/ -_|_-<  _(_-<
+  |_|\___/__/\__/__/
+                    
+|#
+
 (test-->>
  Subset-reduction
  (term (· ((x @ ♭ Number?) @ ♭1 Number?)))
