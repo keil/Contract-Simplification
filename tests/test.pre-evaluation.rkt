@@ -33,7 +33,7 @@
 (test-->>
  Pre-evaluation
  (term (· ((λ x (+ x (x @ ♭ (Number? ∩ Odd?)))) 1)))
- (term (((ι ◃ (ι1 ∩ ι2)) ((♭ ◃ ι) ·)) ((λ x (+ x ((x @ ι1 Number?) @ ι2 Odd?))) 1))))
+ (term (((♭ ◃ ι) ·) ((λ x (+ x (x @ ι (Number? ∩ Odd?)))) 1))))
 
 (test-->>
  Pre-evaluation
@@ -53,16 +53,6 @@
 
 ;; Valid Contracts
 ;; ===============
-
-;(test-->>
-; Pre-evaluation
-; (term (· ((λ x ((+ x 1) @ ♭ (Number? → Number?))) 1)))
-; (term (((ι ◃ (#t ∘ #t)) ((♭ ◃ ι) ·)) ((λ x (+ x 1)) 1))))
-
-;(test-->>
-; Pre-evaluation
-; (term (· ((λ x (+ x 1)) (1 @ ♭ (Number? → Number?)))))
-; (term (((ι ◃ (#t ∘ #t)) ((♭ ◃ ι) ·)) ((λ x (+ x 1)) 1))))
 
 (test-->>
  Pre-evaluation

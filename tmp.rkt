@@ -5,6 +5,29 @@
 
 
 
+   
+   ;(--> (ς
+   ;      (in-hole F (K @ ι Q)))
+   ;     (((ι ◃ (τ #t)) ς)
+   ;      (in-hole F K))
+   ;     "Reduce/Constant")
+   
+   ;(--> (ς
+   ;      (in-hole F ((op M ...) @ ι Q)))
+   ;     (((ι ◃ (τ #t)) ς)
+   ;      (in-hole F (op M ...)))
+   ;     "Redcude/Operation")
+
+
+
+
+
+
+
+
+
+
+
 ;; Old verify, update of state not correct beucase it will end in a blame state
 ;; and thus no execution would be poissible
 

@@ -30,7 +30,6 @@
   ((Q R) .... (C → ⊤) (⊤ → C))
   
   
-  ;; TODO, A has to meanigns, abstraction and term
   
   ;; Contract-free terms (λJ terms)
   ;; ------------------------------
@@ -42,13 +41,12 @@
    ;; Contract-free terms
    T
    ;; Imemdiate Contracts
-   (x @ ι I) ;; TODO
+   (x @ ι I); TODO
    ((B_0 B_1) @ ι I)
    ((op B ...) @ ι I)
    ((if B_0 B_1 B_2) @ ι I)
-   
    ;; Delayed Contracts
-   
+   ; TODO
    ;; Blame terms
    (blame ♭))
   
@@ -60,7 +58,7 @@
   ;; -------------
   
   ;; True-Contracts
-  (True ⊤ (True → True)))
+  (True ⊤ (True → True) (x → (Λ x True)) (True ∩ True) (True ∪ True)))
 
 #|
  ___        _         _   _          
@@ -87,24 +85,21 @@
    ;; --------------------- 
    
    (--> (ς
-         (in-hole F (B @ ♭ C)))
+         (in-hole F (B @ ♭ C))) ; TODO, use M
         (((♭ ◃ ι) ς)
          (in-hole F (B @ ι C)))
         "Unfold/Assert"
         (fresh ι))
    
    (--> (ς
-         (in-hole F (M @ ι (C ∪ D)))) ;; shoudl this be B
+         (in-hole F (M @ ι (C ∪ D)))) ; shoudl this be B
         (((ι ◃ (ι1 ∪ ι2)) ς)
          (in-hole F ((M @ ι1 C) @ ι2 D)))
         "Unfold/Union"
         (fresh ι1 ι2))
    
-   ;; Dependent?:w
-   
-   
    (--> (ς
-         (in-hole F (M @ ι (I ∩ Q)))) ;; TODO ((I ∩ C) -- but neither (Q ∩ R) not (I ∩ J) should be unrolled
+         (in-hole F (M @ ι (I ∩ Q)))) 
         (((ι ◃ (ι1 ∩ ι2)) ς)
          (in-hole F ((M @ ι1 I) @ ι2 C)))
         "Unfold/Intersection"
@@ -113,23 +108,10 @@
    ;; Valid Contracts
    ;; ---------------
    
-   ;(--> (ς
-   ;      (in-hole F (K @ ι Q)))
-   ;     (((ι ◃ (τ #t)) ς)
-   ;      (in-hole F K))
-   ;     "Reduce/Constant")
-   
-   ;(--> (ς
-   ;      (in-hole F ((op M ...) @ ι Q)))
-   ;     (((ι ◃ (τ #t)) ς)
-   ;      (in-hole F (op M ...)))
-   ;     "Redcude/Operation")
-   
    (--> (ς
          (in-hole F (M @ ι True)))
         (((ι ◃ (τ #t)) ς)
-         ⊤)
-         ;(in-hole F M))
+        (in-hole F M))
         "Recude/True")
    
    ;; Predicaste Verification
