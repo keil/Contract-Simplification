@@ -30,6 +30,9 @@
   ((Q R) .... (C → ⊤) (⊤ → C))
   
   
+  ;; TODO
+  ((L M N) .... (M @ ι C))
+  
   
   ;; Contract-free terms (λJ terms)
   ;; ------------------------------
@@ -47,6 +50,8 @@
    ((if B_0 B_1 B_2) @ ι I)
    ;; Delayed Contracts
    ; TODO
+   (B @ ι Q); TODO
+   
    ;; Blame terms
    (blame ♭))
   
@@ -202,9 +207,9 @@
    ;; to all uses of the argument.
    
    (--> (ς
-         (in-hole F ((λ x M) (B @ ι Q))))
+         (in-hole F ((λ x M) (N @ ι Q))))
         (ς
-         (in-hole F ((λ x (unroll x Q ι M)) B)))
+         (in-hole F ((λ x (unroll x Q ι M)) N)))
         "Unroll")
    
    ;; Unfold
@@ -212,9 +217,9 @@
    ;; Rule [Unfold] unfolds a function contract (intersection contract).
    
    (--> (ς
-         (in-hole F ((B @ ι (C → D)) M)))
+         (in-hole F ((M @ ι (C → D)) N)))
         (((ι ◃ (ι1 → ι2)) ς)
-         (in-hole F ((B (M @ ι1 C)) @ ι2 D)))
+         (in-hole F ((M (N @ ι1 C)) @ ι2 D)))
         "Unfold/Function"
         (fresh ι1 ι2))
    
