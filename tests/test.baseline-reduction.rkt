@@ -51,6 +51,28 @@
  (term (· ((λ x (+ (x 1) (x 2))) ((λ x (+ x 1)) @  ♭ (Number? → Number?)))))
  (term (((ι3 ◃ (#t ∘ #t)) ((ι ◃ (ι3 → ι4)) ((ι1 ◃ (#t ∘ #t)) ((ι ◃ (ι1 → ι2)) ((♭ ◃ ι) ·))))) ((λ x (+ ((x 1) @ ι2 Number?) ((x 2) @ ι4 Number?))) (λ x (+ x 1))))))
 
+(test-->>
+ Baseline-reduction
+ (term (· ((λ f (f 1)) ((λ x 1) @ ♭ (Number? → Number?)))))
+ (term (((ι3 ◃ (#t ∘ #t)) ((ι2 ◃ (ι3 → ι4)) ((ι1 ◃ (#t ∘ #t)) ((ι ◃ (ι1 → ι2)) ((♭ ◃ ι) ·))))) (((λ f (f 1)) (λ x 1)) @ ι4 Number?))))
+
+(test-->>
+ Baseline-reduction
+ (term (· ((λ x (x 1)) ((λ x x) @ ♭ (Number? → Number?)))))
+ (term (((ι3 ◃ (#t ∘ #t)) ((ι2 ◃ (ι3 → ι4)) ((ι1 ◃ (#t ∘ #t)) ((ι ◃ (ι1 → ι2)) ((♭ ◃ ι) ·))))) (((λ x (x 1)) (λ x x)) @ ι4 Number?))))
+
+(test-->>
+ Baseline-reduction
+ (term (· ((λ f (f 1)) ((λ x x) @ ♭ ((Number? → Number?) → (Number? → Number?))))))
+ (term (((ι ◃ (ι1 → ι2)) ((♭ ◃ ι) ·)) ((λ f ((f (1 @ ι1 (Number? → Number?))) @ ι2 (Number? → Number?))) (λ x x)))))
+
+
+
+
+
+
+
+
 
 ;; Test: Unfold
 ;; ============
