@@ -144,7 +144,10 @@ Predicate Refinements
 
 
 
-
+we do not optimize or change the original cade
+ one could also optmize, remove dead code or reject programs that are obvipuly
+ false, however, w ony mve contract, and do not care abput the underlying
+ program
 
 
 

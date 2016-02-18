@@ -44,20 +44,28 @@
    ;; Contract-free terms
    T
    ;; Imemdiate Contracts
-   (x @ ι I); TODO
+   ;(x @ ι I); TODO
    ((B_0 B_1) @ ι I)
    ((op B ...) @ ι I)
    ((if B_0 B_1 B_2) @ ι I)
    ;; Delayed Contracts
    ; TODO
-   (B @ ι Q); TODO
+   ;(B @ ι Q); TODO eg.g X @ Q cannot be simpified, and (op T @ Q
+   
+   ;(x @ ι Q); TODO
    
    ;; Blame terms
    (blame ♭))
   
+  ;; TODO
+  (A B (A @ ι Q))
+  
   ;; Baseline Reduction Context
   ;; --------------------------
-  (F hole (λ x F) (F M) (B F) (op B ... F M ...) (if F M N) (if B_0 F N) (if B_0 B_1 F) (F @ b C)) 
+  ((F G H) hole (λ x F) (F M) (B F) (op B ... F M ...) (if F M N) (if B_0 F N) (if B_0 B_1 F) (F @ ι C)) 
+  ;; use (T F) instead of (B F) beacuse the function contract eeds to be unrolled
+  ;; (F M) (T F)
+  
   
   ;; Miscellaneous
   ;; -------------
@@ -90,9 +98,9 @@
    ;; --------------------- 
    
    (--> (ς
-         (in-hole F (B @ ♭ C))) ; TODO, use M
+         (in-hole F (M @ ♭ C))) ; TODO, use M
         (((♭ ◃ ι) ς)
-         (in-hole F (B @ ι C)))
+         (in-hole F (M @ ι C)))
         "Unfold/Assert"
         (fresh ι))
    
@@ -167,12 +175,12 @@
          (in-hole F ((M @ ι_1 Q) @ ι_0 I)))
         "Switch")
    
-   (--> (ς
-         (in-hole F ((B @ ι_0 C) @ ι_1 D)))
-        (ς
-         (in-hole F ((B @ (ι_0 ι_1) C) @ ι_1 (\\ D C))))
-        "Subset"
-        (side-condition (not (λCon-value? (term B)))))
+;   (--> (ς
+;         (in-hole F ((B @ ι_0 C) @ ι_1 D)))
+;        (ς
+;         (in-hole F ((B @ (ι_0 ι_1) C) @ ι_1 (\\ D C))))
+;        "Subset"
+;        (side-condition (not (λCon-value? (term B)))))
    
    ))
 
@@ -199,7 +207,7 @@
   (extend-reduction-relation
    Subset-reduction
    λCon-Baseline
-   #:domain (ς any)
+   #:domain (ς M)
 
    ;; Unroll
    ;; ------
@@ -247,9 +255,10 @@
    ;; on argument x and creates a new function contract.
    
    (--> (ς
-         (in-hole F (λ x (in-hole F (x @ ι I))))) ;; ? all contracts? ;; use special context
+         (in-hole F (λ x (in-hole H (x @ ι I))))) ;; ? all contracts? ;; use special context
         (((ι ◃ (ι1 ∩ ι2)) ς)
-         (in-hole F ((λ x (in-hole F (x @ ι2 ⊤))) @ ι1 (I → ⊤))))
+         (in-hole F ((λ x (in-hole H x)) @ ι1 (I → ⊤))))
+        ; (in-hole F ((λ x (in-hole F (x @ ι2 ⊤))) @ ι1 (I → ⊤))))
         "Lift"
         (fresh ι1 ι2))
    
