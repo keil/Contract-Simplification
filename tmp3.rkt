@@ -25,7 +25,7 @@
 (define canonical? (redex-match λCon-Baseline T))
 (define reducible? (redex-match λCon-Baseline Reducible))
 
-(define (syntax-ok? M) (xor (canonical? M) (reducible? M)))
+(define (syntax-ok? M) (or (canonical? M) (reducible? M)))
 
 (redex-check λCon-Baseline M (syntax-ok? (term M)) 	#:attempts 1000000 )
 

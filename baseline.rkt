@@ -37,9 +37,15 @@
   ;; Contract-free terms (λJ terms)
   ;; ------------------------------
   
+  ;; Source Terms
+  
+  
+  
   ;; Terms without a contract
   (S
-   K x (λ x S) (S_0 S_1) (op T ...) (if T_0 T_1 T_2))
+   K x (λ x S) (S_0 S_1) (op T ...) (if T_0 T_1 T_2)
+   (+blame ♭) (-blame ♭)
+   )
   
   (TI (S_0 S_1) (op T ...) (if T_0 T_1 T_2)
       (TI @ ι I))
@@ -49,15 +55,25 @@
   
   ;; Full-optimized termes
   (T S TQ TI
-     
      (x TI)
      
-     
-     (S_0 S_1) (op S ...) (if S_0 S_1 S_2))
+     (x T) (K T) (TI T) ((blame ♭) T)
+     (S_0 S_1) (op S ...) (if S_0 S_1 S_2)
+     (+blame ♭) (-blame ♭)
+     )
+  
   
   
   (Reducible
-    K x (λ x Reducible) (Reducible_0 Reducible_1) (op Reducible ...) (if Reducible_0 Reducible_1 Reducible_2) (Reducible @ b C)
+    ;K x 
+    (λ x Reducible) (Reducible M) (M Reducible) (op M ... Reducible N ...) (if M ... Reducible N ...)
+    
+    ((λ x M) (T @ ι Q))
+    
+    ;(M @ ι (I ∩ Q))
+    (M @ ι (I ∩ C))
+    
+    (Reducible @ b C)
    
    ((M @ ι_0 Q) @ ι_1 I)
    
@@ -65,9 +81,9 @@
    (K @ ι I) (x @ ι I) ((λ x S) @ ι I)
    
    (M @ ι (C ∪ D))
-   
+   ((blame ♭) @ b C)
    ;;
-   (+blame ♭) (-blame ♭)
+   ;(+blame ♭) (-blame ♭)
    )
   
   
