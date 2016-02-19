@@ -36,7 +36,49 @@
   
   ;; Contract-free terms (λJ terms)
   ;; ------------------------------
-  ((S T) K x (λ x T) (S T) (op T ...) (if S T_0 T_1))
+  
+  ;; Terms without a contract
+  (S
+   K x (λ x S) (S_0 S_1) (op T ...) (if T_0 T_1 T_2))
+  
+  (TI (S_0 S_1) (op T ...) (if T_0 T_1 T_2)
+      (TI @ ι I))
+  
+  (TQ K x (λ x S) (S_0 S_1) (op S ...) (if S_0 S_1 S_2) 
+      (TQ @ ι Q))
+  
+  ;; Full-optimized termes
+  (T S TQ TI
+     
+     (x TI)
+     
+     
+     (S_0 S_1) (op S ...) (if S_0 S_1 S_2))
+  
+  
+  (Reducible
+    K x (λ x Reducible) (Reducible_0 Reducible_1) (op Reducible ...) (if Reducible_0 Reducible_1 Reducible_2) (Reducible @ b C)
+   
+   ((M @ ι_0 Q) @ ι_1 I)
+   
+   (T @ ♭ C) ((T_0 @ ι Q) T_1) (λ x (T @ ι C))
+   (K @ ι I) (x @ ι I) ((λ x S) @ ι I)
+   
+   (M @ ι (C ∪ D))
+   
+   ;;
+   (+blame ♭) (-blame ♭)
+   )
+  
+  
+  
+  
+  (Final
+   T (x @ ι C))
+  
+  ;; Contract-free terms (λJ terms)
+  ;; ------------------------------
+  ;((S T) K x (λ x T) (S T) (op T ...) (if S T_0 T_1))
   
   ;; Non-reducable terms (stucked assertions)
   ;; ----------------------------------------
@@ -50,6 +92,9 @@
    ((if B_0 B_1 B_2) @ ι I)
    ;; Delayed Contracts
    ; TODO
+   
+   
+   
    ;(B @ ι Q); TODO eg.g X @ Q cannot be simpified, and (op T @ Q
    
    ;(x @ ι Q); TODO
@@ -124,7 +169,7 @@
    (--> (ς
          (in-hole F (M @ ι True)))
         (((ι ◃ (τ #t)) ς)
-        (in-hole F M))
+         (in-hole F M))
         "Recude/True")
    
    ;; Predicaste Verification
@@ -175,12 +220,12 @@
          (in-hole F ((M @ ι_1 Q) @ ι_0 I)))
         "Switch")
    
-;   (--> (ς
-;         (in-hole F ((B @ ι_0 C) @ ι_1 D)))
-;        (ς
-;         (in-hole F ((B @ (ι_0 ι_1) C) @ ι_1 (\\ D C))))
-;        "Subset"
-;        (side-condition (not (λCon-value? (term B)))))
+   ;   (--> (ς
+   ;         (in-hole F ((B @ ι_0 C) @ ι_1 D)))
+   ;        (ς
+   ;         (in-hole F ((B @ (ι_0 ι_1) C) @ ι_1 (\\ D C))))
+   ;        "Subset"
+   ;        (side-condition (not (λCon-value? (term B)))))
    
    ))
 
@@ -208,7 +253,7 @@
    Subset-reduction
    λCon-Baseline
    #:domain (ς M)
-
+   
    ;; Unroll
    ;; ------
    ;; Rule [Unroll] unrolles the contract of a contracted argument 
