@@ -10,23 +10,26 @@
 ; #t)
 
 
-(redex-match? λCon-Baseline T (term x))
-(redex-match? λCon-Baseline T (term 1))
-(redex-match? λCon-Baseline T (term (λ x x)))
+;(redex-match? λCon-Baseline T (term x))
+;(redex-match? λCon-Baseline T (term 1))
+;(redex-match? λCon-Baseline T (term (λ x x)))
 
-(redex-match? λCon-Baseline T (term ((λ x 1) 1)))
+;(redex-match? λCon-Baseline T (term ((λ x 1) 1)))
 
-(redex-match? λCon-Baseline T (term ((λ x (1 @ ♭ Number?)) 1)))
-
-
+;(redex-match? λCon-Baseline T (term ((λ x (1 @ ♭ Number?)) 1)))
 
 
 
-(define canonical? (redex-match λCon-Baseline T))
+
+
+(define canonical? (redex-match λCon-Baseline Topt))
 (define reducible? (redex-match λCon-Baseline Reducible))
+;; xor ?
+(define (syntax-ok? M) (xor (canonical? M) (reducible? M)))
 
-(define (syntax-ok? M) (or (canonical? M) (reducible? M)))
+(redex-check λCon-Baseline M (syntax-ok? (term M)) #:print? "a"	#:attempts 2000000 )
 
-(redex-check λCon-Baseline M (syntax-ok? (term M)) 	#:attempts 1000000 )
+(define (print-result M) (string-append "canonical? " (format "~a" (canonical? M)) " - " "reducible? " (format "~a" (reducible? M))))
+;(print-result (term ((((-blame ♭x) hs) ("vn`;Λegtr" @ ιJ (⊤ → ⊤))) @ ιF (flat 1))))
 
 ;; attempts

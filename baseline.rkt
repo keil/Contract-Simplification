@@ -40,40 +40,84 @@
   ;; Source Terms
   
   
+  ;; Non-function terms
+  (non-Lambda K x (+blame ♭) (-blame ♭) (non-Tq Ti) (non-Lambda Topt) (op Topt ...) (if Topt_0 Topt_1 Topt_2)
+         (non-Lambda @ ι C))
+  
+  ;; Non-value Terms
+  (non-Value (+blame ♭) (-blame ♭) (non-Tq Ti) (non-Lambda Topt) (op Topt ...) (if Topt_0 Topt_1 Topt_2)
+            (non-Value @ ι C) )
+  
+  ;; Non-contracted Terms
+  (non-Contract K x (+blame ♭) (-blame ♭) (λ x non-Contract) (non-Tq Ti) (non-Lambda Topt) (op Topt ...) (if Topt_0 Topt_1 Topt_2)
+              )
+  
+  ;; Non-Immediate
+  (non-Ti non-Contract)
+  ;; With-Immediate
+  (Ti non-Contract (Ti @ ι I))
+  
+  ;; Non-Delayed
+  (non-Tq non-Contract Ti)
+  ;; With-Delayed
+  (Tq Ti (Tq @ ι Q))
+  
+  
+  ;; Optimized Term
+  (Topt Tq Ti)
+  
+  
   
   ;; Terms without a contract
   (S
-   K x (λ x S) (S_0 S_1) (op T ...) (if T_0 T_1 T_2)
-   (+blame ♭) (-blame ♭)
+   K x (+blame ♭) (-blame ♭) 
+   (λ x S) (S_0 S_1) (op T ...) (if T_0 T_1 T_2)
+   
+   
+   
+   (x TI)     
+   (S TI)
+   (x T) (K T) (TI T) ((blame ♭) T)
+   
+   
+   (K T) (x T) ((blame ♭) T)  
+   (S TQ)
+   ((op T ...) T_1) ((if T_0 T_1 T_2) T)
    )
   
   (TI (S_0 S_1) (op T ...) (if T_0 T_1 T_2)
-      (TI @ ι I))
+      (TI @ ι I)
+      )
   
-  (TQ K x (λ x S) (S_0 S_1) (op S ...) (if S_0 S_1 S_2) 
-      (TQ @ ι Q))
+  (TQ 
+   ;K x (λ x S) (S_0 S_1) (op T ...) (if T_0 T_1 T_2) 
+   S TI
+   (TQ @ ι Q) (TI @ ι Q)
+   )
   
   ;; Full-optimized termes
   (T S TQ TI
-     (x TI)
-     
-     (x T) (K T) (TI T) ((blame ♭) T)
-     (S_0 S_1) (op S ...) (if S_0 S_1 S_2)
-     (+blame ♭) (-blame ♭)
+     ;(x TI)
+     ;
+     ;(S TI)
+     ;
+     ;(x T) (K T) (TI T) ((blame ♭) T)
+     ;(S_0 S_1) (op S ...) (if S_0 S_1 S_2)
+     ;(+blame ♭) (-blame ♭)
      )
   
   
   
   (Reducible
-    ;K x 
-    (λ x Reducible) (Reducible M) (M Reducible) (op M ... Reducible N ...) (if M ... Reducible N ...)
-    
-    ((λ x M) (T @ ι Q))
-    
-    ;(M @ ι (I ∩ Q))
-    (M @ ι (I ∩ C))
-    
-    (Reducible @ b C)
+   ;K x 
+   (λ x Reducible) (Reducible M) (M Reducible) (op M ... Reducible N ...) (if M ... Reducible N ...)   (Reducible @ b C)
+   
+   ((λ x M) (T @ ι Q))
+   
+   ;(M @ ι (I ∩ Q))
+   (M @ ι (I ∩ C))
+   
+ 
    
    ((M @ ι_0 Q) @ ι_1 I)
    
