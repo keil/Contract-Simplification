@@ -20,14 +20,14 @@
 
 
 
-
+ 
 
 (define canonical? (redex-match λCon-Baseline T))
 (define reducible? (redex-match λCon-Baseline Reducible))
 ;; xor ?
 (define (syntax-ok? M) (xor (canonical? M) (reducible? M)))
 
-(redex-check λCon-Baseline M (syntax-ok? (term M)) #:print? "a"	#:attempts 2000000 )
+(redex-check λCon-Baseline M (syntax-ok? (term M)) #:print? "a"	#:attempts 3000000 )
 
 (define (print-result M) (string-append "canonical? " (format "~a" (canonical? M)) " - " "reducible? " (format "~a" (reducible? M))))
 
