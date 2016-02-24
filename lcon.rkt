@@ -32,13 +32,13 @@
   ;; ---------
   
   ;; Contracts
-  ((C D) I Q (C ∪ D) (I ∩ C))
+  ((C D) I Q (C ∪ D) (I ∩ Q))
   
   ;; Contract Abstraction
   (A (Λ x C))
   
   ; Immediate Contracts
-  ((I J) (flat M) predefined ⊤ ⊥)
+  ((I J) (flat M) predefined ⊤ ⊥ (I ∩ J))
   
   ; Delayed Contracts
   ((Q R) (C → D) (x ↦ A) (Q ∩ R))

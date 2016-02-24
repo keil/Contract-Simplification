@@ -34,39 +34,142 @@
   ((L M N) .... (M @ ι C))
   
   
-  ;; Contract-free terms (λJ terms)
+  ;; Canonical terms (λJ terms)
   ;; ------------------------------
   
-  ;; Source Terms
+  ;; Source Terms (T)
   
+  (S0
+   K x (+blame ♭) (-blame ♭))
   
+  (S1 
+   (λ x S))
+  
+  (S2
+   (S0 T) (TI T) (S S) (S1 TI))
+  
+  (S3
+   (op T ...) (if T_0 T_1 T_2))
+  
+  (S 
+   S0 S1 S2 S3)
+  
+  (TI
+   (+blame ♭) (-blame ♭) ;; TODO
+   S2 S3 (TI @ ι I))
+  
+  (TQ 
+   S0 S1 TI (TQ @ ι Q))
+  
+  (T S TI TQ)
+  
+  #|
   ;; Non-function terms
   (non-Lambda K x (+blame ♭) (-blame ♭) (non-Tq Ti) (non-Lambda Topt) (op Topt ...) (if Topt_0 Topt_1 Topt_2)
-         (non-Lambda @ ι C))
+              (non-Lambda @ ι C))
   
   ;; Non-value Terms
   (non-Value (+blame ♭) (-blame ♭) (non-Tq Ti) (non-Lambda Topt) (op Topt ...) (if Topt_0 Topt_1 Topt_2)
-            (non-Value @ ι C) )
+             (non-Value @ ι C) )
   
   ;; Non-contracted Terms
   (non-Contract K x (+blame ♭) (-blame ♭) (λ x non-Contract) (non-Tq Ti) (non-Lambda Topt) (op Topt ...) (if Topt_0 Topt_1 Topt_2)
-              )
+                )
   
-  ;; Non-Immediate
-  (non-Ti non-Contract)
   ;; With-Immediate
-  (Ti non-Contract (Ti @ ι I))
+  (Ti non-Value (Ti @ ι I))
   
   ;; Non-Delayed
   (non-Tq non-Contract Ti)
   ;; With-Delayed
-  (Tq Ti (Tq @ ι Q))
-  
+  (Tq Ti non-Contract (Tq @ ι Q))
   
   ;; Optimized Term
   (Topt Tq Ti)
   
   
+  
+  ;; Immediate Contracts 
+  (Immediate
+   (+blame ♭) (-blame ♭) 
+   (Canonical Canonical) (Canonical_0 Canonical_1) (op Canonical ...) (if Canonical_0 Canonical_1 Canonical_2)
+   ;; Immediate Contract
+   (Immediate @ ι I)
+   )
+  
+  ;; Delayed Contracts
+  (Delayed
+   K x (+blame ♭) (-blame ♭) 
+   (λ x Canonical) (Canonical Canonical) (Canonical_0 Canonical_1) (op Canonical ...) (if Canonical_0 Canonical_1 Canonical_2)
+   Immediate
+   ;; Delayed Contract
+   (Delayed @ ι Q)
+   )
+  (Canonical 
+   K x (+blame ♭) (-blame ♭) 
+   
+   (λ x Canonical) (Canonical_0 Canonical_1) (op Canonical ...) (if Canonical_0 Canonical_1 Canonical_2)
+   Delayed
+   )
+  |#
+  
+  ;; Canonical Terms (non-reducable terms)
+  (Canonical T)
+  
+  
+  ;; Reducable terms (non-cannonical terms)
+  (Reducible
+   ;; Terms containing a reducable term
+   (λ x Reducible) (Reducible M) (M Reducible) (op M ... Reducible N ...) (if M ... Reducible N ...)   (Reducible @ b C)
+   
+   ;; Optimization
+   ;; ------------
+   
+   ;; Delayed checkes of a delayed contract
+   ((λ x M) (M @ ι Q))
+   
+   ;; Checked of delayed contracts
+   ((M @ ι Q) N) 
+   
+   ;; Imediate contracts in values
+   (K @ ι I) (x @ ι I) ((λ x M) @ ι I)
+   
+   ;; Contracts on return terms
+   (λ x (M @ ι C))
+   
+   ;; Restructuring
+   ;; -------------
+   
+   ;; Intersection betenn immediate and delayed contract
+   (M @ ι (I ∩ Q))
+   
+   ;; Union contracts
+   (M @ ι (C ∪ D))
+   
+   ;; Nested delayed contracts
+   ((M @ ι_0 Q) @ ι_1 I)
+   
+   ;; Top-level assertions
+   (T @ ♭ C)
+   
+   
+   
+   ;; TODO
+   ;; blame terms not nested in a
+   
+   ;((blame ♭) @ b C)
+   ;;
+   ;(+blame ♭) (-blame ♭)
+   )
+  
+  
+  
+  
+  
+  
+  
+  
+  #|
   
   ;; Terms without a contract
   (S
@@ -108,29 +211,11 @@
   
   
   
-  (Reducible
-   ;K x 
-   (λ x Reducible) (Reducible M) (M Reducible) (op M ... Reducible N ...) (if M ... Reducible N ...)   (Reducible @ b C)
-   
-   ((λ x M) (T @ ι Q))
-   
-   ;(M @ ι (I ∩ Q))
-   (M @ ι (I ∩ C))
-   
- 
-   
-   ((M @ ι_0 Q) @ ι_1 I)
-   
-   (T @ ♭ C) ((T_0 @ ι Q) T_1) (λ x (T @ ι C))
-   (K @ ι I) (x @ ι I) ((λ x S) @ ι I)
-   
-   (M @ ι (C ∪ D))
-   ((blame ♭) @ b C)
-   ;;
-   ;(+blame ♭) (-blame ♭)
-   )
   
   
+  
+  
+  |#
   
   
   (Final
