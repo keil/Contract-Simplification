@@ -296,7 +296,7 @@
    (--> (ς
          (in-hole F ((B_0 @ ι (Q ∩ R)) B_1)))
         (((ι ◃ (ι1 ∩ ι2)) ς)
-         (in-hole F (((B_0 @ ι Q) @ ι R) B_1)))
+         (in-hole F (((B_0 @ ι1 Q) @ ι2 R) B_1)))
         "Unfold/Intersection"
         (fresh ι1 ι2))
    

@@ -56,12 +56,13 @@
 
 ;; Notes
 ;; -----
-;; Optimization steps: 23
+;; Optimization steps: 7 -- but more are possible
 
 
 ;; Notes
 ;; -----
-;; Reduction steps: 11
+;; Reduction steps: 39
 
 (traces Baseline-reduction (term (· ,example/addone/1)))
 (traces λCon-reduction (λCon~~>* (term (· ,example/addone/1))))
+
