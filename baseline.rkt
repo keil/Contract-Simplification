@@ -159,23 +159,23 @@
    ;; --------------------- 
    
    (--> (ς
-         (in-hole F (M @ ♭ C))) ; TODO, use M
+         (in-hole F (B @ ♭ C))) ; TODO, use M
         (((♭ ◃ ι) ς)
-         (in-hole F (M @ ι C)))
+         (in-hole F (B @ ι C)))
         "Unfold/Assert"
         (fresh ι))
    
    (--> (ς
-         (in-hole F (M @ ι (C ∪ D)))) ; shoudl this be B
+         (in-hole F (B @ ι (C ∪ D)))) ; shoudl this be B
         (((ι ◃ (ι1 ∪ ι2)) ς)
-         (in-hole F ((M @ ι1 C) @ ι2 D)))
+         (in-hole F ((B @ ι1 C) @ ι2 D)))
         "Unfold/Union"
         (fresh ι1 ι2))
    
    (--> (ς
-         (in-hole F (M @ ι (I ∩ Q)))) 
+         (in-hole F (B @ ι (I ∩ Q)))) 
         (((ι ◃ (ι1 ∩ ι2)) ς)
-         (in-hole F ((M @ ι1 I) @ ι2 C)))
+         (in-hole F ((B @ ι1 I) @ ι2 C)))
         "Unfold/Intersection"
         (fresh ι1 ι2))
    
@@ -183,9 +183,9 @@
    ;; ---------------
    
    (--> (ς
-         (in-hole F (M @ ι True)))
+         (in-hole F (B @ ι True)))
         (((ι ◃ (τ #t)) ς)
-         (in-hole F M))
+         (in-hole F B))
         "Recude/True")
    
    ;; Predicaste Verification
@@ -231,9 +231,9 @@
    #:domain (ς any)
    
    (--> (ς
-         (in-hole F ((M @ ι_0 I) @ ι_1 Q)))
+         (in-hole F ((B @ ι_0 I) @ ι_1 Q)))
         (ς
-         (in-hole F ((M @ ι_1 Q) @ ι_0 I)))
+         (in-hole F ((B @ ι_1 Q) @ ι_0 I)))
         "Switch")
    
    ;   (--> (ς
@@ -276,26 +276,27 @@
    ;; to all uses of the argument.
    
    (--> (ς
-         (in-hole F ((λ x M) (N @ ι Q))))
+         (in-hole F ((λ x S) (B @ ι Q))))
         (ς
-         (in-hole F ((λ x (unroll x Q ι M)) N)))
+         (in-hole F ((λ x (unroll x Q ι S)) B)))
         "Unroll")
+   
    
    ;; Unfold
    ;; ------
    ;; Rule [Unfold] unfolds a function contract (intersection contract).
    
    (--> (ς
-         (in-hole F ((M @ ι (C → D)) N)))
+         (in-hole F ((B_0 @ ι (C → D)) B_1)))
         (((ι ◃ (ι1 → ι2)) ς)
-         (in-hole F ((M (N @ ι1 C)) @ ι2 D)))
+         (in-hole F ((B_0 (B_1 @ ι1 C)) @ ι2 D)))
         "Unfold/Function"
         (fresh ι1 ι2))
    
    (--> (ς
-         (in-hole F ((B @ ι (Q ∩ R)) M)))
+         (in-hole F ((B_0 @ ι (Q ∩ R)) B_1)))
         (((ι ◃ (ι1 ∩ ι2)) ς)
-         (in-hole F (((B @ ι Q) @ ι R) M)))
+         (in-hole F (((B_0 @ ι Q) @ ι R) B_1)))
         "Unfold/Intersection"
         (fresh ι1 ι2))
    
