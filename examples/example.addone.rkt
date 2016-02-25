@@ -7,11 +7,13 @@
 (provide (all-defined-out))
 
 ;; AddOne
-;; =========
+;; ======
 ;; Motivating Example.
 
-;; # 0
-;; ---
+
+
+;; # λJ (Reduction without contracts)
+;; ----------------------------------
 
 (define 
   example/addone/0
@@ -23,10 +25,12 @@
 ;; -----
 ;; Reduction steps: 10
 
-(traces λCon-reduction example/addone/0)
+;(traces λCon-reduction example/addone/0)
 
-;; # 1
-;; ---
+
+
+;; # λCon (Reduction with contracts)
+;; ---------------------------------
 
 (define 
   example/addone/1
@@ -38,10 +42,20 @@
 ;; -----
 ;; Reduction steps: 46
 
-(traces λCon-reduction example/addone/1)
+;(traces λCon-reduction example/addone/1)
 
 
-;(test-->>
-; Baseline-reduction
-; (term (· ((λ f (λ x ((f x) 1))) ((λ x (λ y (+ x y))) @ ♭ (Number? → (Number? → Number?))))))
-; (term (((ι9 ◃ (#t ∘ #t)) ((ι7 ◃ (#t ∘ #t)) ((ι6 ◃ (ι9 → ι10)) ((ι3 ◃ (ι7 → ι8)) ((ι5 ◃ (#t ∘ #t)) ((ι2 ◃ (ι5 → ι6)) ((ι1 ◃ (ι3 ∩ ι4)) ((ι ◃ (ι1 → ι2)) ((♭ ◃ ι) ·))))))))) ((((λ f (λ x ((f x) 1))) (λ x (λ y (+ x y)))) @ ι10 (⊤ → Number?)) @ ι8 (Number? → ⊤)))))
+
+;; # Sugar Reduction
+;; -----------------
+
+(test-->>
+ Baseline-reduction
+ example/addone/1
+ (term (((ι9 ◃ (#t ∘ #t)) ((ι7 ◃ (#t ∘ #t)) ((ι6 ◃ (ι9 → ι10)) ((ι3 ◃ (ι7 → ι8)) ((ι5 ◃ (#t ∘ #t)) ((ι2 ◃ (ι5 → ι6)) ((ι1 ◃ (ι3 ∩ ι4)) ((ι ◃ (ι1 → ι2)) ((♭ ◃ ι) ·))))))))) ((((λ f (λ x ((f x) 1))) (λ x (λ y (+ x y)))) @ ι10 (⊤ → Number?)) @ ι8 (Number? → ⊤)))))
+
+;; Notes
+;; -----
+;; Reduction steps: 46
+
+(traces Baseline-reduction example/addone/1)

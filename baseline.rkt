@@ -119,7 +119,7 @@
   (Final
    T (x @ ι C))
   
- 
+  
   
   ;; Baseline Reduction Context
   ;; --------------------------
@@ -689,3 +689,57 @@
   [(≈ C) C])
 
 
+
+
+
+
+
+
+
+
+
+#|
+ ___            _ _         _                         _ 
+| _ \_ _ ___ __| (_)__ __ _| |_ ___ ___  __ _ _ _  __| |
+|  _/ '_/ -_) _` | / _/ _` |  _/ -_|_-< / _` | ' \/ _` |
+|_| |_| \___\__,_|_\__\__,_|\__\___/__/ \__,_|_||_\__,_|
+                                                        
+ ___             _   _             
+| __|  _ _ _  __| |_(_)___ _ _  ___
+| _| || | ' \/ _|  _| / _ \ ' \(_-<
+|_| \_,_|_||_\__|\__|_\___/_||_/__/
+                                   
+|#
+
+;; Canonical? (non-reducable terms)
+;; --------------------------------
+(define canonical?
+  (redex-match λCon-Baseline T))
+
+;; Reducible? (non-canonical terms)
+;; --------------------------------
+(define reducible? 
+  (redex-match λCon-Baseline Reducible))
+
+;; Final? (top-level final terms)
+;; ------------------------------
+(define final? 
+  (redex-match λCon-Baseline Final))
+
+
+
+;; λCon Reduction (λCon-->)
+;; ------------------------
+(define
+  (λCon~~> ς M)
+  (if (redex-match? λCon M M)
+      (car (apply-reduction-relation Baseline-reduction (term (,ς ,M))))
+      (error "Invalid λCon-term:" M)))
+
+;; λCon Reduction (λCon-->*)
+;; -------------------------
+(define
+  (λCon~~>* configuration)
+  (if (redex-match? λCon (ς M) configuration)
+      (car (apply-reduction-relation* Baseline-reduction (term ,configuration)))
+      (error "Invalid λCon-term:" configuration)))
