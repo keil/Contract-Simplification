@@ -64,10 +64,7 @@
 (test-->>
  Baseline-reduction
  (term (· ((λ f (f 1)) ((λ x x) @ ♭ ((Number? → Number?) → (Number? → Number?))))))
- (term (((ι ◃ (ι1 → ι2)) ((♭ ◃ ι) ·)) ((λ f ((f (1 @ ι1 (Number? → Number?))) @ ι2 (Number? → Number?))) (λ x x)))))
-
-
-
+ (term (((ι3 ◃ (#t ∘ #t)) ((ι2 ◃ (ι3 → ι4)) ((ι ◃ (ι1 → ι2)) ((♭ ◃ ι) ·)))) (((λ f (f (1 @ ι1 (Number? → Number?)))) (λ x x)) @ ι4 (Number? → Number?)))))
 
 
 
