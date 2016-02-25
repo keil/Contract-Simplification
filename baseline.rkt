@@ -123,7 +123,7 @@
   
   ;; Baseline Reduction Context
   ;; --------------------------
-  ((F G H) hole (λ x F) (F M) (B F) (op B ... F M ...) (if F M N) (if B_0 F N) (if B_0 B_1 F) (F @ ι C)) 
+  ((F G H) hole (λ x F) (F M) (B F) (op B ... F M ...) (if F M N) (if B_0 F N) (if B_0 B_1 F) (F @ b C)) 
   ;; use (T F) instead of (B F) beacuse the function contract eeds to be unrolled
   ;; (F M) (T F)
   

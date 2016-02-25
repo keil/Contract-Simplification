@@ -26,15 +26,20 @@
 ; [Lower] moves only function/delayed contracts
 ; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-;(test-->>
-; Baseline-reduction
-; (term (· (λ x (((+ x 1) @ ♭ Number?) @ Positiv?))))
-; (term (· (((λ x (+ x 1)) @ (⊤ → Number?)) @ (⊤ → Positiv?)))))
+(test-->>
+ Baseline-reduction
+ (term (· (λ x ((+ x 1) @ ♭0 Number?))))
+ (term (((♭0 ◃ ι) ·) ((λ x (+ x 1)) @ ι (⊤ → Number?)))))
 
-;(test-->>
-; Baseline-reduction
-; (term (· ((λ x (((+ x 1) @ ♭ Number?) @ Positiv?)) 1)))
-; (term (· ((((λ x (+ x 1)) 1) @ Number?) @ Positiv?))))
+(test-->>
+ Baseline-reduction
+ (term (· (λ x (((+ x 1) @ ♭0 Number?) @ ♭1 Positive?))))
+ (term (· (((λ x (+ x 1)) @ (⊤ → Number?)) @ (⊤ → Positive?)))))
+
+(test-->>
+ Baseline-reduction
+ (term (· ((λ x (((+ x 1) @ ♭0 Number?) @ ♭1 Positive?)) 1)))
+ (term (· ((((λ x (+ x 1)) 1) @ Number?) @ Positive?))))
 
 
 
