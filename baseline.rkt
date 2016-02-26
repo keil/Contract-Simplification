@@ -187,6 +187,12 @@
         (((ι ◃ (τ #t)) ς)
          (in-hole F B))
         "Recude/True")
+
+      (--> (ς
+         (in-hole F (B @ ι ⊥))) ;; Introduce false set
+        (((ι ◃ (τ #f)) ς)
+         (in-hole F B))
+        "Recude/Flase")
    
    ;; Predicaste Verification
    ;; -----------------------
@@ -318,8 +324,9 @@
    
    (--> (ς
          (in-hole F (λ x (in-hole H (x @ ι I))))) ;; ? all contracts? ;; use special context
-        (((ι ◃ (ι1 ∩ ι2)) ς)
-         (in-hole F ((λ x (in-hole H x)) @ ι1 (I → ⊤))))
+        ;(((ι ◃ (ι1 ∩ ι2)) ς)
+        (ς
+         (in-hole F ((λ x (in-hole H x)) @ ι (I → ⊤))))
         ; (in-hole F ((λ x (in-hole F (x @ ι2 ⊤))) @ ι1 (I → ⊤))))
         "Lift"
         (fresh ι1 ι2))

@@ -35,3 +35,14 @@
 (print-result (term ((λ zCXu fB) @ ιOdZ ((⊤ ∩ ⊤) ∩ ((⊤ ∪ ⊤) ∪ ⊤)))))
 
 ;; attempts
+
+
+
+#|
+
+blame?
+
+v @ ⊥ must be reduces as other contracts cannot ptoceed
+v @ T when lifting is not usefull, as T gets reduced
+
+|#
