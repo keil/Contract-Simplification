@@ -29,15 +29,14 @@
   ;; -----------------
   ((Q R) .... (C → ⊤) (⊤ → C))
   
-  
-  ;; TODO
+  ;; Terms
+  ;; -----
   ((L M N) .... (M @ ι C))
   
   
-  ;; Canonical terms (λJ terms)
-  ;; ------------------------------
   
-  ;; Source Terms (T)
+  ;; Canonical terms (λJ terms)
+  ;; --------------------------
   
   ;; Source Terms (Values)
   (S0
@@ -73,7 +72,10 @@
   
   
   ;; Reducable terms (non-cannonical terms)
+  ;; --------------------------------------
+  
   (Reducible
+   
    ;; Terms containing a reducable term
    (λ x Reducible) (Reducible M) (M Reducible) (op M ... Reducible N ...) (if M ... Reducible N ...)   (Reducible @ b C)
    
@@ -105,16 +107,9 @@
    ((M @ ι_0 Q) @ ι_1 I)
    
    ;; Top-level assertions
-   (T @ ♭ C)
-   
-   )
+   (T @ ♭ C))
   
-  
-  
-  
-  
-  
-  
+ 
   ;; Final Terms (top-level)
   (Final
    T (x @ ι C))
@@ -132,7 +127,10 @@
   ;; -------------
   
   ;; True-Contracts
-  (True ⊤ (True → True) (x → (Λ x True)) (True ∩ True) (True ∪ True)))
+  (True ⊤ (True → True) (x → (Λ x True)) (True ∩ True) (True ∪ True))
+  
+  ;; False-Contracts
+  (False ⊥))
 
 #|
  ___        _         _   _          
@@ -187,8 +185,8 @@
         (((ι ◃ (τ #t)) ς)
          (in-hole F B))
         "Recude/True")
-
-      (--> (ς
+   
+   (--> (ς
          (in-hole F (B @ ι ⊥))) ;; Introduce false set
         (((ι ◃ (τ #f)) ς)
          (in-hole F B))
