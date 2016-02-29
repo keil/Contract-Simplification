@@ -55,7 +55,7 @@
   ((U V W) .... (V @ ι Q))
   
   ;; Terms
-  ((L M N) .... (M @ ♭ C) (V @ ι C) (blame ♭) (M @ ι C) ) ;; TODO (V @ b C)
+  ((L M N) .... (M @ ♭ C) (V @ ι C) (blame ♭) (M @ ι C))
   
   ;; Contexts
   (E .... (E @ b C) (V @ b (eval E)))

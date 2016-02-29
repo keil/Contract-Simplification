@@ -68,12 +68,11 @@
    S0 S1 TI (TQ @ ι Q))
   
   ;; Canonical Terms (non-reducable terms)
-  ((T B) S TI TQ)
+  (T S TI TQ)
   
   
   ;; Reducable terms (non-cannonical terms)
   ;; --------------------------------------
-  
   (Reducible
    
    ;; Terms containing a reducable term
@@ -111,17 +110,14 @@
   
  
   ;; Final Terms (top-level)
+  ;; -----------------------
   (Final
    T (x @ ι C))
   
   
-  
   ;; Baseline Reduction Context
   ;; --------------------------
-  ((F G H) hole (λ x F) (F M) (B F) (op B ... F M ...) (if F M N) (if B_0 F N) (if B_0 B_1 F) (F @ b C)) 
-  ;; use (T F) instead of (B F) beacuse the function contract eeds to be unrolled
-  ;; (F M) (T F)
-  
+  ((F G H) hole (λ x F) (F M) (T F) (op T ... F M ...) (if F M N) (if T_0 F N) (if T_0 T_1 F) (F @ b C))   
   
   ;; Miscellaneous
   ;; -------------
@@ -157,23 +153,23 @@
    ;; --------------------- 
    
    (--> (ς
-         (in-hole F (B @ ♭ C))) ; TODO, use M
+         (in-hole F (T @ ♭ C)))
         (((♭ ◃ ι) ς)
-         (in-hole F (B @ ι C)))
+         (in-hole F (T @ ι C)))
         "Unfold/Assert"
         (fresh ι))
    
    (--> (ς
-         (in-hole F (B @ ι (C ∪ D)))) ; shoudl this be B
+         (in-hole F (T @ ι (C ∪ D))))
         (((ι ◃ (ι1 ∪ ι2)) ς)
-         (in-hole F ((B @ ι1 C) @ ι2 D)))
+         (in-hole F ((T @ ι1 C) @ ι2 D)))
         "Unfold/Union"
         (fresh ι1 ι2))
    
    (--> (ς
-         (in-hole F (B @ ι (I ∩ Q)))) 
+         (in-hole F (T @ ι (I ∩ Q)))) 
         (((ι ◃ (ι1 ∩ ι2)) ς)
-         (in-hole F ((B @ ι1 I) @ ι2 C)))
+         (in-hole F ((T @ ι1 I) @ ι2 C)))
         "Unfold/Intersection"
         (fresh ι1 ι2))
    
@@ -181,15 +177,15 @@
    ;; ---------------
    
    (--> (ς
-         (in-hole F (B @ ι True)))
+         (in-hole F (T @ ι True)))
         (((ι ◃ (τ #t)) ς)
-         (in-hole F B))
+         (in-hole F T))
         "Recude/True")
    
    (--> (ς
-         (in-hole F (B @ ι ⊥))) ;; Introduce false set
+         (in-hole F (T @ ι False)))
         (((ι ◃ (τ #f)) ς)
-         (in-hole F B))
+         (in-hole F T))
         "Recude/Flase")
    
    ;; Predicaste Verification
@@ -235,15 +231,15 @@
    #:domain (ς any)
    
    (--> (ς
-         (in-hole F ((B @ ι_0 I) @ ι_1 Q)))
+         (in-hole F ((T @ ι_0 I) @ ι_1 Q)))
         (ς
-         (in-hole F ((B @ ι_1 Q) @ ι_0 I)))
+         (in-hole F ((T @ ι_1 Q) @ ι_0 I)))
         "Switch")
    
    ;   (--> (ς
-   ;         (in-hole F ((B @ ι_0 C) @ ι_1 D)))
+   ;         (in-hole F ((T @ ι_0 C) @ ι_1 D)))
    ;        (ς
-   ;         (in-hole F ((B @ (ι_0 ι_1) C) @ ι_1 (\\ D C))))
+   ;         (in-hole F ((T @ (ι_0 ι_1) C) @ ι_1 (\\ D C))))
    ;        "Subset"
    ;        (side-condition (not (λCon-value? (term B)))))
    
@@ -280,9 +276,9 @@
    ;; to all uses of the argument.
    
    (--> (ς
-         (in-hole F ((λ x S) (B @ ι Q))))
+         (in-hole F ((λ x S) (T @ ι Q))))
         (ς
-         (in-hole F ((λ x (unroll x Q ι S)) B)))
+         (in-hole F ((λ x (unroll x Q ι S)) T)))
         "Unroll")
    
    
@@ -291,16 +287,16 @@
    ;; Rule [Unfold] unfolds a function contract (intersection contract).
    
    (--> (ς
-         (in-hole F ((B_0 @ ι (C → D)) B_1)))
+         (in-hole F ((T_0 @ ι (C → D)) T_1)))
         (((ι ◃ (ι1 → ι2)) ς)
-         (in-hole F ((B_0 (B_1 @ ι1 C)) @ ι2 D)))
+         (in-hole F ((T_0 (T_1 @ ι1 C)) @ ι2 D)))
         "Unfold/Function"
         (fresh ι1 ι2))
    
    (--> (ς
-         (in-hole F ((B_0 @ ι (Q ∩ R)) B_1)))
+         (in-hole F ((T_0 @ ι (Q ∩ R)) T_1)))
         (((ι ◃ (ι1 ∩ ι2)) ς)
-         (in-hole F (((B_0 @ ι1 Q) @ ι2 R) B_1)))
+         (in-hole F (((T_0 @ ι1 Q) @ ι2 R) T_1)))
         "Unfold/Intersection"
         (fresh ι1 ι2))
    
@@ -310,9 +306,9 @@
    ;; contract of the function's body
    
    (--> (ς
-         (in-hole F (λ x (B @ ι C))))
+         (in-hole F (λ x (T @ ι C))))
         (ς
-         (in-hole F ((λ x B) @ ι (⊤ → C))))
+         (in-hole F ((λ x T) @ ι (⊤ → C))))
         "Lower")
    
    ;; Lift (up) Contract
