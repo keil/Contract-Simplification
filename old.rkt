@@ -2,6 +2,48 @@
 
 
 
+   ;; Collapse
+   ;; --------
+   
+   ;; TODO, what kind of contracts should be collapsed?
+   ;; For example:
+   ;; - Flat contarcts: (flat M) • (flat N) --> (flat (M • N))
+   ;; - Function contracts: (⊤ → Num) • (Num → ⊤) --> (Num → Num)
+   ;; - Function contracts: (⊤ → Num) • (⊤ → Pos) --> (⊤ → (Num • Pos))
+   
+   ; Collapse
+   ;(--> (in-hole H ((S @ C) @ D))
+   ;     (in-hole H (S @ (collapse C D)))
+   ;     "Collaps"
+   ;)
+   ;(--> (ς
+   ;      (in-hole F ((S @ Q) @ R)))
+   ;     (ς
+   ;      (in-hole F (S @ (collapse Q R))))
+   ;     "Collaps/Delayed")
+   
+   ;(--> (ς
+   ;      (in-hole F ((S @ I) @ J)))
+   ;     (ς
+   ;      (in-hole F (S @ (collapse I J))))
+   ;     "Collaps/Immediate")
+   
+   ;; Swap
+   ;; -------
+   ;; Rule [Swap] moves delayed contracts to the outer possition.
+   ;; This enables to unfold the contract on the outer position.
+   ;; Hint: This rules changes the blame-semantcs 
+   
+   ;(--> (ς
+   ;      (in-hole F ((M @ ι_0 Q) @ ι_1 I)))
+   ;     (ς
+   ;      (in-hole F ((M @ ι_1 I) @ ι_0 Q)))
+   ;     "Swap"
+   ;     (side-condition (not (λCon-value? (term (M @ ι_0 Q))))))
+
+
+
+
 
   [(is-blame-state? ((♭ ◃ κ) ς)) (or (μ ((♭ ◃ κ) ς) ♭) (is-blame-state? ς))]
   [(is-blame-state? ((ι ◃ κ) ς)) (is-blame-state? ς)]

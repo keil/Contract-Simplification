@@ -173,6 +173,15 @@
         "Unfold/Intersection"
         (fresh ι1 ι2))
    
+   ;; Switch Order
+   ;; ------------
+      
+   (--> (ς
+         (in-hole F ((T @ ι_0 I) @ ι_1 Q)))
+        (ς
+         (in-hole F ((T @ ι_1 Q) @ ι_0 I)))
+        "Switch")
+   
    ;; Valid Contracts
    ;; ---------------
    
@@ -234,7 +243,7 @@
          (in-hole F ((T @ ι_0 I) @ ι_1 Q)))
         (ς
          (in-hole F ((T @ ι_1 Q) @ ι_0 I)))
-        "Switch")
+        "SwitchXXX")
    
    ;   (--> (ς
    ;         (in-hole F ((T @ ι_0 C) @ ι_1 D)))
@@ -281,7 +290,6 @@
          (in-hole F ((λ x (unroll x Q ι S)) T)))
         "Unroll")
    
-   
    ;; Unfold
    ;; ------
    ;; Rule [Unfold] unfolds a function contract (intersection contract).
@@ -324,46 +332,6 @@
         ; (in-hole F ((λ x (in-hole F (x @ ι2 ⊤))) @ ι1 (I → ⊤))))
         "Lift"
         (fresh ι1 ι2))
-   
-   ;; Collapse
-   ;; --------
-   
-   ;; TODO, what kind of contracts should be collapsed?
-   ;; For example:
-   ;; - Flat contarcts: (flat M) • (flat N) --> (flat (M • N))
-   ;; - Function contracts: (⊤ → Num) • (Num → ⊤) --> (Num → Num)
-   ;; - Function contracts: (⊤ → Num) • (⊤ → Pos) --> (⊤ → (Num • Pos))
-   
-   ; Collapse
-   ;(--> (in-hole H ((S @ C) @ D))
-   ;     (in-hole H (S @ (collapse C D)))
-   ;     "Collaps"
-   ;)
-   ;(--> (ς
-   ;      (in-hole F ((S @ Q) @ R)))
-   ;     (ς
-   ;      (in-hole F (S @ (collapse Q R))))
-   ;     "Collaps/Delayed")
-   
-   ;(--> (ς
-   ;      (in-hole F ((S @ I) @ J)))
-   ;     (ς
-   ;      (in-hole F (S @ (collapse I J))))
-   ;     "Collaps/Immediate")
-   
-   ;; Swap
-   ;; -------
-   ;; Rule [Swap] moves delayed contracts to the outer possition.
-   ;; This enables to unfold the contract on the outer position.
-   ;; Hint: This rules changes the blame-semantcs 
-   
-   (--> (ς
-         (in-hole F ((M @ ι_0 Q) @ ι_1 I)))
-        (ς
-         (in-hole F ((M @ ι_1 I) @ ι_0 Q)))
-        "Swap"
-        (side-condition (not (λCon-value? (term (M @ ι_0 Q))))))
-   
    ))
 
 
