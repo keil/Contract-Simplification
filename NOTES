@@ -1,5 +1,9 @@
 *** Predicate Optimization
 
+- user has to define a predicate subset before runnting the optimizer,
+as for TraceTyping
+
+
 Baseline Optimization
 =====================
 
