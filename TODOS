@@ -2,6 +2,59 @@ Next Steps & Open Problems
 ==========================
 
 
+*** Levels
+
+i) Symbolic Executer/ Symbolic Refinement
+
+- Not clear if the symbolic executer needs to run first or last. Clearly, we
+  loose contracts (and information) during the optimization. Is there an
+  intersection between contracts that will be optimized and contracts
+  refined based on symbolic informations. E.g. symbolic refinement refines the
+  output and focuses on predicates whereas optimization considers input and
+  delayed contracts.
+
+- How to related the outcome of the Symbolic Executer with the current program.
+  (Calculus/ Rules required)
+
+ii) Pre-Evaluator
+
+iii) Contract Propagation
+
+
+*** Open Points
+
+- Definition of contract subset (especially for predicates)
+  a) How to define predicates.
+  b) Subset relation
+
+- Static Blame
+
+  What should happen if we detect an errors, e.g. a contract that definitely
+  fails. Throwing an error would change the blame-order.
+
+- Lift and Function Boundaries
+
+  a) Lifting changes the order of checked contracts, e.g. \x. (+ y@Num, x@Num)
+  b) Lifting over function boundaries may check contracts which otherwise would
+  never be checked, e.g. because an inner function is never called.
+
+  Thus, lifting is not blame-preserving.
+  
+  We need a valid definition/use case for this situation.
+  
+
+
+
+Example:
+
+( \plus.E[[ (\z.((plus z) 1)) @ (Num -> Num) ]] ) ((\x.\y.(+ x y)) @ Num -> (Num
+-> Num) \cap Str -> (Str -> Str))
+
+-->*
+
+( \plus.E[[ (\z.((plus z) 1)) @ (Num -> Num) ]] ) (\x.\y.(+ x y))
+
+
 
 
 
