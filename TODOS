@@ -1,6 +1,40 @@
 Next Steps & Open Problems
 ==========================
 
+*** DO WE REALLY NEED THE SYMBOLIC EXECUTER ?
+
+In sum, I do not believe that the SE is really needed. At the moment I do not
+have a good example that requires the SE. Assuming we use the full optimizer
+(this also includes the non-blame-preserving optimization steps) than all
+unchecked contracts are propagated along the execution path. A subset relation
+(which finally needs to follow the same rules than the SE) can combine
+contracts.
+
+In case that we do not use the non-blame-preserving steps, reducing contracts
+based on accumulated knowledge seems to be useful as contracts cannot be lifted. 
+
+
+*** BLAME-PRESERVATION
+
+Unfortunately, non of the rules is really blame preserving. 
+Consider:
+let f = ( \x . (* 1@^1 Str x@^2 Str) @^3 Str ) 
+
+The dynamic execution of (f true) would reduce to (+blame 1), because  1@^1 Str
+is the first lifted contract.
+
+After plain optimization, the execution of (f true) would reduce to (+blame 2),
+because it would lift x@^2 Str to (( \x . (* 1@^1 Str x) @^3 Str ) @^2 Str->T )
+
+SE on the other hand would reduce to a static blame because the signature of *
+is *: Num -> .. -> Num
+
+
+
+
+
+
+
 
 *** Levels
 
