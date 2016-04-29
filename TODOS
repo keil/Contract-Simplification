@@ -13,6 +13,14 @@ contracts.
 In case that we do not use the non-blame-preserving steps, reducing contracts
 based on accumulated knowledge seems to be useful as contracts cannot be lifted. 
 
+*** LEVELS of DIFFERENT GUARANTEES
+
+Enable/Disable certain rules to switch between different optimisation steps and guarantees.
+
+*** BLAME-PRESERVING
+Whenever a contract assertion (M @ b C) is deconstructed or moved, the initial blame label remains (M @ b) such that in case of a blame error (blame b) the initial position (M @ b) reduces to (blame b): (M @ b) —> (blame b)
+This should be instead of throwing/reducing to a global static blame as it is done in the dynamics. The preceding SE can than give static blame messages ion there is a flow between.
+
 
 *** BLAME-PRESERVATION
 
