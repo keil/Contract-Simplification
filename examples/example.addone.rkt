@@ -6,20 +6,20 @@
 
 (provide (all-defined-out))
 
-;; AddOne
-;; ======
+;; AddOne (intersection)
+;; =====================
 ;; Motivating Example.
 
 
 
 ;; # λJ (Reduction without contracts)
 ;; ----------------------------------
+;; Reduction steps: 6
 
 (define 
   example/addone/1
   (term ((λ f (λ x ((f 1) x))) (λ x (λ y (if (or (string? x) (string? y)) (string-append x y) (+ x y)))))))
-
-;(traces λCon-reduction (term (· (,example/addone/1 1))))
+(traces λCon-reduction (term (· (,example/addone/1 1))))
 
 ;; Notes
 ;; -----

@@ -3,52 +3,56 @@
 
 (require "../lcon.rkt")
 (require "../baseline.rkt")
+(require "../lift.rkt")
 
 (provide (all-defined-out))
 
-;; AddOne (simple)
-;; ===============
+;; AddOne (intersection)
+;; =====================
 ;; Motivating Example.
 
 
 
 ;; # λJ (Reduction without contracts)
 ;; ----------------------------------
-;; Reduction steps: 6
+;; Reduction steps: 10
 
 (define 
-  example/addone/0
-  (term ((λ f (λ x ((f 1) x))) (λ x (λ y (+ x y))))))
-;(traces λCon-reduction (term (· (,example/addone/0 1))))
+  example/addone/1
+  (term ((λ f (λ x ((f 1) x))) (λ x (λ y (if (or (string? x) (string? y)) (string-append x y) (+ x y)))))))
+;(traces λCon-reduction (term (· (,example/addone/1 1))))
 
 
 
 ;; # λCon (Reduction with contracts)
 ;; ---------------------------------
-;; Reduction steps: 24
+;; Reduction steps: 46
 
 (define 
-  example/addone/0/contracted
-  (term ((λ f (λ x ((f 1) x))) ((λ x (λ y (+ x y))) @ ♭ (Number? → (Number? → Number?))))))
-;(traces λCon-reduction (term (· (,example/addone/0/contracted, 1))))
+  example/addone/1/contracted
+  (term ((λ f (λ x ((f 1) x))) ((λ x (λ y (if (or (string? x) (string? y)) (string-append x y) (+ x y)))) @ ♭ ((Number? → (Number? → Number?)) ∩ (String? → (String? → String?)))))))
+;(traces λCon-reduction (term (· (,example/addone/1/contracted 1))))
+  
 
+
+;; # Sugar Reduction
+;; -----------------
+;; Optimization steps: 21
+;; Reduction steps:    35
+
+;(traces Baseline-reduction (term (· ,example/addone/1/contracted)))
+
+;(let ([configuration (λCon~~>* (term (· ,example/addone/1/contracted)))]) 
+;  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 1)))))
 
 
 
 ;; # Sugar Reduction
 ;; -----------------
-;; Optimization steps: 16
-;; Reduction steps:    20
+;; Optimization steps: 29
+;; Reduction steps:    39
 
-(traces Baseline-reduction (term (· ,example/addone/0/contracted)))
+(traces Lift-reduction (term (· ,example/addone/1/contracted)))
 
-;; Notes
-;; -----
-;; Optimization steps: 16
-
-;(let ([configuration (λCon~~>* (term (· ,example/addone/0/contracted)))]) 
+;(let ([configuration (λCon/Lift~~>* (term (· ,example/addone/1/contracted)))]) 
 ;  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 1)))))
-
-;; Notes
-;; -----
-;; Reduction steps: 20

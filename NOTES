@@ -1,3 +1,8 @@
+*** Constrains
+
+- Is it really required to produce true-contrasts? I assume that a blank constraint set is enough. 
+
+
 *** Predicate Optimization
 
 - user has to define a predicate subset before runnting the optimizer,
