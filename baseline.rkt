@@ -165,7 +165,8 @@
    (--> (ς
          (in-hole F (T @ ♭ C)))
         (((♭ ◃ ι) ς)
-         (in-hole F (T @ ι C)))
+         ;(in-hole F (T @ ι C)))
+         (in-hole F ((T / C) @ ι C)))
         "Unfold/Assert"
         (fresh ι))
    

@@ -55,7 +55,8 @@
   ((U V W) .... (V @ ι Q))
   
   ;; Terms
-  ((L M N) .... (M @ ♭ C) (V @ ι C) (blame ♭) (M @ ι C))
+  ((L M N) .... (M @ ♭ C) (V @ ι C) (blame ♭) (M @ ι C)
+           (M / C ...))
   
   ;; Contexts
   (E .... (E @ b C) (V @ b (eval E)))
@@ -219,6 +220,14 @@
         (((ι ◃ (τ #f)) ς)
          (in-hole E V))
         "⊥"
+        (side-condition (not (term (is-blame-state? ς)))))
+   
+   ; Symbolic (TODO)
+   (--> (ς
+         (in-hole E (M / C ...)))
+        (ς
+         (in-hole E M))
+        "Symbolic"
         (side-condition (not (term (is-blame-state? ς)))))
    
    ;; Lookup
