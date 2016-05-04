@@ -2,8 +2,9 @@
 (require redex)
 
 (require "../lcon.rkt")
-(require "../baseline.rkt")
-(require "../lift.rkt")
+;(require "../baseline.rkt")
+;(require "../lift.rkt")
+(require "../split.rkt")
 
 (provide (all-defined-out))
 
@@ -41,7 +42,7 @@
 ;; Optimization steps: 20
 ;; Reduction steps: 31
 
-(traces Lift-reduction (term (· ,example/addone/2/contracted)))
+(traces Baseline-reduction (term (· ,example/addone/2/contracted)))
 
 ;; Notes
 ;; -----
