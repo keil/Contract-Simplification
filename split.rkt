@@ -32,10 +32,9 @@
   ;; Terms
   ;; -----
   ((L M N) .... (M @ ι C)
-            (M || N)
-           )
+           (M || N))
   
- ;   ((C D) .... ι) ;; TODO
+  ;   ((C D) .... ι) ;; TODO
   
   ;; Canonical terms (λJ terms)
   ;; --------------------------
@@ -110,7 +109,7 @@
    ;; Top-level assertions
    (T @ ♭ C))
   
- 
+  
   ;; Final Terms (top-level)
   ;; -----------------------
   (Final
@@ -119,12 +118,13 @@
   
   ;; Baseline Reduction Context
   ;; --------------------------
-  ((F G H) hole (λ x F) (F M) (T F) (op T ... F M ...) (if F M N) (if T_0 F N) (if T_0 T_1 F) (F @ b C))   
+  ((F G H) hole (λ x F) (F M) (T F) (op T ... F M ...) (if F M N) (if T_0 F N) (if T_0 T_1 F) (F @ b C)
+           (F || M) (T || F))   
   
-    ;; TODO, Reduction Context without abstraction.
+  ;; TODO, Reduction Context without abstraction.
   ((F0 G0 H0) hole (F0 M) (T F0) (op T ... F0 M ...) (if F0 M N)
               (if T_0 F0 N) (if T_0 T_1 F0) (F0 @ b C))
-
+  
   ;; TODO
   ((CtxI) hole (CtxI @ ι ⊥))
   
@@ -136,6 +136,27 @@
   
   ;; False-Contracts
   (False ⊥))
+
+;; ------------------------
+(define-metafunction λCon-Baseline
+  comparable? : any any -> boolean
+  [(comparable? F F) #t]
+  
+  [(comparable? (G @ b C) G) (comparable? G H)]
+  [(comparable? G (H @ b C)) (comparable? G H)]
+  [(comparable? (G @ b_0 C) (H @ b_1 D)) (comparable? G H)]
+  
+  [(comparable? (any_l0 any_ln ...) (any_r0 any_rn ...)) 
+   (and (term (comparable? any_l0 any_r0)) (term (comparable? any_ln ... any_rn ...)))]
+  
+  [(comparable? any any) #t]
+  [(comparable? any_0 any_1) #f])
+  
+
+;  [(bound? x (λ x M)) #t]
+;  [(bound? x (λ y M)) (bound? x M)]
+;  [(bound? x (any ...)) (or (bound? x any) ...)]
+;  [(bound? x any) #f])
 
 #|
  ___        _         _   _          
@@ -158,6 +179,33 @@
    λCon-Baseline
    #:domain (ς any)
    
+   ;; this may change the order of checked contracts
+   ;; what if no contract is prsent
+   
+   
+   
+   
+   (--> (ς
+         (in-hole F ((in-hole G (T @ ι_1 C)) || (in-hole H (T @ ι_2 D)))))
+        (ς
+         (in-hole F ((in-hole G ((T @ ι_1 C) @ ι_2 D)) || (in-hole H ((T @ ι_1 C) @ ι_2 D)))))
+        "Join/LeftRightContract"
+        
+        (side-condition (and (canonical? (term (T @ ι_1 C)))
+                             (canonical? (term (T @ ι_2 D)))
+                             (term (comparable? G H))))
+
+        )  
+   
+   
+   
+   (--> (ς
+         (in-hole F (T || T))) 
+        (ς
+         (in-hole F T)) 
+        "Join2")
+   
+   
    ;; Constraint Generation
    ;; ---------------------
    ;; Rule [Unfold/Assert] creates a top-level constraint for contrat C.
@@ -174,7 +222,8 @@
    (--> (ς
          (in-hole F (T @ ι (C ∪ D))))
         (((ι ◃ (ι1 ∪ ι2)) ς)
-         (in-hole F ((T @ ι1 C) @ ι2 D)))
+         ;(in-hole F ((T @ ι1 C) @ ι2 D)))
+         ((in-hole F (T @ ι1 C)) || (in-hole F (T @ ι2 D))))
         "Unfold/Union"
         (fresh ι1 ι2))
    
@@ -184,7 +233,7 @@
          (in-hole F ((T @ ι1 I) @ ι2 C)))
         "Unfold/Intersection"
         (fresh ι1 ι2))
-      
+   
    ;; Unroll
    ;; ------
    ;; Rule [Unroll] unrolles the contract of a contracted argument 
@@ -211,7 +260,9 @@
    (--> (ς
          (in-hole F ((T_0 @ ι (Q ∩ R)) T_1)))
         (((ι ◃ (ι1 ∩ ι2)) ς)
-         (in-hole F (((T_0 @ ι1 Q) @ ι2 R) T_1)))
+         ;(in-hole F (((T_0 @ ι1 Q) @ ι2 R) T_1)))
+         ;;(in-hole F ((((T @ ι1 Q)) T_1) || ((T @ ι2 R) T_1))))
+         ((in-hole F ((T_0 @ ι1 Q) T_1)) || (in-hole F ((T_0 @ ι2 R) T_1))))
         "Unfold/D-Intersection"
         (fresh ι1 ι2))
    
@@ -231,7 +282,7 @@
    ;; ------------
    ;; Rule [Switch] changes the order of contracts such that imemdiate contracts
    ;; can be checked right awar.
-      
+   
    (--> (ς
          (in-hole F ((T @ ι_0 I) @ ι_1 Q)))
         (ς
@@ -245,22 +296,22 @@
    (--> (ς
          (in-hole F (T @ ι True)))
         (ς
-;        (((ι ◃ (τ #t)) ς)
+         ;        (((ι ◃ (τ #t)) ς)
          (in-hole F T))
         "Recude/True")
    
-;   (--> (ς
-;         (in-hole F (T @ ι False)))
-;        (((ι ◃ (τ #f)) ς)
-;         (in-hole F T))
-;        "Recude/False")
-
-;   (--> (ς
-;         (in-hole F (λ x (in-hole F0 (T @ ι False)))))
-;        (ς
-;         (in-hole F ((λ x (in-hole F0 T)) @ ι (⊤ → ⊥)))) ;; TODO special false element for blame 
-;        "Recude/False")
-
+   ;   (--> (ς
+   ;         (in-hole F (T @ ι False)))
+   ;        (((ι ◃ (τ #f)) ς)
+   ;         (in-hole F T))
+   ;        "Recude/False")
+   
+   ;   (--> (ς
+   ;         (in-hole F (λ x (in-hole F0 (T @ ι False)))))
+   ;        (ς
+   ;         (in-hole F ((λ x (in-hole F0 T)) @ ι (⊤ → ⊥)))) ;; TODO special false element for blame 
+   ;        "Recude/False")
+   
    
    ;; Predicate Verification
    ;; ----------------------
@@ -331,17 +382,17 @@
 ;; Canonical? (non-reducable terms)
 ;; --------------------------------
 (define canonical?
-  (redex-match λCon-Baseline T))
+  (redex-match? λCon-Baseline T))
 
 ;; Reducible? (non-canonical terms)
 ;; --------------------------------
 (define reducible? 
-  (redex-match λCon-Baseline Reducible))
+  (redex-match? λCon-Baseline Reducible))
 
 ;; Final? (top-level final terms)
 ;; ------------------------------
 (define final? 
-  (redex-match λCon-Baseline Final))
+  (redex-match? λCon-Baseline Final))
 
 ;; λCon Reduction (λCon-->)
 ;; ------------------------
