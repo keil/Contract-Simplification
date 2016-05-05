@@ -29,4 +29,19 @@
                              (canonical? (term (in-hole H (T_2 @ ι_2 D))))
                              (not (eq? (term C) (term D)))
                              ))
-        ) 
+        )
+
+
+
+
+   (--> (ς
+         (in-hole F ((in-hole G (T @ ι_1 C)) || (in-hole H (T @ ι_2 D)))))
+        (ς
+         (in-hole F ((in-hole G ((T @ ι_1 C) @ ι_2 D)) || (in-hole H ((T @ ι_1 C) @ ι_2 D)))))
+        "Join/LeftRightContract"
+        
+        (side-condition (and (canonical? (term (T @ ι_1 C)))
+                             (canonical? (term (T @ ι_2 D)))
+                             (term (comparable? G H))))
+
+        )  
