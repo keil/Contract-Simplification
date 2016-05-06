@@ -51,11 +51,10 @@
 
 ;; # Sugar Reduction
 ;; -----------------
-;; Optimization steps: 40
-;; Reduction steps:    36
+;; Optimization steps: 39
+;; Reduction steps:    34 (36)
 
-(traces Subset-reduction (term (· ,example/addone/3/contracted)))
+;(traces Subset-reduction (term (· ,example/addone/3/contracted)))
 
-
-;(let ([configuration (λCon/Subset~~>* (term (· ,example/addone/3/contracted)))]) 
-;  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 1)))))
+(let ([configuration (λCon/Subset~~>* (term (· ,example/addone/3/contracted)))]) 
+  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 1)))))

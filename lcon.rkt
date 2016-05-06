@@ -179,7 +179,10 @@
          (in-hole E ((V (W @ ι1 C)) @ ι2 D)))
         "D-Function"
         (fresh ι1 ι2)
-        (side-condition (not (term (is-blame-state? ς)))))
+        (side-condition (not (term (is-blame-state? ς))))
+        (side-condition (not (redex-match? λCon ⊤ (term D)))) ;; TODO
+        (side-condition (not (redex-match? λCon ⊤ (term C)))) ;; TODO
+        )
    
    (--> (ς
          (in-hole E ((V @ ι (x ↦ (Λ x C))) W)))
@@ -222,13 +225,32 @@
         "⊥"
         (side-condition (not (term (is-blame-state? ς)))))
    
-   ; Symbolic (TODO)
+   ;; C → ⊤/ ⊤ → C
    (--> (ς
-         (in-hole E (M / C ...)))
-        (ς
-         (in-hole E M))
-        "Symbolic"
+         (in-hole E ((V @ ι (C → ⊤)) W)))
+        (((ι ◃ (ι1 → ι2)) ς) ;; TODO, Inversion constraint ?
+         (in-hole E (V (W @ ι1 C))))
+        "C → ⊤"
+        (fresh ι1 ι2)
         (side-condition (not (term (is-blame-state? ς)))))
+   
+   (--> (ς
+         (in-hole E ((V @ ι (⊤ → C)) W)))
+        (((ι ◃ (ι1 → ι2)) ς) ;; TODO, constraint not required ?
+         (in-hole E ((V W) @ ι2 C)))
+        "⊤ → C"
+        (fresh ι1 ι2)
+        (side-condition (not (term (is-blame-state? ς)))))
+   
+   
+   
+;   ; Symbolic (TODO)
+;   (--> (ς
+;         (in-hole E (M / C ...)))
+;        (ς
+;         (in-hole E M))
+;        "Symbolic"
+;        (side-condition (not (term (is-blame-state? ς)))))
    
    ;; Lookup
    (--> (ς
