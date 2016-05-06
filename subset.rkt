@@ -86,7 +86,9 @@
                          ;(canonical? (term ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
                          (canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D))))
                          ;(not (term (opt? (in-hole ACtx (T @ ι_0 C)))))
-                         (not (term (opt? (in-hole ACtx (T @ ι_1 D)) D)))
+                         ;(not (term (opt? (in-hole ACtx (T @ ι_1 D)) D)))
+                         
+                         (not (term (closest? (T @ ι_1 D))))
                          ;(term (opt? ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
                         )))
    
@@ -117,6 +119,12 @@
 
 ;; reduction when in pos in pos cap even
 
+
+(define-metafunction λCon-Subset 
+  closest? : T -> boolean
+  [(closest? ((in-hole ACtx_2 (T @ ι_0 C)) @ ι_1 D)) #t (side-condition (term (⊑ C D)))]
+  [(closest? ((in-hole ACtx_2 (T @ ι_0 C)) @ ι_1 D)) #t (side-condition (term (⊑ D C)))]
+  [(closest? any) #f])
 
 
 
