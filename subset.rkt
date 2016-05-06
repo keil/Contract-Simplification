@@ -4,6 +4,9 @@
 (require "lj.rkt")
 (require "lcon.rkt")
 
+(require "lift.rkt")
+(require "split.rkt")
+
 (provide (all-defined-out))
 
 #|
@@ -19,8 +22,8 @@
                                                                   
 |#
 
-(define-extended-language λCon-Subset λCon-Baseline 
-)
+(define-extended-language λCon-Subset λCon-Lift 
+  )
 
 #|
  ___        _         _   _          
@@ -40,15 +43,36 @@
 
 (define Subset-reduction
   (extend-reduction-relation
-   Baseline-reduction
+   Lift-reduction
    λCon-Subset
    #:domain (ς any)
    
+   ;(--> (ς
+   ;      (in-hole F ((T @ ι_0 I) @ ι_1 Q)))
+   ;     (ς
+   ;      (in-hole F ((T @ ι_1 Q) @ ι_0 I)))
+   ;     "SwitchXXX")
+   
+   ;; DO i need to update the constaint grapg
+   ;; is this level1 (order) blame perserving
+   ;; or ordre change blame perserving
+   ;; IF its not the direct context
+   
    (--> (ς
-         (in-hole F ((T @ ι_0 I) @ ι_1 Q)))
+         (in-hole F ((T @ ι_0 C) @ ι_1 D)))
         (ς
-         (in-hole F ((T @ ι_1 Q) @ ι_0 I)))
-        "SwitchXXX")
+         (in-hole F (T @ ι_0 C)))
+        "Subset1"
+        (side-condition (term (⊑ C D))))
+   
+   
+   (--> (ς
+         (in-hole F ((T @ ι_0 C) @ ι_1 D)))
+        (ς
+         (in-hole F (T @ ι_1 D)))
+        "Subset2"
+        (side-condition (term (⊑ D C))))
+   
    
    ;   (--> (ς
    ;         (in-hole F ((T @ ι_0 C) @ ι_1 D)))
@@ -385,25 +409,25 @@
 
 ;; Canonical? (non-reducable terms)
 ;; --------------------------------
-(define canonical?
-  (redex-match λCon-Baseline T))
+;(define canonical?
+;  (redex-match λCon-Baseline T))
 
 ;; Reducible? (non-canonical terms)
 ;; --------------------------------
-(define reducible? 
-  (redex-match λCon-Baseline Reducible))
+;(define reducible? 
+;  (redex-match λCon-Baseline Reducible))
 
 ;; Final? (top-level final terms)
 ;; ------------------------------
-(define final? 
-  (redex-match λCon-Baseline Final))
+;(define final? 
+;  (redex-match λCon-Baseline Final))
 
 
 
 ;; λCon Reduction (λCon-->)
 ;; ------------------------
 (define
-  (λCon~~> ς M)
+  (λCon/Subset~~> ς M)
   (if (redex-match? λCon M M)
       (car (apply-reduction-relation Baseline-reduction (term (,ς ,M))))
       (error "Invalid λCon-term:" M)))
@@ -411,7 +435,7 @@
 ;; λCon Reduction (λCon-->*)
 ;; -------------------------
 (define
-  (λCon~~>* configuration)
+  (λCon/Subset~~>* configuration)
   (if (redex-match? λCon (ς M) configuration)
       (car (apply-reduction-relation* Baseline-reduction (term ,configuration)))
       (error "Invalid λCon-term:" configuration)))

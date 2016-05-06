@@ -3,7 +3,8 @@
 
 (require "lj.rkt")
 (require "lcon.rkt")
-(require "baseline.rkt")
+;(require "baseline.rkt")
+(require "split.rkt")
 
 (provide (all-defined-out))
 

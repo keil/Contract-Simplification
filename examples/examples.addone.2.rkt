@@ -3,8 +3,9 @@
 
 (require "../lcon.rkt")
 ;(require "../baseline.rkt")
-;(require "../lift.rkt")
+(require "../lift.rkt")
 (require "../split.rkt")
+(require "../subset.rkt")
 
 (provide (all-defined-out))
 
@@ -42,7 +43,9 @@
 ;; Optimization steps: 20
 ;; Reduction steps: 31
 
-(traces Baseline-reduction (term (· ,example/addone/2/contracted)))
+;(traces Baseline-reduction (term (· ,example/addone/2/contracted)))
+;(traces Lift-reduction (term (· ,example/addone/2/contracted)))
+(traces Subset-reduction (term (· ,example/addone/2/contracted)))
 
 ;; Notes
 ;; -----
