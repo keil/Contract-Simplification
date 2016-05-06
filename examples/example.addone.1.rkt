@@ -3,8 +3,9 @@
 
 (require "../lcon.rkt")
 ;(require "../baseline.rkt")
-;(require "../lift.rkt")\
+;(require "../lift.rkt")
 (require "../split.rkt")
+(require "../subset.rkt")
 
 (provide (all-defined-out))
 
@@ -54,6 +55,7 @@
 ;; Reduction steps:    39
 
 (traces Baseline-reduction (term (· ,example/addone/1/contracted)))
+
 
 ;(let ([configuration (λCon/Lift~~>* (term (· ,example/addone/1/contracted)))]) 
 ;  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 1)))))

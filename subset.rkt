@@ -23,7 +23,10 @@
 |#
 
 (define-extended-language λCon-Subset λCon-Lift 
-  )
+ 
+   ((ACtx) hole (ACtx @ b C))   
+ 
+)
 
 #|
  ___        _         _   _          
@@ -63,7 +66,10 @@
         (ς
          (in-hole F (T @ ι_0 C)))
         "Subset1"
-        (side-condition (term (⊑ C D))))
+        (side-condition (and
+                         (term (⊑ C D))
+                         (canonical? (term (in-hole F ((T @ ι_0 C) @ ι_1 D))))
+                         )))
    
    
    (--> (ς
@@ -71,7 +77,15 @@
         (ς
          (in-hole F (T @ ι_1 D)))
         "Subset2"
-        (side-condition (term (⊑ D C))))
+        (side-condition (and
+                         (term (⊑ D C))
+                         (canonical? (term (in-hole F ((T @ ι_0 C) @ ι_1 D))))
+                        )))
+   
+   
+   
+
+   
    
    
    ;   (--> (ς
