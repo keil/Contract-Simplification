@@ -67,9 +67,11 @@
          (in-hole F (in-hole ACtx (T @ ι_0 C))))
         "Subset1"
         (side-condition (and
+                         ;false
                          (term (⊑ C D))
                          ;(canonical? (term ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
-                         (canonical? (term (in-hole F ((T @ ι_0 C) @ ι_1 D))))
+                         (canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D))))
+                         ;(not (term (opt? (in-hole ACtx (T @ ι_0 C))))) ;; not required
                          )))
    
    
@@ -79,14 +81,28 @@
          (in-hole F (in-hole ACtx (T @ ι_1 D))))
         "Subset2"
         (side-condition (and
+                         ;false
                          (term (⊑ D C))
                          ;(canonical? (term ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
-                         (canonical? (term (in-hole F ((T @ ι_0 C) @ ι_1 D))))
+                         (canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D))))
+                         ;(not (term (opt? (in-hole ACtx (T @ ι_0 C)))))
+                         (not (term (opt? (in-hole ACtx (T @ ι_1 D)) D)))
+                         ;(term (opt? ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
                         )))
    
    
    
-
+;   (--> (ς
+;         (in-hole F ((in-hole ACtx (S @ ι_0 C)) @ ι_1 D)))
+;        (ς
+;         (in-hole F (⇓ ((in-hole ACtx (S @ ι_0 C)) @ ι_1 D))))
+;        "Subset"
+;        (side-condition (and
+;                         false
+;                         ;(term (⊑ D C))
+;                         ;(canonical? (term ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
+;                         (canonical? (term (in-hole F ((S @ ι_0 C) @ ι_1 D))))
+;                        )))
    
    
    
@@ -104,8 +120,21 @@
 
 
 
+(define-metafunction λCon-Subset 
+  opt? : T D -> boolean
+  [(opt? (in-hole ACtx_1 ((in-hole ACtx_2 (T @ ι_0 C)) @ ι_1 D)) D) #t (side-condition (term (⊑ C D)))]
+  [(opt? (in-hole ACtx_1 ((in-hole ACtx_2 (T @ ι_0 C)) @ ι_1 D)) D) #t (side-condition (term (⊑ D C)))]
+  [(opt? any D) #f])
 
 
+
+(define-metafunction λCon-Subset 
+  ⇓ : T -> T
+  [(⇓ ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)) (⇓ (in-hole ACtx (T @ ι_0 C))) (side-condition (term (⊑ C D)))]
+  [(⇓ ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)) (⇓ (in-hole ACtx (T @ ι_1 D))) (side-condition (term (⊑ D C)))]
+  [(⇓ ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)) ((⇓ (in-hole ACtx (T @ ι_0 C))) @ ι_1 D)]
+  [(⇓ (S @ ι_0 C)) (S @ ι_0 C)]
+  )
 
 
 
