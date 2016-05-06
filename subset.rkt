@@ -62,9 +62,9 @@
    ;; IF its not the direct context
    
    (--> (ς
-         (in-hole F ((T @ ι_0 C) @ ι_1 D)))
+         (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
         (ς
-         (in-hole F (T @ ι_0 C)))
+         (in-hole F (in-hole ACtx (T @ ι_0 C))))
         "Subset1"
         (side-condition (and
                          (term (⊑ C D))
@@ -73,9 +73,9 @@
    
    
    (--> (ς
-         (in-hole F ((T @ ι_0 C) @ ι_1 D)))
+         (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
         (ς
-         (in-hole F (T @ ι_1 D)))
+         (in-hole F (in-hole ACtx (T @ ι_1 D))))
         "Subset2"
         (side-condition (and
                          (term (⊑ D C))
