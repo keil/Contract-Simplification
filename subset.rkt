@@ -68,6 +68,7 @@
         "Subset1"
         (side-condition (and
                          (term (⊑ C D))
+                         ;(canonical? (term ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
                          (canonical? (term (in-hole F ((T @ ι_0 C) @ ι_1 D))))
                          )))
    
@@ -79,6 +80,7 @@
         "Subset2"
         (side-condition (and
                          (term (⊑ D C))
+                         ;(canonical? (term ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
                          (canonical? (term (in-hole F ((T @ ι_0 C) @ ι_1 D))))
                         )))
    
@@ -443,7 +445,7 @@
 (define
   (λCon/Subset~~> ς M)
   (if (redex-match? λCon M M)
-      (car (apply-reduction-relation Baseline-reduction (term (,ς ,M))))
+      (car (apply-reduction-relation Subset-reduction (term (,ς ,M))))
       (error "Invalid λCon-term:" M)))
 
 ;; λCon Reduction (λCon-->*)
@@ -451,5 +453,5 @@
 (define
   (λCon/Subset~~>* configuration)
   (if (redex-match? λCon (ς M) configuration)
-      (car (apply-reduction-relation* Baseline-reduction (term ,configuration)))
+      (car (apply-reduction-relation* Subset-reduction (term ,configuration)))
       (error "Invalid λCon-term:" configuration)))
