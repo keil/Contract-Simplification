@@ -33,40 +33,37 @@
   ;; -----
   ((L M N) .... (M @ ι C))
   
- ;   ((C D) .... ι) ;; TODO
+  
   
   ;; Canonical terms (λJ terms)
   ;; --------------------------
   
-  ;; Source Terms (Values)
+  ;; Source Terms (values)
   (S0
-   K (λ x S)
-   )
+   K (λ x S))
   
-  ;; Source Terms (Abstractions)
-  (S1 
-   x (+blame ♭) (-blame ♭) (S TI) (TI T) (S S) (K T) (op T ...) (if T_0 T_1 T_2)
-   )
+  ;; Source Terms (non-values)
+  (S1
+   x (+blame ♭) (-blame ♭) (S TI) (TI T) (S S) (K T) (op T ...) (if T_0 T_1 T_2))
   
   ;; Source Terms (without contracts) 
   (S 
-   S0 S1
-   )
+   S0 S1)
   
-  ;; Terms with Immediate Contracts
+  ;; Terms with Immediate Contracts/ False
   (TI
-   S1
-   (TI @ ι I)
-   (T @ ι ⊥)
-   )
+   S1 (TI @ ι I) (TI @ ι ⊥))
   
   ;; Terms with Delayed Contracts
   (TQ 
    S TI (TQ @ ι Q))
   
   ;; Canonical Terms (non-reducable terms)
-  (T TQ 
-     ) ;; TODO
+  (T TQ (S @ ι ⊥))
+  
+  ;; TODO
+  ;; As every T @ ⊥ is more restrictive than every other contract
+  ;; we only have T @ ⊥ once, because ervy other contract is removed
   
   
   ;; Reducable terms (non-cannonical terms)
