@@ -2,7 +2,8 @@
 (require redex)
 
 (require "../lcon.rkt")
-(require "../baseline.rkt")
+;(require "../baseline.rkt")
+(require "../split.rkt")
 
 (provide (all-defined-out))
 
@@ -37,9 +38,9 @@
 ;; # Sugar Reduction
 ;; -----------------
 ;; Optimization steps: 12
-;; Reduction steps:    18
+;; Reduction steps:    17
 
 (traces Baseline-reduction (term (· ,example/addone/0/contracted)))
 
-(let ([configuration (λCon~~>* (term (· ,example/addone/0/contracted)))]) 
+(let ([configuration (λCon/Baseline~~>* (term (· ,example/addone/0/contracted)))]) 
   (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 1)))))

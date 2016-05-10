@@ -145,15 +145,15 @@
         "Lift/1"
         (fresh ι1 ι2))
    
-;   (--> (ς
-;         (in-hole F (λ x (in-hole H (x @ ι I))))) ;; ? all contracts? ;; use special context
+   (--> (ς
+         (in-hole F (λ x (in-hole H (x @ ι I))))) ;; ? all contracts? ;; use special context
         ;        (((ι ◃ (ι1 ∩ ι2)) ς)
         ;(ς
-;        (((ι0 ◃ (ι1 → ι2)) ς)
-;         (in-hole F ((λ x (in-hole H (x @ ι ι3))) @ ι1 (I → ⊤))))
+        (((ι0 ◃ (ι1 → ι2)) ς)
+         (in-hole F ((λ x (in-hole H x)) @ ι1 (I → ⊤))))
         ; (in-hole F ((λ x (in-hole H (x @ ι2 (⊥⊤)))) @ ι1 (I → ⊤))))
-;        "Lift/n"
-;        (fresh ι3 ι1 ι2))
+        "Lift/n"
+        (fresh ι3 ι1 ι2))
    
    
    ))
