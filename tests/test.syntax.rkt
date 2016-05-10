@@ -18,14 +18,17 @@
 
 (define (syntax-ok? M) (xor (canonical? M) (reducible? M)))
 
-;(redex-check λCon-Baseline M (syntax-ok? (term M)) #:print? "a"	#:attempts 10000000 )
+(define xterm
+(redex-check λCon-Baseline M (syntax-ok? (term M)) #:print? "a"	#:attempts 10000000)
+)
 
 ;; Manual Test
 ;; -----------
 
 (define (print-result M) (string-append "canonical? " (format "~a" (canonical? M)) " - " "reducible? " (format "~a" (reducible? M))))
+;(redex-match? λCon M (term (λ x (+ (x @ ι Number?) 1))))
+;(print-result (term 
+;              ((if (0 @ ιe ⊥) 1 hR) @ ιL (hq ↦ (Λ fT ⊥)))
+;               ))
 
-
-(redex-match? λCon M (term (λ x (+ (x @ ι Number?) 1))))
-
-(print-result (term (λ x (+ (x @ ι Number?) 1))))
+(print-result xterm)

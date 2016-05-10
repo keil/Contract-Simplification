@@ -442,3 +442,6 @@
   (if (redex-match? λCon (ς M) configuration)
       (car (apply-reduction-relation* Baseline-reduction (term ,configuration)))
       (error "Invalid λCon-term:" configuration)))
+
+
+(render-language λCon-Baseline)

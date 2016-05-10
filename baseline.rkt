@@ -40,35 +40,33 @@
   
   ;; Source Terms (Values)
   (S0
-   K x (+blame ♭) (-blame ♭))
+   K (λ x S)
+   )
   
   ;; Source Terms (Abstractions)
   (S1 
-   (λ x S))
-  
-  ;; Source Terms (Applications)
-  (S2
-   (S0 T) (TI T) (S S) (S1 TI))
-  
-  ;; Source Terms ()
-  (S3
-   (op T ...) (if T_0 T_1 T_2))
+   x (+blame ♭) (-blame ♭) (S TI) (TI T) (S S) (K T) (op T ...) (if T_0 T_1 T_2)
+   )
   
   ;; Source Terms (without contracts) 
   (S 
-   S0 S1 S2 S3)
+   S0 S1
+   )
   
   ;; Terms with Immediate Contracts
   (TI
-   (+blame ♭) (-blame ♭) x S2 S3
-   (TI @ ι I))
+   S1
+   (TI @ ι I)
+   (T @ ι ⊥)
+   )
   
   ;; Terms with Delayed Contracts
   (TQ 
-   S0 S1 TI (TQ @ ι Q))
+   S TI (TQ @ ι Q))
   
   ;; Canonical Terms (non-reducable terms)
-  (T S TI TQ (K @ ι ⊥) (x @ ι0 ι1)) ;; TODO
+  (T TQ 
+     ) ;; TODO
   
   
   ;; Reducable terms (non-cannonical terms)
@@ -93,6 +91,9 @@
    ;; Contracts on return terms
    (λ x (M @ ι C))
    
+   ;; True
+   (M @ b ⊤)
+   
    ;; Restructuring
    ;; -------------
    
@@ -113,6 +114,9 @@
   ;; -----------------------
   (Final
    T (x @ ι C))
+  
+  
+  
   
   
   ;; Baseline Reduction Context
@@ -330,17 +334,17 @@
 ;; Canonical? (non-reducable terms)
 ;; --------------------------------
 (define canonical?
-  (redex-match λCon-Baseline T))
+  (redex-match? λCon-Baseline T))
 
 ;; Reducible? (non-canonical terms)
 ;; --------------------------------
 (define reducible? 
-  (redex-match λCon-Baseline Reducible))
+  (redex-match? λCon-Baseline Reducible))
 
 ;; Final? (top-level final terms)
 ;; ------------------------------
 (define final? 
-  (redex-match λCon-Baseline Final))
+  (redex-match? λCon-Baseline Final))
 
 ;; λCon Reduction (λCon-->)
 ;; ------------------------
