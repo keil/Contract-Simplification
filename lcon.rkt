@@ -527,7 +527,7 @@
 ;; ---------------
 (define-metafunction λCon
   solve/¬ : ω -> ω
-  [(solve/¬ ω) ((subject ω_0) ∘ (context ω_0))])
+  [(solve/¬ ω) ((subject ω) ∘ (context ω))])
 
 #|
  ___      _       _   _ _        _   _          

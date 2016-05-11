@@ -1,6 +1,9 @@
 - Top-Level Blame rule
 
 
+- SUbset reduction also changes the order as ot removes less restrictive contract that would blame before.
+
+
 Next Steps & Open Problems
 ==========================
 

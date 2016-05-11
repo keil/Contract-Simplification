@@ -34,7 +34,7 @@
   
   ;; Terms
   ;; -----
-  ((L M N) .... (M @ ι C)); (M || N))
+  ((L M N) .... (M @ ι C) (M || N))
   
   
   
@@ -72,8 +72,6 @@
   ;; Reducable terms (non-cannonical terms)
   ;; ======================================
   
-  ;;  terms ()
-  ;; --------------------------------------
   (Reducible
    
    ;; Terms containing a reducable term
@@ -125,8 +123,8 @@
   ;; Function Body Context
   ;; ---------------------
   ;; Reduction Context without abstraction.
-  (BCtx hole (BCtx M) (T BCtx) (op T ... BCtx M ...) (if T ... BCtx M ...) (BCtx @ b C)
-        (BCtx || N) (T || BCtx))
+  (BCtx hole (BCtx M) (T BCtx) (op T ... BCtx T ...) (if T ... BCtx T ...) (BCtx @ b C)
+        (BCtx || T) (T || BCtx))
   
   ;; Assertion Context
   ;; -----------------
@@ -370,7 +368,7 @@
     ;; none of the previous rules match
     [(unroll x Q b any) any])
   
-  #|
+#|
  ___            _ _         _                         _ 
 | _ \_ _ ___ __| (_)__ __ _| |_ ___ ___  __ _ _ _  __| |
 |  _/ '_/ -_) _` | / _/ _` |  _/ -_|_-< / _` | ' \/ _` |

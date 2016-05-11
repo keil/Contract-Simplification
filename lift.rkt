@@ -3,8 +3,8 @@
 
 (require "lj.rkt")
 (require "lcon.rkt")
-;(require "baseline.rkt")
-(require "split.rkt")
+(require "baseline.rkt")
+(require "subset.rkt")
 
 (provide (all-defined-out))
 
@@ -21,7 +21,82 @@
                                                                   
 |#
 
-(define-extended-language λCon-Lift λCon-Baseline)
+(define-extended-language λCon-Lift λCon-Subset
+  #|
+  ;; Canonical terms (λJ terms)
+  ;; ==========================
+  
+  ;; Source Terms
+  ;; ------------
+  ;; Terms without a contract on the outermost position.
+  
+  ;; Values
+  (S0 K (λ x S))
+  
+  ;; Non-Values
+  (S1 x (+blame ♭) (-blame ♭) (S TI) (TI T) (S S) (K T) (op T ...) (if T_0 T_1 T_2))
+  
+  ;; Source Terms
+  (S S0 S1)
+  
+  ;; Terms
+  ;; -----
+  ;; Terms with non-reducable contracts.
+  
+  ;; Terms with Immediate Contracts/ False
+  (TI S1 (TI @ ι I) (S @ ι ⊥))
+  
+  ;; Terms with Delayed Contracts
+  (TQ S TI (TQ @ ι Q))
+  
+  ;; Canonical Terms (non-reducable terms)
+  (T TQ)
+  
+  
+  
+  ;; Reducable terms (non-cannonical terms)
+  ;; ======================================
+  
+  (Reducible
+   
+   ;; Terms containing a reducable term
+   (λ x Reducible) (Reducible M) (M Reducible) (op M ... Reducible N ...) (if M ... Reducible N ...)   (Reducible @ b C)
+   
+   ;; Optimization
+   ;; ------------
+   
+   ;; Delayed checkes of a delayed contract
+   ((λ x M) (M @ ι Q))
+   
+   ;; Checked of delayed contracts
+   ((M @ ι Q) N) 
+   
+   ;; Imediate contracts in values
+   (K @ ι I) #| (x @ ι I) |# ((λ x M) @ ι I)
+   
+   ;; Contracts on return terms
+   (λ x (M @ ι C))
+   
+   ;; True
+   (M @ b ⊤)
+   
+   ;; Restructuring
+   ;; -------------
+   
+   ;; Intersection betenn immediate and delayed contract
+   (M @ ι (I ∩ C))
+   
+   ;; Union contracts
+   (M @ ι (C ∪ D))
+   
+   ;; Nested delayed contracts
+   ((M @ ι_0 Q) @ ι_1 I) ((M @ ι_0 C) @ ι_1 ⊥)
+   
+   ;; Top-level assertions
+   (T @ ♭ C))
+  |#
+  
+  )
 
 #|
  ___        _         _   _          
@@ -38,7 +113,7 @@
 
 (define Lift-reduction
   (extend-reduction-relation
-   Baseline-reduction
+   Subset-reduction
    λCon-Lift
    #:domain (ς M)
    
@@ -52,15 +127,17 @@
          (in-hole F (λ x (in-hole BCtx (x @ ι I)))))
         (((ι ◃ (¬ ι1)) ς)
          (in-hole F ((λ x (in-hole BCtx x)) @ ι1 (I → ⊤))))
-        "Lift/one"
-        (fresh ι1))
+        "Lift/One"
+        (fresh ι1)
+        (side-condition (canonical? (term (in-hole F (λ x (in-hole BCtx (x @ ι I)))))))
+        )
    
-   (--> (ς
-         (in-hole F (λ x (in-hole G (x @ ι I)))))
-        (((ι ◃ (¬ ι1)) ς)
-         (in-hole F ((λ x (in-hole G x)) @ ι1 (I → ⊤))))
-        "Lift/n"
-        (fresh ι1))
+   ;(--> (ς
+   ;      (in-hole F (λ x (in-hole G (x @ ι I)))))
+   ;     (((ι ◃ (¬ ι1)) ς)
+   ;      (in-hole F ((λ x (in-hole G x)) @ ι1 (I → ⊤))))
+   ;     "Lift/n"
+   ;     (fresh ι1))
    ))
 
 

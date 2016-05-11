@@ -278,6 +278,11 @@
   
   ;; Immediate Contracts
   [(⊑/context I J) #t]
+
+  [(⊑/context C ⊤) #t]
+  [(⊑/context ⊤ D) #t]
+  [(⊑/context ⊥ D) #t]
+  [(⊑/context C ⊥) #t]
   
   ;; Abstraction
   [(⊑/context (Λ x C) (Λ x D)) (⊑/context C D)]
