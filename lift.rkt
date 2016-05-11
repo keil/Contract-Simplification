@@ -21,93 +21,7 @@
                                                                   
 |#
 
-(define-extended-language λCon-Lift λCon-Baseline
-  
-
-  
-  
-  
-  ;; Canonical terms (λJ terms)
-  ;; --------------------------
-  
-  ;; Source Terms (Values)
-  (S0
-   K x (+blame ♭) (-blame ♭))
-  
-  ;; Source Terms (Abstractions)
-  (S1 
-   (λ x S))
-  
-  ;; Source Terms (Applications)
-  (S2
-   (S0 T) (TI T) (S S) (S1 TI))
-  
-  ;; Source Terms ()
-  (S3
-   (op T ...) (if T_0 T_1 T_2))
-  
-  ;; Source Terms (without contracts) 
-  (S 
-   S0 S1 S2 S3)
-  
-  ;; Terms with Immediate Contracts
-  (TI
-   (+blame ♭) (-blame ♭) S2 S3
-   (TI @ ι I))
-  
-  ;; Terms with Delayed Contracts
-  (TQ 
-   S0 S1 TI (TQ @ ι Q))
-  
-  ;; Canonical Terms (non-reducable terms)
-  (T S TI TQ (K @ ι ⊥) (x @ ι0 ι1)) ;; TODO
-  
-  
-  ;; Reducable terms (non-cannonical terms)
-  ;; --------------------------------------
-  (Reducible
-   
-   ;; Terms containing a reducable term
-   (λ x Reducible) (Reducible M) (M Reducible) (op M ... Reducible N ...) (if M ... Reducible N ...)   (Reducible @ b C)
-   
-   ;; Optimization
-   ;; ------------
-   
-   ;; Delayed checkes of a delayed contract
-   ((λ x M) (M @ ι Q))
-   
-   ;; Checked of delayed contracts
-   ((M @ ι Q) N) 
-   
-   ;; Imediate contracts in values
-   (K @ ι I) (x @ ι I) ((λ x M) @ ι I)
-   
-   ;; Contracts on return terms
-   (λ x (M @ ι C))
-   
-   ;; Restructuring
-   ;; -------------
-   
-   ;; Intersection betenn immediate and delayed contract
-   (M @ ι (I ∩ Q))
-   
-   ;; Union contracts
-   (M @ ι (C ∪ D))
-   
-   ;; Nested delayed contracts
-   ((M @ ι_0 Q) @ ι_1 I)
-   
-   ;; Top-level assertions
-   (T @ ♭ C))
-  
-  
-  ;; Final Terms (top-level)
-  ;; -----------------------
-  (Final
-   T (x @ ι C))
-  
-  )
-
+(define-extended-language λCon-Lift λCon-Baseline)
 
 #|
  ___        _         _   _          
@@ -122,7 +36,6 @@
 ;; Verifies all (immediate) contracts that can be check at compile time
 ;; and unroll all intersection/union contracts.
 
-
 (define Lift-reduction
   (extend-reduction-relation
    Baseline-reduction
@@ -136,21 +49,21 @@
    ;; on argument x and creates a new function contract.
    
    (--> (ς
-         (in-hole F (λ x (in-hole F0 (x @ ι I))))) ;; ? all contracts? ;; use special context
+         (in-hole F (λ x (in-hole BCtx (x @ ι I))))) ;; ? all contracts? ;; use special context
         ;        (((ι ◃ (ι1 ∩ ι2)) ς)
         ;(ς
         (((ι ◃ (ι1 → ι2)) ς)
-         (in-hole F ((λ x (in-hole F0 x)) @ ι1 (I → ⊤))))
+         (in-hole F ((λ x (in-hole BCtx x)) @ ι1 (I → ⊤))))
         ; (in-hole F ((λ x (in-hole H (x @ ι2 (⊥⊤)))) @ ι1 (I → ⊤))))
         "Lift/1"
         (fresh ι1 ι2))
    
    (--> (ς
-         (in-hole F (λ x (in-hole H (x @ ι I))))) ;; ? all contracts? ;; use special context
+         (in-hole F (λ x (in-hole G (x @ ι I))))) ;; ? all contracts? ;; use special context
         ;        (((ι ◃ (ι1 ∩ ι2)) ς)
         ;(ς
         (((ι0 ◃ (ι1 → ι2)) ς)
-         (in-hole F ((λ x (in-hole H x)) @ ι1 (I → ⊤))))
+         (in-hole F ((λ x (in-hole G x)) @ ι1 (I → ⊤))))
         ; (in-hole F ((λ x (in-hole H (x @ ι2 (⊥⊤)))) @ ι1 (I → ⊤))))
         "Lift/n"
         (fresh ι3 ι1 ι2))

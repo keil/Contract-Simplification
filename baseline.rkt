@@ -257,8 +257,7 @@
    
    (--> (ς
          (in-hole F (T @ ι ⊤)))
-        ; (ς
-        (((ι ◃ (τ #t)) ς)
+        (ς
          (in-hole F T))
         "Recude/True")
    

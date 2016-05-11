@@ -3,9 +3,7 @@
 
 (require "lj.rkt")
 (require "lcon.rkt")
-
-(require "lift.rkt")
-(require "split.rkt")
+(require "baseline.rkt")
 
 (provide (all-defined-out))
 
@@ -22,11 +20,8 @@
                                                                   
 |#
 
-(define-extended-language λCon-Subset λCon-Lift 
- 
-   ((ACtx) hole (ACtx @ b C))   
- 
-)
+(define-extended-language λCon-Subset λCon-Baseline
+  )
 
 #|
  ___        _         _   _          
@@ -46,15 +41,9 @@
 
 (define Subset-reduction
   (extend-reduction-relation
-   Lift-reduction
+   Baseline-reduction
    λCon-Subset
    #:domain (ς any)
-   
-   ;(--> (ς
-   ;      (in-hole F ((T @ ι_0 I) @ ι_1 Q)))
-   ;     (ς
-   ;      (in-hole F ((T @ ι_1 Q) @ ι_0 I)))
-   ;     "SwitchXXX")
    
    ;; DO i need to update the constaint grapg
    ;; is this level1 (order) blame perserving
@@ -90,21 +79,21 @@
                          
                          (not (term (closest? (T @ ι_1 D))))
                          ;(term (opt? ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
-                        )))
+                         )))
    
    
    
-;   (--> (ς
-;         (in-hole F ((in-hole ACtx (S @ ι_0 C)) @ ι_1 D)))
-;        (ς
-;         (in-hole F (⇓ ((in-hole ACtx (S @ ι_0 C)) @ ι_1 D))))
-;        "Subset"
-;        (side-condition (and
-;                         false
-;                         ;(term (⊑ D C))
-;                         ;(canonical? (term ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
-;                         (canonical? (term (in-hole F ((S @ ι_0 C) @ ι_1 D))))
-;                        )))
+   ;   (--> (ς
+   ;         (in-hole F ((in-hole ACtx (S @ ι_0 C)) @ ι_1 D)))
+   ;        (ς
+   ;         (in-hole F (⇓ ((in-hole ACtx (S @ ι_0 C)) @ ι_1 D))))
+   ;        "Subset"
+   ;        (side-condition (and
+   ;                         false
+   ;                         ;(term (⊑ D C))
+   ;                         ;(canonical? (term ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
+   ;                         (canonical? (term (in-hole F ((S @ ι_0 C) @ ι_1 D))))
+   ;                        )))
    
    
    
@@ -241,9 +230,6 @@
   [(≤ any ...) (≡ any ...)])
 
 
-
-
-
 ;; Semantics Subsets of Contracts (⊑)
 ;; ==================================
 
@@ -313,7 +299,6 @@
   ;; If not otherwise mentioned
   [(⊑/context any ...) #f])
 
-
 (define-metafunction λCon
   ⊑/subject : C D -> boolean
   
@@ -346,11 +331,6 @@
   
   ;; If not otherwise mentioned
   [(⊑/subject any ...) #f])
-
-
-
-
-
 
 #|
   ___         _               _   
@@ -428,7 +408,6 @@
   [(≈ (C ∪ ⊥)) C]
   [(≈ (⊥ ∪ D)) D]
   
-  
   [(≈ (C ∩ D)) C (side-condition (term (⊑/semantic C D)))]
   [(≈ (C ∩ D)) D (side-condition (term (⊑/semantic D C)))]
   
@@ -459,23 +438,6 @@
 |_| \_,_|_||_\__|\__|_\___/_||_/__/
                                    
 |#
-
-;; Canonical? (non-reducable terms)
-;; --------------------------------
-;(define canonical?
-;  (redex-match λCon-Baseline T))
-
-;; Reducible? (non-canonical terms)
-;; --------------------------------
-;(define reducible? 
-;  (redex-match λCon-Baseline Reducible))
-
-;; Final? (top-level final terms)
-;; ------------------------------
-;(define final? 
-;  (redex-match λCon-Baseline Final))
-
-
 
 ;; λCon Reduction (λCon-->)
 ;; ------------------------
