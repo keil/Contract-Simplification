@@ -49,26 +49,18 @@
    ;; on argument x and creates a new function contract.
    
    (--> (ς
-         (in-hole F (λ x (in-hole BCtx (x @ ι I))))) ;; ? all contracts? ;; use special context
-        ;        (((ι ◃ (ι1 ∩ ι2)) ς)
-        ;(ς
-        (((ι ◃ (ι1 → ι2)) ς)
+         (in-hole F (λ x (in-hole BCtx (x @ ι I)))))
+        (((ι ◃ (¬ ι1)) ς)
          (in-hole F ((λ x (in-hole BCtx x)) @ ι1 (I → ⊤))))
-        ; (in-hole F ((λ x (in-hole H (x @ ι2 (⊥⊤)))) @ ι1 (I → ⊤))))
-        "Lift/1"
-        (fresh ι1 ι2))
+        "Lift/one"
+        (fresh ι1))
    
    (--> (ς
-         (in-hole F (λ x (in-hole G (x @ ι I))))) ;; ? all contracts? ;; use special context
-        ;        (((ι ◃ (ι1 ∩ ι2)) ς)
-        ;(ς
-        (((ι0 ◃ (ι1 → ι2)) ς)
+         (in-hole F (λ x (in-hole G (x @ ι I)))))
+        (((ι ◃ (¬ ι1)) ς)
          (in-hole F ((λ x (in-hole G x)) @ ι1 (I → ⊤))))
-        ; (in-hole F ((λ x (in-hole H (x @ ι2 (⊥⊤)))) @ ι1 (I → ⊤))))
         "Lift/n"
-        (fresh ι3 ι1 ι2))
-   
-   
+        (fresh ι1))
    ))
 
 
