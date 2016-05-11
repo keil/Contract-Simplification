@@ -34,7 +34,7 @@
   
   ;; Terms
   ;; -----
-  ((L M N) .... (M @ ι C) (M || N))
+  ((L M N) .... (M @ ι C)); (M || N))
   
   
   
@@ -101,13 +101,13 @@
    ;; -------------
    
    ;; Intersection betenn immediate and delayed contract
-   (M @ ι (I ∩ Q))
+   (M @ ι (I ∩ C))
    
    ;; Union contracts
    (M @ ι (C ∪ D))
    
    ;; Nested delayed contracts
-   ((M @ ι_0 Q) @ ι_1 I)
+   ((M @ ι_0 Q) @ ι_1 I) ((M @ ι_0 C) @ ι_1 ⊥)
    
    ;; Top-level assertions
    (T @ ♭ C))
