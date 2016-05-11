@@ -128,12 +128,12 @@
   ;; Function Body Context
   ;; ---------------------
   ;; Reduction Context without abstraction.
-  ((B) hole (B M) (T B) (op T ... B M ...) (if T ... B M ...) (B @ b C)
-       (B || N) (T || B))
+  (BCtx hole (BCtx M) (T BCtx) (op T ... BCtx M ...) (if T ... BCtx M ...) (BCtx @ b C)
+        (BCtx || N) (T || BCtx))
   
   ;; Assertion Context
   ;; -----------------
-  ((A) hole (A @ ι C)) ;; TODO (X @ ι C) ?
+  (ACtx hole (ACtx @ ι C)) ;; TODO (X @ ι C) ?
   
   ;; Miscellaneous
   ;; =============
@@ -243,11 +243,11 @@
    ;; can be checked right awar.
    
    ;; TODO
-   (--> (ς
-         (in-hole F ((T @ ι_0 I) @ ι_1 Q)))
-        (ς
-         (in-hole F ((T @ ι_1 Q) @ ι_0 I)))
-        "Switch")
+   ;(--> (ς
+   ;      (in-hole F ((T @ ι_0 I) @ ι_1 Q)))
+   ;     (ς
+   ;      (in-hole F ((T @ ι_1 Q) @ ι_0 I)))
+   ;     "Switch")
    
    
    
@@ -257,11 +257,11 @@
    
    (--> (ς
          (in-hole F (T @ ι ⊤)))
-        (ς
-         ;(((ι ◃ (τ #t)) ς) ;; TODO
+        ; (ς
+        (((ι ◃ (τ #t)) ς)
          (in-hole F T))
         "Recude/True")
-
+   
    
    
    ;; Predicate Verification
@@ -269,55 +269,112 @@
    ;; Evaluates predicates on values.
    
    (--> (ς
-         (in-hole F ((in-hole X V) @ ι predefined)))
+         (in-hole F ((in-hole ACtx V) @ ι predefined)))
         (ς
-         (in-hole F ((in-hole X V) @ ι (lookup predefined))))
+         (in-hole F ((in-hole ACtx V) @ ι (lookup predefined))))
         "Lookup")
    
    (--> (ς
-         (in-hole F ((in-hole X V) @ ι (flat M))))
+         (in-hole F ((in-hole ACtx V) @ ι (flat M))))
         (ς
-         (in-hole F ((in-hole X V) @ ι ⊤)))
+         (in-hole F ((in-hole ACtx V) @ ι ⊤)))
         "Verify/True"
         (where W (⇓/Term ,(car (apply-reduction-relation* λCon-reduction (term (· (M V)))))))
         (side-condition (not (false? (term W)))))
    
    (--> (ς
-         (in-hole F ((in-hole X V) @ ι (flat M))))
+         (in-hole F ((in-hole ACtx V) @ ι (flat M))))
         (ς
-         (in-hole F ((in-hole X V) @ ι ⊥)))
+         (in-hole F ((in-hole ACtx V) @ ι ⊥)))
         "Verify/False"
         (where W (⇓/Term ,(car (apply-reduction-relation* λCon-reduction (term (· (M V)))))))
         (side-condition (false? (term W))))
+   
+   
+   
+   ;; Join
+   ;; ----
+   ;; Merges the splitted evaluations.
+   
+   (--> (
+         (in-hole F ((in-hole H (T @ ι C)) || (in-hole H S))))
+        (ς
+         (in-hole F ((in-hole H (T @ ι C)) || (in-hole H (S @ ι C)))))
+        "Join/LeftContract"
+        (side-condition (and (canonical? (term (in-hole H (T @ ι C))))
+                             (canonical? (term (in-hole H S)))))
+        )
+   
+   (--> (ς
+         (in-hole F ((in-hole H S) || (in-hole H (T @ ι C)))))
+        (ς
+         (in-hole F ((in-hole H (S @ ι C)) || (in-hole H (T @ ι C)))))
+        "Join/RightContract"
+        
+        (side-condition (and (canonical? (term (in-hole H S)))
+                             (canonical? (term (in-hole H (T @ ι C))))))
+        ) 
+   
+   (--> (ς
+         (in-hole F ((in-hole H (T_1 @ ι_1 C)) || (in-hole H (T_2 @ ι_2 D)))))
+        (ς
+         (in-hole F ((in-hole H ((T_1 @ ι_1 C) @ ι_2 D)) || (in-hole H ((T_2 @ ι_1 C) @ ι_2 D)))))
+        "Join/LeftRightContract"
+        
+        (side-condition (and (canonical? (term (in-hole H (T_1 @ ι_1 C))))
+                             (canonical? (term (in-hole H (T_2 @ ι_2 D))))
+                             (not (eq? (term C) (term D)))
+                             ))
+        )
+   
+   
+   (--> (ς
+         (in-hole F ((in-hole H (T_1 (T_11 @ ι_1 C))) || (in-hole H (T_2 (T_22 @ ι_2 D))))))
+        (ς
+         (in-hole F ((in-hole H (T_1 ((T_11 @ ι_1 C) @ ι_2 D))) || (in-hole H (T_2 ((T_22 @ ι_1 C) @ ι_2 D))))))
+        "Join/App"
+        
+        (side-condition (and (canonical? (term (in-hole H (T_1 (T_11 @ ι_1 C)))))
+                             (canonical? (term (in-hole H (T_2 (T_22 @ ι_2 D)))))
+                             (not (eq? (term C) (term D)))
+                             ))
+        )
+      
+   (--> (ς
+         (in-hole F (T || T))) 
+        (ς
+         (in-hole F T)) 
+        "Join")
+
    ))
-
-
-
-;; Function unroll : x Q M -> N
-;; ----------------------------
-;; Unrolls a delayed contract Q of function x 
-;; to all uses of x
-
-(define-metafunction λCon-Baseline
-  unroll : x Q b any -> any
   
-  ;; Don't continue if x is bound λ's body
-  [(unroll x Q b (λ x M)) (λ x M)]
   
-  ;; Continue unrollong on λ's body
-  [(unroll x Q b (λ y M)) (λ y (unroll x Q b M))]
   
-  ;; Put contract to the usage of x
-  [(unroll x Q b x) (x @ b Q)]
+  ;; Function unroll : x Q M -> N
+  ;; ----------------------------
+  ;; Unrolls a delayed contract Q of function x 
+  ;; to all uses of x
   
-  ;; Continue unrollong on the structure of M
-  [(unroll x Q b (any ...)) ((unroll x Q b any) ...)]
+  (define-metafunction λCon-Baseline
+    unroll : x Q b any -> any
+    
+    ;; Don't continue if x is bound λ's body
+    [(unroll x Q b (λ x M)) (λ x M)]
+    
+    ;; Continue unrollong on λ's body
+    [(unroll x Q b (λ y M)) (λ y (unroll x Q b M))]
+    
+    ;; Put contract to the usage of x
+    [(unroll x Q b x) (x @ b Q)]
+    
+    ;; Continue unrollong on the structure of M
+    [(unroll x Q b (any ...)) ((unroll x Q b any) ...)]
+    
+    ;; Return the target expression M if
+    ;; none of the previous rules match
+    [(unroll x Q b any) any])
   
-  ;; Return the target expression M if
-  ;; none of the previous rules match
-  [(unroll x Q b any) any])
-
-#|
+  #|
  ___            _ _         _                         _ 
 | _ \_ _ ___ __| (_)__ __ _| |_ ___ ___  __ _ _ _  __| |
 |  _/ '_/ -_) _` | / _/ _` |  _/ -_|_-< / _` | ' \/ _` |
@@ -329,34 +386,34 @@
 |_| \_,_|_||_\__|\__|_\___/_||_/__/
                                    
 |#
-
-;; Canonical? (non-reducable terms)
-;; --------------------------------
-(define canonical?
-  (redex-match? λCon-Baseline T))
-
-;; Reducible? (non-canonical terms)
-;; --------------------------------
-(define reducible? 
-  (redex-match? λCon-Baseline Reducible))
-
-;; Final? (top-level final terms)
-;; ------------------------------
-(define final? 
-  (redex-match? λCon-Baseline Final))
-
-;; λCon Reduction (λCon-->)
-;; ------------------------
-(define
-  (λCon/Baseline~~> ς M)
-  (if (redex-match? λCon M M)
-      (car (apply-reduction-relation Baseline-reduction (term (,ς ,M))))
-      (error "Invalid λCon-term:" M)))
-
-;; λCon Reduction (λCon-->*)
-;; -------------------------
-(define
-  (λCon/Baseline~~>* configuration)
-  (if (redex-match? λCon (ς M) configuration)
-      (car (apply-reduction-relation* Baseline-reduction (term ,configuration)))
-      (error "Invalid λCon-term:" configuration)))
+  
+  ;; Canonical? (non-reducable terms)
+  ;; --------------------------------
+  (define canonical?
+    (redex-match? λCon-Baseline T))
+  
+  ;; Reducible? (non-canonical terms)
+  ;; --------------------------------
+  (define reducible? 
+    (redex-match? λCon-Baseline Reducible))
+  
+  ;; Final? (top-level final terms)
+  ;; ------------------------------
+  (define final? 
+    (redex-match? λCon-Baseline Final))
+  
+  ;; λCon Reduction (λCon-->)
+  ;; ------------------------
+  (define
+    (λCon/Baseline~~> ς M)
+    (if (redex-match? λCon M M)
+        (car (apply-reduction-relation Baseline-reduction (term (,ς ,M))))
+        (error "Invalid λCon-term:" M)))
+  
+  ;; λCon Reduction (λCon-->*)
+  ;; -------------------------
+  (define
+    (λCon/Baseline~~>* configuration)
+    (if (redex-match? λCon (ς M) configuration)
+        (car (apply-reduction-relation* Baseline-reduction (term ,configuration)))
+        (error "Invalid λCon-term:" configuration)))
