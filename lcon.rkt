@@ -32,16 +32,13 @@
   ;; ---------
   
   ;; Contracts
-  ((C D) I Q (C ∪ D) (I ∩ Q) ⊤ ⊥)
-  
-  ;; Contract Abstraction
-  (A (Λ x C))
-  
+  ((C D) I Q (C ∪ D) (I ∩ C) ⊤ ⊥)
+    
   ; Immediate Contracts
-  ((I J) (flat M) predefined (I ∩ J))
+  ((I J) (flat M) predefined)
   
   ; Delayed Contracts
-  ((Q R) (C → D) (x ↦ A) (Q ∩ R))
+  ((Q R) (C → D) (x ↦ (Λ x C)) (Q ∩ R))
   
   
   
@@ -78,7 +75,7 @@
   (B #t #f)
   
   ;; Constraints
-  (κ ω ι (ι_1 → ι_2) (ι_1 ∩ ι_2) (ι_1 ∪ ι_2))
+  (κ ω ι (ι_1 → ι_2) (ι_1 ∩ ι_2) (ι_1 ∪ ι_2) (¬ ι))
   
   ;; State
   (ς · ((b ◃ κ) ς))
@@ -227,30 +224,19 @@
    ;; C → ⊤/ ⊤ → C
    (--> (ς
          (in-hole E ((V @ ι (C → ⊤)) W)))
-        (((ι ◃ (ι1 → ι2)) ς) ;; TODO, Inversion constraint ?
+        (((ι ◃ (¬ ι1)) ς)
          (in-hole E (V (W @ ι1 C))))
         "C → ⊤"
-        (fresh ι1 ι2)
+        (fresh ι1)
         (side-condition (not (term (is-blame-state? ς)))))
    
    (--> (ς
          (in-hole E ((V @ ι (⊤ → C)) W)))
-        (((ι ◃ (ι1 → ι2)) ς) ;; TODO, constraint not required ?
-         (in-hole E ((V W) @ ι2 C)))
+        (ς
+         (in-hole E ((V W) @ ι C)))
         "⊤ → C"
-        (fresh ι1 ι2)
         (side-condition (not (term (is-blame-state? ς)))))
-   
-   
-   
-;   ; Symbolic (TODO)
-;   (--> (ς
-;         (in-hole E (M / C ...)))
-;        (ς
-;         (in-hole E M))
-;        "Symbolic"
-;        (side-condition (not (term (is-blame-state? ς)))))
-   
+     
    ;; Lookup
    (--> (ς
          (in-hole E (V @ ι predefined)))
@@ -512,6 +498,7 @@
   [(solve ς (ι_0 → ι_1)) (solve/→ (μ ς ι_0) (μ ς ι_1))]
   [(solve ς (ι_0 ∩ ι_1)) (solve/∩ (μ ς ι_0) (μ ς ι_1))]
   [(solve ς (ι_0 ∪ ι_1)) (solve/∪ (μ ς ι_0) (μ ς ι_1))]
+  [(solve ς (¬ ι)) (solve/¬ (μ ς ι))]
   [(solve ς ι) (μ ς ι)]
   [(solve ς ω) ω])
 
@@ -532,6 +519,12 @@
 (define-metafunction λCon
   solve/∩ : ω ω -> ω
   [(solve/∩ ω_0 ω_1) (,(or (term (context ω_0)) (term (context ω_1))) ∘ ,(and (term (subject ω_0)) (term (subject ω_1))))])
+
+;; Solve Inversion
+;; ---------------
+(define-metafunction λCon
+  solve/¬ : ω -> ω
+  [(solve/¬ ω) ((subject ω_0) ∘ (context ω_0))])
 
 #|
  ___      _       _   _ _        _   _          

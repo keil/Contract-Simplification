@@ -21,6 +21,9 @@
 
 (define-extended-language λCon-Baseline λCon
   
+  ;; Syntax Extensions
+  ;; =================
+  
   ;; Immediate Contracts
   ;; -------------------
   ((I J) .... (I ∩ J))
@@ -31,32 +34,35 @@
   
   ;; Terms
   ;; -----
-  ((L M N) .... (M @ ι C))
+  ((L M N) .... (M @ ι C) (M || N))
   
   
   
   ;; Canonical terms (λJ terms)
-  ;; --------------------------
+  ;; ==========================
   
-  ;; Source Terms (values)
-  (S0
-   K (λ x S))
+  ;; Source Terms
+  ;; ------------
+  ;; Terms without a contract on the outermost position.
   
-  ;; Source Terms (non-values)
-  (S1
-   x (+blame ♭) (-blame ♭) (S TI) (TI T) (S S) (K T) (op T ...) (if T_0 T_1 T_2))
+  ;; Values
+  (S0 K (λ x S))
   
-  ;; Source Terms (without contracts) 
-  (S 
-   S0 S1)
+  ;; Non-Values
+  (S1 x (+blame ♭) (-blame ♭) (S TI) (TI T) (S S) (K T) (op T ...) (if T_0 T_1 T_2))
+  
+  ;; Source Terms
+  (S S0 S1)
+  
+  ;; Terms
+  ;; -----
+  ;; Terms with non-reducable contracts.
   
   ;; Terms with Immediate Contracts/ False
-  (TI
-   S1 (TI @ ι I) (TI @ ι ⊥))
+  (TI S1 (TI @ ι I) (TI @ ι ⊥))
   
   ;; Terms with Delayed Contracts
-  (TQ 
-   S TI (TQ @ ι Q))
+  (TQ S TI (TQ @ ι Q))
   
   ;; Canonical Terms (non-reducable terms)
   (T TQ (S @ ι ⊥))
@@ -67,6 +73,9 @@
   
   
   ;; Reducable terms (non-cannonical terms)
+  ;; ======================================
+  
+  ;;  terms ()
   ;; --------------------------------------
   (Reducible
    
@@ -106,35 +115,35 @@
    ;; Top-level assertions
    (T @ ♭ C))
   
- 
-  ;; Final Terms (top-level)
-  ;; -----------------------
-  (Final
-   T (x @ ι C))
   
   
-  
-  
+  ;; Contexts
+  ;; ========
   
   ;; Baseline Reduction Context
   ;; --------------------------
-  ((F G H) hole (λ x F) (F M) (T F) (op T ... F M ...) (if F M N) (if T_0 F N) (if T_0 T_1 F) (F @ b C))   
+  ((F G H) hole (λ x F) (F M) (T F) (op T ... F M ...) (if T ... F M ...) (F @ b C)
+           (F || N) (T || F))
   
-    ;; TODO, Reduction Context without abstraction.
-  ((F0 G0 H0) hole (F0 M) (T F0) (op T ... F0 M ...) (if F0 M N)
-              (if T_0 F0 N) (if T_0 T_1 F0) (F0 @ b C))
-
-  ;; TODO
-  ((CtxI) hole (CtxI @ ι ⊥))
+  ;; Function Body Context
+  ;; ---------------------
+  ;; Reduction Context without abstraction.
+  ((B) hole (B M) (T B) (op T ... B M ...) (if T ... B M ...) (B @ b C)
+       (B || N) (T || B))
+  
+  ;; Assertion Context
+  ;; -----------------
+  ((A) hole (A @ ι C)) ;; TODO (X @ ι C) ?
   
   ;; Miscellaneous
-  ;; -------------
+  ;; =============
   
   ;; True-Contracts
-  (True ⊤ (True → True) (x → (Λ x True)) (True ∩ True) (True ∪ True))
+  ;(True ⊤ (True → True) (x → (Λ x True)) (True ∩ True) (True ∪ True))
   
   ;; False-Contracts
-  (False ⊥))
+  ;(False ⊥)
+  )
 
 #|
  ___        _         _   _          
@@ -147,10 +156,7 @@
 ;; Baseline-reduction
 ;; ==================
 ;; Verifies all (immediate) contracts that can be check at compile time
-;; and unroll all intersection/union contracts.
-
-;; TODO
-;; implement top-level blame rule
+;; and unrolls all contracts.
 
 (define Baseline-reduction
   (reduction-relation
@@ -166,15 +172,15 @@
    (--> (ς
          (in-hole F (T @ ♭ C)))
         (((♭ ◃ ι) ς)
-         ;(in-hole F (T @ ι C)))
-         (in-hole F ((T / C) @ ι C)))
+         (in-hole F (T @ ι C)))
         "Unfold/Assert"
         (fresh ι))
    
    (--> (ς
          (in-hole F (T @ ι (C ∪ D))))
         (((ι ◃ (ι1 ∪ ι2)) ς)
-         (in-hole F ((T @ ι1 C) @ ι2 D)))
+         ;(in-hole F ((T @ ι1 C) @ ι2 D))) ;; TODO
+         ((in-hole F (T @ ι1 C)) || (in-hole F (T @ ι2 D))))
         "Unfold/Union"
         (fresh ι1 ι2))
    
@@ -184,7 +190,7 @@
          (in-hole F ((T @ ι1 I) @ ι2 C)))
         "Unfold/Intersection"
         (fresh ι1 ι2))
-      
+   
    ;; Unroll
    ;; ------
    ;; Rule [Unroll] unrolles the contract of a contracted argument 
@@ -211,9 +217,12 @@
    (--> (ς
          (in-hole F ((T_0 @ ι (Q ∩ R)) T_1)))
         (((ι ◃ (ι1 ∩ ι2)) ς)
-         (in-hole F (((T_0 @ ι1 Q) @ ι2 R) T_1)))
+         ;(in-hole F (((T_0 @ ι1 Q) @ ι2 R) T_1))) ;; TODO
+         ((in-hole F ((T_0 @ ι1 Q) T_1)) || (in-hole F ((T_0 @ ι2 R) T_1))))
         "Unfold/D-Intersection"
         (fresh ι1 ι2))
+   
+   
    
    ;; Lower (down)
    ;; ------------
@@ -227,63 +236,56 @@
         "Lower")
    
    
+   
    ;; Switch Order
    ;; ------------
    ;; Rule [Switch] changes the order of contracts such that imemdiate contracts
    ;; can be checked right awar.
-      
+   
+   ;; TODO
    (--> (ς
          (in-hole F ((T @ ι_0 I) @ ι_1 Q)))
         (ς
          (in-hole F ((T @ ι_1 Q) @ ι_0 I)))
         "Switch")
    
+   
+   
    ;; Valid Contracts
    ;; ---------------
-   ;; Removes (termn True) contracts.
+   ;; Removes (term ⊤) contracts.
    
    (--> (ς
-         (in-hole F (T @ ι True)))
+         (in-hole F (T @ ι ⊤)))
         (ς
-;        (((ι ◃ (τ #t)) ς)
+         ;(((ι ◃ (τ #t)) ς) ;; TODO
          (in-hole F T))
         "Recude/True")
+
    
-;   (--> (ς
-;         (in-hole F (T @ ι False)))
-;        (((ι ◃ (τ #f)) ς)
-;         (in-hole F T))
-;        "Recude/False")
-
-;   (--> (ς
-;         (in-hole F (λ x (in-hole F0 (T @ ι False)))))
-;        (ς
-;         (in-hole F ((λ x (in-hole F0 T)) @ ι (⊤ → ⊥)))) ;; TODO special false element for blame 
-;        "Recude/False")
-
    
    ;; Predicate Verification
    ;; ----------------------
    ;; Evaluates predicates on values.
    
    (--> (ς
-         (in-hole F ((in-hole CtxI V) @ ι predefined)))
+         (in-hole F ((in-hole X V) @ ι predefined)))
         (ς
-         (in-hole F ((in-hole CtxI V) @ ι (lookup predefined))))
+         (in-hole F ((in-hole X V) @ ι (lookup predefined))))
         "Lookup")
    
    (--> (ς
-         (in-hole F ((in-hole CtxI V) @ ι (flat M))))
+         (in-hole F ((in-hole X V) @ ι (flat M))))
         (ς
-         (in-hole F ((in-hole CtxI V) @ ι ⊤)))
+         (in-hole F ((in-hole X V) @ ι ⊤)))
         "Verify/True"
         (where W (⇓/Term ,(car (apply-reduction-relation* λCon-reduction (term (· (M V)))))))
         (side-condition (not (false? (term W)))))
    
    (--> (ς
-         (in-hole F ((in-hole CtxI V) @ ι (flat M))))
+         (in-hole F ((in-hole X V) @ ι (flat M))))
         (ς
-         (in-hole F ((in-hole CtxI V) @ ι ⊥)))
+         (in-hole F ((in-hole X V) @ ι ⊥)))
         "Verify/False"
         (where W (⇓/Term ,(car (apply-reduction-relation* λCon-reduction (term (· (M V)))))))
         (side-condition (false? (term W))))

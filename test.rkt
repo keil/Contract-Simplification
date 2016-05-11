@@ -21,17 +21,17 @@
 ;; Baseline/Pre-evaluation
 ;; -----------------------
 
-(require "tests/test.pre-evaluation.rkt")
+;(require "tests/test.pre-evaluation.rkt")
 
 ;; Sub-Contract Relation
 ;; ---------------------
 
-(require "tests/test.subset.rkt")
+;(require "tests/test.subset.rkt")
 
 ;; Contract Substraction
 ;; ---------------------
 
-(require "tests/test.setminus.rkt")
+;(require "tests/test.setminus.rkt")
 
 ;; Baseline/Subset-reduction
 ;; -------------------------
@@ -42,4 +42,4 @@
 ;; Baseline/Baseline-reduction
 ;; ---------------------------
 
-(require "tests/test.baseline-reduction.rkt")
+;(require "tests/test.baseline-reduction.rkt")
