@@ -59,17 +59,14 @@
   ;; Terms with non-reducable contracts.
   
   ;; Terms with Immediate Contracts/ False
-  (TI S1 (TI @ ι I) (TI @ ι ⊥))
+  (TI S1 (TI @ ι I) (S @ ι ⊥))
   
   ;; Terms with Delayed Contracts
   (TQ S TI (TQ @ ι Q))
   
   ;; Canonical Terms (non-reducable terms)
-  (T TQ (S @ ι ⊥))
+  (T TQ)
   
-  ;; TODO
-  ;; As every T @ ⊥ is more restrictive than every other contract
-  ;; we only have T @ ⊥ once, because ervy other contract is removed
   
   
   ;; Reducable terms (non-cannonical terms)
