@@ -26,7 +26,10 @@
   
   ;; Immediate Contracts
   ;; -------------------
-  ((I J) .... (I ∩ J))
+  ;((I J) .... (I ∩ J))
+  
+  ;; Contracts
+  ((C D) .... ⊤ ⊥)
   
   ;; Delayed Contracts
   ;; -----------------
@@ -93,14 +96,14 @@
    (λ x (M @ ι C))
    
    ;; True
-   (M @ b ⊤)
+   (M @ ι ⊤)
    
    ;; Restructuring
    ;; -------------
    
    ;; Intersection betenn immediate and delayed contract
    (M @ ι (I ∩ C))
-   
+      
    ;; Union contracts
    (M @ ι (C ∪ D))
    

@@ -32,7 +32,7 @@
   ;; ---------
   
   ;; Contracts
-  ((C D) I Q (C ∪ D) (I ∩ C) ⊤ ⊥)
+  ((C D) I Q (C ∪ D) (I ∩ C))
 
   ;; Contract Abstraction
   (A (Λ x C))
