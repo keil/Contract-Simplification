@@ -21,34 +21,142 @@
 
 (define-extended-language λCon-Symbolic λCon
   
-  ;; Predicates (TODO)
-  (P (flat (λ x M)) named)
+  ;; Syntax Extensions
+  ;; =================
   
-  ;; Values
-  ((U V W) K (λ x M) ?)
+  ;; Immediate Contracts
+  ;; -------------------
+  ;((I J) .... (I ∩ J))
   
-  ;; Symbolic Values
-  ((S T) (V / (P ...)) (S @ Q))
+  ;; Contracts
+  ((C D) .... ⊤ ⊥)
+  
+  ;; Delayed Contracts
+  ;; -----------------
+  ((Q R) .... (C → ⊤) (⊤ → C))
   
   ;; Terms
-  ((L M N) .... V S (M || N))
+  ;; -----
+  ((L M N) .... (M @ ι C) (M / C)) ;; (M / C ...)
+  
+  
+  
+  
+  ;; Traces
+  ((Tx Ty) M (Tx / C) (Tx ∥ Ty))
+  
+  
+  
+  
+  ;; Canonical terms (λJ terms)
+  ;; ==========================
+  
+  ;; Source Terms
+  ;; ------------
+  ;; Terms without a contract on the outermost position.
+  
+  ;; Values
+  (S0 K (λ x S))
+  
+  ;; Non-Values
+  (S1 x (+blame ♭) (-blame ♭) (S TI) (TI T) (S S) (K T) (op T ...) (if T_0 T_1 T_2))
+  
+  ;; Source Terms
+  (S S0 S1 (S / C))
+  
+  ;; Terms
+  ;; -----
+  ;; Terms with non-reducable contracts.
+  
+  ;; Terms with Immediate Contracts/ False
+  (TI S1 (TI @ ι I))
+  
+  ;; Terms with Delayed Contracts
+  (TQ S TI T0 T1 (TQ @ ι Q))
+  
+  ;; Canonical Terms (non-reducable terms)
+  (T TQ)
+  
+  
+  
+  ;; Reducable terms (non-cannonical terms)
+  ;; ======================================
+  
+  (Reducible
+   
+   ;; Terms containing a reducable term
+   (λ x Reducible) (Reducible M) (M Reducible) (op M ... Reducible N ...) (if M ... Reducible N ...)   (Reducible @ b C)
+   
+   ;; Optimization
+   ;; ------------
+   
+   ;; Delayed checkes of a delayed contract
+   ((λ x M) (M @ ι Q))
+   
+   ;; Checked of delayed contracts
+   ((M @ ι Q) N) 
+   
+   ;; Imediate contracts in values
+   (K @ ι I) #| (x @ ι I) |# ((λ x M) @ ι I) ;; TODO
+   
+   ;; Contracts on return terms
+   (λ x (M @ ι C))
+   
+   ;; True
+   (M @ ι ⊤)
+   
+   ;; False
+   (M @ ι ⊥)
+   
+   ;; Restructuring
+   ;; -------------
+   
+   ;; Intersection betenn immediate and delayed contract
+   (M @ ι (I ∩ C))
+   
+   ;; Union contracts
+   (M @ ι (C ∪ D))
+   
+   ;; Nested delayed contracts
+   ((M @ ι_0 Q) @ ι_1 I) ;((M @ ι_0 Q) @ ι_1 ⊥)
+   
+   ;; Top-level assertions
+   (M @ ♭ C))
+  
+  
   
   ;; Contexts
-  ((E F) hole (E N) (S E) (op S ... E M ...) (if E M N) (E @ C) (S @ (eval E P)) (E || N) (S || E))
+  ;; ========
   
-  ;; False Values
-  (false .... ?))
+  ;; Baseline Reduction Context
+  ;; --------------------------
+  ((F G H) hole (λ x F) #|(F T) (M F)|# (F M) (T F) (op T ... F M ...) (if T ... F M ...) (F @ b C)
+           (F ∥ N) (T ∥ F)
+           (F / C)) ;;  (F M) (T F)
+  
+  ;; Function Body Context
+  ;; ---------------------
+  ;; Reduction Context without abstraction.
+  (BCtx hole (BCtx M) (T BCtx) (op T ... BCtx T ...) (BCtx @ b C)
+        (BCtx || T) (T || BCtx)) ;; (if T ... BCtx T ...)
+  
+  ;; Assertion Context
+  ;; -----------------
+  (ACtx hole (ACtx @ ι C)) ;; TODO (X @ ι C) ?
+  
+  ;; Miscellaneous
+  ;; =============
+  
+  ;; True-Contracts
+  ;(True ⊤ (True → True) (x → (Λ x True)) (True ∩ True) (True ∪ True))
+  
+  ;; False-Contracts
+  ;(False ⊥)
+  )
 
 
-;; Maybe-false
-;; ===========
-(define maybe-false? 
-  (redex-match? λCon-Symbolic false))
 
-;; Maybe-true
-;; ==========
-(define maybe-true? 
-  (not (redex-match? λJ false)))
+
 
 #|
  ___        _         _   _          
@@ -58,202 +166,146 @@
                                      
 |#
 
-(define-metafunction λCon-Symbolic
-  unpack : S -> V
-  [(unpack (V / (P ...))) V]
-  [(unpack V) V]
-  [(unpack any) ?]
-  )
-
-(define-metafunction λCon-Symbolic
-  δ/ : op V ... -> V
-  [(δ/ op K ...) (δ op K ...)]
-  [(δ/ op any ...) ?]
-  )
-
-(define-metafunction λCon-Symbolic
-  Δ : op S ... -> S
-  [(Δ numeric (V / (P ...)) ...) ((δ/ numeric V ...) / (Num?))]  
-  [(Δ logical (V / (P ...)) ...) ((δ/ logical V ...) / (Bool?))]
-  [(Δ relational (V / (P ...)) ...) ((δ/ relational V ...) / (Bool?))]
-  [(Δ predicates (V / (P ...)) ...) ((δ/ predicates V ...) / (Bool?))]
-  )
-
-(define-metafunction λCon-Symbolic
-  ★ : S S -> S
-  ;; Merge predicates when values are identival
-  [(★ (K / (P_v ...)) (K / (P_w ...))) (K / (⊕ (P_v ...) (P_w ...)))]
-  [(★ ((λ x M) / (P_v ...)) ((λ x M) / (P_w ...))) ((λ x M) / (⊕ (P_v ...) (P_w ...)))]
-  ;; Make splitted function body
-  [(★ ((λ x M) / (P_v ...)) ((λ x N) / (P_w ...))) ((λ x (M || N)) / (⊗ (P_v ...) (P_w ...)))]
-  [(★ (V / (P_v ...)) (W / (P_w ...))) (? / (⊗ (P_v ...) (P_w ...)))]
-  )
-
-(define-metafunction λCon-Symbolic
-  ⊗ : (P ...) (P ...) -> (P ...)
-  [(⊗ () (P ...)) ()]
-  [(⊗ (P ...) ()) ()]
-  [(⊗ (P) (P_0 ... P P_i ...)) (P)]
-  [(⊗ (P) (P_0 ...)) (⊤)]  
-  [(⊗ (P_0 P_1 ...) (P ...)) (⊕ (⊗ (P_0) (P ...)) (⊗ (P_1 ...) (P ...)))] 
-  )
-
-(define-metafunction λCon-Symbolic
-  ⊕ : (P ...) (P ...) -> (P ...)  
-  [(⊕ (P ...) ()) (P ...)]
-  [(⊕ (P_0 ... P_i P_j ...) (P_i P ...)) (⊕ (P_0 ... P_i P_j ...) (P ...))]
-  [(⊕ (P ...) (P_0 P_1 ...)) (⊕ (P ... P_0) (P_1 ...))])
+;; Baseline-reduction
+;; ==================
+;; Verifies all (immediate) contracts that can be check at compile time
+;; and unrolls all contracts.
 
 (define Symbolic-reduction
   (reduction-relation
    λCon-Symbolic
+   #:domain (ς any)
    
-   ;; Abstraction of Values
-   ;; =====================
+   (--> (ς
+         (in-hole F (M @ ♭ C)))
+        (((♭ ◃ ι) ς)
+         (in-hole F ((M / C) @ ι C)))
+        "Symbolic/Assert"
+        (fresh ι))
    
-   (--> (in-hole E V)
-        (in-hole E (V / (⊤)))
-        "Abstract")
-   
-   (--> (in-hole E (((λ x M) / (P_v ...)) || ((λ y N) / (P_w ...))))
-        (in-hole E (((λ z (subst x z M)) / (P_v ...)) || ((λ z (subst x z N)) / (P_w ...))))
-        "α"
-        (side-condition (not (eq? (term x) (term y))))
-        (fresh z))
-   
-   (--> (in-hole E ((V / (P_v ...)) || (W / (P_w ...))))
-        (in-hole E (★ (V / (P_v ...)) (W / (P_w ...))))
-        "Join"
-        (side-condition
-         (nand
-          (redex-match? λCon (λ x M) (term V))
-          (redex-match? λCon (λ x M) (term W)))))
-   
-   (--> (in-hole E (((λ x M) / (P_l ...)) || ((λ x N) / (P_r ...))))
-        (in-hole E (★ ((λ x M) / (P_l ...)) ((λ x N) / (P_r ...))))
-        "Join/Function")
-   
-   ;; Rules from λJ
-   ;; =============
-   
-   (--> (in-hole E (op S ...))
-        (in-hole E (Δ op S ...))
-        "Δ")
-   
-   (--> (in-hole E (((λ x M) / (P ...)) S))
-        (in-hole E (subst x S M))
-        "β")
-   
-   (--> (in-hole E ((? / (P ...)) S))
-        (in-hole E (? / (⊤)))
-        "Β")
-   
-   (--> (in-hole E (if (V / (P ...)) M N))
-        (in-hole E M)
-        "If/true"
-        (side-condition (not (maybe-false? (term V)))))
-   
-   (--> (in-hole E (if (V / (P ...)) M N))
-        (in-hole E N)
-        "If/false"
-        (side-condition (false? (term V))))
-   
-   (--> (in-hole E (if (? / (P ...)) M N))
-        (in-hole E (M || N))
-        "If/?")  
-   
-   ;; Rules from λCon
-   ;; ===============
-   
-   ;; Immediate Contracts
-   ;; -------------------
-   
-   (--> (in-hole E ((V / (P_0 ...)) @ (flat M)))
-        (in-hole E ((V / (P_0 ...)) @ (eval (M V) (flat M))))
-        "Flat")
-   
-   (--> (in-hole E ((V / (P_0 ...)) @ (eval (W / (P_w ...)) P)))
-        (in-hole E (V / (⊕ (P_0 ...) ((pretty P)))))
-        "Unit"
-        (side-condition (not (false? (term W)))))
-   
-   (--> (in-hole E ((V / (P_0 ...)) @ (eval (W / (P_w ...)) P)))
-        (in-hole E (V / (P_0 ...)))
-        "Blame"
-        (side-condition (false? (term W))))
-   
-   (--> (in-hole E (S @ (C ∪ D)))
-        (in-hole E ((S @ C) || (S @ D)))
-        "Union")
-   
-   (--> (in-hole E (S @ (C ∩ D)))
-        (in-hole E ((S @ C) || (S @ D)))
-        "Intersection")
-   
-   ;; Delayed Contracts
-   ;; -----------------
-   
-   (--> (in-hole E ((S @ (C → D)) T))
-        (in-hole E ((S (T @ C)) @ D))
-        "Function")
-   
-   (--> (in-hole E ((S @ (x → C)) T)) 
-        (in-hole E ((S T) @ C))
-        "Dependent") ;; TODO
-   
-   (--> (in-hole E (((S_l @ Q) || (S_r @ R)) T))
-        (in-hole E (((S_l @ Q) T) || ((S_r @ R) T)))
-        "Split")
-   
-   ;; Miscellaneous
-   ;; -------------
-   
-   (--> (in-hole E ((V / (P ...)) @ named))
-        (in-hole E ((V / (P ...)) @ (lookup named)))
-        "Lookup")
+   (--> (ς
+         (in-hole F ((M @ ι C) / D)))
+        (ς
+         (in-hole F ((M / D) @ ι C)))
+        "SwitchX")
    
    ))
 
-;; Symbolic Execution
-;; ================== 
 
-(define
-  (⇓/symbolic M)
-  (car (apply-reduction-relation* Symbolic-reduction M)))
 
-(define
-  (⇒/symbolic M)
-  (⇓/symbolic (term (,M (? / (⊤))))))
 
-(define
-  (⇒*/symbolic M)
-  (do [(N (⇒/symbolic M) (⇒/symbolic N))] ((not (redex-match? λCon-Symbolic ((λ x M) / (P ...)) N)) N)))
+
+
+
+
+
+
+
+;; Finalize-reduction
+;; ==================
+
+(define Finalize-reduction
+  (reduction-relation
+   λCon-Symbolic
+   #:domain (ς any)
+   
+   (--> (ς
+         (in-hole F (M / C)))
+        (ς
+         (in-hole F M))
+        "Finalize")
+   
+   
+   
+   (--> (
+         (in-hole F ((in-hole H (T @ ι C)) || (in-hole H S))))
+        (ς
+         (in-hole F ((in-hole H (T @ ι C)) || (in-hole H (S @ ι C)))))
+        "Join/LeftContract"
+        (side-condition (and (canonical? (term (in-hole H (T @ ι C))))
+                             (canonical? (term (in-hole H S)))))
+        )
+   
+   (--> (ς
+         (in-hole F ((in-hole H S) || (in-hole H (T @ ι C)))))
+        (ς
+         (in-hole F ((in-hole H (S @ ι C)) || (in-hole H (T @ ι C)))))
+        "Join/RightContract"
+        
+        (side-condition (and (canonical? (term (in-hole H S)))
+                             (canonical? (term (in-hole H (T @ ι C))))))
+        ) 
+   
+   (--> (ς
+         (in-hole F ((in-hole H (T_1 @ ι_1 C)) || (in-hole H (T_2 @ ι_2 D)))))
+        (ς
+         (in-hole F ((in-hole H ((T_1 @ ι_1 C) @ ι_2 D)) || (in-hole H ((T_2 @ ι_1 C) @ ι_2 D)))))
+        "Join/LeftRightContract"
+        
+        (side-condition (and (canonical? (term (in-hole H (T_1 @ ι_1 C))))
+                             (canonical? (term (in-hole H (T_2 @ ι_2 D))))
+                             (not (eq? (term C) (term D)))
+                             ))
+        )
+   
+   
+   (--> (ς
+         (in-hole F ((in-hole H (T_1 (T_11 @ ι_1 C))) || (in-hole H (T_2 (T_22 @ ι_2 D))))))
+        (ς
+         (in-hole F ((in-hole H (T_1 ((T_11 @ ι_1 C) @ ι_2 D))) || (in-hole H (T_2 ((T_22 @ ι_1 C) @ ι_2 D))))))
+        "Join/App"
+        
+        (side-condition (and (canonical? (term (in-hole H (T_1 (T_11 @ ι_1 C)))))
+                             (canonical? (term (in-hole H (T_2 (T_22 @ ι_2 D)))))
+                             (not (eq? (term C) (term D)))
+                             ))
+        )
+   
+   (--> (ς
+         (in-hole F (T || T))) 
+        (ς
+         (in-hole F T)) 
+        "Join")
+   
+   ))
 
 #|
- _____       _      
-|_   _|__ __| |_ ___
-  | |/ -_|_-<  _(_-<
-  |_|\___/__/\__/__/
-                    
+ ___            _ _         _                         _ 
+| _ \_ _ ___ __| (_)__ __ _| |_ ___ ___  __ _ _ _  __| |
+|  _/ '_/ -_) _` | / _/ _` |  _/ -_|_-< / _` | ' \/ _` |
+|_| |_| \___\__,_|_\__\__,_|\__\___/__/ \__,_|_||_\__,_|
+                                                        
+ ___             _   _             
+| __|  _ _ _  __| |_(_)___ _ _  ___
+| _| || | ' \/ _|  _| / _ \ ' \(_-<
+|_| \_,_|_||_\__|\__|_\___/_||_/__/
+                                   
 |#
 
-;(⇓/symbolic (term ((λ x (+ x 1)) 1)))
-;(⇓/symbolic (term (((λ x (+ x 1)) @ (Nat? → Nat?)) 1)))
-;(⇓/symbolic (term ((λ x (+ x 1)) (? / (⊤)))))
-        
-;(⇒/symbolic (term (λ x (+ x 1))))
-;(⇒/symbolic (term (λ x (λ y (+ x y)))))
-;(⇒*/symbolic (term (λ x (λ y (+ x y)))))
+;; Canonical? (non-reducable terms)
+;; --------------------------------
+(define canonical?
+  (redex-match? λCon-Symbolic T))
 
-;(⇒*/symbolic (term (λ x (λ y (+ x y)))))
-;(⇒*/symbolic (term (λ x (λ y (λ z (- (+ x y) z))))))
-;(⇒*/symbolic (term (λ x (λ y (λ z (and (+ x y) z))))))
+;; Reducible? (non-canonical terms)
+;; --------------------------------
+(define reducible? 
+  (redex-match? λCon-Symbolic Reducible))
 
-;(⇓/symbolic (term (if #t 1 2)))
 
-;(⇓/symbolic
-; (term ((λ x ((if (boolean? x) (λ x (or x 1)) (λ x (+ x 1))) x)) 1))
-; )
+;; λCon Reduction (λCon-->)
+;; ------------------------
+(define
+  (λCon/Finalize~~> ς T)
+  (if (redex-match? λCon-Symbolic T T)
+      (car (apply-reduction-relation Finalize-reduction (term (,ς ,T))))
+      (error "Invalid λCon-term:" T)))
 
-;(⇒*/symbolic
-; (term (λ x ((if (boolean? x) (λ x (or x 1)) (λ x (+ x 1))) x))))
+;; λCon Reduction (λCon-->*)
+;; -------------------------
+(define
+  (λCon/Finalize~~>* configuration)
+  (if (redex-match? λCon-Symbolic (ς T) configuration)
+      (car (apply-reduction-relation* Finalize-reduction (term ,configuration)))
+      (error "Invalid λCon-term:" configuration)))
+

@@ -4,6 +4,8 @@
 (require "lj.rkt")
 (require "lcon.rkt")
 
+(require "symbolic.rkt")
+
 (provide (all-defined-out))
 
 #|
@@ -19,8 +21,8 @@
                                                                   
 |#
 
-(define-extended-language λCon-Baseline λCon
-  
+(define-extended-language λCon-Baseline λCon-Symbolic
+#|  
   ;; Syntax Extensions
   ;; =================
   
@@ -37,7 +39,7 @@
   
   ;; Terms
   ;; -----
-  ((L M N) .... (M @ ι C) (M || N))
+  ((L M N) .... (M @ ι C) (M / C ...))
   
   
   
@@ -121,13 +123,14 @@
   ;; Baseline Reduction Context
   ;; --------------------------
   ((F G H) hole (λ x F) (F M) (T F) (op T ... F M ...) (if T ... F M ...) (F @ b C)
-           (F || N) (T || F))
+           ;(F || N) (T || F))
+           (F / C ...))
   
   ;; Function Body Context
   ;; ---------------------
   ;; Reduction Context without abstraction.
-  (BCtx hole (BCtx M) (T BCtx) (op T ... BCtx T ...) (if T ... BCtx T ...) (BCtx @ b C)
-        (BCtx || T) (T || BCtx))
+  (BCtx hole (BCtx M) (T BCtx) (op T ... BCtx T ...) (BCtx @ b C)
+        (BCtx || T) (T || BCtx)) ;; (if T ... BCtx T ...)
   
   ;; Assertion Context
   ;; -----------------
@@ -141,6 +144,7 @@
   
   ;; False-Contracts
   ;(False ⊥)
+|#
   )
 
 #|
@@ -157,9 +161,15 @@
 ;; and unrolls all contracts.
 
 (define Baseline-reduction
-  (reduction-relation
+  (extend-reduction-relation
+   Symbolic-reduction
    λCon-Baseline
    #:domain (ς any)
+
+;(define Baseline-reduction
+;  (reduction-relation
+;   λCon-Baseline
+;   #:domain (ς any)
    
    ;; Constraint Generation
    ;; ---------------------
@@ -167,18 +177,18 @@
    ;; Rules [Unfold/Union] and [Unfold/Intersection] unfods an 
    ;; union/intersection contract (all immediate).
    
-   (--> (ς
-         (in-hole F (T @ ♭ C)))
-        (((♭ ◃ ι) ς)
-         (in-hole F (T @ ι C)))
-        "Unfold/Assert"
-        (fresh ι))
+;   (--> (ς
+;         (in-hole F (T @ ♭ C)))
+;        (((♭ ◃ ι) ς)
+;         (in-hole F (T @ ι C)))
+;        "Unfold/Assert"
+;        (fresh ι))
    
    (--> (ς
          (in-hole F (T @ ι (C ∪ D))))
         (((ι ◃ (ι1 ∪ ι2)) ς)
          ;(in-hole F ((T @ ι1 C) @ ι2 D))) ;; TODO
-         ((in-hole F (T @ ι1 C)) || (in-hole F (T @ ι2 D))))
+         ((in-hole F (T @ ι1 C)) ∥ (in-hole F (T @ ι2 D))))
         "Unfold/Union"
         (fresh ι1 ι2))
    
@@ -216,7 +226,7 @@
          (in-hole F ((T_0 @ ι (Q ∩ R)) T_1)))
         (((ι ◃ (ι1 ∩ ι2)) ς)
          ;(in-hole F (((T_0 @ ι1 Q) @ ι2 R) T_1))) ;; TODO
-         ((in-hole F ((T_0 @ ι1 Q) T_1)) || (in-hole F ((T_0 @ ι2 R) T_1))))
+         ((in-hole F ((T_0 @ ι1 Q) T_1)) ∥ (in-hole F ((T_0 @ ι2 R) T_1))))
         "Unfold/D-Intersection"
         (fresh ι1 ι2))
    
@@ -292,7 +302,7 @@
    ;; Join
    ;; ----
    ;; Merges the splitted evaluations.
-   
+#|   
    (--> (
          (in-hole F ((in-hole H (T @ ι C)) || (in-hole H S))))
         (ς
@@ -342,7 +352,7 @@
         (ς
          (in-hole F T)) 
         "Join")
-
+|#
    ))
   
   
@@ -384,6 +394,7 @@
                                    
 |#
   
+#|
   ;; Canonical? (non-reducable terms)
   ;; --------------------------------
   (define canonical?
@@ -398,7 +409,7 @@
   ;; ------------------------------
   (define final? 
     (redex-match? λCon-Baseline Final))
-  
+  |#
   ;; λCon Reduction (λCon-->)
   ;; ------------------------
   (define

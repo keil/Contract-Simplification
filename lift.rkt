@@ -3,6 +3,7 @@
 
 (require "lj.rkt")
 (require "lcon.rkt")
+(require "symbolic.rkt")
 (require "baseline.rkt")
 (require "subset.rkt")
 

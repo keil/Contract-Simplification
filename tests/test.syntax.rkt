@@ -3,6 +3,7 @@
 (require rackunit)
 
 (require "../lcon.rkt")
+(require "../symbolic.rkt")
 (require "../baseline.rkt")
 
 ;; Test Syntax
@@ -17,6 +18,9 @@
 
 (define (print-result M) (string-append "canonical? " (format "~a" (canonical? M)) " - " "reducible? " (format "~a" (reducible? M))))
 
+;(print-result (term
+;(((λ gM (-blame ♭T)) @ ιMC ⊥) (3 @ ιO ((ym ↦ (Λ yLM ⊤)) ∩ (fUL ↦ (Λ glv ⊥)))))
+; ))
 
 
 

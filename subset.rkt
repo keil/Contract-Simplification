@@ -3,6 +3,7 @@
 
 (require "lj.rkt")
 (require "lcon.rkt")
+(require "symbolic.rkt")
 (require "baseline.rkt")
 
 (provide (all-defined-out))
@@ -49,6 +50,28 @@
    ;; is this level1 (order) blame perserving
    ;; or ordre change blame perserving
    ;; IF its not the direct context
+   
+   
+   (--> (ς
+         (in-hole F ((T @ ι C) \ D)))
+        (ς
+         (in-hole F (((T \ D) @ ι (C)) \ D)))
+        "SubsetX"
+        (side-condition (term (⊑ C D)))
+        ;; RULE NOT ORDER PRESERVING
+        )
+   
+   
+   (--> (ς
+         (in-hole F (λ x (in-hole BCtx (T @ ι ⊥)))))
+        (ς
+         (in-hole F (λ x (+blame)))) ;; TOOS, calculate right blame
+        "Blame"
+        ;(side-condition (term (⊑ C D)))
+        ;; RULE NOT ORDER PRESERVING
+        )
+   
+   
    
    (--> (ς
          (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
@@ -278,7 +301,7 @@
   
   ;; Immediate Contracts
   [(⊑/context I J) #t]
-
+  
   [(⊑/context C ⊤) #t]
   [(⊑/context ⊤ D) #t]
   [(⊑/context ⊥ D) #t]
