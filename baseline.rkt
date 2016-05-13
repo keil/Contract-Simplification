@@ -188,7 +188,7 @@
          (in-hole F (T @ ι (C ∪ D))))
         (((ι ◃ (ι1 ∪ ι2)) ς)
          ;(in-hole F ((T @ ι1 C) @ ι2 D))) ;; TODO
-         ((in-hole F (T @ ι1 C)) ∥ (in-hole F (T @ ι2 D))))
+         ((in-hole F (T @ ι1 C)) (∪∪ (ι ◃ (ι1 ∪ ι2))) (in-hole F (T @ ι2 D))))
         "Unfold/Union"
         (fresh ι1 ι2))
    
@@ -226,7 +226,7 @@
          (in-hole F ((T_0 @ ι (Q ∩ R)) T_1)))
         (((ι ◃ (ι1 ∩ ι2)) ς)
          ;(in-hole F (((T_0 @ ι1 Q) @ ι2 R) T_1))) ;; TODO
-         ((in-hole F ((T_0 @ ι1 Q) T_1)) ∥ (in-hole F ((T_0 @ ι2 R) T_1))))
+         ((in-hole F ((T_0 @ ι1 Q) T_1)) (∩∩ (ι ◃ (ι1 ∩ ι2))) (in-hole F ((T_0 @ ι2 R) T_1))))
         "Unfold/D-Intersection"
         (fresh ι1 ι2))
    

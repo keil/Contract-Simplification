@@ -1,8 +1,13 @@
 - Top-Level Blame rule
 
+- Question, is the assumtion about the order of consdtrains in the state still correct.
 
 - SUbset reduction also changes the order as ot removes less restrictive contract that would blame before.
 
+- Lift/ Balme in conditional
+- No lift from the inner of an considtionsl
+
+- false needs to remain in if condictions
 
 Next Steps & Open Problems
 ==========================

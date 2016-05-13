@@ -33,7 +33,7 @@
   
   ;; Contracts
   ((C D) I Q (C ∪ D) (I ∩ C) ⊤ ⊥)
-
+  
   ;; Contract Abstraction
   (A (Λ x C))
   
@@ -206,7 +206,7 @@
         "Blame"
         (side-condition (not (blame? (term any))))
         (side-condition (term (is-blame-state? ς)))
-        (where (blame ♭) (produce-blame  ς)))
+        (where (blame ♭) (produce-blame ς)))
    
    ;; ⊤/⊥
    ;; ---
@@ -239,7 +239,7 @@
          (in-hole E ((V W) @ ι C)))
         "⊤ → C"
         (side-condition (not (term (is-blame-state? ς)))))
-     
+   
    ;; Lookup
    (--> (ς
          (in-hole E (V @ ι predefined)))
@@ -434,6 +434,90 @@
 (define-metafunction λCon
   maps-to-false? : ω -> boolean
   [(maps-to-false? (B_0 ∘ B_1)) ,(nand (term B_0) (term B_1))])
+
+
+
+
+
+;; TODO
+
+(define-metafunction λCon
+  blame-label-for : b ς -> any
+  [(blame-label-for b ς) (produce-blame-for (μ ς b) (root-of b ς))]
+  [(blame-label-for ι ς) (blame-label-for (parent-of ι ς) ς)])
+
+
+;;produce-blame-for : ω ♭ 
+
+;; XXXX
+;; --------
+;; XXXX.
+(define-metafunction λCon
+  root-of : b ς -> ♭
+  [(root-of ♭ ς) ♭]
+  [(root-of ι ς) (root-of (parent-of ι ς) ς)])
+
+(define-metafunction λCon
+  parent-of : b ς -> b
+  [(parent-of ι_0 ((b ◃ (ι_0 → ι_1)) ς)) b]
+  [(parent-of ι_1 ((b ◃ (ι_0 → ι_1)) ς)) b]
+  [(parent-of ι_0 ((b ◃ (ι_0 ∩ ι_1)) ς)) b]
+  [(parent-of ι_1 ((b ◃ (ι_0 ∩ ι_1)) ς)) b]
+  [(parent-of ι_0 ((b ◃ (ι_0 ∪ ι_1)) ς)) b]
+  [(parent-of ι_1 ((b ◃ (ι_0 ∪ ι_1)) ς)) b]
+  [(parent-of ι   ((b ◃ (¬ ι)) ς)) b]
+  [(parent-of ι   ((b ◃ ι) ς)) b]
+  [(parent-of ι   ()) ι]
+  [(parent-of ι   ((b ◃ κ) ς)) (parent-of ι ς)])
+
+
+
+
+
+
+(define-metafunction λCon
+  ! : blame -> blame
+  [(! +blame) -blame]
+  [(! -blame) +blame])
+
+
+(define-metafunction λCon
+  blame-of : b ς -> blame
+  [(blame-of ♭ ς) +blame]
+  [(blame-of ι ς) (root-of (parent-of ι ς) ς)])
+
+
+
+
+(define-metafunction λCon
+  callback-of : b ς -> (b ◃ κ)
+  
+  [(callback-of ι_0 ((b ◃ (ι_0 → ι_1)) ς)) (b ◃ (ι_0 → ι_1))]
+
+
+
+
+(define-metafunction λCon
+  sign-of : b ς -> blame
+ 
+  [(sign-of ι_0 ((b ◃ (ι_0 → ι_1)) ς)) (! (sign-of b))]
+  
+  
+  [(sign-of ι_1 ((b ◃ (ι_0 → ι_1)) ς)) b]
+  
+  [(sign-of ι_0 ((b ◃ (ι_0 ∩ ι_1)) ς)) b]
+  [(sign-of ι_1 ((b ◃ (ι_0 ∩ ι_1)) ς)) b]
+  
+  [(sign-of ι_0 ((b ◃ (ι_0 ∪ ι_1)) ς)) b]
+  [(sign-of ι_1 ((b ◃ (ι_0 ∪ ι_1)) ς)) b]
+  
+  [(sign-of ι   ((b ◃ (¬ ι)) ς)) b]
+  [(sign-of ι   ((b ◃ ι) ς)) b]
+  
+  [(sign-of ι   ()) ι]
+  
+  [(sign-of ι   ((b ◃ κ) ς)) (parent-of ι ς)])
+
 
 #|
  ___             _               ___ _                

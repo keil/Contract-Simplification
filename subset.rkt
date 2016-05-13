@@ -61,15 +61,46 @@
         ;; RULE NOT ORDER PRESERVING
         )
    
-   
+   #|   
    (--> (ς
          (in-hole F (λ x (in-hole BCtx (T @ ι ⊥)))))
         (ς
-         (in-hole F (λ x (+blame ♭)))) ;; TOOS, calculate right blame
+         (in-hole F (λ x (blame ♭)))) ;; TOOS, calculate right blame
         "Blame"
+        ;(where (blame ♭) (blame-label-for ι ς)))
+        (where ♭ (blame-label-for ι ς)))
         ;(side-condition (term (⊑ C D)))
         ;; RULE NOT ORDER PRESERVING
-        )
+        ;)
+ |#  
+   
+   (--> (ς
+         (in-hole F (
+                     (in-hole G (λ x (in-hole BCtx (T @ ι ⊥))))
+                      T_0
+                     (∥ (ι1 ∩ ι2))
+                     )))
+        (ς
+         (in-hole OCtx (ι_0 (in-hole F (λ x (blame ♭)))))) ;; TOOS, calculate right blame
+        "Blame/Left"
+        ;(where (blame ♭) (blame-label-for ι ς)))
+        (where (blame ♭) (blame-label-for ι_2 ((ι ◃ (τ #t)) ς))))
+   ;(side-condition (term (⊑ C D)))
+   ;; RULE NOT ORDER PRESERVING
+   ;)
+   
+      (--> (ς
+         (in-hole F (
+                     T_0
+                     (∥ (ι1 ∩ ι2))
+                     (in-hole G (λ x (in-hole BCtx (T @ ι ⊥)))))))
+        (ς
+         (in-hole OCtx (ι_0 (in-hole F (λ x (blame ♭)))))) ;; TOOS, calculate right blame
+        "Blame/Left"
+        ;(where (blame ♭) (blame-label-for ι ς)))
+        (where (blame ♭) (blame-label-for ι_2 ((ι ◃ (τ #t)) ς))))
+   
+   
    
    
    

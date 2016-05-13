@@ -42,11 +42,7 @@
   
   
   
-  
-  ;; Traces
-  ((Tx Ty) T (Tx / C) (Tx ∥ Ty))
-  
-  
+
   
   
   ;; Canonical terms (λJ terms)
@@ -144,6 +140,26 @@
   ;; Assertion Context
   ;; -----------------
   (ACtx hole (ACtx @ ι C)) ;; TODO (X @ ι C) ?
+  
+  
+  
+  
+    
+  ;; Parallel Observations
+  (∥ (∩∩ κ) (∪∪ κ))
+  
+  ;; Traces
+  ((Tx Ty) T (Tx / C) (Tx ∥ Ty))
+  
+  ;; (where (blame ♭) (produce-blame ς)))
+  
+  
+  ;; Trace/ Observation
+  ;(O )
+  
+  ;; TODO observation Context
+  (OCtx hole (OCtx ∥ N) (T ∥ OCtx))
+  
   
   ;; Miscellaneous
   ;; =============
