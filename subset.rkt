@@ -65,7 +65,7 @@
    (--> (ς
          (in-hole F (λ x (in-hole BCtx (T @ ι ⊥)))))
         (ς
-         (in-hole F (λ x (+blame)))) ;; TOOS, calculate right blame
+         (in-hole F (λ x (+blame ♭)))) ;; TOOS, calculate right blame
         "Blame"
         ;(side-condition (term (⊑ C D)))
         ;; RULE NOT ORDER PRESERVING

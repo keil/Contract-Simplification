@@ -54,7 +54,17 @@
 ;; Optimization steps: 39
 ;; Reduction steps:    34 (36)
 
-(traces Subset-reduction (term (· ,example/addone/3/contracted)))
+;(traces Subset-reduction (term (· ,example/addone/3/contracted)))
+(traces Finalize-reduction (λCon/Subset~~>* (term (· ,example/addone/3/contracted))))
 
-(let ([configuration (λCon/Finalize~~>* (λCon/Subset~~>* (term (· ,example/addone/3/contracted))))]) 
-  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 1)))))
+
+
+;(let ([configuration (λCon/Finalize~~>* (term (· ,example/addone/3/contracted)))]) 
+;  (traces Finalize-reduction (term ((stateOf ,configuration) ((termOf ,configuration) 1)))))
+
+
+;(let ([configuration (λCon/Finalize~~>* (λCon/Subset~~>* (term (· ,example/addone/3/contracted))))]) 
+;  (traces Finalize-reduction (term ((stateOf ,configuration) ((termOf ,configuration) 1)))))
+
+;(let ([configuration (λCon/Finalize~~>* (λCon/Subset~~>* (term (· ,example/addone/3/contracted))))]) 
+;  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 1)))))

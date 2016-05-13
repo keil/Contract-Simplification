@@ -4,6 +4,7 @@
 (require "lj.rkt")
 (require "lcon.rkt")
 
+
 (provide (all-defined-out))
 
 #|
@@ -43,7 +44,7 @@
   
   
   ;; Traces
-  ((Tx Ty) M (Tx / C) (Tx ∥ Ty))
+  ((Tx Ty) T (Tx / C) (Tx ∥ Ty))
   
   
   
@@ -138,7 +139,7 @@
   ;; ---------------------
   ;; Reduction Context without abstraction.
   (BCtx hole (BCtx M) (T BCtx) (op T ... BCtx T ...) (BCtx @ b C)
-        (BCtx || T) (T || BCtx)) ;; (if T ... BCtx T ...)
+        (BCtx ∥ T) (T ∥ BCtx)) ;; (if T ... BCtx T ...)
   
   ;; Assertion Context
   ;; -----------------
@@ -179,7 +180,8 @@
    (--> (ς
          (in-hole F (M @ ♭ C)))
         (((♭ ◃ ι) ς)
-         (in-hole F ((M / C) @ ι C)))
+         (in-hole F (M @ ι C)))
+         ;(in-hole F ((M / C) @ ι C)))
         "Symbolic/Assert"
         (fresh ι))
    
@@ -204,6 +206,13 @@
 ;; Finalize-reduction
 ;; ==================
 
+
+;(define Finalize-reduction
+  ;(;extend-reduction-relation
+   ;Subset-reduction
+   ;λCon-Symbolic
+   ;#:domain (ς any)
+   
 (define Finalize-reduction
   (reduction-relation
    λCon-Symbolic
@@ -216,20 +225,43 @@
         "Finalize")
    
    
+   ;; TODO, update blame state
    
-   (--> (
-         (in-hole F ((in-hole H (T @ ι C)) || (in-hole H S))))
+   (--> (ς
+         (in-hole F ((in-hole H (blame ♭)) ∥ (in-hole H T))))
         (ς
-         (in-hole F ((in-hole H (T @ ι C)) || (in-hole H (S @ ι C)))))
+         (in-hole F (in-hole H T)))
+        "Join/LeftBlame"
+        (side-condition (and (canonical? (term (in-hole H (blame ♭))))
+                             (canonical? (term (in-hole H T)))))
+        )
+         
+   (--> (ς
+         (in-hole F ((in-hole H T) ∥ (in-hole H (blame ♭)))))
+        (ς
+         (in-hole F (in-hole H T)))
+        "Join/RightBlame"
+        (side-condition (and (canonical? (term (in-hole H (blame ♭))))
+                             (canonical? (term (in-hole H T)))))
+        )
+   
+   
+   
+   
+   
+   (--> (ς
+         (in-hole F ((in-hole H (T @ ι C)) ∥ (in-hole H S))))
+        (ς
+         (in-hole F ((in-hole H (T @ ι C)) ∥ (in-hole H (S @ ι C)))))
         "Join/LeftContract"
         (side-condition (and (canonical? (term (in-hole H (T @ ι C))))
                              (canonical? (term (in-hole H S)))))
         )
    
    (--> (ς
-         (in-hole F ((in-hole H S) || (in-hole H (T @ ι C)))))
+         (in-hole F ((in-hole H S) ∥ (in-hole H (T @ ι C)))))
         (ς
-         (in-hole F ((in-hole H (S @ ι C)) || (in-hole H (T @ ι C)))))
+         (in-hole F ((in-hole H (S @ ι C)) ∥ (in-hole H (T @ ι C)))))
         "Join/RightContract"
         
         (side-condition (and (canonical? (term (in-hole H S)))
@@ -237,9 +269,9 @@
         ) 
    
    (--> (ς
-         (in-hole F ((in-hole H (T_1 @ ι_1 C)) || (in-hole H (T_2 @ ι_2 D)))))
+         (in-hole F ((in-hole H (T_1 @ ι_1 C)) ∥ (in-hole H (T_2 @ ι_2 D)))))
         (ς
-         (in-hole F ((in-hole H ((T_1 @ ι_1 C) @ ι_2 D)) || (in-hole H ((T_2 @ ι_1 C) @ ι_2 D)))))
+         (in-hole F ((in-hole H ((T_1 @ ι_1 C) @ ι_2 D)) ∥ (in-hole H ((T_2 @ ι_1 C) @ ι_2 D)))))
         "Join/LeftRightContract"
         
         (side-condition (and (canonical? (term (in-hole H (T_1 @ ι_1 C))))
@@ -250,9 +282,9 @@
    
    
    (--> (ς
-         (in-hole F ((in-hole H (T_1 (T_11 @ ι_1 C))) || (in-hole H (T_2 (T_22 @ ι_2 D))))))
+         (in-hole F ((in-hole H (T_1 (T_11 @ ι_1 C))) ∥ (in-hole H (T_2 (T_22 @ ι_2 D))))))
         (ς
-         (in-hole F ((in-hole H (T_1 ((T_11 @ ι_1 C) @ ι_2 D))) || (in-hole H (T_2 ((T_22 @ ι_1 C) @ ι_2 D))))))
+         (in-hole F ((in-hole H (T_1 ((T_11 @ ι_1 C) @ ι_2 D))) ∥ (in-hole H (T_2 ((T_22 @ ι_1 C) @ ι_2 D))))))
         "Join/App"
         
         (side-condition (and (canonical? (term (in-hole H (T_1 (T_11 @ ι_1 C)))))
@@ -262,7 +294,7 @@
         )
    
    (--> (ς
-         (in-hole F (T || T))) 
+         (in-hole F (T ∥ T))) 
         (ς
          (in-hole F T)) 
         "Join")
@@ -282,6 +314,20 @@
                                    
 |#
 
+
+;; Term of (⇓/Term)
+;; ----------------
+(define-metafunction λCon
+  termOf : (ς T) -> T
+  [(termOf (ς T)) T])
+
+;; State of (⇓/State)
+;; ------------------
+(define-metafunction λCon
+  stateOf : (ς T) -> ς
+  [(stateOf (ς T)) ς])
+
+
 ;; Canonical? (non-reducable terms)
 ;; --------------------------------
 (define canonical?
@@ -297,7 +343,7 @@
 ;; ------------------------
 (define
   (λCon/Finalize~~> ς T)
-  (if (redex-match? λCon-Symbolic T T)
+  (if (redex-match? λCon-Symbolic Tx T)
       (car (apply-reduction-relation Finalize-reduction (term (,ς ,T))))
       (error "Invalid λCon-term:" T)))
 
@@ -305,7 +351,7 @@
 ;; -------------------------
 (define
   (λCon/Finalize~~>* configuration)
-  (if (redex-match? λCon-Symbolic (ς T) configuration)
+  (if (redex-match? λCon-Symbolic (ς Tx) configuration)
       (car (apply-reduction-relation* Finalize-reduction (term ,configuration)))
       (error "Invalid λCon-term:" configuration)))
 
