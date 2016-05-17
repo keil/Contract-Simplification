@@ -3,6 +3,7 @@
 
 (require "lj.rkt")
 (require "lcon.rkt")
+
 (require "symbolic.rkt")
 (require "baseline.rkt")
 
@@ -40,7 +41,8 @@
    λCon-Subset
    #:domain (ς any)
    
-   ;; TODO, this also requires that I ∩ J is unrolled.
+   ;; TODO, make rules deterministic
+   ;; (not (term (closest? (T @ ι_1 D))))
    
    (--> (ς
          (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
@@ -49,9 +51,7 @@
         "Subset1"
         (side-condition (and
                          (term (⊑ C D))
-                         (canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D))))
-                         ;; TODO, make deterministic
-                         )))
+                         (canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))))))
    
    (--> (ς
          (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
@@ -60,51 +60,29 @@
         "Subset2"
         (side-condition (and
                          (term (⊑ D C))
-                         (canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D))))
-                         ;(not (term (closest? (T @ ι_1 D))))
-                         )))
-   
-
-   
-
-  
+                         (canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))))))
    
    ))
 
-;; reduction when in pos in pos cap even
+;(define-metafunction λCon-Subset 
+;  closest? : T -> boolean
+;  [(closest? ((in-hole ACtx_2 (T @ ι_0 C)) @ ι_1 D)) #t (side-condition (term (⊑ C D)))]
+;  [(closest? ((in-hole ACtx_2 (T @ ι_0 C)) @ ι_1 D)) #t (side-condition (term (⊑ D C)))]
+;  [(closest? any) #f])
 
-;;
-;;
-;;
-(define-metafunction λCon-Subset 
-  closest? : T -> boolean
-  [(closest? ((in-hole ACtx_2 (T @ ι_0 C)) @ ι_1 D)) #t (side-condition (term (⊑ C D)))]
-  [(closest? ((in-hole ACtx_2 (T @ ι_0 C)) @ ι_1 D)) #t (side-condition (term (⊑ D C)))]
-  [(closest? any) #f])
+;(define-metafunction λCon-Subset 
+;  opt? : T D -> boolean
+;  [(opt? (in-hole ACtx_1 ((in-hole ACtx_2 (T @ ι_0 C)) @ ι_1 D)) D) #t (side-condition (term (⊑ C D)))]
+;  [(opt? (in-hole ACtx_1 ((in-hole ACtx_2 (T @ ι_0 C)) @ ι_1 D)) D) #t (side-condition (term (⊑ D C)))]
+;  [(opt? any D) #f])
 
-
-
-(define-metafunction λCon-Subset 
-  opt? : T D -> boolean
-  [(opt? (in-hole ACtx_1 ((in-hole ACtx_2 (T @ ι_0 C)) @ ι_1 D)) D) #t (side-condition (term (⊑ C D)))]
-  [(opt? (in-hole ACtx_1 ((in-hole ACtx_2 (T @ ι_0 C)) @ ι_1 D)) D) #t (side-condition (term (⊑ D C)))]
-  [(opt? any D) #f])
-
-
-
-(define-metafunction λCon-Subset 
-  ⇓ : T -> T
-  [(⇓ ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)) (⇓ (in-hole ACtx (T @ ι_0 C))) (side-condition (term (⊑ C D)))]
-  [(⇓ ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)) (⇓ (in-hole ACtx (T @ ι_1 D))) (side-condition (term (⊑ D C)))]
-  [(⇓ ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)) ((⇓ (in-hole ACtx (T @ ι_0 C))) @ ι_1 D)]
-  [(⇓ (S @ ι_0 C)) (S @ ι_0 C)]
-  )
-
-
-
-
-
-
+;(define-metafunction λCon-Subset 
+;  ⇓ : T -> T
+;  [(⇓ ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)) (⇓ (in-hole ACtx (T @ ι_0 C))) (side-condition (term (⊑ C ;D)))]
+;  [(⇓ ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)) (⇓ (in-hole ACtx (T @ ι_1 D))) (side-condition (term (⊑ D ;C)))]
+;  [(⇓ ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)) ((⇓ (in-hole ACtx (T @ ι_0 C))) @ ι_1 D)]
+;  [(⇓ (S @ ι_0 C)) (S @ ι_0 C)]
+;  )
 
 #|
  ___                     _   _         _ 
@@ -207,8 +185,6 @@
   
   [(⊑/semantic C D) ,(and (term (⊑/context D C)) (term (⊑/subject C D)))]
   [(⊑/semantic any ...) #f])
-
-
 
 ;; Naive Subsets of Contracts (⊑)
 ;; ==============================
@@ -387,16 +363,6 @@
   
   [(≈ C) C])
 
-
-
-
-
-
-
-
-
-
-
 #|
  ___            _ _         _                         _ 
 | _ \_ _ ___ __| (_)__ __ _| |_ ___ ___  __ _ _ _  __| |
@@ -413,10 +379,10 @@
 ;; λCon Reduction (λCon-->)
 ;; ------------------------
 (define
-  (λCon/Subset~~> ς M)
-  (if (redex-match? λCon M M)
-      (car (apply-reduction-relation Subset-reduction (term (,ς ,M))))
-      (error "Invalid λCon-term:" M)))
+  (λCon/Subset~~> ς configuration)
+  (if (redex-match? λCon (ς M) configuration)
+      (car (apply-reduction-relation Subset-reduction (term ,configuration)))
+      (error "Invalid λCon-term:" configuration)))
 
 ;; λCon Reduction (λCon-->*)
 ;; -------------------------

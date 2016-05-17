@@ -1,6 +1,20 @@
-- Top-Level Blame rule
+OPEN POINTS
+===========
 
-- Question, is the assumtion about the order of consdtrains in the state still correct.
+- \perp must remain, i.e. the false-constraint must be produces at run time.
+
+- subset reduction of T @ POS @ NUM \cap EVEN
+      T @ POS @ NUM \cap EVEN
+  --> T @ POS @ NUM @ EVEN
+  --> T @ POS @ EVEN
+
+- make subset reduction deterministic.
+
+- Theorem for Real-Optimization.
+
+
+
+
 
 - SUbset reduction also changes the order as ot removes less restrictive contract that would blame before.
 

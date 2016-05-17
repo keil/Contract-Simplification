@@ -71,7 +71,7 @@
   (TQ S TI T0 T1 (TQ @ ι Q))
   
   ;; Canonical Terms (non-reducable terms)
-  (T TQ)
+  (T TQ (T_0 ∥ T_1)) ;; TODO
   
   
   
