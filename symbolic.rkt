@@ -197,24 +197,24 @@
           (term (≈ (in-hole G (T @ ι_1 C)) (in-hole H (T @ ι_2 D)))))))
    
    (--> (ς
-         (in-hole F ((in-hole G (T @ ι C)) ∥ (in-hole H T))))
+         (in-hole F ((in-hole G (S @ ι C)) ∥ (in-hole H S))))
         (ς
-         (in-hole F ((in-hole G (T @ ι C)) ∥ (in-hole H (T @ ι C)))))
+         (in-hole F ((in-hole G (S @ ι C)) ∥ (in-hole H (S @ ι C)))))
         "Join/LeftContract"
         (side-condition 
          (and
-          (canonical? (term (in-hole F ((in-hole G (T @ ι C)) ∥ (in-hole H T)))))
-          (term (≈ (in-hole G (T @ ι C)) (in-hole H T))))))
+          (canonical? (term (in-hole F ((in-hole G (S @ ι C)) ∥ (in-hole H S)))))
+          (term (≈ (in-hole G (S @ ι C)) (in-hole H S))))))
    
    (--> (ς
-         (in-hole F ((in-hole G S) ∥ (in-hole H (T @ ι C)))))
+         (in-hole F ((in-hole G S) ∥ (in-hole H (S @ ι C)))))
         (ς
-         (in-hole F ((in-hole G (T @ ι C)) ∥ (in-hole H (T @ ι C)))))
+         (in-hole F ((in-hole G (S @ ι C)) ∥ (in-hole H (S @ ι C)))))
         "Join/RightContract"
         (side-condition 
          (and
-          (canonical? (term (in-hole F ((in-hole G T) ∥ (in-hole H (T @ ι C))))))
-          (term (≈ (in-hole G T) (in-hole G (T @ ι C)))))))
+          (canonical? (term (in-hole F ((in-hole G S) ∥ (in-hole H (S @ ι C))))))
+          (term (≈ (in-hole G S) (in-hole G (S @ ι C)))))))
       
    (--> (ς
          (in-hole F ((in-hole G (blame ♭)) ∥ (in-hole H T))))
