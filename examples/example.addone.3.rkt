@@ -54,10 +54,12 @@
 ;; Optimization steps: 39
 ;; Reduction steps:    34 (36)
 
-(traces Baseline-reduction (term (· ,example/addone/3/contracted)))
+;(traces Baseline-reduction (term (· ,example/addone/3/contracted)))
 
-;(traces Subset-reduction (term (· ,example/addone/3/contracted)))
+(traces Subset-reduction (term (· ,example/addone/3/contracted)))
 ;(traces Lift-reduction (term (· ,example/addone/3/contracted)))
+
+;(traces Finalize-reduction (λCon/Baseline~~>* (term (· ,example/addone/3/contracted))))
 ;(traces Finalize-reduction (λCon/Subset~~>* (term (· ,example/addone/3/contracted))))
 
 

@@ -199,6 +199,95 @@
          (in-hole F ((M / D) @ ι C)))
         "SwitchX")
    
+   
+   
+   
+     
+   
+   ;; TODO, update blame state that fail information did nt get lost
+   ;; in terms of a function contract
+   
+   (--> (ς
+         (in-hole F ((in-hole H (blame ♭)) ∥ (in-hole H T))))
+        (ς
+         (in-hole F (in-hole H (join ∥ (blame ♭) T))))
+        "Join/LeftBlame"
+        (side-condition (and (canonical? (term (in-hole H (blame ♭))))
+                             (canonical? (term (in-hole H T)))))
+        )
+   
+;   (--> (ς
+;         (in-hole F ((in-hole H (+blame ♭)) ∩∩ (in-hole H T))))
+;        (ς
+;         (in-hole F (in-hole H (+blame ♭))))
+;        "Join/LeftPositiveBlame"
+;        (side-condition (and (canonical? (term (in-hole H (+blame ♭))))
+;                             (canonical? (term (in-hole H T)))))
+;        );;;
+
+   (--> (ς
+         (in-hole F ((in-hole H T) ∥ (in-hole H (blame ♭)))))
+        (ς
+         (in-hole F (in-hole H (join ∥ T (blame ♭)))))
+        "Join/RightBlame"
+        (side-condition (and (canonical? (term (in-hole H (blame ♭))))
+                             (canonical? (term (in-hole H T)))))
+        )
+   
+
+   
+   
+   
+   (--> (ς
+         (in-hole F ((in-hole H (T @ ι C)) ∥ (in-hole H S))))
+        (ς
+         (in-hole F ((in-hole H (T @ ι C)) ∥ (in-hole H (S @ ι C)))))
+        "Join/LeftContract"
+        (side-condition (and (canonical? (term (in-hole H (T @ ι C))))
+                             (canonical? (term (in-hole H S)))))
+        )
+   
+   (--> (ς
+         (in-hole F ((in-hole H S) ∥ (in-hole H (T @ ι C)))))
+        (ς
+         (in-hole F ((in-hole H (S @ ι C)) ∥ (in-hole H (T @ ι C)))))
+        "Join/RightContract"
+        
+        (side-condition (and (canonical? (term (in-hole H S)))
+                             (canonical? (term (in-hole H (T @ ι C))))))
+        ) 
+   
+   (--> (ς
+         (in-hole F ((in-hole H (T_1 @ ι_1 C)) ∥ (in-hole H (T_2 @ ι_2 D)))))
+        (ς
+         (in-hole F ((in-hole H ((T_1 @ ι_1 C) @ ι_2 D)) ∥ (in-hole H ((T_2 @ ι_1 C) @ ι_2 D)))))
+        "Join/LeftRightContract"
+        
+        (side-condition (and (canonical? (term (in-hole H (T_1 @ ι_1 C))))
+                             (canonical? (term (in-hole H (T_2 @ ι_2 D))))
+                             (not (eq? (term C) (term D)))
+                             ))
+        )
+   
+   
+   (--> (ς
+         (in-hole F ((in-hole H (T_1 (T_11 @ ι_1 C))) ∥ (in-hole H (T_2 (T_22 @ ι_2 D))))))
+        (ς
+         (in-hole F ((in-hole H (T_1 ((T_11 @ ι_1 C) @ ι_2 D))) ∥ (in-hole H (T_2 ((T_22 @ ι_1 C) @ ι_2 D))))))
+        "Join/App"
+        
+        (side-condition (and (canonical? (term (in-hole H (T_1 (T_11 @ ι_1 C)))))
+                             (canonical? (term (in-hole H (T_2 (T_22 @ ι_2 D)))))
+                             (not (eq? (term C) (term D)))
+                             ))
+        )
+   
+   (--> (ς
+         (in-hole F (T ∥ T))) 
+        (ς
+         (in-hole F T)) 
+        "Join")
+   
    ))
 
 
@@ -225,13 +314,7 @@
   (reduction-relation
    λCon-Symbolic
    #:domain (ς any)
-   
-;   (--> (ς
-;         (in-hole F (M / C)))
-;        (ς
-;         (in-hole F M))
-;        "Finalize")
-   
+  
    
    ;; TODO, update blame state that fail information did nt get lost
    ;; in terms of a function contract
