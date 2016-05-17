@@ -35,7 +35,7 @@
   example/addone/3/contracted
   (term ((λ f ((λ x ((f 1) x)) @ ♭0 (Positive? → Positive?))) ((λ x (λ y (if (or (string? x) (string? y)) (string-append x y) (+ x y)))) @ ♭1 ((Number? → (Number? → Number?)) ∩ (String? → (String? → String?)))))))
 ;(traces λCon-reduction (term (· (,example/addone/1/contracted 1))))
-  
+
 
 ;; # Sugar Reduction
 ;; -----------------
@@ -54,9 +54,9 @@
 ;; Optimization steps: 39
 ;; Reduction steps:    34 (36)
 
-;(traces Baseline-reduction (term (· ,example/addone/3/contracted)))
+(traces Baseline-reduction (term (· ,example/addone/3/contracted)))
 
-(traces Subset-reduction (term (· ,example/addone/3/contracted)))
+;(traces Subset-reduction (term (· ,example/addone/3/contracted)))
 ;(traces Lift-reduction (term (· ,example/addone/3/contracted)))
 
 ;(traces Finalize-reduction (λCon/Baseline~~>* (term (· ,example/addone/3/contracted))))
