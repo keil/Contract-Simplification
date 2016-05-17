@@ -33,11 +33,6 @@
 
 ;; Subset Reduction
 ;; ================
-;; 
-
-;; or callit predicate redution
-
-;; is it possible to reuse teh same context ?
 
 (define Subset-reduction
   (extend-reduction-relation
@@ -45,71 +40,7 @@
    λCon-Subset
    #:domain (ς any)
    
-   ;; DO i need to update the constaint grapg
-   ;; is this level1 (order) blame perserving
-   ;; or ordre change blame perserving
-   ;; IF its not the direct context
-   
-   
-   (--> (ς
-         (in-hole F ((T @ ι C) \ D)))
-        (ς
-         (in-hole F (((T \ D) @ ι (C)) \ D)))
-        "SubsetX"
-        (side-condition (term (⊑ C D)))
-        ;; RULE NOT ORDER PRESERVING
-        )
-   
-   #|   
-   (--> (ς
-         (in-hole F (λ x (in-hole BCtx (T @ ι ⊥)))))
-        (ς
-         (in-hole F (λ x (blame ♭)))) ;; TOOS, calculate right blame
-        "Blame"
-        ;(where (blame ♭) (blame-label-for ι ς)))
-        (where ♭ (blame-label-for ι ς)))
-        ;(side-condition (term (⊑ C D)))
-        ;; RULE NOT ORDER PRESERVING
-        ;)
- |#  
-   
-   (--> (ς
-         (in-hole F ((in-hole G (λ x (in-hole BCtx (T @ ι ⊥)))) ∥ T_0)))
-        (ς
-         (in-hole F ((in-hole G (λ x (blame ♭))) ∥ T_0)))
-        "Blame/Left"
-        ;(where (blame ♭) (blame-label-for ι ς)))
-        (where (blame ♭) (blame-of ι ς)))
-   
-   
-   (--> (ς
-         (in-hole F (T_0 ∥ (in-hole G (λ x (in-hole BCtx (T @ ι ⊥)))))))
-        (ς
-         (in-hole F (T_0 ∥ (in-hole G (λ x (blame ♭))))))
-        "Blame/Right"
-        ;(where (blame ♭) (blame-label-for ι ς)))
-        (where (blame ♭) (blame-of ι ς)))
-   
-   ;; TODO, @⊥ must remain do produce the constrasint
-   
-   ;(side-condition (term (⊑ C D)))
-   ;; RULE NOT ORDER PRESERVING
-   ;)
-   
-   ;   (--> (ς
-   ;         (in-hole F (
-   ;                     T_0
-   ;                     (∥ (ι1 ∩ ι2))
-   ;                     (in-hole G (λ x (in-hole BCtx (T @ ι ⊥)))))))
-   ;        (ς
-   ;         (in-hole OCtx (ι_0 (in-hole F (λ x (blame ♭)))))) ;; TOOS, calculate right blame
-   ;        "Blame/Left"
-   ;        ;(where (blame ♭) (blame-label-for ι ς)))
-   ;        (where (blame ♭) (blame-label-for ι_2 ((ι ◃ (τ #t)) ς))))
-   
-   
-   
-   
+   ;; TODO, this also requires that I ∩ J is unrolled.
    
    (--> (ς
          (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
@@ -117,13 +48,10 @@
          (in-hole F (in-hole ACtx (T @ ι_0 C))))
         "Subset1"
         (side-condition (and
-                         ;false
                          (term (⊑ C D))
-                         ;(canonical? (term ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
                          (canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D))))
-                         ;(not (term (opt? (in-hole ACtx (T @ ι_0 C))))) ;; not required
+                         ;; TODO, make deterministic
                          )))
-   
    
    (--> (ς
          (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
@@ -131,45 +59,23 @@
          (in-hole F (in-hole ACtx (T @ ι_1 D))))
         "Subset2"
         (side-condition (and
-                         ;false
                          (term (⊑ D C))
-                         ;(canonical? (term ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
                          (canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D))))
-                         ;(not (term (opt? (in-hole ACtx (T @ ι_0 C)))))
-                         ;(not (term (opt? (in-hole ACtx (T @ ι_1 D)) D)))
-                         
-                         (not (term (closest? (T @ ι_1 D))))
-                         ;(term (opt? ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
+                         ;(not (term (closest? (T @ ι_1 D))))
                          )))
    
+
    
-   
-   ;   (--> (ς
-   ;         (in-hole F ((in-hole ACtx (S @ ι_0 C)) @ ι_1 D)))
-   ;        (ς
-   ;         (in-hole F (⇓ ((in-hole ACtx (S @ ι_0 C)) @ ι_1 D))))
-   ;        "Subset"
-   ;        (side-condition (and
-   ;                         false
-   ;                         ;(term (⊑ D C))
-   ;                         ;(canonical? (term ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
-   ;                         (canonical? (term (in-hole F ((S @ ι_0 C) @ ι_1 D))))
-   ;                        )))
-   
-   
-   
-   ;   (--> (ς
-   ;         (in-hole F ((T @ ι_0 C) @ ι_1 D)))
-   ;        (ς
-   ;         (in-hole F ((T @ (ι_0 ι_1) C) @ ι_1 (\\ D C))))
-   ;        "Subset"
-   ;        (side-condition (not (λCon-value? (term B)))))
+
+  
    
    ))
 
 ;; reduction when in pos in pos cap even
 
-
+;;
+;;
+;;
 (define-metafunction λCon-Subset 
   closest? : T -> boolean
   [(closest? ((in-hole ACtx_2 (T @ ι_0 C)) @ ι_1 D)) #t (side-condition (term (⊑ C D)))]
@@ -198,87 +104,7 @@
 
 
 
-#|
-  ___      _         _      _         ___ _                
- / __|__ _| |__ _  _| |__ _| |_ ___  | _ ) |__ _ _ __  ___ 
-| (__/ _` | / _| || | / _` |  _/ -_) | _ \ / _` | '  \/ -_)
- \___\__,_|_\__|\_,_|_\__,_|\__\___| |___/_\__,_|_|_|_\___|
-                                                           
-|#
 
-;; root-of
-;; -------
-;; Calculates the root (♭) of blame indetifier b.
-(define-metafunction λCon
-  root-of : b ς -> ♭
-  [(root-of ♭ ς) ♭]
-  [(root-of ι ς) (root-of (parent-of ι ς) ς)])
-
-;; parent-of
-;; ---------
-;; Calculates the parent blame indentifier b of blame variable ι.
-(define-metafunction λCon
-  parent-of : b ς -> b
-  [(parent-of ι_0 ((b ◃ (ι_0 → ι_1)) ς)) b]
-  [(parent-of ι_1 ((b ◃ (ι_0 → ι_1)) ς)) b]
-  [(parent-of ι_0 ((b ◃ (ι_0 ∩ ι_1)) ς)) b]
-  [(parent-of ι_1 ((b ◃ (ι_0 ∩ ι_1)) ς)) b]
-  [(parent-of ι_0 ((b ◃ (ι_0 ∪ ι_1)) ς)) b]
-  [(parent-of ι_1 ((b ◃ (ι_0 ∪ ι_1)) ς)) b]
-  [(parent-of ι   ((b ◃ (¬ ι)) ς)) b]
-  [(parent-of ι   ((b ◃ ι) ς)) b]
-  [(parent-of ι   ()) ι]
-  [(parent-of ι   ((b ◃ κ) ς)) (parent-of ι ς)])
-
-;; invert
-;; ------
-;; Inverts a blame.
-(define-metafunction λCon
-  invert : blame -> blame
-  [(invert +blame) -blame]
-  [(invert -blame) +blame])
-
-;; constraint-of
-;; -------------
-;; Looks for a constraint in state.
-(define-metafunction λCon
-  constraint-of : b ς -> κ
-  [(constraint-of ι_0 ((b ◃ (ι_0 → ι_1)) ς)) (ι_0 → ι_1)]
-  [(constraint-of ι_1 ((b ◃ (ι_0 → ι_1)) ς)) (ι_0 → ι_1)]
-  [(constraint-of ι_0 ((b ◃ (ι_0 ∩ ι_1)) ς)) (ι_0 ∩ ι_1)]
-  [(constraint-of ι_1 ((b ◃ (ι_0 ∩ ι_1)) ς)) (ι_0 ∩ ι_1)]
-  [(constraint-of ι_0 ((b ◃ (ι_0 ∪ ι_1)) ς)) (ι_0 ∪ ι_1)]
-  [(constraint-of ι_1 ((b ◃ (ι_0 ∪ ι_1)) ς)) (ι_0 ∪ ι_1)]
-  [(constraint-of ι   ((b ◃ (¬ ι)) ς)) (¬ ι)]
-  [(constraint-of ι   ((b ◃ ι) ς)) ι]
-  [(constraint-of ι   ()) ι]
-  ;; recursive lookup
-  [(constraint-of ι   ((b ◃ κ) ς)) (constraint-of ι ς)])
-
-;; sign-of
-;; -------
-;; Computes the sign a blame identifier.
-(define-metafunction λCon
-  sign-of : b ς -> blame
-  [(sign-of ♭ ς) +blame]
-  [(sign-of ι ς) (sign-in ι (constraint-of ι ς) ς)])
-
-;; sign-in
-;; -------
-;; Computes the sign of a blame identifier in a constraint.
-(define-metafunction λCon
-  sign-in : b κ ς -> blame
-  [(sign-in ι_0 (ι_0 → ι_1) ς) (invert (sign-of (parent-of ι_0 ς) ς))]
-  [(sign-in ι   (¬ ι) ς)       (invert (sign-of (parent-of ι ς) ς))]
-  ; otherwise
-  [(sign-in ι κ ς)             (sign-of (parent-of ι ς) ς)])
-
-;; sign-in
-;; -------
-;; Produces a balme term for a blame identifier.
-(define-metafunction λCon
-  blame-of : b ς -> (blame ♭)
-  [(blame-of ι ς) ((sign-of ι ς) (root-of ι ς))])
 
 #|
  ___                     _   _         _ 

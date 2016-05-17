@@ -22,7 +22,7 @@
 |#
 
 (define-extended-language λCon-Baseline λCon-Symbolic
-#|  
+  #|  
   ;; Syntax Extensions
   ;; =================
   
@@ -165,11 +165,11 @@
    Symbolic-reduction
    λCon-Baseline
    #:domain (ς any)
-
-;(define Baseline-reduction
-;  (reduction-relation
-;   λCon-Baseline
-;   #:domain (ς any)
+   
+   ;(define Baseline-reduction
+   ;  (reduction-relation
+   ;   λCon-Baseline
+   ;   #:domain (ς any)
    
    ;; Constraint Generation
    ;; ---------------------
@@ -177,12 +177,12 @@
    ;; Rules [Unfold/Union] and [Unfold/Intersection] unfods an 
    ;; union/intersection contract (all immediate).
    
-;   (--> (ς
-;         (in-hole F (T @ ♭ C)))
-;        (((♭ ◃ ι) ς)
-;         (in-hole F (T @ ι C)))
-;        "Unfold/Assert"
-;        (fresh ι))
+   ;   (--> (ς
+   ;         (in-hole F (T @ ♭ C)))
+   ;        (((♭ ◃ ι) ς)
+   ;         (in-hole F (T @ ι C)))
+   ;        "Unfold/Assert"
+   ;        (fresh ι))
    
    (--> (ς
          (in-hole F (T @ ι (C ∪ D))))
@@ -271,6 +271,19 @@
    
    
    
+   ;; Blame
+   ;; ---------------
+   ;; Removes (term ⊥) contracts.
+   
+   (--> (ς
+         (in-hole F (λ x (in-hole BCtx (T @ ι ⊥)))))
+        (ς
+         (in-hole F (λ x (blame ♭))))
+        "Blame"
+        (where (blame ♭) (blame-of ι ς)))
+   
+   
+   
    ;; Predicate Verification
    ;; ----------------------
    ;; Evaluates predicates on values.
@@ -302,7 +315,7 @@
    ;; Join
    ;; ----
    ;; Merges the splitted evaluations.
-#|   
+   #|   
    (--> (
          (in-hole F ((in-hole H (T @ ι C)) || (in-hole H S))))
         (ς
@@ -354,33 +367,121 @@
         "Join")
 |#
    ))
+
+#|
+ _   _              _ _ 
+| | | |_ _  _ _ ___| | |
+| |_| | ' \| '_/ _ \ | |
+ \___/|_||_|_| \___/_|_|
+                        
+|#
+
+;; Function unroll : x Q M -> N
+;; ----------------------------
+;; Unrolls a delayed contract Q of function x 
+;; to all uses of x
+
+(define-metafunction λCon-Baseline
+  unroll : x Q b any -> any
   
+  ;; Don't continue if x is bound λ's body
+  [(unroll x Q b (λ x M)) (λ x M)]
   
+  ;; Continue unrollong on λ's body
+  [(unroll x Q b (λ y M)) (λ y (unroll x Q b M))]
   
-  ;; Function unroll : x Q M -> N
-  ;; ----------------------------
-  ;; Unrolls a delayed contract Q of function x 
-  ;; to all uses of x
+  ;; Put contract to the usage of x
+  [(unroll x Q b x) (x @ b Q)]
   
-  (define-metafunction λCon-Baseline
-    unroll : x Q b any -> any
-    
-    ;; Don't continue if x is bound λ's body
-    [(unroll x Q b (λ x M)) (λ x M)]
-    
-    ;; Continue unrollong on λ's body
-    [(unroll x Q b (λ y M)) (λ y (unroll x Q b M))]
-    
-    ;; Put contract to the usage of x
-    [(unroll x Q b x) (x @ b Q)]
-    
-    ;; Continue unrollong on the structure of M
-    [(unroll x Q b (any ...)) ((unroll x Q b any) ...)]
-    
-    ;; Return the target expression M if
-    ;; none of the previous rules match
-    [(unroll x Q b any) any])
+  ;; Continue unrollong on the structure of M
+  [(unroll x Q b (any ...)) ((unroll x Q b any) ...)]
   
+  ;; Return the target expression M if
+  ;; none of the previous rules match
+  [(unroll x Q b any) any])
+
+#|
+  ___      _         _      _         ___ _                
+ / __|__ _| |__ _  _| |__ _| |_ ___  | _ ) |__ _ _ __  ___ 
+| (__/ _` | / _| || | / _` |  _/ -_) | _ \ / _` | '  \/ -_)
+ \___\__,_|_\__|\_,_|_\__,_|\__\___| |___/_\__,_|_|_|_\___|
+                                                           
+|#
+
+;; root-of
+;; -------
+;; Calculates the root (♭) of blame indetifier b.
+(define-metafunction λCon
+  root-of : b ς -> ♭
+  [(root-of ♭ ς) ♭]
+  [(root-of ι ς) (root-of (parent-of ι ς) ς)])
+
+;; parent-of
+;; ---------
+;; Calculates the parent blame indentifier b of blame variable ι.
+(define-metafunction λCon
+  parent-of : b ς -> b
+  [(parent-of ι_0 ((b ◃ (ι_0 → ι_1)) ς)) b]
+  [(parent-of ι_1 ((b ◃ (ι_0 → ι_1)) ς)) b]
+  [(parent-of ι_0 ((b ◃ (ι_0 ∩ ι_1)) ς)) b]
+  [(parent-of ι_1 ((b ◃ (ι_0 ∩ ι_1)) ς)) b]
+  [(parent-of ι_0 ((b ◃ (ι_0 ∪ ι_1)) ς)) b]
+  [(parent-of ι_1 ((b ◃ (ι_0 ∪ ι_1)) ς)) b]
+  [(parent-of ι   ((b ◃ (¬ ι)) ς)) b]
+  [(parent-of ι   ((b ◃ ι) ς)) b]
+  [(parent-of ι   ()) ι]
+  [(parent-of ι   ((b ◃ κ) ς)) (parent-of ι ς)])
+
+;; invert
+;; ------
+;; Inverts a blame.
+(define-metafunction λCon
+  invert : blame -> blame
+  [(invert +blame) -blame]
+  [(invert -blame) +blame])
+
+;; constraint-of
+;; -------------
+;; Looks for a constraint in state.
+(define-metafunction λCon
+  constraint-of : b ς -> κ
+  [(constraint-of ι_0 ((b ◃ (ι_0 → ι_1)) ς)) (ι_0 → ι_1)]
+  [(constraint-of ι_1 ((b ◃ (ι_0 → ι_1)) ς)) (ι_0 → ι_1)]
+  [(constraint-of ι_0 ((b ◃ (ι_0 ∩ ι_1)) ς)) (ι_0 ∩ ι_1)]
+  [(constraint-of ι_1 ((b ◃ (ι_0 ∩ ι_1)) ς)) (ι_0 ∩ ι_1)]
+  [(constraint-of ι_0 ((b ◃ (ι_0 ∪ ι_1)) ς)) (ι_0 ∪ ι_1)]
+  [(constraint-of ι_1 ((b ◃ (ι_0 ∪ ι_1)) ς)) (ι_0 ∪ ι_1)]
+  [(constraint-of ι   ((b ◃ (¬ ι)) ς)) (¬ ι)]
+  [(constraint-of ι   ((b ◃ ι) ς)) ι]
+  [(constraint-of ι   ()) ι]
+  ;; recursive lookup
+  [(constraint-of ι   ((b ◃ κ) ς)) (constraint-of ι ς)])
+
+;; sign-of
+;; -------
+;; Computes the sign a blame identifier.
+(define-metafunction λCon
+  sign-of : b ς -> blame
+  [(sign-of ♭ ς) +blame]
+  [(sign-of ι ς) (sign-in ι (constraint-of ι ς) ς)])
+
+;; sign-in
+;; -------
+;; Computes the sign of a blame identifier in a constraint.
+(define-metafunction λCon
+  sign-in : b κ ς -> blame
+  [(sign-in ι_0 (ι_0 → ι_1) ς) (invert (sign-of (parent-of ι_0 ς) ς))]
+  [(sign-in ι   (¬ ι) ς)       (invert (sign-of (parent-of ι ς) ς))]
+  ; otherwise
+  [(sign-in ι κ ς)             (sign-of (parent-of ι ς) ς)])
+
+;; sign-in
+;; -------
+;; Produces a balme term for a blame identifier.
+(define-metafunction λCon
+  blame-of : b ς -> (blame ♭)
+  [(blame-of ι ς) ((sign-of ι ς) (root-of ι ς))])
+
 #|
  ___            _ _         _                         _ 
 | _ \_ _ ___ __| (_)__ __ _| |_ ___ ___  __ _ _ _  __| |
@@ -393,7 +494,7 @@
 |_| \_,_|_||_\__|\__|_\___/_||_/__/
                                    
 |#
-  
+
 #|
   ;; Canonical? (non-reducable terms)
   ;; --------------------------------
@@ -410,18 +511,18 @@
   (define final? 
     (redex-match? λCon-Baseline Final))
   |#
-  ;; λCon Reduction (λCon-->)
-  ;; ------------------------
-  (define
-    (λCon/Baseline~~> ς M)
-    (if (redex-match? λCon M M)
-        (car (apply-reduction-relation Baseline-reduction (term (,ς ,M))))
-        (error "Invalid λCon-term:" M)))
-  
-  ;; λCon Reduction (λCon-->*)
-  ;; -------------------------
-  (define
-    (λCon/Baseline~~>* configuration)
-    (if (redex-match? λCon (ς M) configuration)
-        (car (apply-reduction-relation* Baseline-reduction (term ,configuration)))
-        (error "Invalid λCon-term:" configuration)))
+;; λCon Reduction (λCon-->)
+;; ------------------------
+(define
+  (λCon/Baseline~~> ς M)
+  (if (redex-match? λCon M M)
+      (car (apply-reduction-relation Baseline-reduction (term (,ς ,M))))
+      (error "Invalid λCon-term:" M)))
+
+;; λCon Reduction (λCon-->*)
+;; -------------------------
+(define
+  (λCon/Baseline~~>* configuration)
+  (if (redex-match? λCon (ς M) configuration)
+      (car (apply-reduction-relation* Baseline-reduction (term ,configuration)))
+      (error "Invalid λCon-term:" configuration)))
