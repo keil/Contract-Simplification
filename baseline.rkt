@@ -149,9 +149,9 @@
    ;; TODO: ⊥ mus remain
    
    (--> (ς
-         (in-hole F (λ x (in-hole BCtx (T @ ι ⊥)))))
+         (in-hole F (T @ ι ⊥)))
         (ς
-         (in-hole F (λ x (blame ♭))))
+         (in-hole F (blame ♭)))
         "Blame"
         (where (blame ♭) (blame-of ι ς)))
    

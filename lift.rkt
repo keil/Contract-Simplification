@@ -57,9 +57,27 @@
         (fresh ι1)
         (side-condition (canonical? (term (in-hole F (λ x (in-hole BCtx (x @ ι I))))))))
    
+   (--> (ς
+         (in-hole F (λ x (in-hole BCtx (T @ ι ⊥)))))
+        (ς
+         (in-hole F (λ x (blame ♭))))
+        "Blame"
+        (where (blame ♭) (blame-of ι ς)))
+   
    ))
 
-
+   ;; Blame
+   ;; ---------------
+   ;; Removes (term ⊥) contracts.
+   
+   ;; TODO: ⊥ mus remain
+   
+;   (--> (ς
+;         (in-hole F (λ x (in-hole BCtx (T @ ι ⊥)))))
+;        (ς
+;         (in-hole F (λ x (blame ♭))))
+;        "Blame"
+;        (where (blame ♭) (blame-of ι ς)))
 
 
 

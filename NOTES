@@ -1,3 +1,25 @@
+Baseline Reduction
+==================
+
+Guarantees
+- Real-Optimization
+- Order-Preservation (includes Blame-Preservation)
+
+
+Subset Reduction
+================
+
+Guarantees
+- Real-Optimization
+- Blame-Preservation
+
+
+
+
+
+
+
+
 *** Constrains
 
 - Is it really required to produce true-contrasts? I assume that a blank constraint set is enough. 

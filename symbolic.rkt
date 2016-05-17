@@ -37,7 +37,7 @@
   
   ;; Terms
   ;; -----
-  ((L M N) .... (M @ ι C)) ;; (M / C ...)
+  ((L M N) .... (M @ ι C))
   
   
   
@@ -71,7 +71,7 @@
   (TQ S TI T0 T1 (TQ @ ι Q))
   
   ;; Canonical Terms (non-reducable terms)
-  (T TQ (T_0 ∥ T_1)) ;; TODO
+  (T TQ (T_0 ∥ T_1))
   
   
   
@@ -93,7 +93,7 @@
    ((M @ ι Q) N) 
    
    ;; Imediate contracts in values
-   (K @ ι I) #| (x @ ι I) |# ((λ x M) @ ι I) ;; TODO
+   (K @ ι I) ((λ x M) @ ι I)
    
    ;; Contracts on return terms
    (λ x (M @ ι C))
@@ -114,7 +114,7 @@
    (M @ ι (C ∪ D))
    
    ;; Nested delayed contracts
-   ((M @ ι_0 Q) @ ι_1 I) ;((M @ ι_0 Q) @ ι_1 ⊥)
+   ((M @ ι_0 Q) @ ι_1 I)
    
    ;; Top-level assertions
    (M @ ♭ C))
@@ -148,7 +148,7 @@
   (∥ ∩∩ ∪∪)
   
   ;; Traces
-  ((Tx Ty) T (Tx / C) (Tx ∥ Ty))
+;  ((Tx Ty) T (Tx / C) (Tx ∥ Ty))
   
   ;; (where (blame ♭) (produce-blame ς)))
   
@@ -157,17 +157,10 @@
   ;(O )
   
   ;; TODO observation Context
-  (OCtx hole (OCtx ∥ N) (T ∥ OCtx))
+;  (OCtx hole (OCtx ∥ N) (T ∥ OCtx))
   
   
-  ;; Miscellaneous
-  ;; =============
-  
-  ;; True-Contracts
-  ;(True ⊤ (True → True) (x → (Λ x True)) (True ∩ True) (True ∪ True))
-  
-  ;; False-Contracts
-  ;(False ⊥)
+
   )
 
 
@@ -233,11 +226,11 @@
    λCon-Symbolic
    #:domain (ς any)
    
-   (--> (ς
-         (in-hole F (M / C)))
-        (ς
-         (in-hole F M))
-        "Finalize")
+;   (--> (ς
+;         (in-hole F (M / C)))
+;        (ς
+;         (in-hole F M))
+;        "Finalize")
    
    
    ;; TODO, update blame state that fail information did nt get lost
