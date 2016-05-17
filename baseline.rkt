@@ -21,131 +21,7 @@
                                                                   
 |#
 
-(define-extended-language λCon-Baseline λCon-Symbolic
-  #|  
-  ;; Syntax Extensions
-  ;; =================
-  
-  ;; Immediate Contracts
-  ;; -------------------
-  ;((I J) .... (I ∩ J))
-  
-  ;; Contracts
-  ((C D) .... ⊤ ⊥)
-  
-  ;; Delayed Contracts
-  ;; -----------------
-  ((Q R) .... (C → ⊤) (⊤ → C))
-  
-  ;; Terms
-  ;; -----
-  ((L M N) .... (M @ ι C) (M / C ...))
-  
-  
-  
-  ;; Canonical terms (λJ terms)
-  ;; ==========================
-  
-  ;; Source Terms
-  ;; ------------
-  ;; Terms without a contract on the outermost position.
-  
-  ;; Values
-  (S0 K (λ x S))
-  
-  ;; Non-Values
-  (S1 x (+blame ♭) (-blame ♭) (S TI) (TI T) (S S) (K T) (op T ...) (if T_0 T_1 T_2))
-  
-  ;; Source Terms
-  (S S0 S1)
-  
-  ;; Terms
-  ;; -----
-  ;; Terms with non-reducable contracts.
-  
-  ;; Terms with Immediate Contracts/ False
-  (TI S1 (TI @ ι I) (S @ ι ⊥))
-  
-  ;; Terms with Delayed Contracts
-  (TQ S TI (TQ @ ι Q))
-  
-  ;; Canonical Terms (non-reducable terms)
-  (T TQ)
-  
-  
-  
-  ;; Reducable terms (non-cannonical terms)
-  ;; ======================================
-  
-  (Reducible
-   
-   ;; Terms containing a reducable term
-   (λ x Reducible) (Reducible M) (M Reducible) (op M ... Reducible N ...) (if M ... Reducible N ...)   (Reducible @ b C)
-   
-   ;; Optimization
-   ;; ------------
-   
-   ;; Delayed checkes of a delayed contract
-   ((λ x M) (M @ ι Q))
-   
-   ;; Checked of delayed contracts
-   ((M @ ι Q) N) 
-   
-   ;; Imediate contracts in values
-   (K @ ι I) #| (x @ ι I) |# ((λ x M) @ ι I)
-   
-   ;; Contracts on return terms
-   (λ x (M @ ι C))
-   
-   ;; True
-   (M @ ι ⊤)
-   
-   ;; Restructuring
-   ;; -------------
-   
-   ;; Intersection betenn immediate and delayed contract
-   (M @ ι (I ∩ C))
-      
-   ;; Union contracts
-   (M @ ι (C ∪ D))
-   
-   ;; Nested delayed contracts
-   ((M @ ι_0 Q) @ ι_1 I) ((M @ ι_0 C) @ ι_1 ⊥)
-   
-   ;; Top-level assertions
-   (T @ ♭ C))
-  
-  
-  
-  ;; Contexts
-  ;; ========
-  
-  ;; Baseline Reduction Context
-  ;; --------------------------
-  ((F G H) hole (λ x F) (F M) (T F) (op T ... F M ...) (if T ... F M ...) (F @ b C)
-           ;(F || N) (T || F))
-           (F / C ...))
-  
-  ;; Function Body Context
-  ;; ---------------------
-  ;; Reduction Context without abstraction.
-  (BCtx hole (BCtx M) (T BCtx) (op T ... BCtx T ...) (BCtx @ b C)
-        (BCtx || T) (T || BCtx)) ;; (if T ... BCtx T ...)
-  
-  ;; Assertion Context
-  ;; -----------------
-  (ACtx hole (ACtx @ ι C)) ;; TODO (X @ ι C) ?
-  
-  ;; Miscellaneous
-  ;; =============
-  
-  ;; True-Contracts
-  ;(True ⊤ (True → True) (x → (Λ x True)) (True ∩ True) (True ∪ True))
-  
-  ;; False-Contracts
-  ;(False ⊥)
-|#
-  )
+(define-extended-language λCon-Baseline λCon-Symbolic)
 
 #|
  ___        _         _   _          
@@ -177,17 +53,16 @@
    ;; Rules [Unfold/Union] and [Unfold/Intersection] unfods an 
    ;; union/intersection contract (all immediate).
    
-   ;   (--> (ς
-   ;         (in-hole F (T @ ♭ C)))
-   ;        (((♭ ◃ ι) ς)
-   ;         (in-hole F (T @ ι C)))
-   ;        "Unfold/Assert"
-   ;        (fresh ι))
+   (--> (ς
+         (in-hole F (T @ ♭ C)))
+        (((♭ ◃ ι) ς)
+         (in-hole F (T @ ι C)))
+        "Unfold/Assert"
+        (fresh ι))
    
    (--> (ς
          (in-hole F (T @ ι (C ∪ D))))
         (((ι ◃ (ι1 ∪ ι2)) ς)
-         ;(in-hole F ((T @ ι1 C) @ ι2 D))) ;; TODO
          ((in-hole F (T @ ι1 C)) ∪∪ (in-hole F (T @ ι2 D))))
         "Unfold/Union"
         (fresh ι1 ι2))
@@ -230,8 +105,6 @@
         "Unfold/D-Intersection"
         (fresh ι1 ι2))
    
-   
-   
    ;; Lower (down)
    ;; ------------
    ;; Rule [Lower] creates a new function contarct from the 
@@ -250,7 +123,7 @@
    ;; Rule [Switch] changes the order of contracts such that imemdiate contracts
    ;; can be checked right awar.
    
-   ;; TODO
+   ;; NOTE, not required because of assertion context
    ;(--> (ς
    ;      (in-hole F ((T @ ι_0 I) @ ι_1 Q)))
    ;     (ς
@@ -269,11 +142,11 @@
          (in-hole F T))
         "Recude/True")
    
-   
-   
    ;; Blame
    ;; ---------------
    ;; Removes (term ⊥) contracts.
+   
+   ;; TODO: ⊥ mus remain
    
    (--> (ς
          (in-hole F (λ x (in-hole BCtx (T @ ι ⊥)))))
@@ -281,8 +154,6 @@
          (in-hole F (λ x (blame ♭))))
         "Blame"
         (where (blame ♭) (blame-of ι ς)))
-   
-   
    
    ;; Predicate Verification
    ;; ----------------------
@@ -310,62 +181,6 @@
         (where W (⇓/Term ,(car (apply-reduction-relation* λCon-reduction (term (· (M V)))))))
         (side-condition (false? (term W))))
    
-   
-   
-   ;; Join
-   ;; ----
-   ;; Merges the splitted evaluations.
-   #|   
-   (--> (
-         (in-hole F ((in-hole H (T @ ι C)) || (in-hole H S))))
-        (ς
-         (in-hole F ((in-hole H (T @ ι C)) || (in-hole H (S @ ι C)))))
-        "Join/LeftContract"
-        (side-condition (and (canonical? (term (in-hole H (T @ ι C))))
-                             (canonical? (term (in-hole H S)))))
-        )
-   
-   (--> (ς
-         (in-hole F ((in-hole H S) || (in-hole H (T @ ι C)))))
-        (ς
-         (in-hole F ((in-hole H (S @ ι C)) || (in-hole H (T @ ι C)))))
-        "Join/RightContract"
-        
-        (side-condition (and (canonical? (term (in-hole H S)))
-                             (canonical? (term (in-hole H (T @ ι C))))))
-        ) 
-   
-   (--> (ς
-         (in-hole F ((in-hole H (T_1 @ ι_1 C)) || (in-hole H (T_2 @ ι_2 D)))))
-        (ς
-         (in-hole F ((in-hole H ((T_1 @ ι_1 C) @ ι_2 D)) || (in-hole H ((T_2 @ ι_1 C) @ ι_2 D)))))
-        "Join/LeftRightContract"
-        
-        (side-condition (and (canonical? (term (in-hole H (T_1 @ ι_1 C))))
-                             (canonical? (term (in-hole H (T_2 @ ι_2 D))))
-                             (not (eq? (term C) (term D)))
-                             ))
-        )
-   
-   
-   (--> (ς
-         (in-hole F ((in-hole H (T_1 (T_11 @ ι_1 C))) || (in-hole H (T_2 (T_22 @ ι_2 D))))))
-        (ς
-         (in-hole F ((in-hole H (T_1 ((T_11 @ ι_1 C) @ ι_2 D))) || (in-hole H (T_2 ((T_22 @ ι_1 C) @ ι_2 D))))))
-        "Join/App"
-        
-        (side-condition (and (canonical? (term (in-hole H (T_1 (T_11 @ ι_1 C)))))
-                             (canonical? (term (in-hole H (T_2 (T_22 @ ι_2 D)))))
-                             (not (eq? (term C) (term D)))
-                             ))
-        )
-      
-   (--> (ς
-         (in-hole F (T || T))) 
-        (ς
-         (in-hole F T)) 
-        "Join")
-|#
    ))
 
 #|
@@ -495,29 +310,13 @@
                                    
 |#
 
-#|
-  ;; Canonical? (non-reducable terms)
-  ;; --------------------------------
-  (define canonical?
-    (redex-match? λCon-Baseline T))
-  
-  ;; Reducible? (non-canonical terms)
-  ;; --------------------------------
-  (define reducible? 
-    (redex-match? λCon-Baseline Reducible))
-  
-  ;; Final? (top-level final terms)
-  ;; ------------------------------
-  (define final? 
-    (redex-match? λCon-Baseline Final))
-  |#
 ;; λCon Reduction (λCon-->)
 ;; ------------------------
 (define
-  (λCon/Baseline~~> ς M)
-  (if (redex-match? λCon M M)
-      (car (apply-reduction-relation Baseline-reduction (term (,ς ,M))))
-      (error "Invalid λCon-term:" M)))
+  (λCon/Baseline~~> ς configuration)
+  (if (redex-match? λCon (ς M) configuration)
+      (car (apply-reduction-relation Baseline-reduction (term ,configuration)))
+      (error "Invalid λCon-term:" configuration)))
 
 ;; λCon Reduction (λCon-->*)
 ;; -------------------------

@@ -192,13 +192,13 @@
    λCon-Symbolic
    #:domain (ς any)
    
-   (--> (ς
-         (in-hole F (M @ ♭ C)))
-        (((♭ ◃ ι) ς)
-         (in-hole F (M @ ι C)))
-        ;(in-hole F ((M / C) @ ι C)))
-        "Symbolic/Assert"
-        (fresh ι))
+;   (--> (ς
+;         (in-hole F (M @ ♭ C)))
+;        (((♭ ◃ ι) ς)
+;         (in-hole F (M @ ι C)))
+;        ;(in-hole F ((M / C) @ ι C)))
+;        "Symbolic/Assert"
+;        (fresh ι))
    
    (--> (ς
          (in-hole F ((M @ ι C) / D)))

@@ -209,7 +209,6 @@
         (where (blame ♭) (produce-blame ς)))
    
    ;; ⊤/⊥
-   ;; ---
    (--> (ς
          (in-hole E (V @ ι ⊤)))
         (((ι ◃ (τ #t)) ς)
@@ -269,7 +268,7 @@
 (define-metafunction λCon
   lookup : predefined -> M
   
-  [(lookup Any?)   (flat (λ x #t))]
+  [(lookup Any?)      (flat (λ x #t))]
   
   [(lookup Number?)   (flat (λ x (number? x)))]
   [(lookup Complex?)  (flat (λ x (complex? x)))]
@@ -280,9 +279,9 @@
   [(lookup String?)   (flat (λ x (string? x)))]
   [(lookup Boolean?)  (flat (λ x (boolean? x)))]
   
-  [(lookup Exact?)   (flat (λ x (exact? x)))]
-  [(lookup Inexact?) (flat (λ x (inexact? x)))]
-  [(lookup Zero?)    (flat (λ x (zero? x)))]
+  [(lookup Exact?)    (flat (λ x (exact? x)))]
+  [(lookup Inexact?)  (flat (λ x (inexact? x)))]
+  [(lookup Zero?)     (flat (λ x (zero? x)))]
   
   [(lookup Positive?) (flat (λ x (positive? x)))]
   [(lookup Negative?) (flat (λ x (negative? x)))]
