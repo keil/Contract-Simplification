@@ -473,50 +473,63 @@
 
 
 
+;; XXXX
+;; --------
+;; XXXX.
 
 
 (define-metafunction λCon
-  ! : blame -> blame
-  [(! +blame) -blame]
-  [(! -blame) +blame])
-
-
-(define-metafunction λCon
-  blame-of : b ς -> blame
-  [(blame-of ♭ ς) +blame]
-  [(blame-of ι ς) (root-of (parent-of ι ς) ς)])
-
-
-
+  invert : blame -> blame
+  [(invert +blame) -blame]
+  [(invert -blame) +blame])
 
 (define-metafunction λCon
-  callback-of : b ς -> (b ◃ κ)
-  
-  [(callback-of ι_0 ((b ◃ (ι_0 → ι_1)) ς)) (b ◃ (ι_0 → ι_1))]
-
+  constraint-of : b ς -> κ
+  [(constraint-of ι_0 ((b ◃ (ι_0 → ι_1)) ς)) (ι_0 → ι_1)]
+  [(constraint-of ι_1 ((b ◃ (ι_0 → ι_1)) ς)) (ι_0 → ι_1)]
+  [(constraint-of ι_0 ((b ◃ (ι_0 ∩ ι_1)) ς)) (ι_0 ∩ ι_1)]
+  [(constraint-of ι_1 ((b ◃ (ι_0 ∩ ι_1)) ς)) (ι_0 ∩ ι_1)]
+  [(constraint-of ι_0 ((b ◃ (ι_0 ∪ ι_1)) ς)) (ι_0 ∪ ι_1)]
+  [(constraint-of ι_1 ((b ◃ (ι_0 ∪ ι_1)) ς)) (ι_0 ∪ ι_1)]
+  [(constraint-of ι   ((b ◃ (¬ ι)) ς)) (¬ ι)]
+  [(constraint-of ι   ((b ◃ ι) ς)) ι]
+  [(constraint-of ι   ()) ι]
+  ;; recursive lookup
+  [(constraint-of ι   ((b ◃ κ) ς)) (constraint-of ι ς)])
 
 
 
 (define-metafunction λCon
   sign-of : b ς -> blame
- 
-  [(sign-of ι_0 ((b ◃ (ι_0 → ι_1)) ς)) (! (sign-of b))]
-  
-  
-  [(sign-of ι_1 ((b ◃ (ι_0 → ι_1)) ς)) b]
-  
-  [(sign-of ι_0 ((b ◃ (ι_0 ∩ ι_1)) ς)) b]
-  [(sign-of ι_1 ((b ◃ (ι_0 ∩ ι_1)) ς)) b]
-  
-  [(sign-of ι_0 ((b ◃ (ι_0 ∪ ι_1)) ς)) b]
-  [(sign-of ι_1 ((b ◃ (ι_0 ∪ ι_1)) ς)) b]
-  
-  [(sign-of ι   ((b ◃ (¬ ι)) ς)) b]
-  [(sign-of ι   ((b ◃ ι) ς)) b]
-  
-  [(sign-of ι   ()) ι]
-  
-  [(sign-of ι   ((b ◃ κ) ς)) (parent-of ι ς)])
+  [(sign-of ♭ ς) +blame]
+  [(sign-of ι ς) (sign-in ι (constraint-of ι ς) ς)])
+
+(define-metafunction λCon
+  sign-in : b κ ς -> blame
+  [(sign-in ι_0 (ι_0 → ι_1) ς) (invert (sign-of (parent-of ι_0 ς) ς))]
+  [(sign-in ι   (¬ ι) ς)       (invert (sign-of (parent-of ι ς) ς))]
+  ; otherwise
+  [(sign-in ι κ ς)             (sign-of (parent-of ι ς) ς)])
+
+
+
+
+;(define-metafunction λCon
+;  blame-of : b ς -> blame
+;  [(blame-of ♭ ς) +blame]
+;  [(blame-of ι ς) (root-of (parent-of ι ς) ς)])
+
+
+(define-metafunction λCon
+  blame-of : b ς -> (blame ♭)
+  [(blame-of ι ς) ((sign-of ι ς) (root-of ι ς))])
+
+;  [(blame-of ♭ ς) +blame]
+;  [(blame-of ι ς) (root-of (parent-of ι ς) ς)])
+
+
+
+
 
 
 #|

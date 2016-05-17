@@ -38,11 +38,11 @@
   
   ;; Terms
   ;; -----
-  ((L M N) .... (M @ ι C) (M / C)) ;; (M / C ...)
+  ((L M N) .... (M @ ι C)) ;; (M / C ...)
   
   
   
-
+  
   
   
   ;; Canonical terms (λJ terms)
@@ -144,9 +144,9 @@
   
   
   
-    
+  
   ;; Parallel Observations
-  (∥ (∩∩ κ) (∪∪ κ))
+  (∥ ∩∩ ∪∪)
   
   ;; Traces
   ((Tx Ty) T (Tx / C) (Tx ∥ Ty))
@@ -197,7 +197,7 @@
          (in-hole F (M @ ♭ C)))
         (((♭ ◃ ι) ς)
          (in-hole F (M @ ι C)))
-         ;(in-hole F ((M / C) @ ι C)))
+        ;(in-hole F ((M / C) @ ι C)))
         "Symbolic/Assert"
         (fresh ι))
    
@@ -224,11 +224,11 @@
 
 
 ;(define Finalize-reduction
-  ;(;extend-reduction-relation
-   ;Subset-reduction
-   ;λCon-Symbolic
-   ;#:domain (ς any)
-   
+;(;extend-reduction-relation
+;Subset-reduction
+;λCon-Symbolic
+;#:domain (ς any)
+
 (define Finalize-reduction
   (reduction-relation
    λCon-Symbolic
@@ -241,27 +241,37 @@
         "Finalize")
    
    
-   ;; TODO, update blame state
+   ;; TODO, update blame state that fail information did nt get lost
+   ;; in terms of a function contract
    
    (--> (ς
          (in-hole F ((in-hole H (blame ♭)) ∥ (in-hole H T))))
         (ς
-         (in-hole F (in-hole H T)))
+         (in-hole F (in-hole H (join ∥ (blame ♭) T))))
         "Join/LeftBlame"
         (side-condition (and (canonical? (term (in-hole H (blame ♭))))
                              (canonical? (term (in-hole H T)))))
         )
-         
+   
+;   (--> (ς
+;         (in-hole F ((in-hole H (+blame ♭)) ∩∩ (in-hole H T))))
+;        (ς
+;         (in-hole F (in-hole H (+blame ♭))))
+;        "Join/LeftPositiveBlame"
+;        (side-condition (and (canonical? (term (in-hole H (+blame ♭))))
+;                             (canonical? (term (in-hole H T)))))
+;        );;;
+
    (--> (ς
          (in-hole F ((in-hole H T) ∥ (in-hole H (blame ♭)))))
         (ς
-         (in-hole F (in-hole H T)))
+         (in-hole F (in-hole H (join ∥ T (blame ♭)))))
         "Join/RightBlame"
         (side-condition (and (canonical? (term (in-hole H (blame ♭))))
                              (canonical? (term (in-hole H T)))))
         )
    
-   
+
    
    
    
@@ -316,6 +326,26 @@
         "Join")
    
    ))
+
+
+
+(define-metafunction λCon-Symbolic
+  join : ∥ M M -> M
+  ;; intersection/ negative blame
+  [(join ∩∩ (-blame ♭) T) T]
+  [(join ∩∩ T (-blame ♭)) T]
+  ;; intersection/ positive blame
+  [(join ∩∩ (+blame ♭) T) (+blame ♭)]
+  [(join ∩∩ T (+blame ♭)) (+blame ♭)]
+  ;; union/ negative blame
+  [(join ∪∪ (-blame ♭) T) (-blame ♭)]
+  [(join ∪∪ T (-blame ♭)) (-blame ♭)]
+  ;; union/ positive blame
+  [(join ∪∪ (+blame ♭) T) T]
+  [(join ∪∪ T (+blame ♭)) T])
+
+
+
 
 #|
  ___            _ _         _                         _ 
