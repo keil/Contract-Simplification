@@ -185,49 +185,140 @@
    λCon-Symbolic
    #:domain (ς any)
    
-   ;; TODO, update blame state that fail information did nt get lost
-   ;; in terms of a function contract
-   
    (--> (ς
-         (in-hole F ((in-hole H (blame ♭)) ∥ (in-hole H T))))
+         (in-hole F ((in-hole G (T @ ι_1 C)) ∥ (in-hole H (T @ ι_2 D)))))
         (ς
-         (in-hole F (in-hole H (join ∥ (blame ♭) T))))
-        "Join/LeftBlame"
-        (side-condition (canonical? (term (in-hole F ((in-hole H (blame ♭)) ∥ (in-hole H T)))))))
-   
-   (--> (ς
-         (in-hole F ((in-hole H T) ∥ (in-hole H (blame ♭)))))
-        (ς
-         (in-hole F (in-hole H (join ∥ T (blame ♭)))))
-        "Join/RightBlame"
-        (side-condition (canonical? (term (in-hole F ((in-hole H T) ∥ (in-hole H (blame ♭))))))))
-   
-   (--> (ς
-         (in-hole F ((in-hole H (T @ ι C)) ∥ (in-hole H S))))
-        (ς
-         (in-hole F ((in-hole H (T @ ι C)) ∥ (in-hole H (S @ ι C)))))
-        "Join/LeftContract"
-        (side-condition (canonical? (term (in-hole F ((in-hole H (T @ ι C)) ∥ (in-hole H S)))))))
-   
-   (--> (ς
-         (in-hole F ((in-hole H S) ∥ (in-hole H (T @ ι C)))))
-        (ς
-         (in-hole F ((in-hole H (S @ ι C)) ∥ (in-hole H (T @ ι C)))))
-        "Join/RightContract"
-        (side-condition (canonical? (term (in-hole F ((in-hole H S) ∥ (in-hole H (T @ ι C))))))))
-   
-   (--> (ς
-         (in-hole F ((in-hole H (T_1 @ ι_1 C)) ∥ (in-hole H (T_2 @ ι_2 D)))))
-        (ς
-         (in-hole F ((in-hole H ((T_1 @ ι_1 C) @ ι_2 D)) ∥ (in-hole H ((T_2 @ ι_1 C) @ ι_2 D)))))
+         (in-hole F ((in-hole G ((T @ ι_1 C) @ ι_2 D)) ∥ (in-hole H ((T @ ι_1 C) @ ι_2 D)))))
         "Join/LeftRightContract"
         (side-condition
          (and
-          (canonical? (term (in-hole F ((in-hole H (T_1 @ ι_1 C)) ∥ (in-hole H (T_2 @ ι_2 D))))))
-          (not (eq? (term C) (term D))))))
+          (canonical? (term (in-hole F ((in-hole G (T @ ι_1 C)) ∥ (in-hole H (T @ ι_2 D))))))
+          (not (eq? (term C) (term D)))
+          (term (≈ (in-hole G (T @ ι_1 C)) (in-hole H (T @ ι_2 D)))))))
+   
+   (--> (ς
+         (in-hole F ((in-hole G (T @ ι C)) ∥ (in-hole H T))))
+        (ς
+         (in-hole F ((in-hole G (T @ ι C)) ∥ (in-hole H (T @ ι C)))))
+        "Join/LeftContract"
+        (side-condition 
+         (and
+          (canonical? (term (in-hole F ((in-hole G (T @ ι C)) ∥ (in-hole H T)))))
+          (term (≈ (in-hole G (T @ ι C)) (in-hole H T))))))
+   
+   (--> (ς
+         (in-hole F ((in-hole G S) ∥ (in-hole H (T @ ι C)))))
+        (ς
+         (in-hole F ((in-hole G (T @ ι C)) ∥ (in-hole H (T @ ι C)))))
+        "Join/RightContract"
+        (side-condition 
+         (and
+          (canonical? (term (in-hole F ((in-hole G T) ∥ (in-hole H (T @ ι C))))))
+          (term (≈ (in-hole G T) (in-hole G (T @ ι C)))))))
+      
+   (--> (ς
+         (in-hole F ((in-hole G (blame ♭)) ∥ (in-hole H T))))
+        (ς
+         (in-hole F ((in-hole G (join ∥ (blame ♭) T)) ∥ (in-hole H (join ∥ (blame ♭) T)))))
+        "Join/LeftBlame"
+        (side-condition
+         (and
+          (canonical? (term (in-hole F ((in-hole H (blame ♭)) ∥ (in-hole H T)))))
+          (term (≈ (in-hole G (blame ♭)) (in-hole G T))))))
+   
+   
+      (--> (ς
+         (in-hole F ((in-hole G (blame ♭)) ∥ (in-hole H T_r))))
+        (ς
+         (in-hole F ((in-hole G T) ∥ (in-hole H T))))
+        "Join/RightBlame"
+        (where T (join ∥ T (blame ♭)))
+        (side-condition
+         (and
+          (canonical? (term (in-hole F ((in-hole H (blame ♭)) ∥ (in-hole H T)))))
+          (term (≈ (in-hole G (blame ♭)) (in-hole G T_r))))))
+   
+         
+   (--> (ς
+         (in-hole F (T ∥ T))) 
+        (ς
+         (in-hole F T)) 
+        "Join")
+   
+   ))
+      ;; use where
+   
+   
+   ;; What if both sides prouce blame ?
+   
+   
+;   (--> (ς
+;         (in-hole F ((in-hole H (blame ♭)) ∥ (in-hole H T))))
+;        (ς
+;         (in-hole F (in-hole H (join ∥ (blame ♭) T))))
+;        "Join/LeftBlame"
+;        (side-condition (canonical? (term (in-hole F ((in-hole H (blame ♭)) ∥ (in-hole H T)))))))
+   
+   ;   (--> (ς
+   ;         (in-hole F ((in-hole H T) ∥ (in-hole H (blame ♭)))))
+   ;        (ς
+   ;         (in-hole F (in-hole H (join ∥ T (blame ♭)))))
+   ;        "Join/RightBlame"
+   ;        (side-condition (canonical? (term (in-hole F ((in-hole H T) ∥ (in-hole H (blame ♭))))))))
+   
+;   (--> (ς
+;         (in-hole F ((in-hole H T) ∥ (in-hole G (blame ♭)))))
+;        (ς
+;         (in-hole F (in-hole H (join ∥ T (blame ♭))))) ;; NOT Correct
+;        "Join/RightBlame"
+;        (side-condition 
+;         (and
+;          (canonical? (term (in-hole F ((in-hole H T) ∥ (in-hole H (blame ♭))))))
+;          (term (≈ (in-hole H T) (in-hole G (blame ♭))))
+;          )))  
+   
+   ;   (--> (ς
+   ;         (in-hole F ((in-hole H (T @ ι C)) ∥ (in-hole H S))))
+   ;        (ς
+   ;         (in-hole F ((in-hole H (T @ ι C)) ∥ (in-hole H (S @ ι C)))))
+   ;        "Join/LeftContract"
+   ;        (side-condition (canonical? (term (in-hole F ((in-hole H (T @ ι C)) ∥ (in-hole H S)))))))
+   ;   
+   ;   (--> (ς
+   ;         (in-hole F ((in-hole H S) ∥ (in-hole H (T @ ι C)))))
+   ;        (ς
+   ;         (in-hole F ((in-hole H (S @ ι C)) ∥ (in-hole H (T @ ι C)))))
+   ;        "Join/RightContract"
+   ;        (side-condition (canonical? (term (in-hole F ((in-hole H S) ∥ (in-hole H (T @ ι C))))))))
+   
+   ;   (--> (ς
+   ;         (in-hole F ((in-hole H (T_1 @ ι_1 C)) ∥ (in-hole H (T_2 @ ι_2 D)))))
+   ;        (ς
+   ;         (in-hole F ((in-hole H ((T_1 @ ι_1 C) @ ι_2 D)) ∥ (in-hole H ((T_2 @ ι_1 C) @ ι_2 D)))))
+   ;        "Join/LeftRightContract"
+   ;        (side-condition
+   ;         (and
+   ;          (canonical? (term (in-hole F ((in-hole H (T_1 @ ι_1 C)) ∥ (in-hole H (T_2 @ ι_2 D))))))
+   ;          (not (eq? (term C) (term D))))))
    
    
    
+   
+   
+;   (--> (ς
+;         (in-hole F ((in-hole H (T @ ι_1 C)) ∥ (in-hole G (T @ ι_2 D)))))
+;        (ς
+;         (in-hole F ((in-hole H ((T @ ι_1 C) @ ι_2 D)) ∥ (in-hole G ((T @ ι_1 C) @ ι_2 D)))))
+;        "Join/LeftRightContract2"
+;        (side-condition
+;         (and
+;          (canonical? (term (in-hole F ((in-hole H (T @ ι_1 C)) ∥ (in-hole G (T @ ι_2 D))))))
+;          (not (eq? (term C) (term D)))
+;          (term (≈ (in-hole H (T @ ι_1 C)) (in-hole G (T @ ι_2 D))))
+;          )))
+   
+   
+   #|
       (--> (ς
          (in-hole F 
                   ((in-hole H (T_1 (T_11 @ ι_1 C)))
@@ -248,7 +339,7 @@
    
    
    
-   
+   |#
    
    
    
@@ -263,33 +354,52 @@
    
    
    
-   (--> (ς
-         (in-hole F ((in-hole H (T_1 (T_11 @ ι_1 C))) ∥ (in-hole H (T_2 (T_22 @ ι_2 D))))))
-        (ς
-         (in-hole F ((in-hole H (T_1 ((T_11 @ ι_1 C) @ ι_2 D))) ∥ (in-hole H (T_2 ((T_22 @ ι_1 C) @ ι_2 D))))))
-        "Join/App"
-        
-        (side-condition (and (canonical? (term (in-hole H (T_1 (T_11 @ ι_1 C)))))
-                             (canonical? (term (in-hole H (T_2 (T_22 @ ι_2 D)))))
-                             (not (eq? (term C) (term D)))
-                             ))
-        )
-   
-   (--> (ς
-         (in-hole F (T ∥ T))) 
-        (ς
-         (in-hole F T)) 
-        "Join")
-   
-   ))
+   ;   (--> (ς
+   ;         (in-hole F ((in-hole H (T_1 (T_11 @ ι_1 C))) ∥ (in-hole H (T_2 (T_22 @ ι_2 D))))))
+   ;        (ς
+   ;         (in-hole F ((in-hole H (T_1 ((T_11 @ ι_1 C) @ ι_2 D))) ∥ (in-hole H (T_2 ((T_22 @ ι_1 C) @ ;ι_2 D))))))
+   ;        "Join/App"
+   ;        
+   ;        (side-condition (and (canonical? (term (in-hole H (T_1 (T_11 @ ι_1 C)))))
+   ;                             (canonical? (term (in-hole H (T_2 (T_22 @ ι_2 D)))))
+   ;                             (not (eq? (term C) (term D)))
+   ;                             ))
+   ;        )
 
 
 
 
+(define-metafunction λCon-Symbolic
+  ≈ : any any -> boolean
+  ;; Base Case
+  [(≈ any any) #t]
+  ;; Blame
+  [(≈ (blame ♭) any) #t]
+  [(≈ any (blame ♭)) #t]
+  ;; Terms with Contract
+  [(≈ (any_0 @ b C) any_1) (≈ any_0 any_1)]
+  [(≈ any_0 (any_1 @ b C)) (≈ any_0 any_1)]
+  ;; Term Deconstruction
+  [(≈ (any_0 any_i ...) (any_1 any_j ...)) ,(and (term (≈ any_0 any_1)) (term (≈ (any_i ...) (any_j ...))))] 
+  ;; Otherwise
+  [(≈ any_0 any_1) #f])
 
 
 
-
+(define-metafunction λCon-Symbolic
+  join : ∥ M M -> M
+  ;; intersection/ negative blame
+  [(join ∩∩ (-blame ♭) T) T]
+  [(join ∩∩ T (-blame ♭)) T]
+  ;; intersection/ positive blame
+  [(join ∩∩ (+blame ♭) T) (+blame ♭)]
+  [(join ∩∩ T (+blame ♭)) (+blame ♭)]
+  ;; union/ negative blame
+  [(join ∪∪ (-blame ♭) T) (-blame ♭)]
+  [(join ∪∪ T (-blame ♭)) (-blame ♭)]
+  ;; union/ positive blame
+  [(join ∪∪ (+blame ♭) T) T]
+  [(join ∪∪ T (+blame ♭)) T])
 
 
 
@@ -397,20 +507,6 @@
 
 
 
-(define-metafunction λCon-Symbolic
-  join : ∥ M M -> M
-  ;; intersection/ negative blame
-  [(join ∩∩ (-blame ♭) T) T]
-  [(join ∩∩ T (-blame ♭)) T]
-  ;; intersection/ positive blame
-  [(join ∩∩ (+blame ♭) T) (+blame ♭)]
-  [(join ∩∩ T (+blame ♭)) (+blame ♭)]
-  ;; union/ negative blame
-  [(join ∪∪ (-blame ♭) T) (-blame ♭)]
-  [(join ∪∪ T (-blame ♭)) (-blame ♭)]
-  ;; union/ positive blame
-  [(join ∪∪ (+blame ♭) T) T]
-  [(join ∪∪ T (+blame ♭)) T])
 
 
 
