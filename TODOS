@@ -16,6 +16,8 @@ OPEN POINTS
 
 
 
+
+
 - SUbset reduction also changes the order as ot removes less restrictive contract that would blame before.
 
 - Lift/ Balme in conditional
