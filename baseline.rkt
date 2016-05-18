@@ -358,7 +358,6 @@
                             ∥
                             (in-hole G (any ... (in-hole H (T @ ι_2 D)) any_r ...))))))))
    
-   
    (--> (ς
          (in-hole F ((in-hole G (any ... (in-hole H (blame ♭)) any_l ...))
                      ∥
