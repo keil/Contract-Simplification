@@ -44,25 +44,7 @@
    λCon-Lift
    #:domain (ς any)
     
-   ;; Lift (up) Contract
-   ;; ------------------
-   ;; Rule [Lift] lifts an immediate contract I
-   ;; on argument x and creates a new function contract.
-   
-   (--> (ς
-         (in-hole F (λ x (in-hole BCtx (x @ ι I)))))
-        (((ι ◃ (¬ ι1)) ς)
-         (in-hole F ((λ x (in-hole BCtx x)) @ ι1 (I → ⊤))))
-        "Lift"
-        (fresh ι1)
-        (side-condition (canonical? (term (in-hole F (λ x (in-hole BCtx (x @ ι I))))))))
-   
-   (--> (ς
-         (in-hole F (λ x (in-hole BCtx (T @ ι ⊥)))))
-        (ς
-         (in-hole F (λ x (blame ♭))))
-        "Blame"
-        (where (blame ♭) (blame-of ι ς)))
+
    
    ))
 

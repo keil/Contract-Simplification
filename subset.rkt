@@ -3,8 +3,6 @@
 
 (require "lj.rkt")
 (require "lcon.rkt")
-
-(require "symbolic.rkt")
 (require "baseline.rkt")
 
 (provide (all-defined-out))
@@ -41,8 +39,29 @@
    λCon-Subset
    #:domain (ς any)
    
-   ;; TODO, make rules deterministic
-   ;; (not (term (closest? (T @ ι_1 D))))
+   ;; Lift (up) Contract
+   ;; ------------------
+   ;; Rule [Lift] lifts an immediate contract I
+   ;; on argument x and creates a new function contract.
+   
+   (--> (ς
+         (in-hole F (λ x (in-hole BCtx (x @ ι I)))))
+        (((ι ◃ (¬ ι1)) ς)
+         (in-hole F ((λ x (in-hole BCtx x)) @ ι1 (I → ⊤))))
+        "Lift"
+        (fresh ι1)
+        (side-condition (canonical? (term (in-hole F (λ x (in-hole BCtx (x @ ι I))))))))
+   
+   (--> (ς
+         (in-hole F (λ x (in-hole BCtx (T @ ι ⊥)))))
+        (ς
+         (in-hole F (λ x (blame ♭))))
+        "Blame"
+        (where (blame ♭) (blame-of ι ς)))
+   
+   ;; Subset 
+   ;; ---------------
+   ;; Removes contracts based on already checked contarcts.
    
    (--> (ς
          (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))

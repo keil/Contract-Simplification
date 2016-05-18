@@ -15,7 +15,8 @@ OPEN POINTS
    ;; TODO, blame on boh sides
    what if one side would produce a blame, but this cntract is removed from another contract (originined in an intersection)
 
-
+   ;; TODO, make subset rules deterministic
+   ;; (not (term (closest? (T @ ¿_1 D))))
 
 
 
