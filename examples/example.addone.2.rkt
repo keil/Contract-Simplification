@@ -2,11 +2,7 @@
 (require redex)
 
 (require "../lcon.rkt")
-(require "../symbolic.rkt")
 (require "../baseline.rkt")
-(require "../subset.rkt")
-(require "../lift.rkt")
-(require "../multilift.rkt")
 
 (provide (all-defined-out))
 
@@ -44,29 +40,7 @@
 ;; Optimization steps: 16
 ;; Reduction steps: 28
 
-(traces Subset-reduction (term (· ,example/addone/2/contracted)))
+;(traces Baseline-reduction (term (· ,example/addone/2/contracted)))
 
 ;(let ([configuration (λCon/Baseline~~>* (term (· ,example/addone/2/contracted)))]) 
 ;  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 1)))))
-
-;; # Subset Reduction
-;; ------------------
-;; Optimization steps: 17
-;; Reduction steps: 22
-
-;(traces Subset-reduction (term (· ,example/addone/2/contracted)))
-
-;(let ([configuration (λCon/Subset~~>* (term (· ,example/addone/2/contracted)))]) 
-;  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 1)))))
-
-;; # Subset Reduction
-;; ------------------
-;; Optimization steps: 17
-;; Reduction steps: 17
-
-;(traces Lift-reduction (term (· ,example/addone/2/contracted)))
-
-;(let ([configuration (λCon/Lift~~>* (term (· ,example/addone/2/contracted)))]) 
-;  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 1)))))
-
-
