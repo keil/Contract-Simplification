@@ -232,7 +232,7 @@
   [(⊑ ⊥ D) #f]
   
   [(⊑ C D) ,(and (term (⊑/context C D)) (term (⊑/subject C D)))]
-  [(⊑ any ...) #f])
+  [(⊑ any ...) #f]) ;; TODO, is this line required ?
 
 (define-metafunction λCon
   ⊑/context : C D -> boolean
