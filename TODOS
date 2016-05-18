@@ -13,6 +13,7 @@ OPEN POINTS
 - Theorem for Real-Optimization.
 
    ;; TODO, blame on boh sides
+   what if one side would produce a blame, but this cntract is removed from another contract (originined in an intersection)
 
 
 

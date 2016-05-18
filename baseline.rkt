@@ -33,7 +33,7 @@
   
   ;; Delayed Contracts
   ;; -----------------
-  ((Q R) .... (C → ⊤) (⊤ → C))
+  ;((Q R) .... (C → ⊤) (⊤ → C))
   
   ;; Terms
   ;; -----
@@ -55,7 +55,7 @@
   (S1 x (+blame ♭) (-blame ♭) (S TI) (TI T) (S S) (K T) (op T ...) (if T_0 T_1 T_2))
   
   ;; Source Terms
-  (S S0 S1 (S / C))
+  (S S0 S1)
   
   ;; Terms
   ;; -----
@@ -65,7 +65,7 @@
   (TI S1 (TI @ ι I))
   
   ;; Terms with Delayed Contracts
-  (TQ S TI T0 T1 (TQ @ ι Q))
+  (TQ S TI (TQ @ ι Q))
   
   ;; Canonical Terms (non-reducable terms)
   (T TQ (T_0 ∥ T_1))
@@ -177,22 +177,11 @@
         (fresh ι1 ι2))
    
    (--> (ς
-         (in-hole F (T @ ι (I ∩ Q)))) 
+         (in-hole F (T @ ι (I ∩ C)))) 
         (((ι ◃ (ι1 ∩ ι2)) ς)
          (in-hole F ((T @ ι1 I) @ ι2 C)))
         "Unfold/Intersection"
         (fresh ι1 ι2))
-   
-   ;; Unroll
-   ;; ------
-   ;; Rule [Unroll] unrolles the contract of a contracted argument 
-   ;; to all uses of the argument.
-   
-   (--> (ς
-         (in-hole F ((λ x S) (T @ ι Q))))
-        (ς
-         (in-hole F ((λ x (unroll x Q ι S)) T)))
-        "Unroll")
    
    ;; Unfold
    ;; ------
@@ -213,6 +202,17 @@
          ((in-hole F ((T_0 @ ι1 Q) T_1)) ∩∩ (in-hole F ((T_0 @ ι2 R) T_1))))
         "Unfold/D-Intersection"
         (fresh ι1 ι2))
+   
+   ;; Unroll
+   ;; ------
+   ;; Rule [Unroll] unrolles the contract of a contracted argument 
+   ;; to all uses of the argument.
+   
+   (--> (ς
+         (in-hole F ((λ x S) (T @ ι Q))))
+        (ς
+         (in-hole F ((λ x (unroll x Q ι S)) T)))
+        "Unroll")
    
    ;; Lower (down)
    ;; ------------
@@ -258,12 +258,14 @@
          (in-hole F (T @ ι ⊥)))
         (ς
          (in-hole F (blame ♭)))
-        "Blame"
+        "Reduce/False"
         (where (blame ♭) (blame-of ι ς)))
    
    ;; Predicate Verification
    ;; ----------------------
    ;; Evaluates predicates on values.
+   
+   ;; NOT REQUIRED TO HABE AN ASSERTION CONTEXT HERE
    
    (--> (ς
          (in-hole F ((in-hole ACtx V) @ ι predefined)))
