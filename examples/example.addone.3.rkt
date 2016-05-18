@@ -56,7 +56,7 @@
 
 (traces Baseline-reduction (term (· ,example/addone/3/contracted)))
 
-;(traces Subset-reduction (term (· ,example/addone/3/contracted)))
+(traces Subset-reduction (term (· ,example/addone/3/contracted)))
 ;(traces Lift-reduction (term (· ,example/addone/3/contracted)))
 
 ;(traces Finalize-reduction (λCon/Baseline~~>* (term (· ,example/addone/3/contracted))))

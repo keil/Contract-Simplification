@@ -497,7 +497,7 @@
   [(join ∪∪ T (+blame ♭)) T])
 
 
-
+#|
 ;; Finalize-reduction
 ;; ==================
 
@@ -601,7 +601,7 @@
    ))
 
 
-
+|#
 
 
 
@@ -643,7 +643,7 @@
 (define reducible? 
   (redex-match? λCon-Symbolic Reducible))
 
-
+#|
 ;; λCon Reduction (λCon-->)
 ;; ------------------------
 (define
@@ -660,3 +660,4 @@
       (car (apply-reduction-relation* Finalize-reduction (term ,configuration)))
       (error "Invalid λCon-term:" configuration)))
 
+|#
