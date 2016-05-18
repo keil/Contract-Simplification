@@ -4,8 +4,6 @@
 (require "lj.rkt")
 (require "lcon.rkt")
 
-(require "symbolic.rkt")
-
 (provide (all-defined-out))
 
 #|
@@ -21,7 +19,124 @@
                                                                   
 |#
 
-(define-extended-language λCon-Baseline λCon-Symbolic)
+(define-extended-language λCon-Baseline λCon
+  
+  ;; Syntax Extensions
+  ;; =================
+  
+  ;; Immediate Contracts
+  ;; -------------------
+  ;((I J) .... (I ∩ J))
+  
+  ;; Contracts
+  ((C D) .... ⊤ ⊥)
+  
+  ;; Delayed Contracts
+  ;; -----------------
+  ((Q R) .... (C → ⊤) (⊤ → C))
+  
+  ;; Terms
+  ;; -----
+  ((L M N) .... (M @ ι C))
+  
+  
+  
+  ;; Canonical terms (λJ terms)
+  ;; ==========================
+  
+  ;; Source Terms
+  ;; ------------
+  ;; Terms without a contract on the outermost position.
+  
+  ;; Values
+  (S0 K (λ x S))
+  
+  ;; Non-Values
+  (S1 x (+blame ♭) (-blame ♭) (S TI) (TI T) (S S) (K T) (op T ...) (if T_0 T_1 T_2))
+  
+  ;; Source Terms
+  (S S0 S1 (S / C))
+  
+  ;; Terms
+  ;; -----
+  ;; Terms with non-reducable contracts.
+  
+  ;; Terms with Immediate Contracts/ False
+  (TI S1 (TI @ ι I))
+  
+  ;; Terms with Delayed Contracts
+  (TQ S TI T0 T1 (TQ @ ι Q))
+  
+  ;; Canonical Terms (non-reducable terms)
+  (T TQ (T_0 ∥ T_1))
+  
+  
+  
+  ;; Reducable terms (non-cannonical terms)
+  ;; ======================================
+  
+  (Reducible
+   
+   ;; Terms containing a reducable term
+   (λ x Reducible) (Reducible M) (M Reducible) (op M ... Reducible N ...) (if M ... Reducible N ...)   (Reducible @ b C)
+   
+   ;; Optimization
+   ;; ------------
+   
+   ;; Delayed checkes of a delayed contract
+   ((λ x M) (M @ ι Q))
+   
+   ;; Checked of delayed contracts
+   ((M @ ι Q) N) 
+   
+   ;; Imediate contracts in values
+   (K @ ι I) ((λ x M) @ ι I)
+   
+   ;; Contracts on return terms
+   (λ x (M @ ι C))
+   
+   ;; True
+   (M @ ι ⊤)
+   
+   ;; False
+   (M @ ι ⊥)
+   
+   ;; Restructuring
+   ;; -------------
+   
+   ;; Intersection betenn immediate and delayed contract
+   (M @ ι (I ∩ C))
+   
+   ;; Union contracts
+   (M @ ι (C ∪ D))
+   
+   ;; Nested delayed contracts
+   ((M @ ι_0 Q) @ ι_1 I)
+   
+   ;; Top-level assertions
+   (M @ ♭ C))
+  
+  
+  
+  ;; Contexts
+  ;; ========
+  
+  ;; Baseline Reduction Context
+  ;; --------------------------
+  ((F G H) hole (λ x F) (F M) (T F) (op T ... F M ...) (if T ... F M ...) (F @ b C) (F ∥ N) (T ∥ F))
+  
+  ;; Function Body Context
+  ;; ---------------------
+  ;; Reduction Context without abstraction.
+  (BCtx hole (BCtx M) (T BCtx) (op T ... BCtx T ...) (BCtx @ b C)
+        (BCtx ∥ T) (T ∥ BCtx)) ;; (if T ... BCtx T ...)
+  
+  ;; Assertion Context
+  ;; -----------------
+  (ACtx hole (ACtx @ ι C))
+  
+  ;; Parallel Observations
+  (∥ ∩∩ ∪∪))
 
 #|
  ___        _         _   _          
@@ -37,15 +152,9 @@
 ;; and unrolls all contracts.
 
 (define Baseline-reduction
-  (extend-reduction-relation
-   Symbolic-reduction
+  (reduction-relation
    λCon-Baseline
    #:domain (ς any)
-   
-   ;(define Baseline-reduction
-   ;  (reduction-relation
-   ;   λCon-Baseline
-   ;   #:domain (ς any)
    
    ;; Constraint Generation
    ;; ---------------------
@@ -116,8 +225,6 @@
          (in-hole F ((λ x T) @ ι (⊤ → C))))
         "Lower")
    
-   
-   
    ;; Switch Order
    ;; ------------
    ;; Rule [Switch] changes the order of contracts such that imemdiate contracts
@@ -129,8 +236,6 @@
    ;     (ς
    ;      (in-hole F ((T @ ι_1 Q) @ ι_0 I)))
    ;     "Switch")
-   
-   
    
    ;; Valid Contracts
    ;; ---------------
@@ -147,6 +252,7 @@
    ;; Removes (term ⊥) contracts.
    
    ;; TODO: ⊥ mus remain
+   ;; lift than reduces the whole context to blame
    
    (--> (ς
          (in-hole F (T @ ι ⊥)))
@@ -181,6 +287,98 @@
         (where W (⇓/Term ,(car (apply-reduction-relation* λCon-reduction (term (· (M V)))))))
         (side-condition (false? (term W))))
    
+   
+   ;; Join Traces
+   ;; -----------
+   ;; Joins splitted observations.
+   
+   (--> (ς
+         (in-hole F ((in-hole G (any ... (in-hole H (T_l @ ι_1 C)) any_l ...))
+                     ∥
+                     (in-hole G (any ... (in-hole H (T_r @ ι_2 D)) any_r ...)))))
+        (ς
+         (in-hole F ((in-hole G (any ... (in-hole H ((T_l @ ι_1 C) @ ι_2 D)) any_l ...))
+                     ∥
+                     (in-hole G (any ... (in-hole H ((T_r @ ι_1 C) @ ι_2 D)) any_r ...)))))
+        "Join/Mutual"
+        (side-condition
+         (and
+          (canonical? 
+           (term (in-hole F ((in-hole G (any ... (in-hole H (T_l @ ι_1 C)) any_l ...))
+                             ∥
+                             (in-hole G (any ... (in-hole H (T_r @ ι_2 D)) any_r ...))))))
+          (not (eq? (term C) (term D))))))
+   
+   
+   (--> (ς
+         (in-hole F ((in-hole G (any ... (in-hole H (T @ ι_1 C)) any_l ...))
+                     ∥
+                     (in-hole G (any ... (in-hole H S) any_r ...)))))
+        (ς
+         (in-hole F ((in-hole G (any ... (in-hole H (T @ ι_1 C)) any_l ...))
+                     ∥
+                     (in-hole G (any ... (in-hole H (S @ ι_1 C)) any_r ...)))))
+        "Join/Left"
+        (side-condition
+         (canonical? 
+          (term (in-hole F ((in-hole G (any ... (in-hole H (T @ ι_1 C)) any_l ...))
+                            ∥
+                            (in-hole G (any ... (in-hole H S) any_r ...))))))))
+   
+   (--> (ς
+         (in-hole F ((in-hole G (any ... (in-hole H S) any_l ...))
+                     ∥
+                     (in-hole G (any ... (in-hole H (T @ ι_2 D)) any_r ...)))))
+        (ς
+         (in-hole F ((in-hole G (any ... (in-hole H (S @ ι_2 D)) any_l ...))
+                     ∥
+                     (in-hole G (any ... (in-hole H (T @ ι_2 D)) any_r ...)))))
+        "Join/Right"
+        (side-condition
+         (canonical? 
+          (term (in-hole F ((in-hole G (any ... (in-hole H S) any_l ...))
+                            ∥
+                            (in-hole G (any ... (in-hole H (T @ ι_2 D)) any_r ...))))))))
+   
+   
+   (--> (ς
+         (in-hole F ((in-hole G (any ... (in-hole H (blame ♭)) any_l ...))
+                     ∥
+                     (in-hole G (any ... (in-hole H T) any_r ...)))))
+        (ς
+         (in-hole F ((in-hole G (any ... (in-hole H (join ∥ (blame ♭) T)) any_l ...))
+                     ∥
+                     (in-hole G (any ... (in-hole H (join ∥ (blame ♭) T)) any_r ...)))))
+        "Join/LeftBlame"
+        (side-condition
+         (canonical? 
+          (term (in-hole F ((in-hole G (any ... (in-hole H (blame ♭)) any_l ...))
+                            ∥
+                            (in-hole G (any ... (in-hole H T) any_r ...))))))))
+   
+   
+   (--> (ς
+         (in-hole F ((in-hole G (any ... (in-hole H T) any_l ...))
+                     ∥
+                     (in-hole G (any ... (in-hole H (blame ♭)) any_r ...)))))
+        (ς
+         (in-hole F ((in-hole G (any ... (in-hole H (join ∥ T (blame ♭))) any_l ...))
+                     ∥
+                     (in-hole G (any ... (in-hole H (join ∥ T (blame ♭))) any_r ...)))))
+        "Join/RightBlame"
+        (side-condition
+         (canonical? 
+          (term (in-hole F ((in-hole G (any ... (in-hole H T) any_l ...))
+                            ∥
+                            (in-hole G (any ... (in-hole H (blame ♭)) any_r ...))))))))
+   
+   (--> (ς
+         (in-hole F (T ∥ T))) 
+        (ς
+         (in-hole F T)) 
+        "Join")
+   
+   
    ))
 
 #|
@@ -214,6 +412,33 @@
   ;; Return the target expression M if
   ;; none of the previous rules match
   [(unroll x Q b any) any])
+
+#|
+    _     _      
+ _ | |___(_)_ _  
+| || / _ \ | ' \ 
+ \__/\___/_|_||_|
+                 
+|#
+;; TODO, change join function.
+;; A context/subject blame may only be removed if it is a blame term from the splitted contract.
+;; Thus, say ∥ = (∪∪ ♭).
+
+(define-metafunction λCon-Baseline
+  join : ∥ M M -> M
+  ;; intersection/ negative blame
+  [(join ∩∩ (-blame ♭) T) T]
+  [(join ∩∩ T (-blame ♭)) T]
+  ;; intersection/ positive blame
+  [(join ∩∩ (+blame ♭) T) (+blame ♭)]
+  [(join ∩∩ T (+blame ♭)) (+blame ♭)]
+  ;; union/ negative blame
+  [(join ∪∪ (-blame ♭) T) (-blame ♭)]
+  [(join ∪∪ T (-blame ♭)) (-blame ♭)]
+  ;; union/ positive blame
+  [(join ∪∪ (+blame ♭) T) T]
+  [(join ∪∪ T (+blame ♭)) T])
+
 
 #|
   ___      _         _      _         ___ _                
@@ -309,6 +534,29 @@
 |_| \_,_|_||_\__|\__|_\___/_||_/__/
                                    
 |#
+
+;; Term of (⇓/Term)
+;; ----------------
+(define-metafunction λCon
+  termOf : (ς T) -> T
+  [(termOf (ς T)) T])
+
+;; State of (⇓/State)
+;; ------------------
+(define-metafunction λCon
+  stateOf : (ς T) -> ς
+  [(stateOf (ς T)) ς])
+
+
+;; Canonical? (non-reducable terms)
+;; --------------------------------
+(define canonical?
+  (redex-match? λCon-Baseline T))
+
+;; Reducible? (non-canonical terms)
+;; --------------------------------
+(define reducible? 
+  (redex-match? λCon-Baseline Reducible))
 
 ;; λCon Reduction (λCon-->)
 ;; ------------------------
