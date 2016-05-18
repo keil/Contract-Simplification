@@ -56,7 +56,7 @@
          (in-hole F (λ x (in-hole BCtx (T @ ι ⊥)))))
         (ς
          (in-hole F (λ x (blame ♭))))
-        "Blame"
+        "Reduce/False"
         (where (blame ♭) (blame-of ι ς)))
    
    ;; Subset 
