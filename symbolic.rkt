@@ -477,6 +477,10 @@
 
 
 
+;; TODO, change join function.
+;; A context/subject blame may only be removed if it is a blame term from the splitted contract.
+;; Thus, say ∥ = (∪∪ ♭).
+
 (define-metafunction λCon-Symbolic
   join : ∥ M M -> M
   ;; intersection/ negative blame
