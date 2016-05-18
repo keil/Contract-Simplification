@@ -295,6 +295,23 @@
    ;; Joins splitted observations.
    
    (--> (ς
+         (in-hole F ((in-hole H (T_l @ ι_1 C))
+                     ∥
+                     (in-hole H (T_r @ ι_2 D)))))
+        (ς
+         (in-hole F ((in-hole H ((T_l @ ι_1 C) @ ι_2 D))
+                     ∥
+                     (in-hole H ((T_r @ ι_1 C) @ ι_2 D)))))
+        "Join/Mutual1"
+        (side-condition
+         (and
+          (canonical? 
+           (term (in-hole F ((in-hole H (T_l @ ι_1 C))
+                             ∥
+                             (in-hole H (T_r @ ι_2 D))))))
+          (not (eq? (term C) (term D))))))
+   
+   (--> (ς
          (in-hole F ((in-hole G (any ... (in-hole H (T_l @ ι_1 C)) any_l ...))
                      ∥
                      (in-hole G (any ... (in-hole H (T_r @ ι_2 D)) any_r ...)))))
@@ -302,7 +319,7 @@
          (in-hole F ((in-hole G (any ... (in-hole H ((T_l @ ι_1 C) @ ι_2 D)) any_l ...))
                      ∥
                      (in-hole G (any ... (in-hole H ((T_r @ ι_1 C) @ ι_2 D)) any_r ...)))))
-        "Join/Mutual"
+        "Join/Mutual2"
         (side-condition
          (and
           (canonical? 
@@ -310,7 +327,6 @@
                              ∥
                              (in-hole G (any ... (in-hole H (T_r @ ι_2 D)) any_r ...))))))
           (not (eq? (term C) (term D))))))
-   
    
    (--> (ς
          (in-hole F ((in-hole G (any ... (in-hole H (T @ ι_1 C)) any_l ...))
@@ -379,8 +395,7 @@
         (ς
          (in-hole F T)) 
         "Join")
-   
-   
+
    ))
 
 #|
