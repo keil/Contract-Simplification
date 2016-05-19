@@ -439,7 +439,23 @@
   (define-metafunction λCon-Baseline
     ⊔ : ACtx ACtx -> ACtx
     [(⊔ ACtx_l ACtx_r) (in-hole ACtx_r ACtx_l)])
-  
+
+  (define-metafunction λCon-Baseline
+    √ : ∥ T T -> T
+    ;; intersection/ negative blame
+    [(√ ∩∩ (-blame ♭) T) T]
+    [(√ ∩∩ T (-blame ♭)) T]
+    ;; intersection/ positive blame
+    [(√ ∩∩ (+blame ♭) T) (+blame ♭)]
+    [(√ ∩∩ T (+blame ♭)) (+blame ♭)]
+    ;; union/ negative blame
+    [(√ ∪∪ (-blame ♭) T) (-blame ♭)]
+    [(√ ∪∪ T (-blame ♭)) (-blame ♭)]
+    ;; union/ positive blame
+    [(√ ∪∪ (+blame ♭) T) T]
+    [(√ ∪∪ T (+blame ♭)) T]
+    [(√ ∪∪ T S) T]) ;; TODO
+
   ;; TODO, use join with (∩∩ ♭)
   
 #|
