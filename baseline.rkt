@@ -341,44 +341,80 @@
         (side-condition
          (and
           (canonical? 
-           (term (in-hole F ((in-hole G (op T ... (in-hole H (T_l @ ι_1 C)) any_l ...))
+           (term (in-hole F ((in-hole G (if T ... (in-hole H (T_l @ ι_1 C)) any_l ...))
                              ∥
-                             (in-hole G (op T... (in-hole H (T_r @ ι_2 D)) any_r ...))))))
+                             (in-hole G (if T... (in-hole H (T_r @ ι_2 D)) any_r ...))))))
           (not (eq? (term C) (term D))))))
    
    
    (--> (ς
-         (in-hole F ((in-hole G (if T ... (in-hole H (T_l @ ι_1 C)) any_l ...))
+         (in-hole F ((in-hole G (T ... (in-hole H (T_l @ ι_1 C)) any_l ...))
                      ∥
-                     (in-hole G (if T... (in-hole H (T_r @ ι_2 D)) any_r ...)))))
+                     (in-hole G (T... (in-hole H (T_r @ ι_2 D)) any_r ...)))))
         (ς
-         (in-hole F ((in-hole G (if T ... (in-hole H ((T_l @ ι_1 C) @ ι_2 D)) any_l ...))
+         (in-hole F ((in-hole G (T ... (in-hole H ((T_l @ ι_1 C) @ ι_2 D)) any_l ...))
                      ∥
-                     (in-hole G (if T ... (in-hole H ((T_r @ ι_1 C) @ ι_2 D)) any_r ...)))))
+                     (in-hole G (T ... (in-hole H ((T_r @ ι_1 C) @ ι_2 D)) any_r ...)))))
         "Join/App"
         (side-condition
          (and
           (canonical? 
-           (term (in-hole F ((in-hole G (op T ... (in-hole H (T_l @ ι_1 C)) any_l ...))
+           (term (in-hole F ((in-hole G (T ... (in-hole H (T_l @ ι_1 C)) any_l ...))
                              ∥
-                             (in-hole G (op T... (in-hole H (T_r @ ι_2 D)) any_r ...))))))
+                             (in-hole G (T... (in-hole H (T_r @ ι_2 D)) any_r ...))))))
           (not (eq? (term C) (term D))))))
    
    
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
    (--> (ς
-         (in-hole F ((in-hole G (any ... (in-hole H (T @ ι_1 C)) any_l ...))
+         (in-hole F ((in-hole G (in-hole H (T @ ι_1 C)))
                      ∥
-                     (in-hole G (any ... (in-hole H S) any_r ...)))))
+                     (in-hole G (in-hole H S)))))
         (ς
-         (in-hole F ((in-hole G (any ... (in-hole H (T @ ι_1 C)) any_l ...))
+         (in-hole F ((in-hole G (in-hole H (T @ ι_1 C)))
                      ∥
-                     (in-hole G (any ... (in-hole H (S @ ι_1 C)) any_r ...)))))
+                     (in-hole G (in-hole H (S @ ι_1 C))))))
         "Join/Left"
         (side-condition
          (canonical? 
-          (term (in-hole F ((in-hole G (any ... (in-hole H (T @ ι_1 C)) any_l ...))
-                            ∥
-                            (in-hole G (any ... (in-hole H S) any_r ...))))))))
+          (term (in-hole F ((in-hole G (in-hole H (T @ ι_1 C)))
+                     ∥
+                     (in-hole G (in-hole H S))))))))
+   
+   
+   
+   
+      (--> (ς
+         (in-hole F (if T ... (in-hole G (in-hole H (T @ ι_1 C)))
+                     ∥
+                    (if T ... (in-hole G (in-hole H S)))))
+        (ς
+         (in-hole F ((in-hole G (in-hole H (T @ ι_1 C)))
+                     ∥
+                     (in-hole G (in-hole H (S @ ι_1 C))))))
+        "Join/Left/If"
+        (side-condition
+         (canonical? 
+          (term (in-hole F ((in-hole G (in-hole H (T @ ι_1 C)))
+                     ∥
+                     (in-hole G (in-hole H S))))))))
+   
+   
+   
+   
+   
+   
+   
    
    (--> (ς
          (in-hole F ((in-hole G (any ... (in-hole H S) any_l ...))
