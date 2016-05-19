@@ -295,119 +295,71 @@
    ;; Joins splitted observations.
    
    (--> (ς
-         (in-hole F ((in-hole H (T_l @ ι_1 C))
+         (in-hole F ((in-hole H (in-hole ACtx_l S_l))
                      ∥
-                     (in-hole H (T_r @ ι_2 D)))))
+                     (in-hole H (in-hole ACtx_r S_r)))))
         (ς
-         (in-hole F ((in-hole H ((T_l @ ι_1 C) @ ι_2 D))
+         (in-hole F ((in-hole H (in-hole (⊔ ACtx_l ACtx_r) S_l))
                      ∥
-                     (in-hole H ((T_r @ ι_1 C) @ ι_2 D)))))
-        "Join/Mutual1"
-        (side-condition
-         (and
-          (canonical? 
-           (term (in-hole F ((in-hole H (T_l @ ι_1 C))
-                             ∥
-                             (in-hole H (T_r @ ι_2 D))))))
-          (not (eq? (term C) (term D))))))
+                     (in-hole H (in-hole (⊔ ACtx_l ACtx_r) S_r)))))
+        "Join/Term"
+        (side-condition (not (term (≈ (in-hole ACtx_l S_l) (in-hole ACtx_r S_r)))))
+        (side-condition 
+         (canonical? 
+          (term (in-hole F ((in-hole H (in-hole ACtx_l S_l))
+                      ∥
+                      (in-hole H (in-hole ACtx_r S_r))))))))
+   
    
    (--> (ς
-         (in-hole F ((in-hole G (op T ... (in-hole H (T_l @ ι_1 C)) any_l ...))
+         (in-hole F ((in-hole G (op T ... (in-hole H (in-hole ACtx_l S_l)) T_l ... ))
                      ∥
-                     (in-hole G (op T... (in-hole H (T_r @ ι_2 D)) any_r ...)))))
+                     (in-hole G (op T ... (in-hole H (in-hole ACtx_r S_r)) T_r ... )))))
         (ς
-         (in-hole F ((in-hole G (op T ... (in-hole H ((T_l @ ι_1 C) @ ι_2 D)) any_l ...))
+         (in-hole F ((in-hole G (op T ... (in-hole H (in-hole (⊔ ACtx_l ACtx_r) S_l)) T_l ... ))
                      ∥
-                     (in-hole G (op T ... (in-hole H ((T_r @ ι_1 C) @ ι_2 D)) any_r ...)))))
+                     (in-hole G (op T ... (in-hole H (in-hole (⊔ ACtx_l ACtx_r) S_r)) T_r ... )))))
         "Join/Op"
-        (side-condition
-         (and
-          (canonical? 
-           (term (in-hole F ((in-hole G (op T ... (in-hole H (T_l @ ι_1 C)) any_l ...))
-                             ∥
-                             (in-hole G (op T... (in-hole H (T_r @ ι_2 D)) any_r ...))))))
-          (not (eq? (term C) (term D))))))
+        (side-condition (not (term (≈ (in-hole ACtx_l S_l) (in-hole ACtx_r S_r)))))
+        (side-condition 
+         (canonical? 
+          (term (in-hole F ((in-hole G (op T ... (in-hole H (in-hole ACtx_l S_l)) T_l ... ))
+                      ∥
+                      (in-hole G (op T ... (in-hole H (in-hole ACtx_r S_r)) T_r ... ))))))))
    
    
    (--> (ς
-         (in-hole F ((in-hole G (if T ... (in-hole H (T_l @ ι_1 C)) any_l ...))
+         (in-hole F ((in-hole G (if T ... (in-hole H (in-hole ACtx_l S_l)) T_l ... ))
                      ∥
-                     (in-hole G (if T... (in-hole H (T_r @ ι_2 D)) any_r ...)))))
+                     (in-hole G (if T ... (in-hole H (in-hole ACtx_r S_r)) T_r ... )))))
         (ς
-         (in-hole F ((in-hole G (if T ... (in-hole H ((T_l @ ι_1 C) @ ι_2 D)) any_l ...))
+         (in-hole F ((in-hole G (if T ... (in-hole H (in-hole (⊔ ACtx_l ACtx_r) S_l)) T_l ... ))
                      ∥
-                     (in-hole G (if T ... (in-hole H ((T_r @ ι_1 C) @ ι_2 D)) any_r ...)))))
+                     (in-hole G (if T ... (in-hole H (in-hole (⊔ ACtx_l ACtx_r) S_r)) T_r ... )))))
         "Join/If"
-        (side-condition
-         (and
-          (canonical? 
-           (term (in-hole F ((in-hole G (if T ... (in-hole H (T_l @ ι_1 C)) any_l ...))
-                             ∥
-                             (in-hole G (if T... (in-hole H (T_r @ ι_2 D)) any_r ...))))))
-          (not (eq? (term C) (term D))))))
+        (side-condition (not (term (≈ (in-hole ACtx_l S_l) (in-hole ACtx_r S_r)))))
+        (side-condition 
+         (canonical? 
+          (term (in-hole F ((in-hole G (if T ... (in-hole H (in-hole ACtx_l S_l)) T_l ... ))
+                      ∥
+                      (in-hole G (if T ... (in-hole H (in-hole ACtx_r S_r)) T_r ... ))))))))
    
    
    (--> (ς
-         (in-hole F ((in-hole G (T ... (in-hole H (T_l @ ι_1 C)) any_l ...))
+         (in-hole F ((in-hole G (T ... (in-hole H (in-hole ACtx_l S_l)) T_l ... ))
                      ∥
-                     (in-hole G (T... (in-hole H (T_r @ ι_2 D)) any_r ...)))))
+                     (in-hole G (T ... (in-hole H (in-hole ACtx_r S_r)) T_r ... )))))
         (ς
-         (in-hole F ((in-hole G (T ... (in-hole H ((T_l @ ι_1 C) @ ι_2 D)) any_l ...))
+         (in-hole F ((in-hole G (T ... (in-hole H (in-hole (⊔ ACtx_l ACtx_r) S_l)) T_l ... ))
                      ∥
-                     (in-hole G (T ... (in-hole H ((T_r @ ι_1 C) @ ι_2 D)) any_r ...)))))
+                     (in-hole G (T ... (in-hole H (in-hole (⊔ ACtx_l ACtx_r) S_r)) T_r ... )))))
         "Join/App"
-        (side-condition
-         (and
-          (canonical? 
-           (term (in-hole F ((in-hole G (T ... (in-hole H (T_l @ ι_1 C)) any_l ...))
-                             ∥
-                             (in-hole G (T... (in-hole H (T_r @ ι_2 D)) any_r ...))))))
-          (not (eq? (term C) (term D))))))
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   (--> (ς
-         (in-hole F ((in-hole G (in-hole H (T @ ι_1 C)))
-                     ∥
-                     (in-hole G (in-hole H S)))))
-        (ς
-         (in-hole F ((in-hole G (in-hole H (T @ ι_1 C)))
-                     ∥
-                     (in-hole G (in-hole H (S @ ι_1 C))))))
-        "Join/Left"
-        (side-condition
+        (side-condition (not (term (≈ (in-hole ACtx_l S_l) (in-hole ACtx_r S_r)))))
+        (side-condition 
          (canonical? 
-          (term (in-hole F ((in-hole G (in-hole H (T @ ι_1 C)))
-                     ∥
-                     (in-hole G (in-hole H S))))))))
-   
-   
-   
-   
-      (--> (ς
-         (in-hole F (if T ... (in-hole G (in-hole H (T @ ι_1 C)))
-                     ∥
-                    (if T ... (in-hole G (in-hole H S)))))
-        (ς
-         (in-hole F ((in-hole G (in-hole H (T @ ι_1 C)))
-                     ∥
-                     (in-hole G (in-hole H (S @ ι_1 C))))))
-        "Join/Left/If"
-        (side-condition
-         (canonical? 
-          (term (in-hole F ((in-hole G (in-hole H (T @ ι_1 C)))
-                     ∥
-                     (in-hole G (in-hole H S))))))))
+          (term (in-hole F ((in-hole G (T ... (in-hole H (in-hole ACtx_l S_l)) T_l ... ))
+                      ∥
+                      (in-hole G (T ... (in-hole H (in-hole ACtx_r S_r)) T_r ... ))))))))
    
    
    
@@ -416,202 +368,247 @@
    
    
    
-   (--> (ς
-         (in-hole F ((in-hole G (any ... (in-hole H S) any_l ...))
-                     ∥
-                     (in-hole G (any ... (in-hole H (T @ ι_2 D)) any_r ...)))))
-        (ς
-         (in-hole F ((in-hole G (any ... (in-hole H (S @ ι_2 D)) any_l ...))
-                     ∥
-                     (in-hole G (any ... (in-hole H (T @ ι_2 D)) any_r ...)))))
-        "Join/Right"
-        (side-condition
-         (canonical? 
-          (term (in-hole F ((in-hole G (any ... (in-hole H S) any_l ...))
-                            ∥
-                            (in-hole G (any ... (in-hole H (T @ ι_2 D)) any_r ...))))))))
-   
-   (--> (ς
-         (in-hole F ((in-hole G (any ... (in-hole H (blame ♭)) any_l ...))
-                     ∥
-                     (in-hole G (any ... (in-hole H T) any_r ...)))))
-        (ς
-         (in-hole F ((in-hole G (any ... (in-hole H (join ∥ (blame ♭) T)) any_l ...))
-                     ∥
-                     (in-hole G (any ... (in-hole H (join ∥ (blame ♭) T)) any_r ...)))))
-        "Join/LeftBlame"
-        (side-condition
-         (canonical? 
-          (term (in-hole F ((in-hole G (any ... (in-hole H (blame ♭)) any_l ...))
-                            ∥
-                            (in-hole G (any ... (in-hole H T) any_r ...))))))))
    
    
-   (--> (ς
-         (in-hole F ((in-hole G (any ... (in-hole H T) any_l ...))
-                     ∥
-                     (in-hole G (any ... (in-hole H (blame ♭)) any_r ...)))))
-        (ς
-         (in-hole F ((in-hole G (any ... (in-hole H (join ∥ T (blame ♭))) any_l ...))
-                     ∥
-                     (in-hole G (any ... (in-hole H (join ∥ T (blame ♭))) any_r ...)))))
-        "Join/RightBlame"
-        (side-condition
-         (canonical? 
-          (term (in-hole F ((in-hole G (any ... (in-hole H T) any_l ...))
-                            ∥
-                            (in-hole G (any ... (in-hole H (blame ♭)) any_r ...))))))))
    
-   (--> (ς
-         (in-hole F (T ∥ T))) 
-        (ς
-         (in-hole F T)) 
-        "Join")
-
-   ))
-
+        
+        (--> (ς
+              (in-hole F ((in-hole G (any ... (in-hole H (blame ♭)) any_l ...))
+                          ∥
+                          (in-hole G (any ... (in-hole H T) any_r ...)))))
+             (ς
+              (in-hole F ((in-hole G (any ... (in-hole H (join ∥ (blame ♭) T)) any_l ...))
+                          ∥
+                          (in-hole G (any ... (in-hole H (join ∥ (blame ♭) T)) any_r ...)))))
+             "Join/LeftBlame"
+             (side-condition
+              (canonical? 
+               (term (in-hole F ((in-hole G (any ... (in-hole H (blame ♭)) any_l ...))
+                                 ∥
+                                 (in-hole G (any ... (in-hole H T) any_r ...))))))))
+        
+        
+        (--> (ς
+              (in-hole F ((in-hole G (any ... (in-hole H T) any_l ...))
+                          ∥
+                          (in-hole G (any ... (in-hole H (blame ♭)) any_r ...)))))
+             (ς
+              (in-hole F ((in-hole G (any ... (in-hole H (join ∥ T (blame ♭))) any_l ...))
+                          ∥
+                          (in-hole G (any ... (in-hole H (join ∥ T (blame ♭))) any_r ...)))))
+             "Join/RightBlame"
+             (side-condition
+              (canonical? 
+               (term (in-hole F ((in-hole G (any ... (in-hole H T) any_l ...))
+                                 ∥
+                                 (in-hole G (any ... (in-hole H (blame ♭)) any_r ...))))))))
+        
+        (--> (ς
+              (in-hole F (T ∥ T))) 
+             (ς
+              (in-hole F T)) 
+             "Join")
+        
+        ))
+  
+  
+  
+  
+  (define-metafunction λCon-Baseline
+    ≈ : T T -> boolean
+    [(≈ T T) #t]
+    [(≈ (T_l @ ι C) (T_r @ ι C)) #t]
+    [(≈ S_l S_r) #t]
+    [(≈ any ...) #f])
+  
+  ;⊕ \
+  
+  ;; TODO, use join with (∩∩ ♭)
+  #|
+  (define-metafunction λCon-Baseline
+    ⊕ : T T T -> T
+    
+    [(≈ T T T) T]
+    
+    [(⊕ (blame ♭) T T_i) ()]
+    [(⊕ T (blame ♭) T_i) ]
+    
+    [(⊕ A_l A_r) (in-hole A_r A_l)])
+   |# 
+  
+  (define-metafunction λCon-Baseline
+    ⊔ : ACtx ACtx -> ACtx
+    [(⊔ ACtx_l ACtx_r) (in-hole ACtx_r ACtx_l)])
+  
+  ;; TODO, use join with (∩∩ ♭)
+  
 #|
+  (define-metafunction λCon-Baseline
+    ⊔/x : T T -> T
+    ;; intersection/ negative blame
+    [(⊔/x ∩∩ (-blame ♭) T) T]
+    [(⊔/x ∩∩ T (-blame ♭)) T]
+    ;; intersection/ positive blame
+    [(⊔ ∩∩ (+blame ♭) T) (+blame ♭)]
+    [(⊔ ∩∩ T (+blame ♭)) (+blame ♭)]
+    ;; union/ negative blame
+    [(⊔ ∪∪ (-blame ♭) T) (-blame ♭)]
+    [(⊔ ∪∪ T (-blame ♭)) (-blame ♭)]
+    ;; union/ positive blame
+    [(⊔ ∪∪ (+blame ♭) T) T]
+    [(⊔ ∪∪ T (+blame ♭)) T])
+ |# 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  #|
  _   _              _ _ 
 | | | |_ _  _ _ ___| | |
 | |_| | ' \| '_/ _ \ | |
  \___/|_||_|_| \___/_|_|
                         
 |#
-
-;; Function unroll : x Q M -> N
-;; ----------------------------
-;; Unrolls a delayed contract Q of function x 
-;; to all uses of x
-
-(define-metafunction λCon-Baseline
-  unroll : x Q b any -> any
   
-  ;; Don't continue if x is bound λ's body
-  [(unroll x Q b (λ x M)) (λ x M)]
+  ;; Function unroll : x Q M -> N
+  ;; ----------------------------
+  ;; Unrolls a delayed contract Q of function x 
+  ;; to all uses of x
   
-  ;; Continue unrollong on λ's body
-  [(unroll x Q b (λ y M)) (λ y (unroll x Q b M))]
+  (define-metafunction λCon-Baseline
+    unroll : x Q b any -> any
+    
+    ;; Don't continue if x is bound λ's body
+    [(unroll x Q b (λ x M)) (λ x M)]
+    
+    ;; Continue unrollong on λ's body
+    [(unroll x Q b (λ y M)) (λ y (unroll x Q b M))]
+    
+    ;; Put contract to the usage of x
+    [(unroll x Q b x) (x @ b Q)]
+    
+    ;; Continue unrollong on the structure of M
+    [(unroll x Q b (any ...)) ((unroll x Q b any) ...)]
+    
+    ;; Return the target expression M if
+    ;; none of the previous rules match
+    [(unroll x Q b any) any])
   
-  ;; Put contract to the usage of x
-  [(unroll x Q b x) (x @ b Q)]
-  
-  ;; Continue unrollong on the structure of M
-  [(unroll x Q b (any ...)) ((unroll x Q b any) ...)]
-  
-  ;; Return the target expression M if
-  ;; none of the previous rules match
-  [(unroll x Q b any) any])
-
-#|
+  #|
     _     _      
  _ | |___(_)_ _  
 | || / _ \ | ' \ 
  \__/\___/_|_||_|
                  
 |#
-;; TODO, change join function.
-;; A context/subject blame may only be removed if it is a blame term from the splitted contract.
-;; Thus, say ∥ = (∪∪ ♭).
-
-(define-metafunction λCon-Baseline
-  join : ∥ M M -> M
-  ;; intersection/ negative blame
-  [(join ∩∩ (-blame ♭) T) T]
-  [(join ∩∩ T (-blame ♭)) T]
-  ;; intersection/ positive blame
-  [(join ∩∩ (+blame ♭) T) (+blame ♭)]
-  [(join ∩∩ T (+blame ♭)) (+blame ♭)]
-  ;; union/ negative blame
-  [(join ∪∪ (-blame ♭) T) (-blame ♭)]
-  [(join ∪∪ T (-blame ♭)) (-blame ♭)]
-  ;; union/ positive blame
-  [(join ∪∪ (+blame ♭) T) T]
-  [(join ∪∪ T (+blame ♭)) T])
-
-
-#|
+  ;; TODO, change join function.
+  ;; A context/subject blame may only be removed if it is a blame term from the splitted contract.
+  ;; Thus, say ∥ = (∪∪ ♭).
+  
+  (define-metafunction λCon-Baseline
+    join : ∥ M M -> M
+    ;; intersection/ negative blame
+    [(join ∩∩ (-blame ♭) T) T]
+    [(join ∩∩ T (-blame ♭)) T]
+    ;; intersection/ positive blame
+    [(join ∩∩ (+blame ♭) T) (+blame ♭)]
+    [(join ∩∩ T (+blame ♭)) (+blame ♭)]
+    ;; union/ negative blame
+    [(join ∪∪ (-blame ♭) T) (-blame ♭)]
+    [(join ∪∪ T (-blame ♭)) (-blame ♭)]
+    ;; union/ positive blame
+    [(join ∪∪ (+blame ♭) T) T]
+    [(join ∪∪ T (+blame ♭)) T])
+  
+  
+  #|
   ___      _         _      _         ___ _                
  / __|__ _| |__ _  _| |__ _| |_ ___  | _ ) |__ _ _ __  ___ 
 | (__/ _` | / _| || | / _` |  _/ -_) | _ \ / _` | '  \/ -_)
  \___\__,_|_\__|\_,_|_\__,_|\__\___| |___/_\__,_|_|_|_\___|
                                                            
 |#
-
-;; root-of
-;; -------
-;; Calculates the root (♭) of blame indetifier b.
-(define-metafunction λCon
-  root-of : b ς -> ♭
-  [(root-of ♭ ς) ♭]
-  [(root-of ι ς) (root-of (parent-of ι ς) ς)])
-
-;; parent-of
-;; ---------
-;; Calculates the parent blame indentifier b of blame variable ι.
-(define-metafunction λCon
-  parent-of : b ς -> b
-  [(parent-of ι_0 ((b ◃ (ι_0 → ι_1)) ς)) b]
-  [(parent-of ι_1 ((b ◃ (ι_0 → ι_1)) ς)) b]
-  [(parent-of ι_0 ((b ◃ (ι_0 ∩ ι_1)) ς)) b]
-  [(parent-of ι_1 ((b ◃ (ι_0 ∩ ι_1)) ς)) b]
-  [(parent-of ι_0 ((b ◃ (ι_0 ∪ ι_1)) ς)) b]
-  [(parent-of ι_1 ((b ◃ (ι_0 ∪ ι_1)) ς)) b]
-  [(parent-of ι   ((b ◃ (¬ ι)) ς)) b]
-  [(parent-of ι   ((b ◃ ι) ς)) b]
-  [(parent-of ι   ()) ι]
-  [(parent-of ι   ((b ◃ κ) ς)) (parent-of ι ς)])
-
-;; invert
-;; ------
-;; Inverts a blame.
-(define-metafunction λCon
-  invert : blame -> blame
-  [(invert +blame) -blame]
-  [(invert -blame) +blame])
-
-;; constraint-of
-;; -------------
-;; Looks for a constraint in state.
-(define-metafunction λCon
-  constraint-of : b ς -> κ
-  [(constraint-of ι_0 ((b ◃ (ι_0 → ι_1)) ς)) (ι_0 → ι_1)]
-  [(constraint-of ι_1 ((b ◃ (ι_0 → ι_1)) ς)) (ι_0 → ι_1)]
-  [(constraint-of ι_0 ((b ◃ (ι_0 ∩ ι_1)) ς)) (ι_0 ∩ ι_1)]
-  [(constraint-of ι_1 ((b ◃ (ι_0 ∩ ι_1)) ς)) (ι_0 ∩ ι_1)]
-  [(constraint-of ι_0 ((b ◃ (ι_0 ∪ ι_1)) ς)) (ι_0 ∪ ι_1)]
-  [(constraint-of ι_1 ((b ◃ (ι_0 ∪ ι_1)) ς)) (ι_0 ∪ ι_1)]
-  [(constraint-of ι   ((b ◃ (¬ ι)) ς)) (¬ ι)]
-  [(constraint-of ι   ((b ◃ ι) ς)) ι]
-  [(constraint-of ι   ()) ι]
-  ;; recursive lookup
-  [(constraint-of ι   ((b ◃ κ) ς)) (constraint-of ι ς)])
-
-;; sign-of
-;; -------
-;; Computes the sign a blame identifier.
-(define-metafunction λCon
-  sign-of : b ς -> blame
-  [(sign-of ♭ ς) +blame]
-  [(sign-of ι ς) (sign-in ι (constraint-of ι ς) ς)])
-
-;; sign-in
-;; -------
-;; Computes the sign of a blame identifier in a constraint.
-(define-metafunction λCon
-  sign-in : b κ ς -> blame
-  [(sign-in ι_0 (ι_0 → ι_1) ς) (invert (sign-of (parent-of ι_0 ς) ς))]
-  [(sign-in ι   (¬ ι) ς)       (invert (sign-of (parent-of ι ς) ς))]
-  ; otherwise
-  [(sign-in ι κ ς)             (sign-of (parent-of ι ς) ς)])
-
-;; sign-in
-;; -------
-;; Produces a balme term for a blame identifier.
-(define-metafunction λCon
-  blame-of : b ς -> (blame ♭)
-  [(blame-of ι ς) ((sign-of ι ς) (root-of ι ς))])
-
-#|
+  
+  ;; root-of
+  ;; -------
+  ;; Calculates the root (♭) of blame indetifier b.
+  (define-metafunction λCon
+    root-of : b ς -> ♭
+    [(root-of ♭ ς) ♭]
+    [(root-of ι ς) (root-of (parent-of ι ς) ς)])
+  
+  ;; parent-of
+  ;; ---------
+  ;; Calculates the parent blame indentifier b of blame variable ι.
+  (define-metafunction λCon
+    parent-of : b ς -> b
+    [(parent-of ι_0 ((b ◃ (ι_0 → ι_1)) ς)) b]
+    [(parent-of ι_1 ((b ◃ (ι_0 → ι_1)) ς)) b]
+    [(parent-of ι_0 ((b ◃ (ι_0 ∩ ι_1)) ς)) b]
+    [(parent-of ι_1 ((b ◃ (ι_0 ∩ ι_1)) ς)) b]
+    [(parent-of ι_0 ((b ◃ (ι_0 ∪ ι_1)) ς)) b]
+    [(parent-of ι_1 ((b ◃ (ι_0 ∪ ι_1)) ς)) b]
+    [(parent-of ι   ((b ◃ (¬ ι)) ς)) b]
+    [(parent-of ι   ((b ◃ ι) ς)) b]
+    [(parent-of ι   ()) ι]
+    [(parent-of ι   ((b ◃ κ) ς)) (parent-of ι ς)])
+  
+  ;; invert
+  ;; ------
+  ;; Inverts a blame.
+  (define-metafunction λCon
+    invert : blame -> blame
+    [(invert +blame) -blame]
+    [(invert -blame) +blame])
+  
+  ;; constraint-of
+  ;; -------------
+  ;; Looks for a constraint in state.
+  (define-metafunction λCon
+    constraint-of : b ς -> κ
+    [(constraint-of ι_0 ((b ◃ (ι_0 → ι_1)) ς)) (ι_0 → ι_1)]
+    [(constraint-of ι_1 ((b ◃ (ι_0 → ι_1)) ς)) (ι_0 → ι_1)]
+    [(constraint-of ι_0 ((b ◃ (ι_0 ∩ ι_1)) ς)) (ι_0 ∩ ι_1)]
+    [(constraint-of ι_1 ((b ◃ (ι_0 ∩ ι_1)) ς)) (ι_0 ∩ ι_1)]
+    [(constraint-of ι_0 ((b ◃ (ι_0 ∪ ι_1)) ς)) (ι_0 ∪ ι_1)]
+    [(constraint-of ι_1 ((b ◃ (ι_0 ∪ ι_1)) ς)) (ι_0 ∪ ι_1)]
+    [(constraint-of ι   ((b ◃ (¬ ι)) ς)) (¬ ι)]
+    [(constraint-of ι   ((b ◃ ι) ς)) ι]
+    [(constraint-of ι   ()) ι]
+    ;; recursive lookup
+    [(constraint-of ι   ((b ◃ κ) ς)) (constraint-of ι ς)])
+  
+  ;; sign-of
+  ;; -------
+  ;; Computes the sign a blame identifier.
+  (define-metafunction λCon
+    sign-of : b ς -> blame
+    [(sign-of ♭ ς) +blame]
+    [(sign-of ι ς) (sign-in ι (constraint-of ι ς) ς)])
+  
+  ;; sign-in
+  ;; -------
+  ;; Computes the sign of a blame identifier in a constraint.
+  (define-metafunction λCon
+    sign-in : b κ ς -> blame
+    [(sign-in ι_0 (ι_0 → ι_1) ς) (invert (sign-of (parent-of ι_0 ς) ς))]
+    [(sign-in ι   (¬ ι) ς)       (invert (sign-of (parent-of ι ς) ς))]
+    ; otherwise
+    [(sign-in ι κ ς)             (sign-of (parent-of ι ς) ς)])
+  
+  ;; sign-in
+  ;; -------
+  ;; Produces a balme term for a blame identifier.
+  (define-metafunction λCon
+    blame-of : b ς -> (blame ♭)
+    [(blame-of ι ς) ((sign-of ι ς) (root-of ι ς))])
+  
+  #|
  ___            _ _         _                         _ 
 | _ \_ _ ___ __| (_)__ __ _| |_ ___ ___  __ _ _ _  __| |
 |  _/ '_/ -_) _` | / _/ _` |  _/ -_|_-< / _` | ' \/ _` |
@@ -623,42 +620,42 @@
 |_| \_,_|_||_\__|\__|_\___/_||_/__/
                                    
 |#
-
-;; Term of (⇓/Term)
-;; ----------------
-(define-metafunction λCon
-  termOf : (ς T) -> T
-  [(termOf (ς T)) T])
-
-;; State of (⇓/State)
-;; ------------------
-(define-metafunction λCon
-  stateOf : (ς T) -> ς
-  [(stateOf (ς T)) ς])
-
-
-;; Canonical? (non-reducable terms)
-;; --------------------------------
-(define canonical?
-  (redex-match? λCon-Baseline T))
-
-;; Reducible? (non-canonical terms)
-;; --------------------------------
-(define reducible? 
-  (redex-match? λCon-Baseline Reducible))
-
-;; λCon Reduction (λCon-->)
-;; ------------------------
-(define
-  (λCon/Baseline~~> ς configuration)
-  (if (redex-match? λCon (ς M) configuration)
-      (car (apply-reduction-relation Baseline-reduction (term ,configuration)))
-      (error "Invalid λCon-term:" configuration)))
-
-;; λCon Reduction (λCon-->*)
-;; -------------------------
-(define
-  (λCon/Baseline~~>* configuration)
-  (if (redex-match? λCon (ς M) configuration)
-      (car (apply-reduction-relation* Baseline-reduction (term ,configuration)))
-      (error "Invalid λCon-term:" configuration)))
+  
+  ;; Term of (⇓/Term)
+  ;; ----------------
+  (define-metafunction λCon
+    termOf : (ς T) -> T
+    [(termOf (ς T)) T])
+  
+  ;; State of (⇓/State)
+  ;; ------------------
+  (define-metafunction λCon
+    stateOf : (ς T) -> ς
+    [(stateOf (ς T)) ς])
+  
+  
+  ;; Canonical? (non-reducable terms)
+  ;; --------------------------------
+  (define canonical?
+    (redex-match? λCon-Baseline T))
+  
+  ;; Reducible? (non-canonical terms)
+  ;; --------------------------------
+  (define reducible? 
+    (redex-match? λCon-Baseline Reducible))
+  
+  ;; λCon Reduction (λCon-->)
+  ;; ------------------------
+  (define
+    (λCon/Baseline~~> ς configuration)
+    (if (redex-match? λCon (ς M) configuration)
+        (car (apply-reduction-relation Baseline-reduction (term ,configuration)))
+        (error "Invalid λCon-term:" configuration)))
+  
+  ;; λCon Reduction (λCon-->*)
+  ;; -------------------------
+  (define
+    (λCon/Baseline~~>* configuration)
+    (if (redex-match? λCon (ς M) configuration)
+        (car (apply-reduction-relation* Baseline-reduction (term ,configuration)))
+        (error "Invalid λCon-term:" configuration)))

@@ -40,7 +40,7 @@
 ;; Optimization steps: 26
 ;; Reduction steps:    32
 
-;(traces Baseline-reduction (term (· ,example/addone/1/contracted)))
+(traces Baseline-reduction (term (· ,example/addone/1/contracted)))
 
 ;(let ([configuration (λCon/Baseline~~>* (term (· ,example/addone/1/contracted)))]) 
 ;  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 1)))))
@@ -51,7 +51,7 @@
 ;; Optimization steps: 16
 ;; Reduction steps:    18 (!)
 
-(traces Subset-reduction (term (· ,example/addone/1/contracted)))
+;(traces Subset-reduction (term (· ,example/addone/1/contracted)))
 
 ;(let ([configuration (λCon/Subset~~>* (term (· ,example/addone/0/contracted)))]) 
 ;  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 1)))))
