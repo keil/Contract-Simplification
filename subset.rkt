@@ -81,7 +81,39 @@
                          (term (⊑ D C))
                          (canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))))))
    
+   
+   
+   
+   ;; TODO
+   (--> (ς
+         (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
+        (((ι_0 ◃ ι2) ((ι_1 ◃ ι2) ς))
+         (in-hole F (in-hole ACtx (T @ ι2 (⊓ C D)))))
+        "SubsetX"
+        (fresh ι2)
+        (side-condition (and
+                         (term (⊑/semantic C D))
+                         (canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))))))
+   
+   (--> (ς
+         (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
+        (((ι_0 ◃ ι2) ((ι_1 ◃ ι2) ς))
+         (in-hole F (in-hole ACtx (T @ ι2 (⊓ D C)))))
+        "SubsetY"
+        (fresh ι2)
+        (side-condition (and
+                         (term (⊑/semantic D C))
+                         (canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))))))
+   
+   
    ))
+
+; TODO
+(define-metafunction λCon
+  ⊓ : C C -> C
+  [(⊓ (C_d → C_r) (D_d → D_r)) (D_d → C_r)])
+
+
 
 ;(define-metafunction λCon-Subset 
 ;  closest? : T -> boolean
