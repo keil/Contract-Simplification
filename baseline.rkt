@@ -299,9 +299,9 @@
                      ∥
                      (in-hole H (in-hole ACtx_r S_r)))))
         (ς
-         (in-hole F ((in-hole H (in-hole (⊔ ACtx_l ACtx_r) S_l))
+         (in-hole F ((in-hole H (in-hole (⊔ ACtx_l ACtx_r) (√ ∥ S_l S_r)))
                      ∥
-                     (in-hole H (in-hole (⊔ ACtx_l ACtx_r) S_r)))))
+                     (in-hole H (in-hole (⊔ ACtx_l ACtx_r) (√ ∥ S_r S_l))))))
         "Join/Term"
         (side-condition (not (term (≈ (in-hole ACtx_l S_l) (in-hole ACtx_r S_r)))))
         (side-condition 
@@ -316,9 +316,9 @@
                      ∥
                      (in-hole G (op T ... (in-hole H (in-hole ACtx_r S_r)) T_r ... )))))
         (ς
-         (in-hole F ((in-hole G (op T ... (in-hole H (in-hole (⊔ ACtx_l ACtx_r) S_l)) T_l ... ))
+         (in-hole F ((in-hole G (op T ... (in-hole H (in-hole (⊔ ACtx_l ACtx_r) (√ ∥ S_l S_r))) T_l ... ))
                      ∥
-                     (in-hole G (op T ... (in-hole H (in-hole (⊔ ACtx_l ACtx_r) S_r)) T_r ... )))))
+                     (in-hole G (op T ... (in-hole H (in-hole (⊔ ACtx_l ACtx_r) (√ ∥ S_r S_l))) T_r ... )))))
         "Join/Op"
         (side-condition (not (term (≈ (in-hole ACtx_l S_l) (in-hole ACtx_r S_r)))))
         (side-condition 
@@ -333,9 +333,9 @@
                      ∥
                      (in-hole G (if T ... (in-hole H (in-hole ACtx_r S_r)) T_r ... )))))
         (ς
-         (in-hole F ((in-hole G (if T ... (in-hole H (in-hole (⊔ ACtx_l ACtx_r) S_l)) T_l ... ))
+         (in-hole F ((in-hole G (if T ... (in-hole H (in-hole (⊔ ACtx_l ACtx_r) (√ ∥ S_l S_r))) T_l ... ))
                      ∥
-                     (in-hole G (if T ... (in-hole H (in-hole (⊔ ACtx_l ACtx_r) S_r)) T_r ... )))))
+                     (in-hole G (if T ... (in-hole H (in-hole (⊔ ACtx_l ACtx_r) (√ ∥ S_r S_l))) T_r ... )))))
         "Join/If"
         (side-condition (not (term (≈ (in-hole ACtx_l S_l) (in-hole ACtx_r S_r)))))
         (side-condition 
@@ -350,9 +350,9 @@
                      ∥
                      (in-hole G (T ... (in-hole H (in-hole ACtx_r S_r)) T_r ... )))))
         (ς
-         (in-hole F ((in-hole G (T ... (in-hole H (in-hole (⊔ ACtx_l ACtx_r) S_l)) T_l ... ))
+         (in-hole F ((in-hole G (T ... (in-hole H (in-hole (⊔ ACtx_l ACtx_r) (√ ∥ S_l S_r))) T_l ... ))
                      ∥
-                     (in-hole G (T ... (in-hole H (in-hole (⊔ ACtx_l ACtx_r) S_r)) T_r ... )))))
+                     (in-hole G (T ... (in-hole H (in-hole (⊔ ACtx_l ACtx_r) (√ ∥ S_r S_l))) T_r ... )))))
         "Join/App"
         (side-condition (not (term (≈ (in-hole ACtx_l S_l) (in-hole ACtx_r S_r)))))
         (side-condition 
@@ -369,7 +369,7 @@
    
    
    
-   
+   #|
    
         
         (--> (ς
@@ -403,6 +403,8 @@
                                  ∥
                                  (in-hole G (any ... (in-hole H (blame ♭)) any_r ...))))))))
         
+|#
+
         (--> (ς
               (in-hole F (T ∥ T))) 
              (ς
@@ -416,9 +418,16 @@
   
   (define-metafunction λCon-Baseline
     ≈ : T T -> boolean
+    ;; equals terms
     [(≈ T T) #t]
+    ;; equal contracts on differnt terms
     [(≈ (T_l @ ι C) (T_r @ ι C)) #t]
+    ;; one side blame
+    [(≈ (blame ♭) T) #f]
+    [(≈ T (blame ♭)) #f]
+    ;; differnt terms without contract
     [(≈ S_l S_r) #t]
+    ;; othweise
     [(≈ any ...) #f])
   
   ;⊕ \
@@ -454,7 +463,11 @@
     ;; union/ positive blame
     [(√ ∪∪ (+blame ♭) T) T]
     [(√ ∪∪ T (+blame ♭)) T]
+    
+    ;; XXX
+    [(√ ∩∩ T S) T]
     [(√ ∪∪ T S) T]) ;; TODO
+
 
   ;; TODO, use join with (∩∩ ♭)
   
