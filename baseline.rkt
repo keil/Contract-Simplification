@@ -309,8 +309,7 @@
           (term (in-hole F ((in-hole H (in-hole ACtx_l S_l))
                       ∥
                       (in-hole H (in-hole ACtx_r S_r))))))))
-   
-   
+
    (--> (ς
          (in-hole F ((in-hole G (op T ... (in-hole H (in-hole ACtx_l S_l)) T_l ... ))
                      ∥
@@ -360,51 +359,7 @@
           (term (in-hole F ((in-hole G (T ... (in-hole H (in-hole ACtx_l S_l)) T_l ... ))
                       ∥
                       (in-hole G (T ... (in-hole H (in-hole ACtx_r S_r)) T_r ... ))))))))
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   #|
-   
-        
-        (--> (ς
-              (in-hole F ((in-hole G (any ... (in-hole H (blame ♭)) any_l ...))
-                          ∥
-                          (in-hole G (any ... (in-hole H T) any_r ...)))))
-             (ς
-              (in-hole F ((in-hole G (any ... (in-hole H (join ∥ (blame ♭) T)) any_l ...))
-                          ∥
-                          (in-hole G (any ... (in-hole H (join ∥ (blame ♭) T)) any_r ...)))))
-             "Join/LeftBlame"
-             (side-condition
-              (canonical? 
-               (term (in-hole F ((in-hole G (any ... (in-hole H (blame ♭)) any_l ...))
-                                 ∥
-                                 (in-hole G (any ... (in-hole H T) any_r ...))))))))
-        
-        
-        (--> (ς
-              (in-hole F ((in-hole G (any ... (in-hole H T) any_l ...))
-                          ∥
-                          (in-hole G (any ... (in-hole H (blame ♭)) any_r ...)))))
-             (ς
-              (in-hole F ((in-hole G (any ... (in-hole H (join ∥ T (blame ♭))) any_l ...))
-                          ∥
-                          (in-hole G (any ... (in-hole H (join ∥ T (blame ♭))) any_r ...)))))
-             "Join/RightBlame"
-             (side-condition
-              (canonical? 
-               (term (in-hole F ((in-hole G (any ... (in-hole H T) any_l ...))
-                                 ∥
-                                 (in-hole G (any ... (in-hole H (blame ♭)) any_r ...))))))))
-        
-|#
-
+ 
         (--> (ς
               (in-hole F (T ∥ T))) 
              (ς
@@ -429,21 +384,6 @@
     [(≈ S_l S_r) #t]
     ;; othweise
     [(≈ any ...) #f])
-  
-  ;⊕ \
-  
-  ;; TODO, use join with (∩∩ ♭)
-  #|
-  (define-metafunction λCon-Baseline
-    ⊕ : T T T -> T
-    
-    [(≈ T T T) T]
-    
-    [(⊕ (blame ♭) T T_i) ()]
-    [(⊕ T (blame ♭) T_i) ]
-    
-    [(⊕ A_l A_r) (in-hole A_r A_l)])
-   |# 
   
   (define-metafunction λCon-Baseline
     ⊔ : ACtx ACtx -> ACtx
