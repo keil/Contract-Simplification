@@ -20,7 +20,101 @@
                                                                   
 |#
 
-(define-extended-language λCon-Subset λCon-Baseline)
+(define-extended-language λCon-Subset λCon-Baseline
+  
+  ;; Canonical terms (λJ terms)
+  ;; ==========================
+  
+  ;; Source Terms
+  ;; ------------
+  ;; Terms without a contract on the outermost position.
+  
+  ;; Values
+  (S0 K ;(λ x S)
+      (side-condition 
+       (name _fundec (λ x S))
+       (not
+        (redex-match? λCon-Baseline (λ x (in-hole BCtx (x @ ι I))) (term _fundec))
+        )
+       )
+      )
+  
+  ;; Non-Values
+  (S1 x (+blame ♭) (-blame ♭) (S TI) (TI T) (S S) (K T) (op T ...) (if T_0 T_1 T_2))
+  
+  ;; Source Terms
+  (S S0 S1)
+  
+  ;; Terms
+  ;; -----
+  ;; Terms with non-reducable contracts.
+  
+  ;; Terms with Immediate Contracts/ False
+  (TI S1 (TI @ ι I))
+  
+  ;; Terms with Delayed Contracts
+  (TQ S TI 
+      ;(TQ @ ι Q)
+      (S @ ι Q) (TI @ ι Q)
+      
+      (side-condition 
+       ((in-hole ACtx (TQ @ ι_q (name _Q Q))) @ ι_r (name _R R))
+       (not
+        (or (term (⊑ _Q _R)) (term (⊑ _R _Q)) (term (⊑/semnatic _Q _R)) (term (⊑/semantic _R _Q)))
+        )
+       )
+      )
+  
+  ;; Canonical Terms (non-reducable terms)
+  (T TQ (T_0 ∥ T_1))
+  
+  
+  
+  ;; Reducable terms (non-cannonical terms)
+  ;; ======================================
+  
+  (Reducible
+   
+   ;; Terms containing a reducable term
+   (λ x Reducible) (Reducible M) (M Reducible) (op M ... Reducible N ...) (if M ... Reducible N ...)   (Reducible @ b C)
+   
+   ;; Optimization
+   ;; ------------
+   
+   ;; Delayed checkes of a delayed contract
+   ((λ x M) (M @ ι Q))
+   
+   ;; Checked of delayed contracts
+   ((M @ ι Q) N) 
+   
+   ;; Imediate contracts in values
+   (K @ ι I) ((λ x M) @ ι I)
+   
+   ;; Contracts on return terms
+   (λ x (M @ ι C))
+   
+   ;; True
+   (M @ ι ⊤)
+   
+   ;; False
+   (M @ ι ⊥)
+   
+   ;; Restructuring
+   ;; -------------
+   
+   ;; Intersection betenn immediate and delayed contract
+   (M @ ι (I ∩ C))
+   
+   ;; Union contracts
+   (M @ ι (C ∪ D))
+   
+   ;; Nested delayed contracts
+   ((M @ ι_0 Q) @ ι_1 I)
+   
+   ;; Top-level assertions
+   (M @ ♭ C))
+  
+  )
 
 #|
  ___        _         _   _          
@@ -50,7 +144,27 @@
          (in-hole F ((λ x (in-hole BCtx x)) @ ι1 (I → ⊤))))
         "Lift"
         (fresh ι1)
-        (side-condition (canonical? (term (in-hole F (λ x (in-hole BCtx (x @ ι I))))))))
+        ;        (side-condition (canonical? (term (in-hole F (λ x (in-hole BCtx (x @ ι I)))))))
+        )
+   
+   ;; Lower (down)
+   ;; ------------
+   ;; Rule [Lower] creates a new function contarct from the 
+   ;; contract of the function's body.
+   
+   (--> (ς
+         (in-hole F (λ x (T @ ι C))))
+        (ς
+         (in-hole F ((λ x T) @ ι (⊤ → C))))
+        "Lower"
+        
+        (side-condition 
+         (not
+          (redex-match? λCon-Baseline (λ x (in-hole BCtx (x @ ι I))) (term (λ x (T @ ι C))))
+          )
+         )
+        
+        )
    
    (--> (ς
          (in-hole F (λ x (in-hole BCtx (T @ ι ⊥)))))
@@ -70,7 +184,8 @@
         "Subset1"
         (side-condition (and
                          (term (⊑ C D))
-                         (canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))))))
+                         (canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D))))
+                         )))
    
    (--> (ς
          (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
@@ -93,7 +208,8 @@
         (fresh ι2)
         (side-condition (and
                          (term (⊑/semantic C D))
-                         (canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))))))
+                         ;(canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D))))
+                         )))
    
    (--> (ς
          (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
@@ -103,7 +219,8 @@
         (fresh ι2)
         (side-condition (and
                          (term (⊑/semantic D C))
-                         (canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))))))
+                         ;(canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D))))
+                         )))
    
    
    ))
@@ -428,6 +545,18 @@
 |_| \_,_|_||_\__|\__|_\___/_||_/__/
                                    
 |#
+
+; TODO
+
+;; Canonical? (non-reducable terms)
+;; --------------------------------
+(define canonical?/Subset
+  (redex-match? λCon-Subset T))
+
+;; Reducible? (non-canonical terms)
+;; --------------------------------
+(define reducible?/Subset
+  (redex-match? λCon-Subset Reducible))
 
 ;; λCon Reduction (λCon-->)
 ;; ------------------------
