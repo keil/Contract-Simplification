@@ -170,7 +170,7 @@
          (in-hole F (λ x (in-hole BCtx (T @ ι ⊥)))))
         (ς
          (in-hole F (λ x (blame ♭))))
-        "Reduce/False"
+        "Blame"
         (where (blame ♭) (blame-of ι ς)))
    
    ;; Subset 

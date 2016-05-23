@@ -23,18 +23,10 @@
   
   ;; Syntax Extensions
   ;; =================
-  
-  ;; Immediate Contracts
-  ;; -------------------
-  ;((I J) .... (I ∩ J))
-  
+    
   ;; Contracts
   ((C D) .... ⊤ ⊥)
-  
-  ;; Delayed Contracts
-  ;; -----------------
-  ;((Q R) .... (C → ⊤) (⊤ → C))
-  
+    
   ;; Terms
   ;; -----
   ((L M N) .... (M @ ι C))
@@ -62,7 +54,7 @@
   ;; Terms with non-reducable contracts.
   
   ;; Terms with Immediate Contracts/ False
-  (TI S1 (TI @ ι I))
+  (TI S1 (TI @ ι I) (TI @ ι ⊥))
   
   ;; Terms with Delayed Contracts
   (TQ S TI (TQ @ ι Q))
@@ -99,7 +91,7 @@
    (M @ ι ⊤)
    
    ;; False
-   (M @ ι ⊥)
+   ;(M @ ι ⊥)
    
    ;; Restructuring
    ;; -------------
@@ -254,12 +246,12 @@
    ;; TODO: ⊥ mus remain
    ;; lift than reduces the whole context to blame
    
-   (--> (ς
-         (in-hole F (T @ ι ⊥)))
-        (ς
-         (in-hole F (blame ♭)))
-        "Reduce/False"
-        (where (blame ♭) (blame-of ι ς)))
+;   (--> (ς
+;         (in-hole F (T @ ι ⊥)))
+;        (ς
+;         (in-hole F (blame ♭)))
+;        "Reduce/False"
+;        (where (blame ♭) (blame-of ι ς)))
    
    ;; Predicate Verification
    ;; ----------------------

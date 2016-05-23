@@ -3,7 +3,6 @@
 (require rackunit)
 
 (require "../lcon.rkt")
-(require "../symbolic.rkt")
 (require "../baseline.rkt")
 
 ;; Test Syntax
