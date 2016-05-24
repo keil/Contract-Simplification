@@ -44,7 +44,9 @@
   (S0 K (λ x S))
   
   ;; Non-Values
-  (S1 x (+blame ♭) (-blame ♭) (S TI) (TI T) (S S) (K T) (op T ...) (if T_0 T_1 T_2))
+  (S1 x (+blame ♭) (-blame ♭) (SF TI) (TI T) (SF SF) 
+      (KF T)
+      (op T ...) (if T_0 T_1 T_2))
   
   ;; Source Terms
   (S S0 S1)
@@ -53,11 +55,15 @@
   ;; -----
   ;; Terms with non-reducable contracts.
   
+  ;; TODO
+  (KF K (KF @ ι ⊥))
+  (SF S (SF @ ι ⊥))
+  
   ;; Terms with Immediate Contracts/ False
   (TI S1 (TI @ ι I) (TI @ ι ⊥))
   
   ;; Terms with Delayed Contracts
-  (TQ S TI (TQ @ ι Q))
+  (TQ SF TI (TQ @ ι Q))
   
   ;; Canonical Terms (non-reducable terms)
   (T TQ (T_0 ∥ T_1))
@@ -76,13 +82,17 @@
    ;; ------------
    
    ;; Delayed checkes of a delayed contract
-   ((λ x M) (M @ ι Q))
+   ;((λ x M) (M @ ι Q))
+   ((in-hole ACtx (λ x M)) (M @ ι Q))
    
    ;; Checked of delayed contracts
    ((M @ ι Q) N) 
    
    ;; Imediate contracts in values
-   (K @ ι I) ((λ x M) @ ι I)
+   ((in-hole ACtx K) @ ι I)
+   ;(K @ ι I)
+   ((in-hole ACtx (λ x M)) @ ι I)
+   ;((λ x M) @ ι I)
    
    ;; Contracts on return terms
    (λ x (M @ ι C))
@@ -104,6 +114,7 @@
    
    ;; Nested delayed contracts
    ((M @ ι_0 Q) @ ι_1 I)
+   ((M @ ι_0 Q) @ ι_1 ⊥)
    
    ;; Top-level assertions
    (M @ ♭ C))
@@ -125,7 +136,9 @@
   
   ;; Assertion Context
   ;; -----------------
-  (ACtx hole (ACtx @ ι C))
+  ((ACtx CCtx) hole (ACtx @ ι C))
+  (ICtx hole (ICtx @ ι I)) ;; TODO
+  (QCtx hole (QCtx @ ι I)) ;; TODO
   
   ;; Parallel Observations
   (∥ ∩∩ ∪∪))
