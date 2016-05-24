@@ -24,9 +24,6 @@
   ;; Syntax Extensions
   ;; =================
     
-  ;; Contracts
-  ((C D) .... ⊤ ⊥)
-    
   ;; Terms
   ;; -----
   ((L M N) .... (M @ ι C))
@@ -41,15 +38,21 @@
   ;; Terms without a contract on the outermost position.
   
   ;; Values
-  (S0 K (λ x S))
+  (S0 K (λ x TI) (λ x TV))
   
   ;; Non-Values
-  (S1 x (+blame ♭) (-blame ♭) (SF TI) (TI T) (SF SF) 
+  (S1 x (+blame ♭) (-blame ♭)
+      (TI TQ) (TV TI) (TI TV) (TV TV)
+;      (S TI)  
       (KF T)
+      (K TQ)
+      
       (op T ...) (if T_0 T_1 T_2))
   
   ;; Source Terms
-  (S S0 S1)
+  (S S0 S1 (S @ ι ⊥) )
+  
+  
   
   ;; Terms
   ;; -----
@@ -57,13 +60,16 @@
   
   ;; TODO
   (KF K (KF @ ι ⊥))
-  (SF S (SF @ ι ⊥))
+  ;(SF S (SF @ ι ⊥))
   
+  ;; Values with False Contarcts
+  (TV S0 (TV @ ι ⊥))
+    
   ;; Terms with Immediate Contracts/ False
   (TI S1 (TI @ ι I) (TI @ ι ⊥))
   
   ;; Terms with Delayed Contracts
-  (TQ SF TI (TQ @ ι Q))
+  (TQ TV TI (TQ @ ι Q))
   
   ;; Canonical Terms (non-reducable terms)
   (T TQ (T_0 ∥ T_1))
@@ -95,7 +101,7 @@
    ;((λ x M) @ ι I)
    
    ;; Contracts on return terms
-   (λ x (M @ ι C))
+   (λ x (M @ ι Q)) ;; (λ x (M @ ι C))
    
    ;; True
    (M @ ι ⊤)
