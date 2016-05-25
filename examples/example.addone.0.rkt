@@ -3,6 +3,7 @@
 
 (require "../lcon.rkt")
 (require "../baseline.rkt")
+(require "../join.rkt")
 (require "../subset.rkt")
 
 (provide (all-defined-out))
@@ -20,6 +21,7 @@
 (define 
   example/addone/0
   (term ((λ f (λ x ((f 1) x))) (λ x (λ y (+ x y))))))
+
 ;(traces λCon-reduction (term (· (,example/addone/0 1))))
 
 
@@ -31,6 +33,7 @@
 (define 
   example/addone/0/contracted
   (term ((λ f (λ x ((f 1) x))) ((λ x (λ y (+ x y))) @ ♭ (Number? → (Number? → Number?))))))
+
 ;(traces λCon-reduction (term (· (,example/addone/0/contracted, 1))))
 
 
@@ -38,12 +41,14 @@
 ;; # Baseline Reduction
 ;; --------------------
 ;; Optimization steps: 12
+;; Join Steps:         0
 ;; Reduction steps:    17
 
 ;(traces Baseline-reduction (term (· ,example/addone/0/contracted)))
+;(traces Join-reduction (λCon/Baseline~~>* (term (· ,example/addone/0/contracted))))
 
-;(let ([configuration (λCon/Baseline~~>* (term (· ,example/addone/0/contracted)))]) 
-;  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 1)))))
+(let ([configuration (λCon/Join~~>*  (λCon/Baseline~~>* (term (· ,example/addone/0/contracted))))]) 
+  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 1)))))
 
 
 
@@ -52,7 +57,7 @@
 ;; Optimization steps: 16
 ;; Reduction steps:    18 (!)
 
-(traces Subset-reduction (term (· ,example/addone/0/contracted)))
+;(traces Subset-reduction (term (· ,example/addone/0/contracted)))
 
 ;(let ([configuration (λCon/Subset~~>* (term (· ,example/addone/0/contracted)))]) 
 ;  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 1)))))

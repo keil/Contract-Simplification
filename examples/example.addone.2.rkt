@@ -3,11 +3,13 @@
 
 (require "../lcon.rkt")
 (require "../baseline.rkt")
+(require "../join.rkt")
+(require "../subset.rkt")
 
 (provide (all-defined-out))
 
-;; AddOne
-;; ======
+;; AddOne (two contracts)
+;; ======================
 ;; Motivating Example.
 
 
@@ -19,6 +21,7 @@
 (define 
   example/addone/2
   (term ((λ f (λ x ((f 1) x))) (λ x (λ y (+ x y))))))
+
 ;(traces λCon-reduction (term (· (,example/addone/2 1))))
 
 
@@ -30,17 +33,19 @@
 (define 
   example/addone/2/contracted
   (term ((λ f ((λ x ((f 1) x)) @ ♭0 (Positive? → Positive?))) ((λ x (λ y (+ x y))) @ ♭1 (Number? → (Number? → Number?))))))
-;(traces λCon-reduction (term (· (,example/addone/2/contracted, 1))))
 
+;(traces λCon-reduction (term (· (,example/addone/2/contracted, 1))))
 
 
 
 ;; # Baseline Reduction
 ;; --------------------
 ;; Optimization steps: 16
-;; Reduction steps: 28
+;; Join Steps:         0
+;; Reduction steps:    28
 
-(traces Baseline-reduction (term (· ,example/addone/2/contracted)))
+;(traces Baseline-reduction (term (· ,example/addone/2/contracted)))
+;(traces Join-reduction (λCon/Baseline~~>* (term (· ,example/addone/2/contracted))))
 
-;(let ([configuration (λCon/Baseline~~>* (term (· ,example/addone/2/contracted)))]) 
-;  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 1)))))
+(let ([configuration (λCon/Join~~>* (λCon/Baseline~~>* (term (· ,example/addone/2/contracted))))]) 
+  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 1)))))

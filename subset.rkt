@@ -58,7 +58,7 @@
       (S @ ι Q) (TI @ ι Q)
       
       (side-condition 
-       ((in-hole ACtx (TQ @ ι_q (name _Q Q))) @ ι_r (name _R R))
+       ((in-hole CCtx (TQ @ ι_q (name _Q Q))) @ ι_r (name _R R))
        (not
         (or (term (⊑ _Q _R)) (term (⊑ _R _Q)) (term (⊑/semnatic _Q _R)) (term (⊑/semantic _R _Q)))
         )
@@ -166,6 +166,20 @@
         
         )
    
+   ;; Blame
+   ;; ---------------
+   ;; Removes (term ⊥) contracts.
+   
+   ;; TODO: ⊥ mus remain
+   ;; lift than reduces the whole context to blame
+   
+   ;   (--> (ς
+   ;         (in-hole F (T @ ι ⊥)))
+   ;        (ς
+   ;         (in-hole F (blame ♭)))
+   ;        "Reduce/False"
+   ;        (where (blame ♭) (blame-of ι ς)))
+   
    (--> (ς
          (in-hole F (λ x (in-hole BCtx (T @ ι ⊥)))))
         (ς
@@ -178,48 +192,48 @@
    ;; Removes contracts based on already checked contarcts.
    
    (--> (ς
-         (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
+         (in-hole F ((in-hole CCtx (T @ ι_0 C)) @ ι_1 D)))
         (ς
-         (in-hole F (in-hole ACtx (T @ ι_0 C))))
+         (in-hole F (in-hole CCtx (T @ ι_0 C))))
         "Subset1"
         (side-condition (and
                          (term (⊑ C D))
-                         (canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D))))
+                         (canonical? (term (in-hole F ((in-hole CCtx (T @ ι_0 C)) @ ι_1 D))))
                          )))
    
    (--> (ς
-         (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
+         (in-hole F ((in-hole CCtx (T @ ι_0 C)) @ ι_1 D)))
         (ς
-         (in-hole F (in-hole ACtx (T @ ι_1 D))))
+         (in-hole F (in-hole CCtx (T @ ι_1 D))))
         "Subset2"
         (side-condition (and
                          (term (⊑ D C))
-                         (canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))))))
+                         (canonical? (term (in-hole F ((in-hole CCtx (T @ ι_0 C)) @ ι_1 D)))))))
    
    
    
    
    ;; TODO
    (--> (ς
-         (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
+         (in-hole F ((in-hole CCtx (T @ ι_0 C)) @ ι_1 D)))
         (((ι_0 ◃ ι2) ((ι_1 ◃ ι2) ς))
-         (in-hole F (in-hole ACtx (T @ ι2 (⊓ C D)))))
+         (in-hole F (in-hole CCtx (T @ ι2 (⊓ C D)))))
         "SubsetX"
         (fresh ι2)
         (side-condition (and
                          (term (⊑/semantic C D))
-                         ;(canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D))))
+                         ;(canonical? (term (in-hole F ((in-hole CCtx (T @ ι_0 C)) @ ι_1 D))))
                          )))
    
    (--> (ς
-         (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
+         (in-hole F ((in-hole CCtx (T @ ι_0 C)) @ ι_1 D)))
         (((ι_0 ◃ ι2) ((ι_1 ◃ ι2) ς))
-         (in-hole F (in-hole ACtx (T @ ι2 (⊓ D C)))))
+         (in-hole F (in-hole CCtx (T @ ι2 (⊓ D C)))))
         "SubsetY"
         (fresh ι2)
         (side-condition (and
                          (term (⊑/semantic D C))
-                         ;(canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D))))
+                         ;(canonical? (term (in-hole F ((in-hole CCtx (T @ ι_0 C)) @ ι_1 D))))
                          )))
    
    
@@ -234,23 +248,110 @@
 
 ;(define-metafunction λCon-Subset 
 ;  closest? : T -> boolean
-;  [(closest? ((in-hole ACtx_2 (T @ ι_0 C)) @ ι_1 D)) #t (side-condition (term (⊑ C D)))]
-;  [(closest? ((in-hole ACtx_2 (T @ ι_0 C)) @ ι_1 D)) #t (side-condition (term (⊑ D C)))]
+;  [(closest? ((in-hole CCtx_2 (T @ ι_0 C)) @ ι_1 D)) #t (side-condition (term (⊑ C D)))]
+;  [(closest? ((in-hole CCtx_2 (T @ ι_0 C)) @ ι_1 D)) #t (side-condition (term (⊑ D C)))]
 ;  [(closest? any) #f])
 
 ;(define-metafunction λCon-Subset 
 ;  opt? : T D -> boolean
-;  [(opt? (in-hole ACtx_1 ((in-hole ACtx_2 (T @ ι_0 C)) @ ι_1 D)) D) #t (side-condition (term (⊑ C D)))]
-;  [(opt? (in-hole ACtx_1 ((in-hole ACtx_2 (T @ ι_0 C)) @ ι_1 D)) D) #t (side-condition (term (⊑ D C)))]
+;  [(opt? (in-hole CCtx_1 ((in-hole CCtx_2 (T @ ι_0 C)) @ ι_1 D)) D) #t (side-condition (term (⊑ C D)))]
+;  [(opt? (in-hole CCtx_1 ((in-hole CCtx_2 (T @ ι_0 C)) @ ι_1 D)) D) #t (side-condition (term (⊑ D C)))]
 ;  [(opt? any D) #f])
 
 ;(define-metafunction λCon-Subset 
 ;  ⇓ : T -> T
-;  [(⇓ ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)) (⇓ (in-hole ACtx (T @ ι_0 C))) (side-condition (term (⊑ C ;D)))]
-;  [(⇓ ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)) (⇓ (in-hole ACtx (T @ ι_1 D))) (side-condition (term (⊑ D ;C)))]
-;  [(⇓ ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)) ((⇓ (in-hole ACtx (T @ ι_0 C))) @ ι_1 D)]
+;  [(⇓ ((in-hole CCtx (T @ ι_0 C)) @ ι_1 D)) (⇓ (in-hole CCtx (T @ ι_0 C))) (side-condition (term (⊑ C ;D)))]
+;  [(⇓ ((in-hole CCtx (T @ ι_0 C)) @ ι_1 D)) (⇓ (in-hole CCtx (T @ ι_1 D))) (side-condition (term (⊑ D ;C)))]
+;  [(⇓ ((in-hole CCtx (T @ ι_0 C)) @ ι_1 D)) ((⇓ (in-hole CCtx (T @ ι_0 C))) @ ι_1 D)]
 ;  [(⇓ (S @ ι_0 C)) (S @ ι_0 C)]
 ;  )
+
+
+
+#|
+  ___      _         _      _         ___ _                
+ / __|__ _| |__ _  _| |__ _| |_ ___  | _ ) |__ _ _ __  ___ 
+| (__/ _` | / _| || | / _` |  _/ -_) | _ \ / _` | '  \/ -_)
+ \___\__,_|_\__|\_,_|_\__,_|\__\___| |___/_\__,_|_|_|_\___|
+                                                           
+|#
+#|
+;; root-of
+;; -------
+;; Calculates the root (♭) of blame indetifier b.
+(define-metafunction λCon
+  root-of : b ς -> ♭
+  [(root-of ♭ ς) ♭]
+  [(root-of ι ς) (root-of (parent-of ι ς) ς)])
+
+;; parent-of
+;; ---------
+;; Calculates the parent blame indentifier b of blame variable ι.
+(define-metafunction λCon
+  parent-of : b ς -> b
+  [(parent-of ι_0 ((b ◃ (ι_0 → ι_1)) ς)) b]
+  [(parent-of ι_1 ((b ◃ (ι_0 → ι_1)) ς)) b]
+  [(parent-of ι_0 ((b ◃ (ι_0 ∩ ι_1)) ς)) b]
+  [(parent-of ι_1 ((b ◃ (ι_0 ∩ ι_1)) ς)) b]
+  [(parent-of ι_0 ((b ◃ (ι_0 ∪ ι_1)) ς)) b]
+  [(parent-of ι_1 ((b ◃ (ι_0 ∪ ι_1)) ς)) b]
+  [(parent-of ι   ((b ◃ (¬ ι)) ς)) b]
+  [(parent-of ι   ((b ◃ ι) ς)) b]
+  [(parent-of ι   ()) ι]
+  [(parent-of ι   ((b ◃ κ) ς)) (parent-of ι ς)])
+
+|#
+
+;; invert
+;; ------
+;; Inverts a blame.
+(define-metafunction λCon
+  invert : blame -> blame
+  [(invert +blame) -blame]
+  [(invert -blame) +blame])
+
+;; constraint-of
+;; -------------
+;; Looks for a constraint in state.
+(define-metafunction λCon
+  constraint-of : b ς -> κ
+  [(constraint-of ι_0 ((b ◃ (ι_0 → ι_1)) ς)) (ι_0 → ι_1)]
+  [(constraint-of ι_1 ((b ◃ (ι_0 → ι_1)) ς)) (ι_0 → ι_1)]
+  [(constraint-of ι_0 ((b ◃ (ι_0 ∩ ι_1)) ς)) (ι_0 ∩ ι_1)]
+  [(constraint-of ι_1 ((b ◃ (ι_0 ∩ ι_1)) ς)) (ι_0 ∩ ι_1)]
+  [(constraint-of ι_0 ((b ◃ (ι_0 ∪ ι_1)) ς)) (ι_0 ∪ ι_1)]
+  [(constraint-of ι_1 ((b ◃ (ι_0 ∪ ι_1)) ς)) (ι_0 ∪ ι_1)]
+  [(constraint-of ι   ((b ◃ (¬ ι)) ς)) (¬ ι)]
+  [(constraint-of ι   ((b ◃ ι) ς)) ι]
+  [(constraint-of ι   ()) ι]
+  ;; recursive lookup
+  [(constraint-of ι   ((b ◃ κ) ς)) (constraint-of ι ς)])
+
+;; sign-of
+;; -------
+;; Computes the sign a blame identifier.
+(define-metafunction λCon
+  sign-of : b ς -> blame
+  [(sign-of ♭ ς) +blame]
+  [(sign-of ι ς) (sign-in ι (constraint-of ι ς) ς)])
+
+;; sign-in
+;; -------
+;; Computes the sign of a blame identifier in a constraint.
+(define-metafunction λCon
+  sign-in : b κ ς -> blame
+  [(sign-in ι_0 (ι_0 → ι_1) ς) (invert (sign-of (parent-of ι_0 ς) ς))]
+  [(sign-in ι   (¬ ι) ς)       (invert (sign-of (parent-of ι ς) ς))]
+  ; otherwise
+  [(sign-in ι κ ς)             (sign-of (parent-of ι ς) ς)])
+
+;; sign-in
+;; -------
+;; Produces a balme term for a blame identifier.
+(define-metafunction λCon
+  blame-of : b ς -> (blame ♭)
+  [(blame-of ι ς) ((sign-of ι ς) (root-of ι ς))])
+
 
 #|
  ___                     _   _         _ 

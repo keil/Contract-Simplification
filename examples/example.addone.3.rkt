@@ -3,11 +3,13 @@
 
 (require "../lcon.rkt")
 (require "../baseline.rkt")
+(require "../join.rkt")
+(require "../subset.rkt")
 
 (provide (all-defined-out))
 
-;; AddOne (intersection)
-;; =====================
+;; AddOne (two contracts, intersection)
+;; ====================================
 ;; Motivating Example.
 
 
@@ -19,7 +21,8 @@
 (define 
   example/addone/3
   (term ((λ f (λ x ((f 1) x))) (λ x (λ y (if (or (string? x) (string? y)) (string-append x y) (+ x y)))))))
-;(traces λCon-reduction (term (· (,example/addone/1 1))))
+
+;(traces λCon-reduction (term (· (,example/addone/3 1))))
 
 
 
@@ -30,16 +33,19 @@
 (define 
   example/addone/3/contracted
   (term ((λ f ((λ x ((f 1) x)) @ ♭0 (Positive? → Positive?))) ((λ x (λ y (if (or (string? x) (string? y)) (string-append x y) (+ x y)))) @ ♭1 ((Number? → (Number? → Number?)) ∩ (String? → (String? → String?)))))))
-;(traces λCon-reduction (term (· (,example/addone/1/contracted 1))))
+
+;(traces λCon-reduction (term (· (,example/addone/3/contracted 1))))
 
 
 
-;; # Sugar Reduction
-;; -----------------
-;; Optimization steps: 30
-;; Reduction steps:    43
+;; # Baseline Reduction
+;; --------------------
+;; Optimization steps: 25
+;; Join Steps:         5
+;; Reduction steps:    44
 
-(traces Baseline-reduction (term (· ,example/addone/3/contracted)))
+;(traces Baseline-reduction (term (· ,example/addone/3/contracted)))
+;(traces Join-reduction (λCon/Baseline~~>* (term (· ,example/addone/3/contracted))))
 
-;(let ([configuration (λCon/Baseline~~>* (term (· ,example/addone/3/contracted)))]) 
-;  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 1)))))
+(let ([configuration (λCon/Join~~>* (λCon/Baseline~~>* (term (· ,example/addone/3/contracted))))]) 
+  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 1)))))
