@@ -58,7 +58,7 @@
       (S @ ι Q) (TI @ ι Q)
       
       (side-condition 
-       ((in-hole CCtx (TQ @ ι_q (name _Q Q))) @ ι_r (name _R R))
+       ((in-hole ACtx (TQ @ ι_q (name _Q Q))) @ ι_r (name _R R))
        (not
         (or (term (⊑ _Q _R)) (term (⊑ _R _Q)) (term (⊑/semnatic _Q _R)) (term (⊑/semantic _R _Q)))
         )
@@ -192,48 +192,48 @@
    ;; Removes contracts based on already checked contarcts.
    
    (--> (ς
-         (in-hole F ((in-hole CCtx (T @ ι_0 C)) @ ι_1 D)))
+         (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
         (ς
-         (in-hole F (in-hole CCtx (T @ ι_0 C))))
+         (in-hole F (in-hole ACtx (T @ ι_0 C))))
         "Subset1"
         (side-condition (and
                          (term (⊑ C D))
-                         (canonical? (term (in-hole F ((in-hole CCtx (T @ ι_0 C)) @ ι_1 D))))
+                         (canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D))))
                          )))
    
    (--> (ς
-         (in-hole F ((in-hole CCtx (T @ ι_0 C)) @ ι_1 D)))
+         (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
         (ς
-         (in-hole F (in-hole CCtx (T @ ι_1 D))))
+         (in-hole F (in-hole ACtx (T @ ι_1 D))))
         "Subset2"
         (side-condition (and
                          (term (⊑ D C))
-                         (canonical? (term (in-hole F ((in-hole CCtx (T @ ι_0 C)) @ ι_1 D)))))))
+                         (canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))))))
    
    
    
    
    ;; TODO
    (--> (ς
-         (in-hole F ((in-hole CCtx (T @ ι_0 C)) @ ι_1 D)))
+         (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
         (((ι_0 ◃ ι2) ((ι_1 ◃ ι2) ς))
-         (in-hole F (in-hole CCtx (T @ ι2 (⊓ C D)))))
+         (in-hole F (in-hole ACtx (T @ ι2 (⊓ C D)))))
         "SubsetX"
         (fresh ι2)
         (side-condition (and
                          (term (⊑/semantic C D))
-                         ;(canonical? (term (in-hole F ((in-hole CCtx (T @ ι_0 C)) @ ι_1 D))))
+                         ;(canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D))))
                          )))
    
    (--> (ς
-         (in-hole F ((in-hole CCtx (T @ ι_0 C)) @ ι_1 D)))
+         (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
         (((ι_0 ◃ ι2) ((ι_1 ◃ ι2) ς))
-         (in-hole F (in-hole CCtx (T @ ι2 (⊓ D C)))))
+         (in-hole F (in-hole ACtx (T @ ι2 (⊓ D C)))))
         "SubsetY"
         (fresh ι2)
         (side-condition (and
                          (term (⊑/semantic D C))
-                         ;(canonical? (term (in-hole F ((in-hole CCtx (T @ ι_0 C)) @ ι_1 D))))
+                         ;(canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D))))
                          )))
    
    
@@ -248,21 +248,21 @@
 
 ;(define-metafunction λCon-Subset 
 ;  closest? : T -> boolean
-;  [(closest? ((in-hole CCtx_2 (T @ ι_0 C)) @ ι_1 D)) #t (side-condition (term (⊑ C D)))]
-;  [(closest? ((in-hole CCtx_2 (T @ ι_0 C)) @ ι_1 D)) #t (side-condition (term (⊑ D C)))]
+;  [(closest? ((in-hole ACtx_2 (T @ ι_0 C)) @ ι_1 D)) #t (side-condition (term (⊑ C D)))]
+;  [(closest? ((in-hole ACtx_2 (T @ ι_0 C)) @ ι_1 D)) #t (side-condition (term (⊑ D C)))]
 ;  [(closest? any) #f])
 
 ;(define-metafunction λCon-Subset 
 ;  opt? : T D -> boolean
-;  [(opt? (in-hole CCtx_1 ((in-hole CCtx_2 (T @ ι_0 C)) @ ι_1 D)) D) #t (side-condition (term (⊑ C D)))]
-;  [(opt? (in-hole CCtx_1 ((in-hole CCtx_2 (T @ ι_0 C)) @ ι_1 D)) D) #t (side-condition (term (⊑ D C)))]
+;  [(opt? (in-hole ACtx_1 ((in-hole ACtx_2 (T @ ι_0 C)) @ ι_1 D)) D) #t (side-condition (term (⊑ C D)))]
+;  [(opt? (in-hole ACtx_1 ((in-hole ACtx_2 (T @ ι_0 C)) @ ι_1 D)) D) #t (side-condition (term (⊑ D C)))]
 ;  [(opt? any D) #f])
 
 ;(define-metafunction λCon-Subset 
 ;  ⇓ : T -> T
-;  [(⇓ ((in-hole CCtx (T @ ι_0 C)) @ ι_1 D)) (⇓ (in-hole CCtx (T @ ι_0 C))) (side-condition (term (⊑ C ;D)))]
-;  [(⇓ ((in-hole CCtx (T @ ι_0 C)) @ ι_1 D)) (⇓ (in-hole CCtx (T @ ι_1 D))) (side-condition (term (⊑ D ;C)))]
-;  [(⇓ ((in-hole CCtx (T @ ι_0 C)) @ ι_1 D)) ((⇓ (in-hole CCtx (T @ ι_0 C))) @ ι_1 D)]
+;  [(⇓ ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)) (⇓ (in-hole ACtx (T @ ι_0 C))) (side-condition (term (⊑ C ;D)))]
+;  [(⇓ ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)) (⇓ (in-hole ACtx (T @ ι_1 D))) (side-condition (term (⊑ D ;C)))]
+;  [(⇓ ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)) ((⇓ (in-hole ACtx (T @ ι_0 C))) @ ι_1 D)]
 ;  [(⇓ (S @ ι_0 C)) (S @ ι_0 C)]
 ;  )
 

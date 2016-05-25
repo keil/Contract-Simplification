@@ -82,14 +82,14 @@
    ;; ------------
    
    ;; Delayed checkes of a delayed contract
-   ((in-hole CCtx (λ x M)) (M @ ι Q))
+   ((in-hole ACtx (λ x M)) (M @ ι Q))
    
    ;; Checkes of delayed contracts
    ((M @ ι Q) N) 
    
    ;; Imediate contracts on values
-   ((in-hole CCtx K) @ ι I)
-   ((in-hole CCtx (λ x M)) @ ι I)
+   ((in-hole ACtx K) @ ι I)
+   ((in-hole ACtx (λ x M)) @ ι I)
    ;((λ x M) @ ι I)
    
    ;; Contracts on return terms
@@ -110,7 +110,7 @@
    
    ;; Nested delayed contracts
    ((M @ ι_0 Q) @ ι_1 I)
-   ((M @ ι_0 Q) @ ι_1 ⊥) ;; TODO
+   ((M @ ι_0 Q) @ ι_1 ⊥)
    
    ;; Top-level assertions
    (M @ ♭ C))
@@ -131,9 +131,8 @@
   
   ;; Assertion Context
   ;; -----------------
-  (CCtx hole (CCtx @ ι C))
-  (ICtx hole (ICtx @ ι I)) ;; TODO
-  (QCtx hole (QCtx @ ι I)) ;; TODO
+  (ACtx hole (ACtx @ ι C))
+  (VCtx hole (VCtx @ ι I))  
   
   ;; Forks (parallel observations)
   ;; -----------------------------
@@ -211,7 +210,7 @@
    ;; to all uses of the argument.
    
    (--> (ς
-         (in-hole F ((λ x S) (T @ ι Q))))
+         (in-hole F ((in-hole VCtx (λ x S)) (T @ ι Q))))
         (ς
          (in-hole F ((λ x (unroll x Q ι S)) T)))
         "Unroll")
@@ -220,9 +219,7 @@
    ;; ------------
    ;; Rule [Lower] creates a new function contarct from the 
    ;; contract of the function's body.
-   
-   ;; TODO, Lower only triggers when the valuation A[[S1]] @ C
-   
+      
    (--> (ς
          (in-hole F (λ x (T @ ι C))))
         (ς
@@ -261,23 +258,23 @@
    ;; Evaluates predicates on values.
    
    (--> (ς
-         (in-hole F ((in-hole ICtx V) @ ι predefined)))
+         (in-hole F ((in-hole VCtx V) @ ι predefined)))
         (ς
-         (in-hole F ((in-hole ICtx V) @ ι (lookup predefined))))
+         (in-hole F ((in-hole VCtx V) @ ι (lookup predefined))))
         "Lookup")
    
    (--> (ς
-         (in-hole F ((in-hole ICtx V) @ ι (flat M))))
+         (in-hole F ((in-hole VCtx V) @ ι (flat M))))
         (ς
-         (in-hole F ((in-hole ICtx V) @ ι ⊤)))
+         (in-hole F ((in-hole VCtx V) @ ι ⊤)))
         "Verify/True"
         (where W (⇓/Term ,(car (apply-reduction-relation* λCon-reduction (term (· (M V)))))))
         (side-condition (not (false? (term W)))))
    
    (--> (ς
-         (in-hole F ((in-hole ICtx V) @ ι (flat M))))
+         (in-hole F ((in-hole VCtx V) @ ι (flat M))))
         (ς
-         (in-hole F ((in-hole ICtx V) @ ι ⊥)))
+         (in-hole F ((in-hole VCtx V) @ ι ⊥)))
         "Verify/False"
         (where W (⇓/Term ,(car (apply-reduction-relation* λCon-reduction (term (· (M V)))))))
         (side-condition (false? (term W))))
