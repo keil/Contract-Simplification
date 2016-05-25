@@ -219,7 +219,7 @@
    ;; ------------
    ;; Rule [Lower] creates a new function contarct from the 
    ;; contract of the function's body.
-      
+   
    (--> (ς
          (in-hole F (λ x (T @ ι C))))
         (ς

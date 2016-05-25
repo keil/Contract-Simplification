@@ -122,21 +122,21 @@
 (define-metafunction λCon-Baseline
   √ : ∥ T T -> T
   ;; intersection/ negative blame
-  [(√ ∩∩ (-blame ♭) T) T]
-  [(√ ∩∩ T (-blame ♭)) T]
+  [(√ (∩∩ b) (-blame ♭) T) T]
+  [(√ (∩∩ b) T (-blame ♭)) T]
   ;; intersection/ positive blame
-  [(√ ∩∩ (+blame ♭) T) (+blame ♭)]
-  [(√ ∩∩ T (+blame ♭)) (+blame ♭)]
+  [(√ (∩∩ b) (+blame ♭) T) (+blame ♭)]
+  [(√ (∩∩ b) T (+blame ♭)) (+blame ♭)]
   ;; union/ negative blame
-  [(√ ∪∪ (-blame ♭) T) (-blame ♭)]
-  [(√ ∪∪ T (-blame ♭)) (-blame ♭)]
+  [(√ (∪∪ b) (-blame ♭) T) (-blame ♭)]
+  [(√ (∪∪ b) T (-blame ♭)) (-blame ♭)]
   ;; union/ positive blame
-  [(√ ∪∪ (+blame ♭) T) T]
-  [(√ ∪∪ T (+blame ♭)) T]
+  [(√ (∪∪ b) (+blame ♭) T) T]
+  [(√ (∪∪ b) T (+blame ♭)) T]
   
   ;; XXX
-  [(√ ∩∩ T S) T]
-  [(√ ∪∪ T S) T]) ;; TODO
+  [(√ (∩∩ b) T S) T]
+  [(√ (∪∪ b) T S) T]) ;; TODO
 
 
 ;; TODO, use join with (∩∩ ♭)
