@@ -144,7 +144,7 @@
    (--> (ς
          (in-hole E (V @ ι (flat M))))
         (ς
-         (in-hole E (V @ ι (eval (M V)))))
+         (in-hole E (V @ ι (eval (M (∇ V))))))
         "Flat"
         (side-condition (not (term (is-blame-state? ς)))))
    
@@ -179,8 +179,8 @@
         "D-Function"
         (fresh ι1 ι2)
         (side-condition (not (term (is-blame-state? ς))))
-        (side-condition (not (redex-match? λCon ⊤ (term D)))) ;; TODO
-        (side-condition (not (redex-match? λCon ⊤ (term C)))) ;; TODO
+        (side-condition (not (redex-match? λCon ⊤ (term D))))
+        (side-condition (not (redex-match? λCon ⊤ (term C))))
         )
    
    (--> (ς
@@ -297,6 +297,14 @@
 |_|  |_\___|\__\__,_|   |_| \_,_|_||_\__|\__|_\___/_||_/__/
 
 |#
+
+
+;; Unwrap (∇)
+;; ----------
+(define-metafunction λCon
+  ∇ : V -> V
+  [(∇ (V @ ι Q)) (∇ V)]
+  [(∇ V) V])
 
 ;; Delta (δ/)
 ;; ----------
