@@ -44,9 +44,9 @@
   ;; Non-Values
   (SNonVal
    x (+blame ♭) (-blame ♭)
-      (TI TQ) (TCons TQ) (TAbs TI) (TVal TVal) (S S) ;; (TI TV) (KF T) (K TQ)
-      (S TI)  (TVal S)
-      (TVal TI)
+      (TI TQ) (TCons TQ) (TAbs TI) (TAbs TVal) (S S) ;;(TVal TVal) (TI TV) (KF T) (K TQ)
+      (S TI)  ;(TVal S)
+      ;(TVal TI)
 
       (op T ...) (if T_0 T_1 T_2))
   
@@ -61,7 +61,7 @@
   
   ;; TODO
   (TCons K (TCons @ ι ⊥))
-  (TAps (λ x S) (TAps @ ι ⊥))
+  (TAbs (λ x S) (TAbs @ ι ⊥))
   
   ;; Values with False Contarcts
   (TVal SVal (TVal @ ι ⊥))
