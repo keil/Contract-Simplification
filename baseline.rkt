@@ -44,8 +44,12 @@
   ;; Non-Values
   (SNonVal
    x (+blame ♭) (-blame ♭)
-      (TI TQ) (TCons TQ) (TAbs TI) (TAbs TVal) (S S) ;;(TVal TVal) (TI TV) (KF T) (K TQ)
-      (S TI)  ;(TVal S)
+      (TI TQ) (TCons TQ) (TAbs TI) (TAbs TVal) ;(S S) ;;(TVal TVal) (TI TV) (KF T) (K TQ)
+      (S TI)  
+      
+      ;; (S SVal)
+      
+      ;(TVal S)
       ;(TVal TI)
 
       (op T ...) (if T_0 T_1 T_2))
