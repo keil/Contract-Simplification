@@ -12,7 +12,8 @@
 (define (print-result M) (string-append "canonical? " (format "~a" (canonical? M)) " - " "reducible? " (format "~a" (reducible? M))))
 
 (print-result (term
-(λ gf ((#t @ ιT ⊥) (#f @ ιh (⊥ → ⊤))))
+(((λ f◃ 4) @ ιG ⊥)
+ ((if gE (-blame ♭even?) (-blame ♭E)) @ ιW (flat (-blame ♭v))))
 ))
 
 ;; Test Syntax

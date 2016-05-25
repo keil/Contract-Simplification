@@ -38,19 +38,20 @@
   ;; Terms without a contract on the outermost position.
   
   ;; Values
-  (S0 K (λ x TI) (λ x TV))
+  (SVal
+   K (λ x S))
   
   ;; Non-Values
-  (S1 x (+blame ♭) (-blame ♭)
-      (TI TQ) (TV TI) (TI TV) (TV TV)
-;      (S TI)  
-      (KF T)
-      (K TQ)
-      
+  (SNonVal
+   x (+blame ♭) (-blame ♭)
+      (TI TQ) (TCons TQ) (TAbs TI) (TVal TVal) (S S) ;; (TI TV) (KF T) (K TQ)
+      (S TI)  (TVal S)
+      (TVal TI)
+
       (op T ...) (if T_0 T_1 T_2))
   
   ;; Source Terms
-  (S S0 S1 (S @ ι ⊥) )
+  (S SVal SNonVal) ;(S @ ι ⊥) 
   
   
   
@@ -59,17 +60,17 @@
   ;; Terms with non-reducable contracts.
   
   ;; TODO
-  (KF K (KF @ ι ⊥))
-  ;(SF S (SF @ ι ⊥))
+  (TCons K (TCons @ ι ⊥))
+  (TAps (λ x S) (TAps @ ι ⊥))
   
   ;; Values with False Contarcts
-  (TV S0 (TV @ ι ⊥))
+  (TVal SVal (TVal @ ι ⊥))
     
   ;; Terms with Immediate Contracts/ False
-  (TI S1 (TI @ ι I) (TI @ ι ⊥))
+  (TI SNonVal (TI @ ι I) (TI @ ι ⊥))
   
   ;; Terms with Delayed Contracts
-  (TQ TV TI (TQ @ ι Q))
+  (TQ TVal TI (TQ @ ι Q))
   
   ;; Canonical Terms (non-reducable terms)
   (T TQ (T_0 ∥ T_1))
@@ -101,7 +102,7 @@
    ;((λ x M) @ ι I)
    
    ;; Contracts on return terms
-   (λ x (M @ ι Q)) ;; (λ x (M @ ι C))
+   (λ x (M @ ι C))
    
    ;; True
    (M @ ι ⊤)
@@ -229,6 +230,8 @@
    ;; ------------
    ;; Rule [Lower] creates a new function contarct from the 
    ;; contract of the function's body.
+   
+   ;; TODO, Lower only triggers when the valuation A[[S1]] @ C
    
    (--> (ς
          (in-hole F (λ x (T @ ι C))))
