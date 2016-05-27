@@ -269,7 +269,37 @@
   ⊓ : C C -> C
   [(⊓ (C_d → C_r) (D_d → D_r)) (D_d → C_r)])
 
+#|
+  ___      _         _      _         ___ _                
+ / __|__ _| |__ _  _| |__ _| |_ ___  | _ ) |__ _ _ __  ___ 
+| (__/ _` | / _| || | / _` |  _/ -_) | _ \ / _` | '  \/ -_)
+ \___\__,_|_\__|\_,_|_\__,_|\__\___| |___/_\__,_|_|_|_\___|
+                                                           
+|#
 
+;; root-of
+;; -------
+;; Calculates the root (♭) of blame indetifier b.
+(define-metafunction λCon
+  root-of : b ς -> ♭
+  [(root-of ♭ ς) ♭]
+  [(root-of ι ς) (root-of (parent-of ι ς) ς)])
+
+;; parent-of
+;; ---------
+;; Calculates the parent blame indentifier b of blame variable ι.
+(define-metafunction λCon
+  parent-of : b ς -> b
+  [(parent-of ι_0 ((b ◃ (ι_0 → ι_1)) ς)) b]
+  [(parent-of ι_1 ((b ◃ (ι_0 → ι_1)) ς)) b]
+  [(parent-of ι_0 ((b ◃ (ι_0 ∩ ι_1)) ς)) b]
+  [(parent-of ι_1 ((b ◃ (ι_0 ∩ ι_1)) ς)) b]
+  [(parent-of ι_0 ((b ◃ (ι_0 ∪ ι_1)) ς)) b]
+  [(parent-of ι_1 ((b ◃ (ι_0 ∪ ι_1)) ς)) b]
+  [(parent-of ι   ((b ◃ (¬ ι)) ς)) b]
+  [(parent-of ι   ((b ◃ ι) ς)) b]
+  [(parent-of ι   ()) ι]
+  [(parent-of ι   ((b ◃ κ) ς)) (parent-of ι ς)])
 
 ;(define-metafunction λCon-Subset 
 ;  closest? : T -> boolean

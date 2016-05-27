@@ -170,14 +170,6 @@
         "Unfold/Assert"
         (fresh ι))
    
-   ;   (--> (ς
-   ;         (in-hole F (T @ ι (C ∪ D))))
-   ;        (((ι ◃ (ι1 ∪ ι2)) ς)
-   ;         ((in-hole F (T @ ι1 C)) (∪∪ ♭) (in-hole F (T @ ι2 D))))
-   ;        "Unfold/Union"
-   ;        (fresh ι1 ι2)
-   ;        (where ♭ (root-of ι ς)))
-   
    (--> (ς
          (in-hole F (T @ ι (C ∪ D)))) 
         (((ι ◃ (ι1 ∩ ι2)) ς)
@@ -210,14 +202,6 @@
          (in-hole F (((T_0 @ ι1 Q) @ ι2 R) T_1)))
         "Unfold/D-Intersection"
         (fresh ι1 ι2))
-   
-;   (--> (ς
-;         (in-hole F ((T_0 @ ι (Q ∩ R)) T_1)))
-;        (((ι ◃ (ι1 ∩ ι2)) ς)
-;         ((in-hole F ((T_0 @ ι1 Q) T_1)) (∩∩ ♭) (in-hole F ((T_0 @ ι2 R) T_1))))
-;        "Unfold/D-Intersection"
-;        (fresh ι1 ι2)
-;        (where ♭ (root-of ι ς)))
    
    ;; Unroll
    ;; ------
@@ -327,38 +311,6 @@
   ;; Return the target expression M if
   ;; none of the previous rules match
   [(unroll x Q b any) any])
-
-#|
-  ___      _         _      _         ___ _                
- / __|__ _| |__ _  _| |__ _| |_ ___  | _ ) |__ _ _ __  ___ 
-| (__/ _` | / _| || | / _` |  _/ -_) | _ \ / _` | '  \/ -_)
- \___\__,_|_\__|\_,_|_\__,_|\__\___| |___/_\__,_|_|_|_\___|
-                                                           
-|#
-
-;; root-of
-;; -------
-;; Calculates the root (♭) of blame indetifier b.
-(define-metafunction λCon
-  root-of : b ς -> ♭
-  [(root-of ♭ ς) ♭]
-  [(root-of ι ς) (root-of (parent-of ι ς) ς)])
-
-;; parent-of
-;; ---------
-;; Calculates the parent blame indentifier b of blame variable ι.
-(define-metafunction λCon
-  parent-of : b ς -> b
-  [(parent-of ι_0 ((b ◃ (ι_0 → ι_1)) ς)) b]
-  [(parent-of ι_1 ((b ◃ (ι_0 → ι_1)) ς)) b]
-  [(parent-of ι_0 ((b ◃ (ι_0 ∩ ι_1)) ς)) b]
-  [(parent-of ι_1 ((b ◃ (ι_0 ∩ ι_1)) ς)) b]
-  [(parent-of ι_0 ((b ◃ (ι_0 ∪ ι_1)) ς)) b]
-  [(parent-of ι_1 ((b ◃ (ι_0 ∪ ι_1)) ς)) b]
-  [(parent-of ι   ((b ◃ (¬ ι)) ς)) b]
-  [(parent-of ι   ((b ◃ ι) ς)) b]
-  [(parent-of ι   ()) ι]
-  [(parent-of ι   ((b ◃ κ) ς)) (parent-of ι ς)])
 
 #|
  ___            _ _         _                         _ 
