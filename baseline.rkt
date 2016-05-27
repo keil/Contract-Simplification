@@ -44,7 +44,7 @@
   ;; Non-Values
   (SNonVal
    x (+blame ♭) (-blame ♭)
-   (TI TQ) (TCons TQ) (TAbs TI) (TAbs TVal) (S TI)  
+   (TI TQ) (TCons TQ) (TAbs TI) (TAbs TVal) ;(S TI)  
    (op TQ ...) (if TQ_0 TQ_1 TQ_2))
   
   ;; Source Terms
@@ -128,11 +128,11 @@
   ;; Function Body Context
   ;; ---------------------
   ;; Reduction Context without abstraction.
-  (BCtx hole (BCtx M) (T BCtx) (op T ... BCtx M ...) (BCtx @ b C))
+  ;; TODO, graft to subse (BCtx hole (BCtx M) (T BCtx) (op T ... BCtx M ...) (BCtx @ b C))
   
   ;; Assertion Context
   ;; -----------------
-  (ACtx hole (ACtx @ ι C))
+  (ACtx hole (ACtx @ ι C)) ;; TODO, graft to subse
   (VCtx hole (VCtx @ ι ⊥))  
   
   ;; Forks (parallel observations)
