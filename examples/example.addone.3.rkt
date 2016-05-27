@@ -41,11 +41,9 @@
 ;; # Baseline Reduction
 ;; --------------------
 ;; Optimization steps: 25
-;; Join Steps:         5
 ;; Reduction steps:    44
 
 ;(traces Baseline-reduction (term (· ,example/addone/3/contracted)))
-;(traces Join-reduction (λCon/Baseline~~>* (term (· ,example/addone/3/contracted))))
 
 (let ([configuration (λCon/Join~~>* (λCon/Baseline~~>* (term (· ,example/addone/3/contracted))))]) 
   (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 1)))))

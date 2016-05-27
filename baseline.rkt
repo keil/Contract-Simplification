@@ -66,7 +66,7 @@
   (TQ TVal TI (TQ @ ι Q))
   
   ;; Canonical Terms (non-reducable terms)
-  (T TQ (T_0 ∥ T_1))
+  (T TQ) ;; TODO, graft to subset (T_0 ∥ T_1)
   
   
   
@@ -122,7 +122,8 @@
   
   ;; Baseline Reduction Context
   ;; --------------------------
-  ((F G H) hole (λ x F) (F M) (T F) (op T ... F M ...) (if T ... F M ...) (F @ b C) (F ∥ N) (T ∥ F))
+  ((F G H) hole (λ x F) (F M) (T F) (op T ... F M ...) (if T ... F M ...) (F @ b C))
+  ;; TODO, graft to subset  (F ∥ N) (T ∥ F))
   
   ;; Function Body Context
   ;; ---------------------
@@ -132,7 +133,7 @@
   ;; Assertion Context
   ;; -----------------
   (ACtx hole (ACtx @ ι C))
-  (VCtx hole (VCtx @ ι I))  
+  (VCtx hole (VCtx @ ι ⊥))  
   
   ;; Forks (parallel observations)
   ;; -----------------------------
@@ -169,13 +170,20 @@
         "Unfold/Assert"
         (fresh ι))
    
+   ;   (--> (ς
+   ;         (in-hole F (T @ ι (C ∪ D))))
+   ;        (((ι ◃ (ι1 ∪ ι2)) ς)
+   ;         ((in-hole F (T @ ι1 C)) (∪∪ ♭) (in-hole F (T @ ι2 D))))
+   ;        "Unfold/Union"
+   ;        (fresh ι1 ι2)
+   ;        (where ♭ (root-of ι ς)))
+   
    (--> (ς
-         (in-hole F (T @ ι (C ∪ D))))
-        (((ι ◃ (ι1 ∪ ι2)) ς)
-         ((in-hole F (T @ ι1 C)) (∪∪ ♭) (in-hole F (T @ ι2 D))))
+         (in-hole F (T @ ι (C ∪ D)))) 
+        (((ι ◃ (ι1 ∩ ι2)) ς)
+         (in-hole F ((T @ ι1 C) @ ι2 D)))
         "Unfold/Union"
-        (fresh ι1 ι2)
-        (where ♭ (root-of ι ς)))
+        (fresh ι1 ι2))
    
    (--> (ς
          (in-hole F (T @ ι (I ∩ C)))) 
@@ -199,10 +207,17 @@
    (--> (ς
          (in-hole F ((T_0 @ ι (Q ∩ R)) T_1)))
         (((ι ◃ (ι1 ∩ ι2)) ς)
-         ((in-hole F ((T_0 @ ι1 Q) T_1)) (∩∩ ♭) (in-hole F ((T_0 @ ι2 R) T_1))))
+         (in-hole F (((T_0 @ ι1 Q) @ ι2 R) T_1)))
         "Unfold/D-Intersection"
-        (fresh ι1 ι2)
-        (where ♭ (root-of ι ς)))
+        (fresh ι1 ι2))
+   
+;   (--> (ς
+;         (in-hole F ((T_0 @ ι (Q ∩ R)) T_1)))
+;        (((ι ◃ (ι1 ∩ ι2)) ς)
+;         ((in-hole F ((T_0 @ ι1 Q) T_1)) (∩∩ ♭) (in-hole F ((T_0 @ ι2 R) T_1))))
+;        "Unfold/D-Intersection"
+;        (fresh ι1 ι2)
+;        (where ♭ (root-of ι ς)))
    
    ;; Unroll
    ;; ------
