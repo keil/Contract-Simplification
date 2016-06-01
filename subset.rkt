@@ -24,8 +24,24 @@
   
   ;; Forks (parallel observations)
   ;; -----------------------------
-  (∥ (∩∩ ♭) (∪∪ ♭))
+  (∥ (∩∩ ι) (∪∪ ι))
+    
+  ;; Contexts
+  ;; ========
   
+  ;; Baseline Reduction Context
+  ;; --------------------------
+  ((F G H) .... (F ∥ N) (T ∥ F))
+  
+  ;; Function Body Context
+  ;; ---------------------
+  ;; Reduction Context without abstraction.
+  (BCtx hole (BCtx M) (T BCtx) (op T ... BCtx M ...) (BCtx @ b C))
+  
+  ;; Assertion Context
+  ;; -----------------
+  ;; TODO, soll needed?
+  (ACtx hole (ACtx @ ι C))
   
   
   ;; Canonical terms (λJ terms)
@@ -40,7 +56,7 @@
    K (side-condition
       (name _fundec (λ x S))
       (not
-       (redex-match? λCon-Baseline (λ x (in-hole BCtx (x @ ι I))) (term _fundec))
+       (redex-match? λCon-Subset (λ x (in-hole BCtx (x @ ι I))) (term _fundec))
        )
       ))
   
@@ -66,7 +82,7 @@
   (TI SNonVal (TI @ ι ⊥)
       ; (TI @ ι I) ;; TODO
       (in-hole VCtx (SNonVal @ ι I))
-
+      
       (side-condition 
        ((in-hole VCtx (TI @ ι_i (name _I I))) @ ι_r (name _J J))
        (not
@@ -99,6 +115,14 @@
    
    ;; Terms containing a reducable term
    (λ x Reducible) (Reducible M) (M Reducible) (op M ... Reducible N ...) (if M ... Reducible N ...)   (Reducible @ b C)
+   
+   ;; Subsets
+   ;; -------
+   (side-condition 
+    ((in-hole ACtx (M @ ι_c (name _c C))) @ ι_d (name _d D))
+    (or (term (⊑ _C _D)) (term (⊑ _D _C)) (term (⊑/semnatic _C _D)) (term (⊑/semantic _D _C)))
+    )
+   
    
    ;; Optimization
    ;; ------------
@@ -135,26 +159,22 @@
    ((M @ ι_0 Q) @ ι_1 ⊥)
    
    ;; Top-level assertions
-   (M @ ♭ C))
-  
-  
-  
-  ;; Contexts
-  ;; ========
-  
-  ;; Baseline Reduction Context
-  ;; --------------------------
-  ((F G H) .... (F ∥ N) (T ∥ F))
-  
-  ;; Function Body Context
-  ;; ---------------------
-  ;; Reduction Context without abstraction.
-  (BCtx hole (BCtx M) (T BCtx) (op T ... BCtx M ...) (BCtx @ b C))
-  
-  ;; Assertion Context
-  ;; -----------------
-  ;; TODO, soll needed?
-  (ACtx hole (ACtx @ ι C)))
+   (M @ ♭ C)))
+
+;; TODO
+
+;; Canonical? (non-reducable terms)
+;; --------------------------------
+(define Subset/canonical?
+  (redex-match? λCon-Subset T))
+
+;; Reducible? (non-canonical terms)
+;; --------------------------------
+(define Subset/reducible?
+  (redex-match? λCon-Subset Reducible))
+
+
+
 
 #|
  ___        _         _   _          
@@ -173,30 +193,24 @@
    λCon-Subset
    #:domain (ς any)
    
-   ;;l Rename
-   
-   (--> (ς
-         (in-hole F ((T_0 @ ι (Q ∩ R)) T_1)))
-        (((ι ◃ (ι1 ∩ ι2)) ς)
-         ((in-hole F ((T_0 @ ι1 Q) T_1)) (∩∩ ♭) (in-hole F ((T_0 @ ι2 R) T_1))))
-        "Unfold/D-Intersection"
-        (fresh ι1 ι2)
-        (where ♭ (root-of ι ς)))
-   
+   ;; Unfold
+   ;; ------
+   ;; Rule [Unfold/Union] and [Unfold/D-Intersection] forks an 
+   ;; union or intersection contract.
    
    (--> (ς
          (in-hole F (T @ ι (C ∪ D))))
         (((ι ◃ (ι1 ∪ ι2)) ς)
-         ((in-hole F (T @ ι1 C)) (∪∪ ♭) (in-hole F (T @ ι2 D))))
+         ((in-hole F (T @ ι1 C)) (∪∪ ι) (in-hole F (T @ ι2 D))))
         "Unfold/Union"
-        (fresh ι1 ι2)
-        (where ♭ (root-of ι ς)))
+        (fresh ι1 ι2))
    
-   
-   
-   
-   
-   
+   (--> (ς
+         (in-hole F ((T_0 @ ι (Q ∩ R)) T_1)))
+        (((ι ◃ (ι1 ∩ ι2)) ς)
+         ((in-hole F ((T_0 @ ι1 Q) T_1)) (∩∩ ι) (in-hole F ((T_0 @ ι2 R) T_1))))
+        "Unfold/D-Intersection"
+        (fresh ι1 ι2))
    
    ;; Lift (up) Contract
    ;; ------------------
@@ -225,7 +239,7 @@
         
         (side-condition 
          (not
-          (redex-match? λCon-Baseline (λ x (in-hole BCtx (x @ ι I))) (term (λ x (T @ ι C))))
+          (redex-match? λCon-Subset (λ x (in-hole BCtx (x @ ι I))) (term (λ x (T @ ι C))))
           )
          )
         
