@@ -22,6 +22,12 @@
 
 (define-extended-language λCon-Subset λCon-Baseline
   
+  ;; Forks (parallel observations)
+  ;; -----------------------------
+  (∥ (∩∩ ♭) (∪∪ ♭))
+  
+  
+  
   ;; Canonical terms (λJ terms)
   ;; ==========================
   
@@ -30,33 +36,49 @@
   ;; Terms without a contract on the outermost position.
   
   ;; Values
-  (S0 K ;(λ x S)
-      (side-condition 
-       (name _fundec (λ x S))
-       (not
-        (redex-match? λCon-Baseline (λ x (in-hole BCtx (x @ ι I))) (term _fundec))
-        )
+  (SVal
+   K (side-condition
+      (name _fundec (λ x S))
+      (not
+       (redex-match? λCon-Baseline (λ x (in-hole BCtx (x @ ι I))) (term _fundec))
        )
-      )
+      ))
   
   ;; Non-Values
-  (S1 x (+blame ♭) (-blame ♭) (S TI) (TI T) (S S) (K T) (op T ...) (if T_0 T_1 T_2))
+  (SNonVal
+   x (+blame ♭) (-blame ♭)
+   (TI TQ) (TCons TQ) (TAbs TI) (TAbs TVal)
+   (op TQ ...) (if TQ_0 TQ_1 TQ_2))
   
   ;; Source Terms
-  (S S0 S1)
+  (S SVal SNonVal)
   
   ;; Terms
   ;; -----
   ;; Terms with non-reducable contracts.
   
+  ;; Values with False Contract
+  (TCons K (TCons @ ι ⊥))
+  (TAbs (λ x S) (TAbs @ ι ⊥))
+  (TVal SVal (TVal @ ι ⊥))
+  
   ;; Terms with Immediate Contracts/ False
-  (TI S1 (TI @ ι I))
+  (TI SNonVal (TI @ ι ⊥)
+      ; (TI @ ι I) ;; TODO
+      (in-hole VCtx (SNonVal @ ι I))
+
+      (side-condition 
+       ((in-hole VCtx (TI @ ι_i (name _I I))) @ ι_r (name _J J))
+       (not
+        (or (term (⊑ _I _J)) (term (⊑ _J _I)) (term (⊑/semnatic _I _J)) (term (⊑/semantic _J _I)))
+        )
+       )
+      )
   
   ;; Terms with Delayed Contracts
-  (TQ S TI 
-      ;(TQ @ ι Q)
-      (S @ ι Q) (TI @ ι Q)
-      
+  (TQ TVal TI 
+      ;(TQ @ ι Q) ;; TODO
+      (TVal @ ι Q) (TI @ ι Q)
       (side-condition 
        ((in-hole ACtx (TQ @ ι_q (name _Q Q))) @ ι_r (name _R R))
        (not
@@ -70,51 +92,22 @@
   
   
   
-  ;; Reducable terms (non-cannonical terms)
-  ;; ======================================
+  ;; Contexts
+  ;; ========
   
-  (Reducible
-   
-   ;; Terms containing a reducable term
-   (λ x Reducible) (Reducible M) (M Reducible) (op M ... Reducible N ...) (if M ... Reducible N ...)   (Reducible @ b C)
-   
-   ;; Optimization
-   ;; ------------
-   
-   ;; Delayed checkes of a delayed contract
-   ((λ x M) (M @ ι Q))
-   
-   ;; Checked of delayed contracts
-   ((M @ ι Q) N) 
-   
-   ;; Imediate contracts in values
-   (K @ ι I) ((λ x M) @ ι I)
-   
-   ;; Contracts on return terms
-   (λ x (M @ ι C))
-   
-   ;; True
-   (M @ ι ⊤)
-   
-   ;; False
-   (M @ ι ⊥)
-   
-   ;; Restructuring
-   ;; -------------
-   
-   ;; Intersection betenn immediate and delayed contract
-   (M @ ι (I ∩ C))
-   
-   ;; Union contracts
-   (M @ ι (C ∪ D))
-   
-   ;; Nested delayed contracts
-   ((M @ ι_0 Q) @ ι_1 I)
-   
-   ;; Top-level assertions
-   (M @ ♭ C))
+  ;; Baseline Reduction Context
+  ;; --------------------------
+  ((F G H) .... (F ∥ N) (T ∥ F))
   
-  )
+  ;; Function Body Context
+  ;; ---------------------
+  ;; Reduction Context without abstraction.
+  (BCtx hole (BCtx M) (T BCtx) (op T ... BCtx M ...) (BCtx @ b C))
+  
+  ;; Assertion Context
+  ;; -----------------
+  ;; TODO, soll needed?
+  (ACtx hole (ACtx @ ι C)))
 
 #|
  ___        _         _   _          
@@ -134,7 +127,7 @@
    #:domain (ς any)
    
    ;;l Rename
-      
+   
    (--> (ς
          (in-hole F ((T_0 @ ι (Q ∩ R)) T_1)))
         (((ι ◃ (ι1 ∩ ι2)) ς)
@@ -144,7 +137,7 @@
         (where ♭ (root-of ι ς)))
    
    
-      (--> (ς
+   (--> (ς
          (in-hole F (T @ ι (C ∪ D))))
         (((ι ◃ (ι1 ∪ ι2)) ς)
          ((in-hole F (T @ ι1 C)) (∪∪ ♭) (in-hole F (T @ ι2 D))))

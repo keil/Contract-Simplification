@@ -44,7 +44,7 @@
   ;; Non-Values
   (SNonVal
    x (+blame ♭) (-blame ♭)
-   (TI TQ) (TCons TQ) (TAbs TI) (TAbs TVal) ;(S TI)  
+   (TI TQ) (TCons TQ) (TAbs TI) (TAbs TVal)
    (op TQ ...) (if TQ_0 TQ_1 TQ_2))
   
   ;; Source Terms
@@ -66,7 +66,7 @@
   (TQ TVal TI (TQ @ ι Q))
   
   ;; Canonical Terms (non-reducable terms)
-  (T TQ) ;; TODO, graft to subset (T_0 ∥ T_1)
+  (T TQ)
   
   
   
@@ -82,14 +82,14 @@
    ;; ------------
    
    ;; Delayed checkes of a delayed contract
-   ((in-hole ACtx (λ x M)) (M @ ι Q))
+   ((in-hole VCtx (λ x M)) (M @ ι Q)) ;; TODO, ACtx
    
    ;; Checkes of delayed contracts
    ((M @ ι Q) N) 
    
    ;; Imediate contracts on values
-   ((in-hole ACtx K) @ ι I)
-   ((in-hole ACtx (λ x M)) @ ι I)
+   ((in-hole VCtx K) @ ι I) ;; TODO, ACtx
+   ((in-hole VCtx (λ x M)) @ ι I) ;; TODO, ACtx
    ;((λ x M) @ ι I)
    
    ;; Contracts on return terms
@@ -123,21 +123,11 @@
   ;; Baseline Reduction Context
   ;; --------------------------
   ((F G H) hole (λ x F) (F M) (T F) (op T ... F M ...) (if T ... F M ...) (F @ b C))
-  ;; TODO, graft to subset  (F ∥ N) (T ∥ F))
-  
-  ;; Function Body Context
-  ;; ---------------------
-  ;; Reduction Context without abstraction.
-  ;; TODO, graft to subse (BCtx hole (BCtx M) (T BCtx) (op T ... BCtx M ...) (BCtx @ b C))
   
   ;; Assertion Context
   ;; -----------------
-  (ACtx hole (ACtx @ ι C)) ;; TODO, graft to subse
-  (VCtx hole (VCtx @ ι ⊥))  
-  
-  ;; Forks (parallel observations)
-  ;; -----------------------------
-  (∥ (∩∩ ♭) (∪∪ ♭)))
+  (VCtx hole (VCtx @ ι ⊥)))
+
 
 #|
  ___        _         _   _          
