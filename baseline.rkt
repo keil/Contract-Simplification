@@ -82,14 +82,14 @@
    ;; ------------
    
    ;; Delayed checkes of a delayed contract
-   ((in-hole VCtx (λ x M)) (M @ ι Q)) ;; TODO, ACtx
+   ((in-hole VCtx (λ x M)) (M @ ι Q))
    
    ;; Checkes of delayed contracts
    ((M @ ι Q) N) 
    
    ;; Imediate contracts on values
-   ((in-hole VCtx K) @ ι I) ;; TODO, ACtx
-   ((in-hole VCtx (λ x M)) @ ι I) ;; TODO, ACtx
+   ((in-hole VCtx K) @ ι I)
+   ((in-hole VCtx (λ x M)) @ ι I)
    ;((λ x M) @ ι I)
    
    ;; Contracts on return terms

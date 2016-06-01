@@ -92,6 +92,53 @@
   
   
   
+  ;; Reducable terms (non-cannonical terms)
+  ;; ======================================
+  
+  (Reducible
+   
+   ;; Terms containing a reducable term
+   (λ x Reducible) (Reducible M) (M Reducible) (op M ... Reducible N ...) (if M ... Reducible N ...)   (Reducible @ b C)
+   
+   ;; Optimization
+   ;; ------------
+   
+   ;; Delayed checkes of a delayed contract
+   ((in-hole VCtx (λ x M)) (M @ ι Q)) 
+   
+   ;; Checkes of delayed contracts
+   ((M @ ι Q) N) 
+   
+   ;; Imediate contracts on values
+   ((in-hole VCtx K) @ ι I)
+   ((in-hole VCtx (λ x M)) @ ι I)
+   ;((λ x M) @ ι I)
+   
+   ;; Contracts on return terms
+   (λ x (M @ ι C))
+   
+   ;; True
+   (M @ ι ⊤)
+   
+   
+   ;; Restructuring
+   ;; -------------
+   
+   ;; Intersection betenn immediate and delayed contract
+   (M @ ι (I ∩ C))
+   
+   ;; Union contracts
+   (M @ ι (C ∪ D))
+   
+   ;; Nested delayed contracts
+   ((M @ ι_0 Q) @ ι_1 I)
+   ((M @ ι_0 Q) @ ι_1 ⊥)
+   
+   ;; Top-level assertions
+   (M @ ♭ C))
+  
+  
+  
   ;; Contexts
   ;; ========
   
