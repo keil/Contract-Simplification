@@ -3,8 +3,8 @@
 
 (require "../lcon.rkt")
 (require "../baseline.rkt")
-(require "../join.rkt")
-(require "../subset.rkt")
+;(require "../join.rkt")
+;(require "../subset.rkt")
 
 (provide (all-defined-out))
 
