@@ -1,0 +1,71 @@
+#lang racket
+  ;; Canonical terms (λJ terms)
+  ;; ==========================
+  
+  ;; Source Terms
+  ;; ------------
+  ;; Terms without a contract on the outermost position.
+  
+  ;; Values
+  (S0 K (λ x S))
+  
+  ;; Non-Values
+  (S1 x (+blame ♭) (-blame ♭) (S TI) (TI T) (S S) 
+      (KF T)
+      (op T ...) (if T_0 T_1 T_2)
+      )
+  
+  ;; Source Terms
+  (S S0 S1)
+  
+  ;; Terms
+  ;; -----
+  ;; Terms with non-reducable contracts.
+  
+  ;; TODO
+  (KF K (KF @ ι ⊥))
+  (SF S (SF @ ι ⊥))
+  
+  ;; Terms with Immediate Contracts/ False
+  (TI S1 (TI @ ι I) (TI @ ι ⊥))
+  
+  ;; Terms with Delayed Contracts
+  (TQ SF TI (TQ @ ι Q))
+  
+  ;; Canonical Terms (non-reducable terms)
+  (T TQ (T_0 ∥ T_1))
+  
+  
+  
+  ;; Reducable terms (non-cannonical terms)
+  ;; ======================================
+  
+  (Reducible
+   
+   ;; Terms containing a reducable term
+   (λ x Reducible) (Reducible M) (M Reducible) (op M ... Reducible N ...) (if M ... Reducible N ...)   (Reducible @ b C)
+   
+   ;; Optimization
+   ;; ------------
+   
+   ;; Delayed checkes of a delayed contract
+   ;((λ x M) (M @ ι Q))
+   ((in-hole ACtx (λ x M)) (M @ ι Q))
+   
+   ;; Checked of delayed contracts
+   ((M @ ι Q) N) 
+   
+   ;; Imediate contracts in values
+   ((in-hole ACtx K) @ ι I)
+   ;(K @ ι I)
+   ((in-hole ACtx (λ x M)) @ ι I)
+   ;((λ x M) @ ι I)
+   
+   ;; Contracts on return terms
+   (λ x (M @ ι C))
+   
+   ;; True
+   (M @ ι ⊤)
+   
+   ;; False
+   ;(M @ ι ⊥)
