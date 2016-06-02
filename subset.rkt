@@ -40,7 +40,6 @@
   
   ;; Assertion Context
   ;; -----------------
-  ;; TODO, soll needed?
   (ACtx hole (ACtx @ ι C))
   
   
@@ -167,18 +166,6 @@
    ;; Top-level assertions
    (M @ ♭ C)))
 
-;; TODO
-
-;; Canonical? (non-reducable terms)
-;; --------------------------------
-(define Subset/canonical?
-  (redex-match? λCon-Subset T))
-
-;; Reducible? (non-canonical terms)
-;; --------------------------------
-(define Subset/reducible?
-  (redex-match? λCon-Subset Reducible))
-
 
 
 
@@ -240,29 +227,15 @@
         (ς
          (in-hole F ((λ x T) @ ι (⊤ → C))))
         "Lower"
-        
-        ;; Lower only when term is canonical.
-        (side-condition 
+        (side-condition ; Lower only when term is canonical.
          (canonical?/Subset (term (T @ ι C))))
-        ;; DO NOT lower argument contracts.
-        (side-condition 
-         (not (redex-match? λCon-Subset (λ x (in-hole BCtx (x @ ι I))) (term (λ x (T @ ι C))))))
-        
-        )
+        (side-condition ; Do not lower argument contracts.
+         (not (redex-match? λCon-Subset (λ x (in-hole BCtx (x @ ι I))) (term (λ x (T @ ι C)))))))
    
    ;; Blame
    ;; ---------------
-   ;; Removes (term ⊥) contracts.
-   
-   ;; TODO: ⊥ mus remain
-   ;; lift than reduces the whole context to blame
-   
-   ;   (--> (ς
-   ;         (in-hole F (T @ ι ⊥)))
-   ;        (ς
-   ;         (in-hole F (blame ♭)))
-   ;        "Reduce/False"
-   ;        (where (blame ♭) (blame-of ι ς)))
+   ;; Reduces False to blame.
+   ;; Note: ⊥ mus remain in the source program.
    
    (--> (ς
          (in-hole F (λ x (in-hole BCtx (T @ ι ⊥)))))
@@ -279,56 +252,63 @@
          (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
         (ς
          (in-hole F (in-hole ACtx (T @ ι_0 C))))
-        "Subset1"
-        (side-condition (and
-                         (term (⊑ C D))
-                         ;(canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D))))
-                         )))
+        "Subset/1"
+        (side-condition (term (⊑ C D))))
    
    (--> (ς
          (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
         (ς
          (in-hole F (in-hole ACtx (T @ ι_1 D))))
-        "Subset2"
-        (side-condition (and
-                         (term (⊑ D C))
-                         ;(canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D))))
-                         )))
+        "Subset/2"
+        (side-condition (term (⊑ D C))))
+   
+   ;; NOTE: For flat contracts, native and ordanary subset is the same.
+   ;; Thus, the following two rules are restricted to delayed contracts.
+   
+   ;; problem, say, we use the context from q and the sbject from c
+   ;; ist might happen that we violate the subject 
+   ;; part, but also repoirt thi sviolation to q, oritin
+   
+   ;; it is not alloowed to report falls to a constraint that is not violated,
+   ;; otherwise we would repor a contract violation that is not violated.
    
    
+   (--> (ς
+         (in-hole F (in-hole ACtx ((T @ ι_0 (⊤ → C)) @ ι_1 (I → ⊤)))))
+        (((ι_0 ◃ ι2) ((ι_1 ◃ ι2) ς)) ;; TODO is this step correct
+         (in-hole F (in-hole ACtx (T @ ι2 (I → C)))))
+        "Condense"
+        (fresh ι2))
+        ;(side-condition (term (⊑/semantic Q R))))
    
-   ;; NOTE; for flat contarcts, natice ans semantic subset are the same.
-   
-   ;; TODO, why no inversion ?
+     #|
    (--> (ς
          (in-hole F ((in-hole ACtx (T @ ι_0 Q)) @ ι_1 R)))
-        (((ι_0 ◃ ι2) ((ι_1 ◃ ι2) ς))
+        (((ι_0 ◃ ι2) ((ι_1 ◃ ι2) ς)) ;; TODO is this step correct
          (in-hole F (in-hole ACtx (T @ ι2 (⊓ Q R)))))
-        "SubsetX"
+        "Merge/1"
         (fresh ι2)
         (side-condition (term (⊑/semantic Q R))))
-;         (and
- ;                        (term (⊑/semantic Q R))
- ;                        true
-                         ;(canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D))))
-  ;                       )))
    
    (--> (ς
          (in-hole F ((in-hole ACtx (T @ ι_0 Q)) @ ι_1 R)))
-        (((ι_0 ◃ ι2) ((ι_1 ◃ ι2) ς))
+        (((ι_0 ◃ ι2) ((ι_1 ◃ ι2) ς))  ;; TODO is this step correct
          (in-hole F (in-hole ACtx (T @ ι2 (⊓ R Q)))))
-        "SubsetY"
+        "Merge/2"
         (fresh ι2)
-        (side-condition (and
-                         (term (⊑/semantic R Q))
-                         true
-                         ;(canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D))))
-                         )))
-   
-   
+        (side-condition (term (⊑/semantic R Q))))
+   |#
    ))
 
-; TODO
+
+#|
+ __  __                  
+|  \/  |___ _ _ __ _ ___ 
+| |\/| / -_) '_/ _` / -_)
+|_|  |_\___|_| \__, \___|
+               |___/     
+|#
+
 (define-metafunction λCon
   ⊓ : C C -> C
   [(⊓ (C_d → C_r) (D_d → D_r)) (D_d → C_r)])
@@ -366,62 +346,6 @@
   [(parent-of ι   ((b ◃ ι) ς)) b]
   [(parent-of ι   ()) ι]
   [(parent-of ι   ((b ◃ κ) ς)) (parent-of ι ς)])
-
-;(define-metafunction λCon-Subset 
-;  closest? : T -> boolean
-;  [(closest? ((in-hole ACtx_2 (T @ ι_0 C)) @ ι_1 D)) #t (side-condition (term (⊑ C D)))]
-;  [(closest? ((in-hole ACtx_2 (T @ ι_0 C)) @ ι_1 D)) #t (side-condition (term (⊑ D C)))]
-;  [(closest? any) #f])
-
-;(define-metafunction λCon-Subset 
-;  opt? : T D -> boolean
-;  [(opt? (in-hole ACtx_1 ((in-hole ACtx_2 (T @ ι_0 C)) @ ι_1 D)) D) #t (side-condition (term (⊑ C D)))]
-;  [(opt? (in-hole ACtx_1 ((in-hole ACtx_2 (T @ ι_0 C)) @ ι_1 D)) D) #t (side-condition (term (⊑ D C)))]
-;  [(opt? any D) #f])
-
-;(define-metafunction λCon-Subset 
-;  ⇓ : T -> T
-;  [(⇓ ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)) (⇓ (in-hole ACtx (T @ ι_0 C))) (side-condition (term (⊑ C ;D)))]
-;  [(⇓ ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)) (⇓ (in-hole ACtx (T @ ι_1 D))) (side-condition (term (⊑ D ;C)))]
-;  [(⇓ ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)) ((⇓ (in-hole ACtx (T @ ι_0 C))) @ ι_1 D)]
-;  [(⇓ (S @ ι_0 C)) (S @ ι_0 C)]
-;  )
-
-
-
-#|
-  ___      _         _      _         ___ _                
- / __|__ _| |__ _  _| |__ _| |_ ___  | _ ) |__ _ _ __  ___ 
-| (__/ _` | / _| || | / _` |  _/ -_) | _ \ / _` | '  \/ -_)
- \___\__,_|_\__|\_,_|_\__,_|\__\___| |___/_\__,_|_|_|_\___|
-                                                           
-|#
-#|
-;; root-of
-;; -------
-;; Calculates the root (♭) of blame indetifier b.
-(define-metafunction λCon
-  root-of : b ς -> ♭
-  [(root-of ♭ ς) ♭]
-  [(root-of ι ς) (root-of (parent-of ι ς) ς)])
-
-;; parent-of
-;; ---------
-;; Calculates the parent blame indentifier b of blame variable ι.
-(define-metafunction λCon
-  parent-of : b ς -> b
-  [(parent-of ι_0 ((b ◃ (ι_0 → ι_1)) ς)) b]
-  [(parent-of ι_1 ((b ◃ (ι_0 → ι_1)) ς)) b]
-  [(parent-of ι_0 ((b ◃ (ι_0 ∩ ι_1)) ς)) b]
-  [(parent-of ι_1 ((b ◃ (ι_0 ∩ ι_1)) ς)) b]
-  [(parent-of ι_0 ((b ◃ (ι_0 ∪ ι_1)) ς)) b]
-  [(parent-of ι_1 ((b ◃ (ι_0 ∪ ι_1)) ς)) b]
-  [(parent-of ι   ((b ◃ (¬ ι)) ς)) b]
-  [(parent-of ι   ((b ◃ ι) ς)) b]
-  [(parent-of ι   ()) ι]
-  [(parent-of ι   ((b ◃ κ) ς)) (parent-of ι ς)])
-
-|#
 
 ;; invert
 ;; ------
@@ -602,8 +526,8 @@
   [(⊑ C ⊤) #t]
   [(⊑ ⊥ D) #f]
   
-  [(⊑ C D) ,(and (term (⊑/context C D)) (term (⊑/subject C D)))]
-  [(⊑ any ...) #f]) ;; TODO, is this line required ?
+  [(⊑ C D) ,(and (term (⊑/context C D)) (term (⊑/subject C D)))])
+;;[(⊑ any ...) #f]) ;; TODO, is this line required ?
 
 
 ;; Context Subset (⊑/context)
@@ -661,7 +585,6 @@
   
   ;; Function Contract
   [(⊑/subject (C_0 → D_0) (C_1 → D_1)) ,(and (term (⊑/context C_0 C_1)) (term (⊑/subject D_0 D_1)))]
-;  [(⊑/subject (C_0 → D_0) (C_1 → D_1)) ,(and (term (⊑/context C_0 C_1)) (implies (term (⊑/subject C_0 C_1)) (term (⊑/subject D_0 D_1))))]
   
   ;; Dependent Contract
   [(⊑/subject (x → A_0) (x → A_1)) (⊑/subject A_0 A_1)]
@@ -676,92 +599,6 @@
   
   ;; If not otherwise mentioned
   [(⊑/subject any ...) #f])
-
-#|
-  ___         _               _   
- / __|___ _ _| |_ _ _ __ _ __| |_ 
-| (__/ _ \ ' \  _| '_/ _` / _|  _|
- \___\___/_||_\__|_| \__,_\__|\__|
-                                  
- ___      _       _               _   _          
-/ __|_  _| |__ __| |_ _ _ __ _ __| |_(_)___ _ _  
-\__ \ || | '_ (_-<  _| '_/ _` / _|  _| / _ \ ' \ 
-|___/\_,_|_.__/__/\__|_| \__,_\__|\__|_\___/_||_|
-                                                 
-|#
-
-
-;; Contract Minus (I \ J)
-
-
-;; Predicate Containment (∈)
-;; ------------------------
-
-
-#|
-;; Contract Difference (\\)
-;; ------------------------
-
-(define-metafunction λCon-Baseline
-  \\ : C D -> C
-  
-  ;; ⊤ \ J 
-  [(\\ ⊤ D) ⊤]
-  ;; I \ J (e.g. Numer \ Positive) 
-  [(\\ C D) ⊤ (side-condition (term (⊑ D C)))]
-  
-  ;; Right-Intersection
-  [(\\ C (D_0 ∩ D_1)) (≈/ ((\\ C D_0) ∪ (\\ C D_1)))]
-  ;; Right-Union
-  [(\\ C (D_0 ∪ D_1)) (≈/ ((\\ C D_0) ∩ (\\ C D_1)))]
-  
-  ;; Left-Intersection
-  [(\\ (C_0 ∩ C_1) D) (≈/ ((\\ C_0 D) ∩ (\\ C_1 D)))]
-  ;; Left-Union
-  [(\\ (C_0 ∪ C_1) D) (≈/ ((\\ C_0 D) ∪ (\\ C_1 D)))]
-  
-  ;; Otherwise
-  [(\\ C D) C])
-
-
-;; Contract Normalization (≈)
-;; --------------------------
-
-(define-metafunction λCon-Baseline
-  ≈/ : C -> C
-  [(≈/ (C ∩ D)) (≈ ((≈/ C) ∩ (≈/ D)))]
-  [(≈/ (C ∪ D)) (≈ ((≈/ C) ∪ (≈/ D)))]
-  [(≈/ (C → D)) (≈ ((≈/ C) → (≈/ D)))]
-  [(≈/ any) (≈ any)])
-
-(define-metafunction λCon-Baseline
-  ≈ : C -> C
-  
-  [(≈ (I ∩ ⊥)) ⊥]
-  [(≈ (⊥ ∩ J)) ⊥]
-  [(≈ (I ∩ ⊤)) I]
-  [(≈ (⊤ ∩ J)) J]
-  
-  [(≈ (I ∪ ⊥)) I]
-  [(≈ (⊥ ∪ J)) J]
-  [(≈ (I ∪ ⊤)) ⊤]
-  [(≈ (⊤ ∪ J)) ⊤]
-  
-  [(≈ (C ∩ ⊥)) ⊥]
-  [(≈ (⊥ ∩ D)) ⊥]
-  
-  [(≈ (C ∪ ⊥)) C]
-  [(≈ (⊥ ∪ D)) D]
-  
-  [(≈ (C ∩ D)) C (side-condition (term (⊑/semantic C D)))]
-  [(≈ (C ∩ D)) D (side-condition (term (⊑/semantic D C)))]
-  
-  [(≈ (C ∪ D)) D (side-condition (term (⊑/semantic C D)))]
-  [(≈ (C ∪ D)) C (side-condition (term (⊑/semantic D C)))]
-  
-  [(≈ C) C])
-
-|#
 
 #|
  ___            _ _         _                         _ 
