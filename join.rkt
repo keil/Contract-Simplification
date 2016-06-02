@@ -36,32 +36,36 @@
                      ∥
                      (in-hole H (in-hole ACtx_r S_r)))))
         (ς
-         (in-hole F ((in-hole H (in-hole (⊔/ACtx ACtx_l ACtx_r) (⊔/Term S_l S_r)))
+         (in-hole F ((in-hole H (in-hole (⊔/ACtx ACtx_l ACtx_r) S_l))
                      ∥
-                     (in-hole H (in-hole (⊔/ACtx ACtx_l ACtx_r) (⊔/Term S_r S_l))))))
-        "Join/Term"
-        (side-condition (not (term (≈ (in-hole ACtx_l S_l) (in-hole ACtx_r S_r)))))
-        (side-condition 
-         (canonical? 
-          (term (in-hole F ((in-hole H (in-hole ACtx_l S_l))
-                            ∥
-                            (in-hole H (in-hole ACtx_r S_r))))))))
+                     (in-hole H (in-hole (⊔/ACtx ACtx_l ACtx_r) S_r)))))
+        "Join/Context/Term"
+        (side-condition (not (term (≡/ACtx ACtx_l ACtx_r))))
+        ;        (side-condition (not (term (≈ (in-hole ACtx_l S_l) (in-hole ACtx_r S_r)))))
+        ;        (side-condition 
+        ;         (canonical? 
+        ;          (term (in-hole F ((in-hole H (in-hole ACtx_l S_l))
+        ;                            ∥
+        ;                            (in-hole H (in-hole ACtx_r S_r)))))))
+        )
    
    (--> (ς
          (in-hole F ((in-hole G (op T ... (in-hole H (in-hole ACtx_l S_l)) T_l ... ))
                      ∥
                      (in-hole G (op T ... (in-hole H (in-hole ACtx_r S_r)) T_r ... )))))
         (ς
-         (in-hole F ((in-hole G (op T ... (in-hole H (in-hole (⊔/ACtx ACtx_l ACtx_r) (⊔/Term S_l S_r))) T_l ... ))
+         (in-hole F ((in-hole G (op T ... (in-hole H (in-hole (⊔/ACtx ACtx_l ACtx_r) S_l)) T_l ... ))
                      ∥
-                     (in-hole G (op T ... (in-hole H (in-hole (⊔/ACtx ACtx_l ACtx_r) (⊔/Term S_r S_l))) T_r ... )))))
+                     (in-hole G (op T ... (in-hole H (in-hole (⊔/ACtx ACtx_l ACtx_r) S_r)) T_r ... )))))
         "Join/Op"
-        (side-condition (not (term (≈ (in-hole ACtx_l S_l) (in-hole ACtx_r S_r)))))
-        (side-condition 
-         (canonical? 
-          (term (in-hole F ((in-hole G (op T ... (in-hole H (in-hole ACtx_l S_l)) T_l ... ))
-                            ∥
-                            (in-hole G (op T ... (in-hole H (in-hole ACtx_r S_r)) T_r ... ))))))))
+        (side-condition (not (term (≡/ACtx ACtx_l ACtx_r))))
+        ;        (side-condition (not (term (≈ (in-hole ACtx_l S_l) (in-hole ACtx_r S_r)))))
+        ;        (side-condition 
+        ;         (canonical? 
+        ;          (term (in-hole F ((in-hole G (op T ... (in-hole H (in-hole ACtx_l S_l)) T_l ... ))
+        ;                            ∥
+        ;                            (in-hole G (op T ... (in-hole H (in-hole ACtx_r S_r)) T_r ... )))))))
+        )
    
    
    (--> (ς
@@ -69,42 +73,116 @@
                      ∥
                      (in-hole G (if T ... (in-hole H (in-hole ACtx_r S_r)) T_r ... )))))
         (ς
-         (in-hole F ((in-hole G (if T ... (in-hole H (in-hole (⊔/ACtx ACtx_l ACtx_r) (⊔/Term S_l S_r))) T_l ... ))
+         (in-hole F ((in-hole G (if T ... (in-hole H (in-hole (⊔/ACtx ACtx_l ACtx_r) S_l)) T_l ... ))
                      ∥
-                     (in-hole G (if T ... (in-hole H (in-hole (⊔/ACtx ACtx_l ACtx_r) (⊔/Term S_r S_l))) T_r ... )))))
+                     (in-hole G (if T ... (in-hole H (in-hole (⊔/ACtx ACtx_l ACtx_r) S_r)) T_r ... )))))
         "Join/If"
-        (side-condition (not (term (≈ (in-hole ACtx_l S_l) (in-hole ACtx_r S_r)))))
-        (side-condition 
-         (canonical? 
-          (term (in-hole F ((in-hole G (if T ... (in-hole H (in-hole ACtx_l S_l)) T_l ... ))
-                            ∥
-                            (in-hole G (if T ... (in-hole H (in-hole ACtx_r S_r)) T_r ... ))))))))
-   
+        (side-condition (not (term (≡/ACtx ACtx_l ACtx_r))))
+        ;(side-condition (not (term (≈ (in-hole ACtx_l S_l) (in-hole ACtx_r S_r)))))
+        ;        (side-condition 
+        ;         (canonical? 
+        ;          (term (in-hole F ((in-hole G (if T ... (in-hole H (in-hole ACtx_l S_l)) T_l ... ))
+        ;                            ∥
+        ;                            (in-hole G (if T ... (in-hole H (in-hole ACtx_r S_r)) T_r ... )))))))
+        )
    
    (--> (ς
          (in-hole F ((in-hole G (T ... (in-hole H (in-hole ACtx_l S_l)) T_l ... ))
                      ∥
                      (in-hole G (T ... (in-hole H (in-hole ACtx_r S_r)) T_r ... )))))
         (ς
-         (in-hole F ((in-hole G (T ... (in-hole H (in-hole (⊔/ACtx ACtx_l ACtx_r) (⊔/Term S_l S_r))) T_l ... ))
+         (in-hole F ((in-hole G (T ... (in-hole H (in-hole (⊔/ACtx ACtx_l ACtx_r) S_l)) T_l ... ))
                      ∥
-                     (in-hole G (T ... (in-hole H (in-hole (⊔/ACtx ACtx_l ACtx_r) (⊔/Term S_r S_l))) T_r ... )))))
+                     (in-hole G (T ... (in-hole H (in-hole (⊔/ACtx ACtx_l ACtx_r) S_r)) T_r ... )))))
         "Join/App"
-        (side-condition (not (term (≈ (in-hole ACtx_l S_l) (in-hole ACtx_r S_r)))))
-        (side-condition 
-         (canonical? 
-          (term (in-hole F ((in-hole G (T ... (in-hole H (in-hole ACtx_l S_l)) T_l ... ))
-                            ∥
-                            (in-hole G (T ... (in-hole H (in-hole ACtx_r S_r)) T_r ... ))))))))
+        (side-condition (not (term (≡/ACtx ACtx_l ACtx_r))))
+        
+        ;(side-condition (not (term (≈ (in-hole ACtx_l S_l) (in-hole ACtx_r S_r)))))
+        ;        (side-condition 
+        ;         (canonical? 
+        ;          (term (in-hole F ((in-hole G (T ... (in-hole H (in-hole ACtx_l S_l)) T_l ... ))
+        ;                            ∥
+        ;                            (in-hole G (T ... (in-hole H (in-hole ACtx_r S_r)) T_r ... )))))))
+        )
    
    
+   
+   
+   
+   
+   
+   
+   
+   
+   (--> (ς
+         (in-hole F ((in-hole H S_l)
+                     ∥
+                     (in-hole H S_r))))
+        (ς
+         (in-hole F ((in-hole H (⊔/Term S_l S_r))
+                     ∥
+                     (in-hole H (⊔/Term S_l S_r)))))
+        "Join/Term"
+        (side-condition (not (term (≡/Term S_l S_r)))))
+   
+   (--> (ς
+         (in-hole F ((in-hole G (op T ... (in-hole H S_l) T_l ... ))
+                     ∥
+                     (in-hole G (op T ... (in-hole H S_r) T_r ... )))))
+        (ς
+         (in-hole F ((in-hole G (op T ... (in-hole H (⊔/Term S_l S_r)) T_l ... ))
+                     ∥
+                     (in-hole G (op T ... (in-hole H (⊔/Term S_l S_r)) T_r ... )))))
+        "Join/Term/Op"
+        (side-condition (not (term (≡/Term S_l S_r)))))
+   
+   (--> (ς
+         (in-hole F ((in-hole G (if T ... (in-hole H S_l) T_l ... ))
+                     ∥
+                     (in-hole G (if T ... (in-hole H S_r) T_r ... )))))
+        (ς
+         (in-hole F ((in-hole G (if T ... (in-hole H (⊔/Term S_l S_r)) T_l ... ))
+                     ∥
+                     (in-hole G (if T ... (in-hole H (⊔/Term S_l S_r)) T_r ... )))))
+        "Join/Term/If"
+        (side-condition (not (term (≡/Term S_l S_r)))))
+   
+   (--> (ς
+         (in-hole F ((in-hole G (T ... (in-hole H S_l) T_l ... ))
+                     ∥
+                     (in-hole G (T ... (in-hole H S_r) T_r ... )))))
+        (ς
+         (in-hole F ((in-hole G (T ... (in-hole H (⊔/Term S_l S_r)) T_l ... ))
+                     ∥
+                     (in-hole G (T ... (in-hole H (⊔/Term S_l S_r)) T_r ... )))))
+        "Join/Term/App"
+        (side-condition (not (term (≡/Term S_l S_r)))))
    
    ))
 
+;; Problem, term is not the deepest term
+
+(⊔/Term 
+ ((λ f (λ x ((f 1) x))) (λ x (λ y (if (or (string? x) (string? y)) (string-append x y) (+ x y))))) 
+ ((λ f (λ x ((-blame ♭) @ ι11 ⊥))) (λ x (λ y (if (or (string? x) (string? y)) (string-append x y) (+ x y))))))
+
+
+(((λ f (λ x ((f 1) x)))   
+(((λ f (λ x ((-blame ♭) @ ι11 ⊥))) 
+  
+  (λ x (λ y (if (or (string? x) (string? y)) (string-append x y) (+ x y))))) @ ι10 (Number? → Number?))
+  (λ x (λ y (if (or (string? x) (string? y)) (string-append x y) (+ x y))))) @ ι10 (Number? → Number?))
+
+;(⊔/Term 
+; ((λ f (λ x ((f 1) x))) (λ x (λ y (if (or (string? x) (string? y)) (string-append x y) (+ x y))))) 
+; ((λ f (λ x ((-blame ♭) @ ι11 ⊥))) (λ x (λ y (if (or (string? x) (string? y)) (string-append x y) (+ x ;y))))))
+
+
 ;; merge
 (define-metafunction λCon-Subset
-  ⊕/ACtx : ACtx ACtx -> ACtx
-  [(⊕/ACtx ACtx_l ACtx_r) (in-hole ACtx_l (\\ ACtx_r ACtx_l))])
+  ⊔/ACtx : ACtx ACtx -> ACtx
+  [(⊔/ACtx ACtx_l ACtx_r) (in-hole ACtx_l ACtx_r)])
+;; ACtx_l(in-hole ACtx_l (\\ ACtx_r ACtx_l))
 
 (define-metafunction λCon-Subset
   ∈/ACtx : C ACtx -> boolean
@@ -125,6 +203,10 @@
   [(≡/ACtx hole hole) #t] 
   [(≡/ACtx any ...) #f])
 
+(define-metafunction λCon-Subset
+  ≡/Term : T T -> boolean
+  [(≡/Term T T) #t] 
+  [(≡/Term any ...) #f])
 
 ;; TODO, maybe we need a one level equivalence of contetx
 

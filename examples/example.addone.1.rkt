@@ -4,7 +4,7 @@
 (require "../lcon.rkt")
 (require "../baseline.rkt")
 (require "../subset.rkt")
-;(require "../join.rkt")
+(require "../join.rkt")
 
 (provide (all-defined-out))
 
@@ -55,8 +55,9 @@
 ;; Join Steps:         XX
 ;; Reduction steps:    XX
 
-(traces Subset-reduction (term (· ,example/addone/1/contracted)))
+;(traces Subset-reduction (term (· ,example/addone/0/contracted)))
 
-;(traces Join-reduction (λCon/Baseline~~>* (term (· ,example/addone/1/contracted))))
-;(let ([configuration (λCon/Subset~~>* (term (· ,example/addone/0/contracted)))]) 
+(traces Join-reduction (λCon/Subset~~>* (term (· ,example/addone/1/contracted))))
+
+;(let ([configuration (λCon/Join~~>* (λCon/Subset~~>* (term (· ,example/addone/0/contracted))))]) 
 ;  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 1)))))

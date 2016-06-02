@@ -4,7 +4,7 @@
 (require "../lcon.rkt")
 (require "../baseline.rkt")
 (require "../subset.rkt")
-;(require "../join.rkt")
+(require "../join.rkt")(require "../join.rkt")
 
 (provide (all-defined-out))
 
