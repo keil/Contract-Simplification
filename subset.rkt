@@ -305,11 +305,12 @@
          (in-hole F (in-hole ACtx (T @ ι2 (⊓ Q R)))))
         "SubsetX"
         (fresh ι2)
-        (side-condition (and
-                         (term (⊑/semantic Q R))
-                         
+        (side-condition (term (⊑/semantic Q R))))
+;         (and
+ ;                        (term (⊑/semantic Q R))
+ ;                        true
                          ;(canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D))))
-                         )))
+  ;                       )))
    
    (--> (ς
          (in-hole F ((in-hole ACtx (T @ ι_0 Q)) @ ι_1 R)))
@@ -319,7 +320,7 @@
         (fresh ι2)
         (side-condition (and
                          (term (⊑/semantic R Q))
-                         
+                         true
                          ;(canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D))))
                          )))
    
@@ -603,6 +604,10 @@
   [(⊑ C D) ,(and (term (⊑/context C D)) (term (⊑/subject C D)))]
   [(⊑ any ...) #f]) ;; TODO, is this line required ?
 
+
+;; Context Subset (⊑/context)
+;; --------------------------
+
 (define-metafunction λCon
   ⊑/context : C D -> boolean
   
@@ -634,6 +639,9 @@
   ;; If not otherwise mentioned
   [(⊑/context any ...) #f])
 
+;; Subject Subset (⊑/subject)
+;; --------------------------
+
 (define-metafunction λCon
   ⊑/subject : C D -> boolean
   
@@ -651,7 +659,8 @@
   [(⊑/subject (Λ x C) (Λ x D)) (⊑/subject C D)]
   
   ;; Function Contract
-  [(⊑/subject (C_0 → D_0) (C_1 → D_1)) ,(and (term (⊑/context C_0 C_1)) (implies (term (⊑/subject C_0 C_1)) (term (⊑/subject D_0 D_1))))]
+  [(⊑/subject (C_0 → D_0) (C_1 → D_1)) ,(and (term (⊑/context C_0 C_1)) (term (⊑/subject D_0 D_1)))]
+;  [(⊑/subject (C_0 → D_0) (C_1 → D_1)) ,(and (term (⊑/context C_0 C_1)) (implies (term (⊑/subject C_0 C_1)) (term (⊑/subject D_0 D_1))))]
   
   ;; Dependent Contract
   [(⊑/subject (x → A_0) (x → A_1)) (⊑/subject A_0 A_1)]
