@@ -25,7 +25,7 @@
   ;; Forks (parallel observations)
   ;; -----------------------------
   (∥ (∩∩ ι) (∪∪ ι))
-    
+  
   ;; Contexts
   ;; ========
   
@@ -62,7 +62,7 @@
   
   ;; Non-Values
   (SNonVal
-   x (+blame ♭) (-blame ♭)
+   x ((blame ♭) @ ι ⊥) ;(+blame ♭) (-blame ♭)
    (TI TQ) (TCons TQ) (TAbs TI) (TAbs TVal)
    (op TQ ...) (if TQ_0 TQ_1 TQ_2))
   
@@ -147,7 +147,9 @@
    (M @ ι ⊤)
    
    ;; False
-   (M @ ι ⊥)
+   (side-condition 
+    ((name _M M) @ ι ⊥) 
+    (not (redex-match? λCon-Subset (blame ♭) (term _M))))
    
    ;; Restructuring
    ;; -------------
@@ -265,7 +267,7 @@
    (--> (ς
          (in-hole F (λ x (in-hole BCtx (T @ ι ⊥)))))
         (ς
-         (in-hole F (λ x (blame ♭))))
+         (in-hole F (λ x ((blame ♭) @ ι ⊥))))
         "Blame"
         (where (blame ♭) (blame-of ι ς)))
    
@@ -294,27 +296,30 @@
    
    
    
+   ;; NOTE; for flat contarcts, natice ans semantic subset are the same.
    
-   ;; TODO
+   ;; TODO, why no inversion ?
    (--> (ς
-         (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
+         (in-hole F ((in-hole ACtx (T @ ι_0 Q)) @ ι_1 R)))
         (((ι_0 ◃ ι2) ((ι_1 ◃ ι2) ς))
-         (in-hole F (in-hole ACtx (T @ ι2 (⊓ C D)))))
+         (in-hole F (in-hole ACtx (T @ ι2 (⊓ Q R)))))
         "SubsetX"
         (fresh ι2)
         (side-condition (and
-                         (term (⊑/semantic C D))
+                         (term (⊑/semantic Q R))
+                         
                          ;(canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D))))
                          )))
    
    (--> (ς
-         (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
+         (in-hole F ((in-hole ACtx (T @ ι_0 Q)) @ ι_1 R)))
         (((ι_0 ◃ ι2) ((ι_1 ◃ ι2) ς))
-         (in-hole F (in-hole ACtx (T @ ι2 (⊓ D C)))))
+         (in-hole F (in-hole ACtx (T @ ι2 (⊓ R Q)))))
         "SubsetY"
         (fresh ι2)
         (side-condition (and
-                         (term (⊑/semantic D C))
+                         (term (⊑/semantic R Q))
+                         
                          ;(canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D))))
                          )))
    
@@ -325,6 +330,8 @@
 (define-metafunction λCon
   ⊓ : C C -> C
   [(⊓ (C_d → C_r) (D_d → D_r)) (D_d → C_r)])
+;; TODO, it might be better to join domain and range
+;; as they might be function contracts ?
 
 #|
   ___      _         _      _         ___ _                
