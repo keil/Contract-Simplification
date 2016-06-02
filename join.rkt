@@ -4,6 +4,7 @@
 (require "lj.rkt")
 (require "lcon.rkt")
 (require "baseline.rkt")
+(require "subset.rkt")
 
 (provide (all-defined-out))
 
@@ -98,8 +99,43 @@
    
    ))
 
+;; merge
+(define-metafunction λCon-Baseline
+  ⊕/ACtx : ACtx ACtx -> ACtx
+  [(⊕/ACtx ACtx_l ACtx_r) (in-hole ACtx_l (\\ ACtx_r ACtx_l))])
+
+(define-metafunction λCon-Baseline
+  ∈/ACtx : C ACtx -> boolean
+  [(∈/ACtx C (ACtx @ ι C)) #t]
+  [(∈/ACtx C (ACtx @ ι D)) (∈/ACtx C ACtx)]
+  [(∈/ACtx C hole) #f])  
+
+;; context set minus
+(define-metafunction λCon-Baseline
+  \\ : : ACtx ACtx -> ACtx
+  [(\\ (ACtx_0 @ ι C) ACtx) (\\ ACtx_0 ACtx) (side-condition (∈/ACtx C ACtx))]
+  [(\\ (ACtx_0 @ ι C) ACtx) ((\\ ACtx_0 ACtx) @ ι C) (side-condition (not (∈/ACtx C ACtx)))]
+  [(\\ hole ACtx) hole])
+
+(define-metafunction λCon-Baseline
+  ≡/ACtx : ACtx ACtx -> boolean
+  [(≡/ACtx (ACtx_0 @ ι C) (ACtx_1 @ ι C)) (≡/ACtx ACtx_0 ACtx_1)]
+  [(≡/ACtx hole hole) #t] 
+  [(≡/ACtx any ...) #f])
 
 
+;; TODO, maybe we need a one level equivalence of contetx
+
+
+(define-metafunction λCon-Baseline
+  ⊔ : ∥ T T -> T
+  [(⊔ ∥ (blame ♭) T) T]
+  [(⊔ ∥ T (blame ♭)) T]
+  [(⊔ ∥ T T) T])
+
+
+
+#|
 
 (define-metafunction λCon-Baseline
   ≈ : T T -> boolean
@@ -115,9 +151,7 @@
   ;; othweise
   [(≈ any ...) #f])
 
-(define-metafunction λCon-Baseline
-  ⊔ : ACtx ACtx -> ACtx
-  [(⊔ ACtx_l ACtx_r) (in-hole ACtx_r ACtx_l)])
+
 
 (define-metafunction λCon-Baseline
   √ : ∥ T T -> T
@@ -137,6 +171,8 @@
   ;; XXX
   [(√ (∩∩ b) T S) T]
   [(√ (∪∪ b) T S) T]) ;; TODO
+
+|#
 
 
 ;; TODO, use join with (∩∩ ♭)
@@ -176,6 +212,8 @@
 ;; A context/subject blame may only be removed if it is a blame term from the splitted contract.
 ;; Thus, say ∥ = (∪∪ ♭).
 
+#|
+
 (define-metafunction λCon-Baseline
   join : ∥ M M -> M
   ;; intersection/ negative blame
@@ -190,6 +228,8 @@
   ;; union/ positive blame
   [(join ∪∪ (+blame ♭) T) T]
   [(join ∪∪ T (+blame ♭)) T])
+
+|#
 
 #|
  ___            _ _         _                         _ 
