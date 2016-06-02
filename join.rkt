@@ -22,7 +22,7 @@
 
 (define Join-reduction
   (reduction-relation
-   λCon-Baseline
+   λCon-Subset
    #:domain (ς any)
    
    (--> (ς
@@ -100,24 +100,24 @@
    ))
 
 ;; merge
-(define-metafunction λCon-Baseline
+(define-metafunction λCon-Subset
   ⊕/ACtx : ACtx ACtx -> ACtx
   [(⊕/ACtx ACtx_l ACtx_r) (in-hole ACtx_l (\\ ACtx_r ACtx_l))])
 
-(define-metafunction λCon-Baseline
+(define-metafunction λCon-Subset
   ∈/ACtx : C ACtx -> boolean
   [(∈/ACtx C (ACtx @ ι C)) #t]
   [(∈/ACtx C (ACtx @ ι D)) (∈/ACtx C ACtx)]
   [(∈/ACtx C hole) #f])  
 
 ;; context set minus
-(define-metafunction λCon-Baseline
+(define-metafunction λCon-Subset
   \\ : : ACtx ACtx -> ACtx
-  [(\\ (ACtx_0 @ ι C) ACtx) (\\ ACtx_0 ACtx) (side-condition (∈/ACtx C ACtx))]
-  [(\\ (ACtx_0 @ ι C) ACtx) ((\\ ACtx_0 ACtx) @ ι C) (side-condition (not (∈/ACtx C ACtx)))]
+  [(\\ (ACtx_0 @ ι C) ACtx) (\\ ACtx_0 ACtx) (side-condition (term (∈/ACtx C ACtx)))]
+  [(\\ (ACtx_0 @ ι C) ACtx) ((\\ ACtx_0 ACtx) @ ι C) (side-condition (not (term (∈/ACtx C ACtx))))]
   [(\\ hole ACtx) hole])
 
-(define-metafunction λCon-Baseline
+(define-metafunction λCon-Subset
   ≡/ACtx : ACtx ACtx -> boolean
   [(≡/ACtx (ACtx_0 @ ι C) (ACtx_1 @ ι C)) (≡/ACtx ACtx_0 ACtx_1)]
   [(≡/ACtx hole hole) #t] 
@@ -127,7 +127,7 @@
 ;; TODO, maybe we need a one level equivalence of contetx
 
 
-(define-metafunction λCon-Baseline
+(define-metafunction λCon-Subset
   ⊔ : ∥ T T -> T
   [(⊔ ∥ (blame ♭) T) T]
   [(⊔ ∥ T (blame ♭)) T]
