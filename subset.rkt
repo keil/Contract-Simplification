@@ -282,7 +282,7 @@
         "Subset1"
         (side-condition (and
                          (term (⊑ C D))
-                         (canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D))))
+                         ;(canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D))))
                          )))
    
    (--> (ς
@@ -292,7 +292,8 @@
         "Subset2"
         (side-condition (and
                          (term (⊑ D C))
-                         (canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))))))
+                         ;(canonical? (term (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D))))
+                         )))
    
    
    
