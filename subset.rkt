@@ -74,14 +74,15 @@
   ;; Terms with non-reducable contracts.
   
   ;; Values with False Contract
-  (TCons K (TCons @ ι ⊥))
-  (TAbs (λ x S) (TAbs @ ι ⊥))
-  (TVal SVal (TVal @ ι ⊥))
+  (TCons K) ;; TODO (TCons @ ι ⊥)
+  (TAbs (λ x S)) ;; TODO (TAbs @ ι ⊥)
+  (TVal SVal) ;; TODO (TVal @ ι ⊥)
   
   ;; Terms with Immediate Contracts/ False
-  (TI SNonVal (TI @ ι ⊥)
+  (TI SNonVal
       ; (TI @ ι I) ;; TODO
-      (in-hole VCtx (SNonVal @ ι I))
+      ;(in-hole VCtx (SNonVal @ ι I))
+      (SNonVal @ ι I)
       
       (side-condition 
        ((in-hole VCtx (TI @ ι_i (name _I I))) @ ι_r (name _J J))
@@ -95,6 +96,7 @@
   (TQ TVal TI 
       ;(TQ @ ι Q) ;; TODO
       (TVal @ ι Q) (TI @ ι Q)
+      
       (side-condition 
        ((in-hole ACtx (TQ @ ι_q (name _Q Q))) @ ι_r (name _R R))
        (not
@@ -144,6 +146,8 @@
    ;; True
    (M @ ι ⊤)
    
+   ;; False
+   (M @ ι ⊥)
    
    ;; Restructuring
    ;; -------------
