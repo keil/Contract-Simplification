@@ -222,9 +222,7 @@
         (((ι ◃ (¬ ι1)) ς)
          (in-hole F ((λ x (in-hole BCtx x)) @ ι1 (I → ⊤))))
         "Lift"
-        (fresh ι1)
-        ;        (side-condition (canonical? (term (in-hole F (λ x (in-hole BCtx (x @ ι I)))))))
-        )
+        (fresh ι1))
    
    ;; Lower (down)
    ;; ------------
@@ -237,11 +235,12 @@
          (in-hole F ((λ x T) @ ι (⊤ → C))))
         "Lower"
         
+        ;; Lower only when term is canonical.
         (side-condition 
-         (not
-          (redex-match? λCon-Subset (λ x (in-hole BCtx (x @ ι I))) (term (λ x (T @ ι C))))
-          )
-         )
+         (canonical?/Subset (term (T @ ι C))))
+        ;; DO NOT lower argument contracts.
+        (side-condition 
+         (not (redex-match? λCon-Subset (λ x (in-hole BCtx (x @ ι I))) (term (λ x (T @ ι C))))))
         
         )
    
