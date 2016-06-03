@@ -52,16 +52,18 @@
         "Join")
    
    (--> (ς
-         (in-hole F ((in-hole H (in-hole ACtx_l S_l))
+         (in-hole F ((in-hole G (in-hole ACtx_l S_l))
                      ∥
                      (in-hole H (in-hole ACtx_r S_r)))))
         (ς
-         (in-hole F ((in-hole H (in-hole (⊔/ACtx ACtx_l ACtx_r) S_l))
+         (in-hole F ((in-hole G (in-hole (⊔/ACtx ACtx_l ACtx_r) S_l))
                      ∥
                      (in-hole H (in-hole (⊔/ACtx ACtx_l ACtx_r) S_r)))))
         "Join/Context"
-        (side-condition (not (term (≡/ACtx ACtx_l ACtx_r)))))
-   
+        (side-condition (term (≈ G H)))
+        ;(side-condition (not (term (≡/ACtx ACtx_l ACtx_r))))
+        )
+   #|
    (--> (ς
          (in-hole F ((in-hole G (op T ... (in-hole H (in-hole ACtx_l S_l)) T_l ... ))
                      ∥
@@ -97,29 +99,69 @@
    
    
    
+   |#
    
-   
-   
+   #|
+#lang racket
+(match
+  (list
+   (bind 'F hole)
+   (bind
+    'G
+    '((((λ f (λ x hole))
+        (λ x
+          (λ y
+            (if (or (string? x)
+                    (string? y))
+              (string-append x y)
+              (+ x y)))))
+       @
+       ι14
+       (⊤ → ⊥))
+      @
+      ι10
+      (Number? → Number?)))
+   (bind
+    'H
+    '((((λ f (λ x hole))
+        (λ x
+          (λ y
+            (if (or (string? x)
+                    (string? y))
+              (string-append x y)
+              (+ x y)))))
+       @
+       ι14
+       (⊤ → ⊥))
+      @
+      ι10
+      (Number? → Number?)))
+   (bind 'S_l '((f 1) x))
+   (bind 'S_r '(-blame ♭))))
+|#
    
    
    
    
    (--> (ς
-         (in-hole F ((in-hole H S_l)
+         (in-hole F ((in-hole G S_l)
                      ∥
                      (in-hole H S_r))))
         (ς
-         (in-hole F ((in-hole H (⊔/Term S_l S_r))
+         (in-hole F ((in-hole G (⊔/Term S_l S_r))
                      ∥
                      (in-hole H (⊔/Term S_r S_l)))))
         "Join/Term"
         ;(side-condition (not (term (≡/Term S_l S_r)))))
+        (side-condition (term (≈ G H)))
         (side-condition 
          (or 
-          (redex-match? λCon-Join (blame ♭) (term (S_l)))
-          (redex-match? λCon-Join (blame ♭) (term (S_r)))))
+          (redex-match? λCon-Subset (blame ♭) (term S_l))
+          (redex-match? λCon-Subset (blame ♭) (term S_r))
+         )
+         )
         )
-   
+   #|   
    (--> (ς
          (in-hole F ((in-hole G (op T ... (in-hole H S_l) T_l ... ))
                      ∥
@@ -170,29 +212,35 @@
 ;          (term (≡/Term S_l S_r)) (term (≡/Term S_l S_r)))))
 ;        (side-condition (not (term (≡/Term S_l S_r)))))
    
-   
+   |#
    ))
 
- ((L M N) .... (M @ ♭ C) (V @ ι C) (blame ♭) (M @ ι C))
-  
-  ((L M N) K x (λ x M) (M N) (op M ...) (if L M N))
-  ;; Baseline Reduction Context
-  ;; --------------------------
-  ((F G H) hole (λ x F) (F M) (T F) (op T ... F M ...) (if T ... F M ...) (F @ b C))
+; ((L M N) .... (M @ ♭ C) (V @ ι C) (blame ♭) (M @ ι C))
+;  
+;  ((L M N) K x (λ x M) (M N) (op M ...) (if L M N))
+;  ;; Baseline Reduction Context
+;  ;; --------------------------
+;  ((F G H) hole (λ x F) (F M) (T F) (op T ... F M ...) (if T ... F M ...) (F @ b C));
 
 
 (define-metafunction λCon-Subset
   ≈ : any any -> boolean
   
   [(≈ any any) #t]
+  
+  [(≈ (blame ♭) any) #t]
+  [(≈ any (blame ♭)) #t]
+  
+  ;; what, if only left a contarct
+  
   [(≈ (any_l @ ι_l C_l) (any_r @ ι_r C_r)) (≈ any_l any_r)]
-  [(≈ (any_l ...) (any_r ...)) (and (≈ any_l any_r) ...)]
+  [(≈ (any_l0 any_l1 ...) (any_r0 any_r1 ...)) ,(and (term (≈ any_l0 any_r0)) (term (≈ (any_l1 ...) (any_r1 ...))))]
   [(≈ any ... ) #f])
-  
-  
-  [(≈/M M M) #t] 
-  
-  
+
+
+;  [(≈/M M M) #t])
+
+#|
 (define-metafunction λCon-Subset
   ≈/M : M M -> boolean
   
@@ -201,9 +249,9 @@
   
   [(≈/M M M) #t] 
   
-  
+ |# 
 
-
+#|
 
 (define-metafunction λCon-Subset
   ≡/F : F F -> boolean
@@ -231,7 +279,7 @@
   [(≡/F hole hole) #t] 
   [(≡/F any ...) #f])
 
-
+|#
 
 
 ;; Problem, term is not the deepest term
@@ -255,8 +303,11 @@
 ;; merge
 (define-metafunction λCon-Subset
   ⊔/ACtx : ACtx ACtx -> ACtx
-  [(⊔/ACtx ACtx_l ACtx_r) (in-hole ACtx_l ACtx_r)])
-;; ACtx_l(in-hole ACtx_l (\\ ACtx_r ACtx_l))
+  ;  [(⊔/ACtx ACtx_l ACtx_r) (in-hole ACtx_l ACtx_r)])
+  ;  [(⊔/ACtx hole ACtx)  ACtx]
+  ;  [(⊔/ACtx ACtx hole)  ACtx]
+  [(⊔/ACtx ACtx_l ACtx_r)  (in-hole ACtx_l (\\ ACtx_r ACtx_l))])
+;;
 
 (define-metafunction λCon-Subset
   ∈/ACtx : C ACtx -> boolean
@@ -266,9 +317,10 @@
 
 ;; context set minus
 (define-metafunction λCon-Subset
-  \\ : : ACtx ACtx -> ACtx
+  \\ : ACtx ACtx -> ACtx
   [(\\ (ACtx_0 @ ι C) ACtx) (\\ ACtx_0 ACtx) (side-condition (term (∈/ACtx C ACtx)))]
   [(\\ (ACtx_0 @ ι C) ACtx) ((\\ ACtx_0 ACtx) @ ι C) (side-condition (not (term (∈/ACtx C ACtx))))]
+  [(\\ hole hole) hole]
   [(\\ hole ACtx) hole])
 
 (define-metafunction λCon-Subset
