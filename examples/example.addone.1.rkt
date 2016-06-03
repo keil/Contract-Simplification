@@ -55,7 +55,7 @@
 ;; Join Steps:         XX
 ;; Reduction steps:    XX
 
-;(traces Subset-reduction (term (· ,example/addone/0/contracted)))
+(traces Subset-reduction (term (· ,example/addone/1/contracted)))
 
 (traces Join-reduction (λCon/Subset~~>* (term (· ,example/addone/1/contracted))))
 

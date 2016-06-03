@@ -24,7 +24,7 @@
   
   ;; Forks (parallel observations)
   ;; -----------------------------
-  (∥ (∩∩ ι) (∪∪ ι))
+  ;;(∥ (∩∩ ι) (∪∪ ι)) ;; TODO make to ∩∩
   
   ;; Contexts
   ;; ========
@@ -61,7 +61,9 @@
   
   ;; Non-Values
   (SNonVal
-   x ((blame ♭) @ ι ⊥) ;(+blame ♭) (-blame ♭)
+   x ;;((blame ♭) @ ι ⊥) ;(+blame ♭) (-blame ♭)
+   (blame ♭)
+   ;(blame ι) ;; TODO XXX
    (TI TQ) (TCons TQ) (TAbs TI) (TAbs TVal)
    (op TQ ...) (if TQ_0 TQ_1 TQ_2))
   
@@ -86,7 +88,7 @@
       (side-condition 
        ((in-hole VCtx (TI @ ι_i (name _I I))) @ ι_r (name _J J))
        (not
-        (or (term (⊑ _I _J)) (term (⊑ _J _I)) (term (⊑/semnatic _I _J)) (term (⊑/semantic _J _I)))
+        (or (term (⊑ _I _J)) (term (⊑ _J _I)) (term (⊑/semantic _I _J)) (term (⊑/semantic _J _I))) ;; TODO
         )
        )
       )
@@ -94,12 +96,15 @@
   ;; Terms with Delayed Contracts
   (TQ TVal TI 
       ;(TQ @ ι Q) ;; TODO
+      ;; TODO, false (TI @ ι ⊥)
       (TVal @ ι Q) (TI @ ι Q)
-      
+      ;(TQ @ ι Q)
       (side-condition 
        ((in-hole ACtx (TQ @ ι_q (name _Q Q))) @ ι_r (name _R R))
        (not
-        (or (term (⊑ _Q _R)) (term (⊑ _R _Q)) (term (⊑/semnatic _Q _R)) (term (⊑/semantic _R _Q)))
+        (or (term (⊑ _Q _R)) (term (⊑ _R _Q)) ;(term (⊑/semantic _Q _R)) (term (⊑/semantic _R _Q))
+            )
+        ;; TODO
         )
        )
       )
@@ -146,9 +151,10 @@
    (M @ ι ⊤)
    
    ;; False
-   (side-condition 
-    ((name _M M) @ ι ⊥) 
-    (not (redex-match? λCon-Subset (blame ♭) (term _M))))
+   (M @ ι ⊥) ;; TODO
+;   (side-condition 
+;    ((name _M M) @ ι ⊥) 
+;    (not (redex-match? λCon-Subset (blame ♭) (term _M))))
    
    ;; Restructuring
    ;; -------------
@@ -194,14 +200,14 @@
    (--> (ς
          (in-hole F (T @ ι (C ∪ D))))
         (((ι ◃ (ι1 ∪ ι2)) ς)
-         ((in-hole F (T @ ι1 C)) (∪∪ ι) (in-hole F (T @ ι2 D))))
+         ((in-hole F (T @ ι1 C)) ∥ (in-hole F (T @ ι2 D))))
         "Unfold/Union"
         (fresh ι1 ι2))
    
    (--> (ς
          (in-hole F ((T_0 @ ι (Q ∩ R)) T_1)))
         (((ι ◃ (ι1 ∩ ι2)) ς)
-         ((in-hole F ((T_0 @ ι1 Q) T_1)) (∩∩ ι) (in-hole F ((T_0 @ ι2 R) T_1))))
+         ((in-hole F ((T_0 @ ι1 Q) T_1)) ∥ (in-hole F ((T_0 @ ι2 R) T_1))))
         "Unfold/D-Intersection"
         (fresh ι1 ι2))
    
@@ -227,8 +233,13 @@
         (ς
          (in-hole F ((λ x T) @ ι (⊤ → C))))
         "Lower"
+        ;; TODO
+;        (side-condition ; Lower only when term is canonical.
+;         (canonical?/Subset (term (T @ ι C))))
+        
         (side-condition ; Lower only when term is canonical.
-         (canonical?/Subset (term (T @ ι C))))
+         (or (canonical?/Subset (term (T @ ι C))) (redex-match? λCon-Subset ⊥ (term C))))
+        
         (side-condition ; Do not lower argument contracts.
          (not (redex-match? λCon-Subset (λ x (in-hole BCtx (x @ ι I))) (term (λ x (T @ ι C)))))))
    
@@ -240,9 +251,11 @@
    (--> (ς
          (in-hole F (λ x (in-hole BCtx (T @ ι ⊥)))))
         (ς
-         (in-hole F (λ x ((blame ♭) @ ι ⊥))))
+         (in-hole F (λ x ((blame ♭) @ ι ⊥)))) ;; TODO
         "Blame"
         (where (blame ♭) (blame-of ι ς)))
+   ;; TODO, T must not be a blame already
+        ;;(where blame (sign-of ι ς))) ;; TODO
    
    ;; Subset 
    ;; ---------------
