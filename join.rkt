@@ -22,18 +22,25 @@
 |#
 
 (define-extended-language λCon-Join λCon-Subset
-  ;TODO, we need a special canonical syntaxt because finally we have two or more contract on a term that are subsets, but cannot be further reduces. 
-  ;; canonical form did not have splitted observations
+
+  ;; Source Terms
+  (S K x (λ x T) (T T) (op T ...) (if T ...) (blame ♭))
+  ;; Terms with contarcts
+  (T S (T @ ι C))
+
+  ;; Trace
+  (Trace T (Trace_l ∥ Trace_r))
   
+  ;; Traces
+  (Traces hole (Traces ∥ Trace) (T ∥ Traces))
   
-  ((F G H) hole (λ x F) (F M) (T F) (op T ... F M ...) (if T ... F M ...) (F0 @ b C)) 
+  ((F G H)
+   hole (λ x F) (F M) (M F) (op M ... F N ...) (if M ... F N ...) (F0 @ b C))
   
-  ((F0 G0 H0)
-   (λ x F) (F M) (T F) (op T ... F M ...) (if T ... F M ...) (F0 @ b C)) 
+  ((F0 G0 H0) 
+   (λ x F) (F M) (M F) (op M ... F N ...) (if M ... F N ...) (F0 @ b C))
   
-;  (O 
-;   (λ x F) (F M) (T F) (op T ... F M ...) (if T ... F M ...) (O @ b C)) 
-  ;); .. no assertions
+
   
   )
 
@@ -50,12 +57,12 @@
   [(≈/Ctx (λ x G) (λ x H)) (≈/Ctx G H)]
   
   [(≈/Ctx (op T ... G M_n ...) (op T ... H N_n ...)) ,(and
-                                                      (term (≈/Ctx G H))
-                                                      (term (≈/Terms (M_n ...) (N_n ...))))]
+                                                       (term (≈/Ctx G H))
+                                                       (term (≈/Terms (M_n ...) (N_n ...))))]
   
   [(≈/Ctx (if T ... G M_n ...) (op T ... H N_n ...)) ,(and
-                                                      (term (≈/Ctx G H))
-                                                      (term (≈/Terms (M_n ...) (N_n ...))))]
+                                                       (term (≈/Ctx G H))
+                                                       (term (≈/Terms (M_n ...) (N_n ...))))]
   
   [(≈/Ctx (G M) (H N)) ,(and (term (≈/Ctx G H)) (term (≈/Term M N)))]
   [(≈/Ctx (T G) (T H)) ,(term (≈/Ctx G H))]
@@ -127,19 +134,19 @@
    #:domain (ς any)
    
    (--> (ς
-         (in-hole F (T ∥ T))) 
+         (in-hole Traces (M ∥ M))) 
         (ς
-         (in-hole F T)) 
+         (in-hole Traces M)) 
         "Join")
    
    (--> (ς
-         (in-hole F ((in-hole G (in-hole ACtx_l S_l))
-                     ∥
-                     (in-hole H (in-hole ACtx_r S_r)))))
+         (in-hole Traces ((in-hole G (in-hole ACtx_l S_l))
+                         ∥
+                         (in-hole H (in-hole ACtx_r S_r)))))
         (ς
-         (in-hole F ((in-hole G (in-hole (⊔/ACtx ACtx_l ACtx_r) S_l))
-                     ∥
-                     (in-hole H (in-hole (⊔/ACtx ACtx_l ACtx_r) S_r)))))
+         (in-hole Traces ((in-hole G (in-hole (⊔/ACtx ACtx_l ACtx_r) S_l))
+                         ∥
+                         (in-hole H (in-hole (⊔/ACtx ACtx_l ACtx_r) S_r)))))
         "Join/Context"
         (side-condition (term (≈/Ctx G H)))
         (side-condition (term (≈/Term S_l S_r)))
@@ -148,13 +155,13 @@
    
    
    (--> (ς
-         (in-hole F ((in-hole G (in-hole ACtx S_l))
-                     ∥
-                     (in-hole H (in-hole ACtx S_r)))))
+         (in-hole Traces ((in-hole G (in-hole ACtx S_l))
+                         ∥
+                         (in-hole H (in-hole ACtx S_r)))))
         (ς
-         (in-hole F ((in-hole G (in-hole ACtx (⊔/Term S_l S_r)))
-                     ∥
-                     (in-hole H (in-hole ACtx (⊔/Term S_r S_l))))))
+         (in-hole Traces ((in-hole G (in-hole ACtx (⊔/Term S_l S_r)))
+                         ∥
+                         (in-hole H (in-hole ACtx (⊔/Term S_r S_l))))))
         "Join/Term"
         (side-condition (term (≈/Ctx G H)))
         (side-condition 
