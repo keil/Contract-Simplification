@@ -22,10 +22,6 @@
 
 (define-extended-language λCon-Subset λCon-Baseline
   
-  ;; Forks (parallel observations)
-  ;; -----------------------------
-  ;;(∥ (∩∩ ι) (∪∪ ι)) ;; TODO make to ∩∩
-  
   ;; Contexts
   ;; ========
   
