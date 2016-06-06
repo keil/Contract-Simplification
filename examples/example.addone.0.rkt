@@ -53,9 +53,9 @@
 
 ;; # Subset Reduction
 ;; ------------------
-;; Optimization steps: 14
+;; Optimization steps: 16
 ;; Join Steps:          0
-;; Reduction steps:    17
+;; Reduction steps:    18
 
 (traces Subset-reduction (term (· ,example/addone/0/contracted)))
 

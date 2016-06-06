@@ -225,7 +225,7 @@
 ;; -----------------------------
 (define
   (λCon/Join~~> ς configuration)
-  (if (redex-match? λCon-Baseline (ς T) configuration)
+  (if (redex-match? λCon-Join (ς Trace) configuration)
       (car (apply-reduction-relation Join-reduction (term ,configuration)))
       (error "Invalid λCon-term:" configuration)))
 
@@ -233,6 +233,6 @@
 ;; ------------------------------
 (define
   (λCon/Join~~>* configuration)
-  (if (redex-match? λCon-Baseline (ς T) configuration)
+  (if (redex-match? λCon-Join (ς Trace) configuration)
       (car (apply-reduction-relation* Join-reduction (term ,configuration)))
       (error "Invalid λCon-term:" configuration)))
