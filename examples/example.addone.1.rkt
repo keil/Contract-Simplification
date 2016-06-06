@@ -35,7 +35,7 @@
   (term ((λ f (λ x ((f 1) x))) ((λ x (λ y (if (or (string? x) (string? y)) (string-append x y) (+ x y)))) @ ♭ ((Number? → (Number? → Number?)) ∩ (String? → (String? → String?)))))))
 
 ;(traces λCon-reduction (term (· (,example/addone/1/contracted 1))))
-  
+
 
 
 ;; # Baseline Reduction
@@ -55,9 +55,36 @@
 ;; Join Steps:         XX
 ;; Reduction steps:    XX
 
-(traces Subset-reduction (term (· ,example/addone/1/contracted)))
+;(traces Subset-reduction (term (· ,example/addone/1/contracted)))
 
-(traces Join-reduction (λCon/Subset~~>* (term (· ,example/addone/1/contracted))))
+(traces
+ Join-reduction
+ (term (·
+        (
+         (+ (x @ ι1 Number?) (y @ ι11 Number?))
+         ∥
+         (+ (x @ ι2 String?) (y @ ι22 String?))
+         ))))
+
+(traces
+ Join-reduction
+ (term (·
+        (
+         (+ (+blame ♭1) (y @ ι11 Number?))
+         ∥
+         (+ (x @ ι2 String?) (-blame ♭2))
+         ))))
+
+(traces
+ Join-reduction
+ (term (·
+        (
+         (+ (x @ ι1 Number?) (y @ ι11 Number?))
+         ∥
+         (+ (x @ ι1 Number?) (-blame ♭2))
+         ))))
+
+;(traces Join-reduction (λCon/Subset~~>* (term (· ,example/addone/1/contracted))))
 
 ;(let ([configuration (λCon/Join~~>* (λCon/Subset~~>* (term (· ,example/addone/0/contracted))))]) 
 ;  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 1)))))

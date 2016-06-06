@@ -24,8 +24,89 @@
 (define-extended-language λCon-Join λCon-Subset
   ;TODO, we need a special canonical syntaxt because finally we have two or more contract on a term that are subsets, but cannot be further reduces. 
   ;; canonical form did not have splitted observations
+  
+  
+  ((F G H) hole (λ x F) (F M) (T F) (op T ... F M ...) (if T ... F M ...) (F0 @ b C)) 
+  
+  ((F0 G0 H0)
+   (λ x F) (F M) (T F) (op T ... F M ...) (if T ... F M ...) (F0 @ b C)) 
+  
+;  (O 
+;   (λ x F) (F M) (T F) (op T ... F M ...) (if T ... F M ...) (O @ b C)) 
+  ;); .. no assertions
+  
   )
 
+
+
+(define-metafunction λCon-Join
+  ≈/Ctx : G H -> boolean
+  
+  ;; todo, short
+  [(≈/Ctx any any) #t]
+  
+  [(≈/Ctx hole hole) #t]
+  
+  [(≈/Ctx (λ x G) (λ x H)) (≈/Ctx G H)]
+  
+  [(≈/Ctx (op T ... G M_n ...) (op T ... H N_n ...)) ,(and
+                                                      (term (≈/Ctx G H))
+                                                      (term (≈/Terms (M_n ...) (N_n ...))))]
+  
+  [(≈/Ctx (if T ... G M_n ...) (op T ... H N_n ...)) ,(and
+                                                      (term (≈/Ctx G H))
+                                                      (term (≈/Terms (M_n ...) (N_n ...))))]
+  
+  [(≈/Ctx (G M) (H N)) ,(and (term (≈/Ctx G H)) (term (≈/Term M N)))]
+  [(≈/Ctx (T G) (T H)) ,(term (≈/Ctx G H))]
+  
+  [(≈/Ctx (G @ ι C) H) (≈/Ctx G H)]
+  [(≈/Ctx G (H @ ι C)) (≈/Ctx G H)]  
+  
+  [(≈/Ctx any ... ) #f])
+
+
+(define-metafunction λCon-Join
+  ≈/Terms : (M ...) (N ...) -> boolean
+  
+  ;; todo, short
+  [(≈/Terms any any) #t]
+  
+  [(≈/Terms (M_0 M_n ...) (N_0 N_n ...)) ,(and
+                                           (term (≈/Term M_0 N_0))
+                                           (term (≈/Terms (M_n ...) (N_n ...))))]
+  [(≈/Terms any ... ) #f])
+
+(define-metafunction λCon-Join
+  ≈/Term : M N -> boolean
+  
+  [(≈/Term K K) #t]
+  [(≈/Term x x) #t]
+  
+  ;; todo, short
+  [(≈/Term any any) #t]
+  
+  [(≈/Term (blame ♭) N) #t]
+  [(≈/Term M (blame ♭)) #t]
+  
+  [(≈/Term (λ x M) (λ x N)) (≈/Term M N)]
+  
+  [(≈/Term (op M_0 M_n ...) (op N_0 N_n ...)) ,(and
+                                                (term (≈/Term M_0 N_0))
+                                                (term (≈/Terms (M_n ...) (N_n ...))))]
+  
+  [(≈/Term (if M_0 M_n ...) (if N_0 N_n ...)) ,(and
+                                                (term (≈/Term M_0 N_0))
+                                                (term (≈/Terms (M_n ...) (N_n ...))))]  
+  
+  [(≈/Term (M_0 M_1) (N_0 N_1)) ,(and (term (≈/Term M_0 N_0)) (term (≈/Term M_1 N_1)))]
+  
+  
+  ;[(≈/Term (M @ ι C) (N @ ι C)) (≈/Term M N)]
+  [(≈/Term (M @ ι C) N) (≈/Term M N)]
+  [(≈/Term M (N @ ι C)) (≈/Term M N)]  
+  
+  [(≈/Term any ... ) #f])
 
 
 #|
@@ -60,10 +141,47 @@
                      ∥
                      (in-hole H (in-hole (⊔/ACtx ACtx_l ACtx_r) S_r)))))
         "Join/Context"
-        (side-condition (term (≈ G H)))
-        ;(side-condition (not (term (≡/ACtx ACtx_l ACtx_r))))
+        (side-condition (term (≈/Ctx G H)))
+        (side-condition (term (≈/Term S_l S_r)))
+        (side-condition (not (term (≡/ACtx ACtx_l ACtx_r))))
         )
+   
+   
+   (--> (ς
+         (in-hole F ((in-hole G (in-hole ACtx S_l))
+                     ∥
+                     (in-hole H (in-hole ACtx S_r)))))
+        (ς
+         (in-hole F ((in-hole G (in-hole ACtx (⊔/Term S_l S_r)))
+                     ∥
+                     (in-hole H (in-hole ACtx (⊔/Term S_r S_l))))))
+        "Join/Term"
+        (side-condition (term (≈/Ctx G H)))
+        (side-condition 
+         (or 
+          (redex-match? λCon-Subset (blame ♭) (term S_l))
+          (redex-match? λCon-Subset (blame ♭) (term S_r))
+          )
+         )
+        ;(side-condition (term (≈ G H)))
+        ;(side-condition (term (≈ S_l S_r)))
+        ;(side-condition (term (≡/ACtx ACtx_l ACtx_r))))
+        )
+   
    #|
+
+(--> (ς
+         (in-hole F ((in-hole G (in-hole ACtx_l S_l))
+                     ∥
+                     (in-hole H (in-hole ACtx_r S_r)))))
+        (ς
+         (in-hole F ((in-hole G (in-hole (⊔/ACtx ACtx_l ACtx_r) S_l))
+                     ∥
+                     (in-hole H (in-hole (⊔/ACtx ACtx_l ACtx_r) S_r)))))
+        "Join/Context"
+        (side-condition (term (≈ G H)))
+        (side-condition (not (term (≡/ACtx ACtx_l ACtx_r))))
+        )
    (--> (ς
          (in-hole F ((in-hole G (op T ... (in-hole H (in-hole ACtx_l S_l)) T_l ... ))
                      ∥
@@ -143,6 +261,8 @@
    
    
    
+   
+   #|
    (--> (ς
          (in-hole F ((in-hole G S_l)
                      ∥
@@ -158,9 +278,10 @@
          (or 
           (redex-match? λCon-Subset (blame ♭) (term S_l))
           (redex-match? λCon-Subset (blame ♭) (term S_r))
-         )
+          )
          )
         )
+|#
    #|   
    (--> (ς
          (in-hole F ((in-hole G (op T ... (in-hole H S_l) T_l ... ))
@@ -223,6 +344,66 @@
 ;  ((F G H) hole (λ x F) (F M) (T F) (op T ... F M ...) (if T ... F M ...) (F @ b C));
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#|
+
+
+(define-metafunction λCon-Subset
+  ≈ : G H -> boolean
+  
+  [(≈ any any) #t]
+  
+  [(≈ (blame ♭) H) #t]
+  [(≈ G (blame ♭)) #t]
+  
+  
+  
+  ;; what, if only left a contarct
+  
+  
+  [(≈ (G @ ι_l C_l) H) (≈ G H)]
+  [(≈ G (H @ ι_r C_r)) (≈ G H)]
+  
+  [(≈ (op T ... G M ...) (op T ... H N ...)) ,(and
+                                               (term (≈ any_l0 any_r0))
+                                               (term (≈ (any_l1 ...) (any_r1 ...))))]
+  
+  
+  
+  ;[(≈ (any_l @ ι C) (any_r @ ι C)) (≈ any_l any_r)]
+  
+  ;[(≈ (any_l @ ι_l C_l) (any_r @ ι_r C_r)) (≈ any_l any_r)]
+  [(≈ (any_l0 any_l1 ...) (any_r0 any_r1 ...)) ,(and
+                                                 (term (≈ any_l0 any_r0))
+                                                 (term (≈ (any_l1 ...) (any_r1 ...))))]
+  [(≈ any ... ) #f])
+
+|#
+
+#|
+
+
+
+
 (define-metafunction λCon-Subset
   ≈ : any any -> boolean
   
@@ -233,11 +414,18 @@
   
   ;; what, if only left a contarct
   
-  [(≈ (any_l @ ι_l C_l) (any_r @ ι_r C_r)) (≈ any_l any_r)]
-  [(≈ (any_l0 any_l1 ...) (any_r0 any_r1 ...)) ,(and (term (≈ any_l0 any_r0)) (term (≈ (any_l1 ...) (any_r1 ...))))]
+  [(≈ (any_l @ ι_l C_l) any_r) (≈ any_l any_r)]
+  [(≈ any_l (any_r @ ι_r C_r)) (≈ any_l any_r)]
+  
+  ;[(≈ (any_l @ ι C) (any_r @ ι C)) (≈ any_l any_r)]
+  
+  ;[(≈ (any_l @ ι_l C_l) (any_r @ ι_r C_r)) (≈ any_l any_r)]
+  [(≈ (any_l0 any_l1 ...) (any_r0 any_r1 ...)) ,(and
+                                                 (term (≈ any_l0 any_r0))
+                                                 (term (≈ (any_l1 ...) (any_r1 ...))))]
   [(≈ any ... ) #f])
 
-
+|#
 ;  [(≈/M M M) #t])
 
 #|
