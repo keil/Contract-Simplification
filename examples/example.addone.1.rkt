@@ -57,7 +57,7 @@
 
 ;(traces Subset-reduction (term (· ,example/addone/1/contracted)))
 
-#|
+
 (traces
  Join-reduction
  (term (·
@@ -84,7 +84,7 @@
          ∥
          (+ (x @ ι1 Number?) (-blame ♭2))
          ))))
-|#
+
 
 (traces Join-reduction (λCon/Subset~~>* (term (· ,example/addone/1/contracted))))
 

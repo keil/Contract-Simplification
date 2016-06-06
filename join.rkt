@@ -139,7 +139,8 @@
          (in-hole Traces M)) 
         "Join")
    
-   (--> (ς
+   
+      (--> (ς
          (in-hole Traces ((in-hole G (in-hole ACtx_l S_l))
                          ∥
                          (in-hole H (in-hole ACtx_r S_r)))))
@@ -147,12 +148,26 @@
          (in-hole Traces ((in-hole G (in-hole (⊔/ACtx ACtx_l ACtx_r) S_l))
                          ∥
                          (in-hole H (in-hole (⊔/ACtx ACtx_l ACtx_r) S_r)))))
-        "Join/Context"
+        "Join/Context/XXX"
         (side-condition (term (≈/Ctx G H)))
         (side-condition (term (≈/Term S_l S_r)))
         (side-condition (not (term (≡/ACtx ACtx_l ACtx_r))))
         )
-   
+ #|  
+   (--> (ς
+         (in-hole Traces ((in-hole G (in-hole ACtx_l S))
+                         ∥
+                         (in-hole H (in-hole ACtx_r S)))))
+        (ς
+         (in-hole Traces ((in-hole G (in-hole (⊔/ACtx ACtx_l ACtx_r) S))
+                         ∥
+                         (in-hole H (in-hole (⊔/ACtx ACtx_l ACtx_r) S)))))
+        "Join/Context"
+        (side-condition (term (≈/Ctx G H)))
+        ;(side-condition (term (≈/Term S_l S_r)))
+        (side-condition (not (term (≡/ACtx ACtx_l ACtx_r))))
+        )
+   |#
    
    (--> (ς
          (in-hole Traces ((in-hole G (in-hole ACtx S_l))
