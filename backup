@@ -1,0 +1,519 @@
+  #|
+  
+  ((F G H) hole (λ x F) (F M) (T F) (op T ... F M ...) (if T ... F M ...) (F0 @ b C)) 
+  
+  
+  ((F G H) hole (λ x F) (F M) (T F) (op T ... F M ...) (if T ... F M ...) (F0 @ b C)) 
+  
+  ((F0 G0 H0)
+   (λ x F) (F M) (T F) (op T ... F M ...) (if T ... F M ...) (F0 @ b C)) 
+  
+;  (O 
+;   (λ x F) (F M) (T F) (op T ... F M ...) (if T ... F M ...) (O @ b C)) 
+  ;); .. no assertions
+  
+|#
+
+
+
+
+#|
+
+
+(define-metafunction λCon-Subset
+  ≈ : G H -> boolean
+  
+  [(≈ any any) #t]
+  
+  [(≈ (blame ♭) H) #t]
+  [(≈ G (blame ♭)) #t]
+  
+  
+  
+  ;; what, if only left a contarct
+  
+  
+  [(≈ (G @ ι_l C_l) H) (≈ G H)]
+  [(≈ G (H @ ι_r C_r)) (≈ G H)]
+  
+  [(≈ (op T ... G M ...) (op T ... H N ...)) ,(and
+                                               (term (≈ any_l0 any_r0))
+                                               (term (≈ (any_l1 ...) (any_r1 ...))))]
+  
+  
+  
+  ;[(≈ (any_l @ ι C) (any_r @ ι C)) (≈ any_l any_r)]
+  
+  ;[(≈ (any_l @ ι_l C_l) (any_r @ ι_r C_r)) (≈ any_l any_r)]
+  [(≈ (any_l0 any_l1 ...) (any_r0 any_r1 ...)) ,(and
+                                                 (term (≈ any_l0 any_r0))
+                                                 (term (≈ (any_l1 ...) (any_r1 ...))))]
+  [(≈ any ... ) #f])
+
+|#
+
+#|
+
+
+
+
+(define-metafunction λCon-Subset
+  ≈ : any any -> boolean
+  
+  [(≈ any any) #t]
+  
+  [(≈ (blame ♭) any) #t]
+  [(≈ any (blame ♭)) #t]
+  
+  ;; what, if only left a contarct
+  
+  [(≈ (any_l @ ι_l C_l) any_r) (≈ any_l any_r)]
+  [(≈ any_l (any_r @ ι_r C_r)) (≈ any_l any_r)]
+  
+  ;[(≈ (any_l @ ι C) (any_r @ ι C)) (≈ any_l any_r)]
+  
+  ;[(≈ (any_l @ ι_l C_l) (any_r @ ι_r C_r)) (≈ any_l any_r)]
+  [(≈ (any_l0 any_l1 ...) (any_r0 any_r1 ...)) ,(and
+                                                 (term (≈ any_l0 any_r0))
+                                                 (term (≈ (any_l1 ...) (any_r1 ...))))]
+  [(≈ any ... ) #f])
+
+|#
+;  [(≈/M M M) #t])
+
+#|
+(define-metafunction λCon-Subset
+  ≈/M : M M -> boolean
+  
+  [(≈/M M M) #t]
+  
+  
+  [(≈/M M M) #t] 
+  
+ |# 
+
+#|
+
+(define-metafunction λCon-Subset
+  ≡/F : F F -> boolean
+  
+  [(≡/F F F) #t] 
+  
+  [(≡/F (λ x G) (λ x H)) (≡/F G H)]
+  [(≡/F (G M)   (H M))   (≡/F G H)]
+  [(≡/F (T G)   (T H))   (≡/F G H)]
+  
+  [(≡/F (op T ... G M ...)   (op T ... H M ...))   (≡/F G H)]
+  [(≡/F (if T ... G M ...)   (if T ... H M ...))   (≡/F G H)]
+  
+  [(≡/F (T G)   (T H))   (≡/F G H)]
+  
+  
+  ;; false
+  [(≡/F (λ x G) (λ y H)) (≡/F G H)]
+  
+  
+  
+  [(≡/F (ACtx_0 @ ι C) (ACtx_1 @ ι C)) (≡/ACtx ACtx_0 ACtx_1)] ;;
+  ;; TO make this deterministiv, say that the upper contract must be different
+  ;; same for terms
+  [(≡/F hole hole) #t] 
+  [(≡/F any ...) #f])
+
+|#
+
+
+;; Problem, term is not the deepest term
+
+;(⊔/Term 
+; ((λ f (λ x ((f 1) x))) (λ x (λ y (if (or (string? x) (string? y)) (string-append x y) (+ x y))))) 
+; ((λ f (λ x ((-blame ♭) @ ι11 ⊥))) (λ x (λ y (if (or (string? x) (string? y)) (string-append x y) (+ x ;y))))))
+
+;
+;(((λ f (λ x ((f 1) x)))   
+;(((λ f (λ x ((-blame ♭) @ ι11 ⊥))) 
+;  
+;  (λ x (λ y (if (or (string? x) (string? y)) (string-append x y) (+ x y))))) @ ι10 (Number? → Number?))
+;  (λ x (λ y (if (or (string? x) (string? y)) (string-append x y) (+ x y))))) @ ι10 (Number? → Number?))
+
+;(⊔/Term 
+; ((λ f (λ x ((f 1) x))) (λ x (λ y (if (or (string? x) (string? y)) (string-append x y) (+ x y))))) 
+; ((λ f (λ x ((-blame ♭) @ ι11 ⊥))) (λ x (λ y (if (or (string? x) (string? y)) (string-append x y) (+ x ;y))))))
+
+#|
+
+
+(define-metafunction λCon-Subset
+  ≈ : G H -> boolean
+  
+  [(≈ any any) #t]
+  
+  [(≈ (blame ♭) H) #t]
+  [(≈ G (blame ♭)) #t]
+  
+  
+  
+  ;; what, if only left a contarct
+  
+  
+  [(≈ (G @ ι_l C_l) H) (≈ G H)]
+  [(≈ G (H @ ι_r C_r)) (≈ G H)]
+  
+  [(≈ (op T ... G M ...) (op T ... H N ...)) ,(and
+                                               (term (≈ any_l0 any_r0))
+                                               (term (≈ (any_l1 ...) (any_r1 ...))))]
+  
+  
+  
+  ;[(≈ (any_l @ ι C) (any_r @ ι C)) (≈ any_l any_r)]
+  
+  ;[(≈ (any_l @ ι_l C_l) (any_r @ ι_r C_r)) (≈ any_l any_r)]
+  [(≈ (any_l0 any_l1 ...) (any_r0 any_r1 ...)) ,(and
+                                                 (term (≈ any_l0 any_r0))
+                                                 (term (≈ (any_l1 ...) (any_r1 ...))))]
+  [(≈ any ... ) #f])
+
+|#
+
+#|
+
+
+
+
+(define-metafunction λCon-Subset
+  ≈ : any any -> boolean
+  
+  [(≈ any any) #t]
+  
+  [(≈ (blame ♭) any) #t]
+  [(≈ any (blame ♭)) #t]
+  
+  ;; what, if only left a contarct
+  
+  [(≈ (any_l @ ι_l C_l) any_r) (≈ any_l any_r)]
+  [(≈ any_l (any_r @ ι_r C_r)) (≈ any_l any_r)]
+  
+  ;[(≈ (any_l @ ι C) (any_r @ ι C)) (≈ any_l any_r)]
+  
+  ;[(≈ (any_l @ ι_l C_l) (any_r @ ι_r C_r)) (≈ any_l any_r)]
+  [(≈ (any_l0 any_l1 ...) (any_r0 any_r1 ...)) ,(and
+                                                 (term (≈ any_l0 any_r0))
+                                                 (term (≈ (any_l1 ...) (any_r1 ...))))]
+  [(≈ any ... ) #f])
+
+|#
+;  [(≈/M M M) #t])
+
+#|
+(define-metafunction λCon-Subset
+  ≈/M : M M -> boolean
+  
+  [(≈/M M M) #t]
+  
+  
+  [(≈/M M M) #t] 
+  
+ |# 
+
+#|
+
+(define-metafunction λCon-Subset
+  ≡/F : F F -> boolean
+  
+  [(≡/F F F) #t] 
+  
+  [(≡/F (λ x G) (λ x H)) (≡/F G H)]
+  [(≡/F (G M)   (H M))   (≡/F G H)]
+  [(≡/F (T G)   (T H))   (≡/F G H)]
+  
+  [(≡/F (op T ... G M ...)   (op T ... H M ...))   (≡/F G H)]
+  [(≡/F (if T ... G M ...)   (if T ... H M ...))   (≡/F G H)]
+  
+  [(≡/F (T G)   (T H))   (≡/F G H)]
+  
+  
+  ;; false
+  [(≡/F (λ x G) (λ y H)) (≡/F G H)]
+  
+  
+  
+  [(≡/F (ACtx_0 @ ι C) (ACtx_1 @ ι C)) (≡/ACtx ACtx_0 ACtx_1)] ;;
+  ;; TO make this deterministiv, say that the upper contract must be different
+  ;; same for terms
+  [(≡/F hole hole) #t] 
+  [(≡/F any ...) #f])
+
+|#
+
+
+;; Problem, term is not the deepest term
+
+;(⊔/Term 
+; ((λ f (λ x ((f 1) x))) (λ x (λ y (if (or (string? x) (string? y)) (string-append x y) (+ x y))))) 
+; ((λ f (λ x ((-blame ♭) @ ι11 ⊥))) (λ x (λ y (if (or (string? x) (string? y)) (string-append x y) (+ x ;y))))))
+
+;
+;(((λ f (λ x ((f 1) x)))   
+;(((λ f (λ x ((-blame ♭) @ ι11 ⊥))) 
+;  
+;  (λ x (λ y (if (or (string? x) (string? y)) (string-append x y) (+ x y))))) @ ι10 (Number? → Number?))
+;  (λ x (λ y (if (or (string? x) (string? y)) (string-append x y) (+ x y))))) @ ι10 (Number? → Number?))
+
+;(⊔/Term 
+; ((λ f (λ x ((f 1) x))) (λ x (λ y (if (or (string? x) (string? y)) (string-append x y) (+ x y))))) 
+; ((λ f (λ x ((-blame ♭) @ ι11 ⊥))) (λ x (λ y (if (or (string? x) (string? y)) (string-append x y) (+ x ;y))))))
+
+
+
+
+#|
+
+(define-metafunction λCon-Baseline
+  ≈ : T T -> boolean
+  ;; equals terms
+  [(≈ T T) #t]
+  ;; equal contracts on differnt terms
+  [(≈ (T_l @ ι C) (T_r @ ι C)) #t]
+  ;; one side blame
+  [(≈ (blame ♭) T) #f]
+  [(≈ T (blame ♭)) #f]
+  ;; differnt terms without contract
+  [(≈ S_l S_r) #t]
+  ;; othweise
+  [(≈ any ...) #f])
+
+
+
+(define-metafunction λCon-Baseline
+  √ : ∥ T T -> T
+  ;; intersection/ negative blame
+  [(√ (∩∩ b) (-blame ♭) T) T]
+  [(√ (∩∩ b) T (-blame ♭)) T]
+  ;; intersection/ positive blame
+  [(√ (∩∩ b) (+blame ♭) T) (+blame ♭)]
+  [(√ (∩∩ b) T (+blame ♭)) (+blame ♭)]
+  ;; union/ negative blame
+  [(√ (∪∪ b) (-blame ♭) T) (-blame ♭)]
+  [(√ (∪∪ b) T (-blame ♭)) (-blame ♭)]
+  ;; union/ positive blame
+  [(√ (∪∪ b) (+blame ♭) T) T]
+  [(√ (∪∪ b) T (+blame ♭)) T]
+  
+  ;; XXX
+  [(√ (∩∩ b) T S) T]
+  [(√ (∪∪ b) T S) T]) ;; TODO
+
+|#
+
+
+;; TODO, use join with (∩∩ ♭)
+
+#|
+  (define-metafunction λCon-Baseline
+    ⊔/x : T T -> T
+    ;; intersection/ negative blame
+    [(⊔/x ∩∩ (-blame ♭) T) T]
+    [(⊔/x ∩∩ T (-blame ♭)) T]
+    ;; intersection/ positive blame
+    [(⊔ ∩∩ (+blame ♭) T) (+blame ♭)]
+    [(⊔ ∩∩ T (+blame ♭)) (+blame ♭)]
+    ;; union/ negative blame
+    [(⊔ ∪∪ (-blame ♭) T) (-blame ♭)]
+    [(⊔ ∪∪ T (-blame ♭)) (-blame ♭)]
+    ;; union/ positive blame
+    [(⊔ ∪∪ (+blame ♭) T) T]
+    [(⊔ ∪∪ T (+blame ♭)) T])
+ |# 
+
+
+;; TODO, change join function.
+;; A context/subject blame may only be removed if it is a blame term from the splitted contract.
+;; Thus, say ∥ = (∪∪ ♭).
+
+#|
+
+(define-metafunction λCon-Baseline
+  join : ∥ M M -> M
+  ;; intersection/ negative blame
+  [(join ∩∩ (-blame ♭) T) T]
+  [(join ∩∩ T (-blame ♭)) T]
+  ;; intersection/ positive blame
+  [(join ∩∩ (+blame ♭) T) (+blame ♭)]
+  [(join ∩∩ T (+blame ♭)) (+blame ♭)]
+  ;; union/ negative blame
+  [(join ∪∪ (-blame ♭) T) (-blame ♭)]
+  [(join ∪∪ T (-blame ♭)) (-blame ♭)]
+  ;; union/ positive blame
+  [(join ∪∪ (+blame ♭) T) T]
+  [(join ∪∪ T (+blame ♭)) T])
+
+|#
+
+
+
+   #|
+
+(--> (ς
+         (in-hole F ((in-hole G (in-hole ACtx_l S_l))
+                     ∥
+                     (in-hole H (in-hole ACtx_r S_r)))))
+        (ς
+         (in-hole F ((in-hole G (in-hole (⊔/ACtx ACtx_l ACtx_r) S_l))
+                     ∥
+                     (in-hole H (in-hole (⊔/ACtx ACtx_l ACtx_r) S_r)))))
+        "Join/Context"
+        (side-condition (term (≈ G H)))
+        (side-condition (not (term (≡/ACtx ACtx_l ACtx_r))))
+        )
+   (--> (ς
+         (in-hole F ((in-hole G (op T ... (in-hole H (in-hole ACtx_l S_l)) T_l ... ))
+                     ∥
+                     (in-hole G (op T ... (in-hole H (in-hole ACtx_r S_r)) T_r ... )))))
+        (ς
+         (in-hole F ((in-hole G (op T ... (in-hole H (in-hole (⊔/ACtx ACtx_l ACtx_r) S_l)) T_l ... ))
+                     ∥
+                     (in-hole G (op T ... (in-hole H (in-hole (⊔/ACtx ACtx_l ACtx_r) S_r)) T_r ... )))))
+        "Join/Context/Op"
+        (side-condition (not (term (≡/ACtx ACtx_l ACtx_r)))))
+   
+   (--> (ς
+         (in-hole F ((in-hole G (if T ... (in-hole H (in-hole ACtx_l S_l)) T_l ... ))
+                     ∥
+                     (in-hole G (if T ... (in-hole H (in-hole ACtx_r S_r)) T_r ... )))))
+        (ς
+         (in-hole F ((in-hole G (if T ... (in-hole H (in-hole (⊔/ACtx ACtx_l ACtx_r) S_l)) T_l ... ))
+                     ∥
+                     (in-hole G (if T ... (in-hole H (in-hole (⊔/ACtx ACtx_l ACtx_r) S_r)) T_r ... )))))
+        "Join/Context/If"
+        (side-condition (not (term (≡/ACtx ACtx_l ACtx_r)))))
+   
+   (--> (ς
+         (in-hole F ((in-hole G (T ... (in-hole H (in-hole ACtx_l S_l)) T_l ... ))
+                     ∥
+                     (in-hole G (T ... (in-hole H (in-hole ACtx_r S_r)) T_r ... )))))
+        (ς
+         (in-hole F ((in-hole G (T ... (in-hole H (in-hole (⊔/ACtx ACtx_l ACtx_r) S_l)) T_l ... ))
+                     ∥
+                     (in-hole G (T ... (in-hole H (in-hole (⊔/ACtx ACtx_l ACtx_r) S_r)) T_r ... )))))
+        "Join/Context/App"
+        (side-condition (not (term (≡/ACtx ACtx_l ACtx_r)))))
+   
+   
+   
+   |#
+   
+   #|
+#lang racket
+(match
+  (list
+   (bind 'F hole)
+   (bind
+    'G
+    '((((λ f (λ x hole))
+        (λ x
+          (λ y
+            (if (or (string? x)
+                    (string? y))
+              (string-append x y)
+              (+ x y)))))
+       @
+       ι14
+       (⊤ → ⊥))
+      @
+      ι10
+      (Number? → Number?)))
+   (bind
+    'H
+    '((((λ f (λ x hole))
+        (λ x
+          (λ y
+            (if (or (string? x)
+                    (string? y))
+              (string-append x y)
+              (+ x y)))))
+       @
+       ι14
+       (⊤ → ⊥))
+      @
+      ι10
+      (Number? → Number?)))
+   (bind 'S_l '((f 1) x))
+   (bind 'S_r '(-blame ♭))))
+|#
+   
+   
+   
+   
+   
+   #|
+   (--> (ς
+         (in-hole F ((in-hole G S_l)
+                     ∥
+                     (in-hole H S_r))))
+        (ς
+         (in-hole F ((in-hole G (⊔/Term S_l S_r))
+                     ∥
+                     (in-hole H (⊔/Term S_r S_l)))))
+        "Join/Term"
+        ;(side-condition (not (term (≡/Term S_l S_r)))))
+        (side-condition (term (≈ G H)))
+        (side-condition 
+         (or 
+          (redex-match? λCon-Subset (blame ♭) (term S_l))
+          (redex-match? λCon-Subset (blame ♭) (term S_r))
+          )
+         )
+        )
+|#
+   #|   
+   (--> (ς
+         (in-hole F ((in-hole G (op T ... (in-hole H S_l) T_l ... ))
+                     ∥
+                     (in-hole G (op T ... (in-hole H S_r) T_r ... )))))
+        (ς
+         (in-hole F ((in-hole G (op T ... (in-hole H (⊔/Term S_l S_r)) T_l ... ))
+                     ∥
+                     (in-hole G (op T ... (in-hole H (⊔/Term S_r S_l)) T_r ... )))))
+        "Join/Term/Op"
+        ;(side-condition (not (term (≡/Term S_l S_r)))))
+        (side-condition 
+         (or 
+          (redex-match? λCon-Join (blame ♭) (term (S_l)))
+          (redex-match? λCon-Join (blame ♭) (term (S_r)))))
+        )
+   
+   (--> (ς
+         (in-hole F ((in-hole G (if T ... (in-hole H S_l) T_l ... ))
+                     ∥
+                     (in-hole G (if T ... (in-hole H S_r) T_r ... )))))
+        (ς
+         (in-hole F ((in-hole G (if T ... (in-hole H (⊔/Term S_l S_r)) T_l ... ))
+                     ∥
+                     (in-hole G (if T ... (in-hole H (⊔/Term S_r S_l)) T_r ... )))))
+        "Join/Term/If"
+        (side-condition 
+         (or 
+          (redex-match? λCon-Join (blame ♭) (term (S_l)))
+          (redex-match? λCon-Join (blame ♭) (term (S_r)))))
+        )
+        ;(side-condition (not (term (≡/Term S_l S_r)))))
+   
+   (--> (ς
+         (in-hole F ((in-hole G (T ... (in-hole H S_l) T_l ... ))
+                     ∥
+                     (in-hole G (T ... (in-hole H S_r) T_r ... )))))
+        (ς
+         (in-hole F ((in-hole G (T ... (in-hole H (⊔/Term S_l S_r)) T_l ... ))
+                     ∥
+                     (in-hole G (T ... (in-hole H (⊔/Term S_r S_l)) T_r ... )))))
+        "Join/Term/App"
+        (side-condition 
+         (or 
+          true
+          (redex-match? λCon-Join (blame ♭) (term (S_l)))
+          (redex-match? λCon-Join (blame ♭) (term (S_r)))))
+        )
+;          (term (≡/Term S_l S_r)) (term (≡/Term S_l S_r)))))
+;        (side-condition (not (term (≡/Term S_l S_r)))))
+   
+   |#
