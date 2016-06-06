@@ -57,9 +57,7 @@
   
   ;; Non-Values
   (SNonVal
-   x ;;((blame ♭) @ ι ⊥) ;(+blame ♭) (-blame ♭)
-   (blame ♭)
-   ;(blame ι) ;; TODO XXX
+   x (blame ♭)
    (TI TQ) (TCons TQ) (TAbs TI) (TAbs TVal)
    (op TQ ...) (if TQ_0 TQ_1 TQ_2))
   
@@ -70,43 +68,22 @@
   ;; -----
   ;; Terms with non-reducable contracts.
   
-  ;; Values with False Contract
-  (TCons K) ;; TODO (TCons @ ι ⊥)
-  (TAbs (λ x S)) ;; TODO (TAbs @ ι ⊥)
-  (TVal SVal) ;; TODO (TVal @ ι ⊥)
-  
   ;; Terms with Immediate Contracts/ False
   (TI SNonVal
-      ; (TI @ ι I) ;; TODO
-      ;(in-hole VCtx (SNonVal @ ι I))
       (SNonVal @ ι I)
-      
       (side-condition 
        ((in-hole VCtx (TI @ ι_i (name _I I))) @ ι_r (name _J J))
-       (not
-        (or (term (⊑ _I _J)) (term (⊑ _J _I)) (term (⊑/semantic _I _J)) (term (⊑/semantic _J _I))) ;; TODO
-        )
-       )
-      )
+       (not (or (term (⊑/naive _I _J)) (term (⊑/naive _J _I))))))
   
   ;; Terms with Delayed Contracts
-  (TQ TVal TI 
-      ;(TQ @ ι Q) ;; TODO
-      ;; TODO, false (TI @ ι ⊥)
-      (TVal @ ι Q) (TI @ ι Q)
-      ;(TQ @ ι Q)
+  (TQ SVal TI 
+      (SVal @ ι Q) (TI @ ι Q)
       (side-condition 
        ((in-hole ACtx (TQ @ ι_q (name _Q Q))) @ ι_r (name _R R))
-       (not
-        (or (term (⊑ _Q _R)) (term (⊑ _R _Q)) ;(term (⊑/semantic _Q _R)) (term (⊑/semantic _R _Q))
-            )
-        ;; TODO
-        )
-       )
-      )
+       (not (or (term (⊑/naive _Q _R)) (term (⊑/naive _R _Q))))))
   
   ;; Canonical Terms (non-reducable terms)
-  (T TQ (T_0 ∥ T_1))
+  (T TQ (T_0 ∥ T_1) ((blame ♭) @ ι ⊥)) ;; TODO
   
   
   
@@ -122,7 +99,7 @@
    ;; -------
    (side-condition 
     ((in-hole ACtx (M @ ι_c (name _c C))) @ ι_d (name _d D))
-    (or (term (⊑ _C _D)) (term (⊑ _D _C)) (term (⊑/semnatic _C _D)) (term (⊑/semantic _D _C)))
+    (or (term (⊑/naive _C _D)) (term (⊑/naive _D _C)) (term (⊑/semnatic _C _D)) (term (⊑/ordinary _D _C)))
     )
    
    
@@ -148,9 +125,9 @@
    
    ;; False
    (M @ ι ⊥) ;; TODO
-;   (side-condition 
-;    ((name _M M) @ ι ⊥) 
-;    (not (redex-match? λCon-Subset (blame ♭) (term _M))))
+   ;   (side-condition 
+   ;    ((name _M M) @ ι ⊥) 
+   ;    (not (redex-match? λCon-Subset (blame ♭) (term _M))))
    
    ;; Restructuring
    ;; -------------
@@ -228,14 +205,8 @@
          (in-hole F (λ x (T @ ι C))))
         (ς
          (in-hole F ((λ x T) @ ι (⊤ → C))))
-        "Lower"
-        ;; TODO
-;        (side-condition ; Lower only when term is canonical.
-;         (canonical?/Subset (term (T @ ι C))))
-        
-        (side-condition ; Lower only when term is canonical.
-         (or (canonical?/Subset (term (T @ ι C))) (redex-match? λCon-Subset ⊥ (term C))))
-        
+        "Lower"        
+        (side-condition (canonical?/Subset (term (T @ ι C))))        
         (side-condition ; Do not lower argument contracts.
          (not (redex-match? λCon-Subset (λ x (in-hole BCtx (x @ ι I))) (term (λ x (T @ ι C)))))))
    
@@ -247,11 +218,18 @@
    (--> (ς
          (in-hole F (λ x (in-hole BCtx (T @ ι ⊥)))))
         (ς
-         (in-hole F (λ x ((blame ♭) @ ι ⊥)))) ;; TODO
-        "Blame"
+         (in-hole F (λ x ((blame ♭) @ ι ⊥))))
+        "Blame/Context"
+        (side-condition (not (redex-match? λCon-Subset (blame ♭) (term T))))
         (where (blame ♭) (blame-of ι ς)))
-   ;; TODO, T must not be a blame already
-        ;;(where blame (sign-of ι ς))) ;; TODO
+   
+   (--> (ς
+         (T @ ι ⊥))
+        (ς
+         (blame ♭))
+        "Blame/Global"
+        (side-condition (not (redex-match? λCon-Subset (blame ♭) (term T))))
+        (where (blame ♭) (blame-of ι ς)))
    
    ;; Subset 
    ;; ---------------
@@ -261,68 +239,49 @@
          (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
         (ς
          (in-hole F (in-hole ACtx (T @ ι_0 C))))
-        "Subset/1"
-        (side-condition (term (⊑ C D))))
+        "Subset/Inner"
+        (side-condition (term (⊑/naive C D))))
    
    (--> (ς
          (in-hole F ((in-hole ACtx (T @ ι_0 C)) @ ι_1 D)))
         (ς
          (in-hole F (in-hole ACtx (T @ ι_1 D))))
-        "Subset/2"
-        (side-condition (term (⊑ D C))))
+        "Subset/Outer"
+        (side-condition (term (⊑/naive D C))))
    
-   ;; NOTE: For flat contracts, native and ordanary subset is the same.
-   ;; Thus, the following two rules are restricted to delayed contracts.
    
-   ;; problem, say, we use the context from q and the sbject from c
-   ;; ist might happen that we violate the subject 
-   ;; part, but also repoirt thi sviolation to q, oritin
    
-   ;; it is not alloowed to report falls to a constraint that is not violated,
-   ;; otherwise we would repor a contract violation that is not violated.
    
+   ;; TODO
+   ;; Dod not work like this as there are two possibilities.
+   (--> (ς
+         (in-hole F (T @ ι (C ∩ D))))
+        (ς
+         (in-hole F (T @ ι C)))
+        "Reduce/Intersection/1"
+        (side-condition (term (⊑/ordinary C D))))
    
    (--> (ς
-         (in-hole F (in-hole ACtx ((T @ ι_0 (⊤ → C)) @ ι_1 (I → ⊤)))))
-        (((ι_0 ◃ ι2) ((ι_1 ◃ ι2) ς)) ;; TODO is this step correct
-         (in-hole F (in-hole ACtx (T @ ι2 (I → C)))))
-        "Condense"
-        (fresh ι2))
-        ;(side-condition (term (⊑/semantic Q R))))
-   
-     #|
-   (--> (ς
-         (in-hole F ((in-hole ACtx (T @ ι_0 Q)) @ ι_1 R)))
-        (((ι_0 ◃ ι2) ((ι_1 ◃ ι2) ς)) ;; TODO is this step correct
-         (in-hole F (in-hole ACtx (T @ ι2 (⊓ Q R)))))
-        "Merge/1"
-        (fresh ι2)
-        (side-condition (term (⊑/semantic Q R))))
+         (in-hole F (T @ ι (C ∩ D))))
+        (ς
+         (in-hole F (T @ ι D)))
+        "Reduce/Intersection/2"
+        (side-condition (term (⊑/ordinary D C))))
    
    (--> (ς
-         (in-hole F ((in-hole ACtx (T @ ι_0 Q)) @ ι_1 R)))
-        (((ι_0 ◃ ι2) ((ι_1 ◃ ι2) ς))  ;; TODO is this step correct
-         (in-hole F (in-hole ACtx (T @ ι2 (⊓ R Q)))))
-        "Merge/2"
-        (fresh ι2)
-        (side-condition (term (⊑/semantic R Q))))
-   |#
+         (in-hole F (T @ ι (C ∪ D))))
+        (ς
+         (in-hole F (T @ ι D)))
+        "Reduce/Union/1"
+        (side-condition (term (⊑/ordinary C D))))
+   
+   (--> (ς
+         (in-hole F (T @ ι (C ∪ D))))
+        (ς
+         (in-hole F (T @ ι C)))
+        "Reduce/Union/2"
+        (side-condition (term (⊑/ordinary D C))))
    ))
-
-
-#|
- __  __                  
-|  \/  |___ _ _ __ _ ___ 
-| |\/| / -_) '_/ _` / -_)
-|_|  |_\___|_| \__, \___|
-               |___/     
-|#
-
-(define-metafunction λCon
-  ⊓ : C C -> C
-  [(⊓ (C_d → C_r) (D_d → D_r)) (D_d → C_r)])
-;; TODO, it might be better to join domain and range
-;; as they might be function contracts ?
 
 #|
   ___      _         _      _         ___ _                
@@ -353,7 +312,7 @@
   [(parent-of ι_1 ((b ◃ (ι_0 ∪ ι_1)) ς)) b]
   [(parent-of ι   ((b ◃ (¬ ι)) ς)) b]
   [(parent-of ι   ((b ◃ ι) ς)) b]
-  [(parent-of ι   ()) ι]
+  [(parent-of ι   ·) ι]
   [(parent-of ι   ((b ◃ κ) ς)) (parent-of ι ς)])
 
 ;; invert
@@ -377,7 +336,7 @@
   [(constraint-of ι_1 ((b ◃ (ι_0 ∪ ι_1)) ς)) (ι_0 ∪ ι_1)]
   [(constraint-of ι   ((b ◃ (¬ ι)) ς)) (¬ ι)]
   [(constraint-of ι   ((b ◃ ι) ς)) ι]
-  [(constraint-of ι   ()) ι]
+  [(constraint-of ι   ·) ι]
   ;; recursive lookup
   [(constraint-of ι   ((b ◃ κ) ς)) (constraint-of ι ς)])
 
@@ -501,13 +460,13 @@
 ;; ==================================
 
 (define-metafunction λCon
-  ⊑/semantic : C D -> boolean
+  ⊑/ordinary : C D -> boolean
   
-  [(⊑/semantic C ⊤) #t]
-  [(⊑/semantic ⊥ D) #f]
+  [(⊑/ordinary C ⊤) #t]
+  [(⊑/ordinary ⊥ D) #f]
   
-  [(⊑/semantic C D) ,(and (term (⊑/context D C)) (term (⊑/subject C D)))]
-  [(⊑/semantic any ...) #f])
+  [(⊑/ordinary C D) ,(and (term (⊑/context D C)) (term (⊑/subject C D)))]
+  [(⊑/ordinary any ...) #f])
 
 ;; Naive Subsets of Contracts (⊑)
 ;; ==============================
@@ -515,7 +474,7 @@
 ;; A contract C is subset of contract D iff
 ;; C is more restrictive than D.
 
-;; If C ⊑ D then \forall .
+;; If C ⊑/naive D then \forall .
 ;; * V \in [[C]]+ => V \in [[D]]+
 ;; * E \in [[C]]- => E \in [[D]]-
 ;; resp.
@@ -530,13 +489,13 @@
 ;; => E[[ M @ D ]] --> V
 
 (define-metafunction λCon
-  ⊑ : C D -> boolean
+  ⊑/naive : C D -> boolean
   
-  [(⊑ C ⊤) #t]
-  [(⊑ ⊥ D) #f]
+  [(⊑/naive C ⊤) #t]
+  [(⊑/naive ⊥ D) #f]
   
-  [(⊑ C D) ,(and (term (⊑/context C D)) (term (⊑/subject C D)))])
-;;[(⊑ any ...) #f]) ;; TODO, is this line required ?
+  [(⊑/naive C D) ,(and (term (⊑/context C D)) (term (⊑/subject C D)))])
+;;[(⊑/naive any ...) #f]) ;; TODO, is this line required ?
 
 
 ;; Context Subset (⊑/context)

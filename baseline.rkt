@@ -43,7 +43,7 @@
   
   ;; Non-Values
   (SNonVal
-   x (+blame ♭) (-blame ♭)
+   x (blame ♭)
    (TI TQ) (TCons TQ) (TAbs TI) (TAbs TVal)
    (op TQ ...) (if TQ_0 TQ_1 TQ_2))
   

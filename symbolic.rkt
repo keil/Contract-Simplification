@@ -1,5 +1,71 @@
 
+   ;; NOTE: For flat contracts, native and ordanary subset is the same.
+   ;; Thus, the following two rules are restricted to delayed contracts.
+   
+   ;; problem, say, we use the context from q and the sbject from c
+   ;; ist might happen that we violate the subject 
+   ;; part, but also repoirt thi sviolation to q, oritin
+   
+   ;; it is not alloowed to report falls to a constraint that is not violated,
+   ;; otherwise we would repor a contract violation that is not violated.
+   
+   #|
+   (--> (ς
+         (in-hole F (in-hole ACtx ((T @ ι_0 (⊤ → J)) @ ι_1 (I → ⊤)))))
+        (((ι_0 ◃ ι2) ((ι_1 ◃ ι2) ς)) ;; TODO is this step correct
+         (in-hole F (in-hole ACtx (T @ ι2 (I → J)))))
+        "Condense/1"
+        (side-condition
+         (eq? (term (root-of ι_0 ς)) (term (root-of ι_1 ς)))
+         )
+        (fresh ι2)) |#
+   
+   #|
+   (--> (ς
+         (in-hole F (in-hole ACtx ((T @ ι_0 (⊤ → D)) @ ι_1 (C → ⊤)))))
+        (((♭ ◃ ι2) ς)
+         (in-hole F (in-hole ACtx (T @ ι2 (C → D)))))
+        "Condense"
+        (side-condition (eq? (term (root-of ι_0 ς)) (term (root-of ι_1 ς))))
+        (side-condition (eq? (term (sign-of ι_1 ς)) (term +blame)))
+        ;; Must be positive because of inbversion constraint
+        (side-condition (eq? (term (sign-of ι_0 ς)) (term +blame)))
+        (fresh ι2)
+        (where ♭ (root-of ι_0 ς)))
+        
+        |#
+          #|
+   (--> (ς
+         (in-hole F ((in-hole ACtx (T @ ι_0 Q)) @ ι_1 R)))
+        (((ι_0 ◃ ι2) ((ι_1 ◃ ι2) ς)) ;; TODO is this step correct
+         (in-hole F (in-hole ACtx (T @ ι2 (⊓ Q R)))))
+        "Merge/1"
+        (fresh ι2)
+        (side-condition (term (⊑/ordinary Q R))))
+   
+   (--> (ς
+         (in-hole F ((in-hole ACtx (T @ ι_0 Q)) @ ι_1 R)))
+        (((ι_0 ◃ ι2) ((ι_1 ◃ ι2) ς))  ;; TODO is this step correct
+         (in-hole F (in-hole ACtx (T @ ι2 (⊓ R Q)))))
+        "Merge/2"
+        (fresh ι2)
+        (side-condition (term (⊑/ordinary R Q))))
+   |#
 
+
+#|
+ __  __                  
+|  \/  |___ _ _ __ _ ___ 
+| |\/| / -_) '_/ _` / -_)
+|_|  |_\___|_| \__, \___|
+               |___/     
+|#
+
+(define-metafunction λCon
+  ⊓ : C C -> C
+  [(⊓ (C_d → C_r) (D_d → D_r)) (D_d → C_r)])
+;; TODO, it might be better to join domain and range
+;; as they might be function contracts ?
 
 #|
  ___        _         _   _          
