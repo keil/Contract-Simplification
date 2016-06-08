@@ -75,6 +75,10 @@
        ((in-hole VCtx (TI @ ι_i (name _I I))) @ ι_r (name _J J))
        (not (or (term (⊑/naive _I _J)) (term (⊑/naive _J _I))))))
   
+  ;; TODO. is it correct to have VCtx here?
+  ;; dont think so, Actx must be correct , boy it shoudl only contain immediate contract
+  ;; same for TQ
+  
   ;; Terms with Delayed Contracts
   (TQ SVal TI 
       (SVal @ ι Q) (TI @ ι Q)
