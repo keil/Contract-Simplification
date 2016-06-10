@@ -255,12 +255,12 @@
    
    ;; TODo, test
    
-      (--> (ς
-         (in-hole F (λ x (in-hole BCtx (y @ ι I)))))
-        (((ι ◃ (¬ ι1)) ς)
-         (in-hole F (((λ z (λ x (in-hole BCtx z))) @ ι1 (I → ⊤)) y)))
-        "η-reverse-lift"
-        (fresh ι1))
+;      (--> (ς
+;         (in-hole F (λ x (in-hole BCtx (y @ ι I)))))
+;        (((ι ◃ (¬ ι1)) ς)
+;         (in-hole F (((λ z (λ x (in-hole BCtx z))) @ ι1 (I → ⊤)) y)))
+;        "η-reverse-lift"
+;        (fresh ι1))
       
       
    
