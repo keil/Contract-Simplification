@@ -1,0 +1,34 @@
+#lang racket
+(require redex)
+
+(require "../lcon.rkt")
+(require "../baseline.rkt")
+(require "../subset.rkt")
+(require "../join.rkt")(require "../join.rkt")
+
+(provide (all-defined-out))
+
+(define 
+  example/reverse/1
+  (term ((λ f (λ x ((f (0 @ ♭ Positive?)) x))) (λ x (λ y (+ x y))))))
+
+;(traces λCon-reduction (term (· (,example/reverse/1 1))))
+
+(traces Baseline-reduction (term (· ,example/reverse/1)))
+
+;(let ([configuration (λCon/Baseline~~>* (term (· ,example/reverse/1)))]) 
+;  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 1)))))
+
+
+;; # Subset Reduction
+;; ------------------
+;; Optimization steps: 32
+;; Join Steps:          4
+;; Reduction steps:    23
+
+(traces Subset-reduction (term (· ,example/reverse/1)))
+
+;(traces Join-reduction (λCon/Subset~~>* (term (· ,example/reverse/1))))
+
+;(let ([configuration (λCon/Join~~>* (λCon/Subset~~>* (term (· ,example/reverse/1))))]) 
+;  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 1)))))
