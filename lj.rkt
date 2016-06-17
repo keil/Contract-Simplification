@@ -117,7 +117,7 @@
 ;; Free Variables (free?)
 ;; ----------------------
 (define-metafunction λJ
-  free? : x any -> (x ...)
+  free? : x any -> boolean
   [(free? x x) #t] 
   [(free? x (λ x M)) #f]
   [(free? x (λ y M)) (free x M)]
