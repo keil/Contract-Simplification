@@ -2,10 +2,9 @@
 (require redex)
 
 (require "../lcon.rkt")
-;(require "../baseline.rkt")
-(require "../lift.rkt")
-(require "../split.rkt")
+(require "../baseline.rkt")
 (require "../subset.rkt")
+(require "../join.rkt")
 
 (provide (all-defined-out))
 
@@ -20,6 +19,7 @@
 (define 
   example/factorial/0
   (term ((λ f (λ x ((f f) x))) (λ f (λ x (if (= x 1) 1 (* x ((f f) (- x 1)))))))))
+
 ;(traces λCon-reduction (term (· (,example/factorial/0 5))))
 
 
@@ -31,14 +31,32 @@
 (define 
   example/factorial/0/contracted
   (term ((λ f (λ x ((f f) x))) (λ f ((λ x (if (= x 1) 1 (* x ((f f) (- x 1))))) @ ♭ (Natural? → Positive?))))))
+
 ;(traces λCon-reduction (term (· (,example/factorial/0/contracted 5))))
 
-;; # Sugar Reduction
-;; -----------------
-;; Optimization steps: 27
-;; Reduction steps:    77
 
-(traces Lift-reduction (term (· ,example/factorial/0/contracted)))
 
-;(let ([configuration (λCon/Subset~~>* (term (· ,example/factorial/0/contracted)))]) 
+;; # Baseline Reduction
+;; --------------------
+;; Optimization steps: 11
+;; Reduction steps:    90
+
+;(traces Baseline-reduction (term (· ,example/factorial/0/contracted)))
+
+;(let ([configuration (λCon/Baseline~~>* (term (· ,example/factorial/0/contracted)))]) 
+;  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 5)))))
+
+
+
+;; # Subset Reduction
+;; ------------------
+;; Optimization steps: 13
+;; Join Steps:          0
+;; Reduction steps:    90
+
+;(traces Subset-reduction (term (· ,example/factorial/0/contracted)))
+
+;(traces Join-reduction (λCon/Subset~~>* (term (· ,example/factorial/0/contracted))))
+
+;(let ([configuration (λCon/Join~~>* (λCon/Subset~~>* (term (· ,example/factorial/0/contracted))))]) 
 ;  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 5)))))
