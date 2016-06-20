@@ -288,14 +288,6 @@
    ;; ---------------
    ;; Removes contracts based on already checked contarcts.
    
-   #| (--> (ς
-         (in-hole F (in-hole ACtx ((T @ ι_0 (⊤ → D)) @ ι_1 (C → ⊤)))))
-        (((ι_0 ◃ ι2) ((ι_1 ◃ ι2) ς)) ;; TODO is this step correct
-         (in-hole F (in-hole ACtx (T @ ι2 (C → D)))))
-        "Condense/1"
-        (side-condition (equal? (term (blame-of ι_0 ς)) (term (blame-of ι_1 ς))))
-        (fresh ι2)) |#
-   
     (--> (ς
          (in-hole F (in-hole ACtx ((T @ ι_0 (C_d → C_r)) @ ι_1 (D_d → D_r)))))
         (((ι_0 ◃ ι2) ((ι_1 ◃ ι2) ς))
@@ -646,8 +638,6 @@
 |_| \_,_|_||_\__|\__|_\___/_||_/__/
                                    
 |#
-
-; TODO
 
 ;; Canonical? (non-reducable terms)
 ;; --------------------------------

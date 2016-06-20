@@ -205,10 +205,10 @@
    
    (--> (ς
          (in-hole F ((in-hole XCtx (in-hole VCtx (λ x S))) (T @ ι Q))))
-        ;(in-hole F ((in-hole VCtx (λ x S)) (T @ ι Q))))
+        ;(in-hole F ((in-hole VCtx (λ x S)) (T @ ι Q)))) ;; TODO
         (ς
          (in-hole F ((in-hole XCtx (λ x (unroll x Q ι S))) T)))
-        ;(in-hole F ((λ x (unroll x Q ι S)) T)))
+        ;(in-hole F ((λ x (unroll x Q ι S)) T))) ;; todo
         "Unroll")
    
    ;; Lower (down)
