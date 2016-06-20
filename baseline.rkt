@@ -126,7 +126,12 @@
   
   ;; Assertion Context
   ;; -----------------
-  (VCtx hole (VCtx @ ι ⊥)))
+  (VCtx hole (VCtx @ ι ⊥))
+  
+  ;; TODO
+  (XCtx hole ((λ x XCtx) M))
+  
+  )
 
 
 #|

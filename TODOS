@@ -1,34 +1,10 @@
 OPEN POINTS
 ===========
 
-- \Con bus be in LAX mode
-
-- \perp must remain, i.e. the false-constraint must be produces at run time.
-- really?
-
-- subset reduction of T @ POS @ NUM \cap EVEN
-      T @ POS @ NUM \cap EVEN
-  --> T @ POS @ NUM @ EVEN
-  --> T @ POS @ EVEN
-
-- make subset reduction deterministic.
-
-- Theorem for Real-Optimization.
-
-   ;; TODO, blame on boh sides
-   what if one side would produce a blame, but this cntract is removed from another contract (originined in an intersection)
-
-   ;; TODO, make subset rules deterministic
-   ;; (not (term (closest? (T @ ¿_1 D))))
+@ with blame lable
 
 
 
-- SUbset reduction also changes the order as ot removes less restrictive contract that would blame before.
-
-- Lift/ Balme in conditional
-- No lift from the inner of an considtionsl
-
-- false needs to remain in if condictions
 
 Next Steps & Open Problems
 ==========================
