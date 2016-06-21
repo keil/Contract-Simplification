@@ -70,13 +70,13 @@
 
 ;; # Success Reduction
 ;; -------------------
-;; Optimization steps: 16
+;; Optimization steps: 14
 ;; Join Steps:          0
-;; Reduction steps:    18
+;; Reduction steps:    17
 
 (traces Success-reduction (term (· ,example/addone/0/contracted)))
 
-;(traces Join-reduction (λCon/Subset~~>* (term (· ,example/addone/0/contracted))))
+(traces Join-reduction (λCon/Subset~~>* (term (· ,example/addone/0/contracted))))
 
-;(let ([configuration (λCon/Join~~>* (λCon/Success~~>* (term (· ,example/addone/0/contracted))))]) 
-;  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 1)))))
+(let ([configuration (λCon/Join~~>* (λCon/Success~~>* (term (· ,example/addone/0/contracted))))]) 
+  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 1)))))

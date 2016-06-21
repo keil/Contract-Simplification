@@ -5,6 +5,7 @@
 (require "../baseline.rkt")
 (require "../subset.rkt")
 (require "../join.rkt")
+(require "../success.rkt")
 
 (provide (all-defined-out))
 
@@ -60,3 +61,18 @@
 
 ;(let ([configuration (λCon/Join~~>* (λCon/Subset~~>* (term (· ,example/factorial/0/contracted))))]) 
 ;  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 5)))))
+
+
+
+;; # Success Reduction
+;; -------------------
+;; Optimization steps: 13
+;; Join Steps:          0
+;; Reduction steps:    90
+
+(traces Success-reduction (term (· ,example/factorial/0/contracted)))
+
+(traces Join-reduction (λCon/Subset~~>* (term (· ,example/factorial/0/contracted))))
+
+(let ([configuration (λCon/Join~~>* (λCon/Success~~>* (term (· ,example/factorial/0/contracted))))]) 
+  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 5)))))

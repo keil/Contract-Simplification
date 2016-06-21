@@ -5,6 +5,7 @@
 (require "../baseline.rkt")
 (require "../subset.rkt")
 (require "../join.rkt")
+(require "../success.rkt")
 
 (provide (all-defined-out))
 
@@ -56,10 +57,10 @@
 ;; Optimization steps: 20
 ;; Reduction steps:    77
 
-(traces Baseline-reduction (term (· ,example/evenodd/0/contracted)))
+;(traces Baseline-reduction (term (· ,example/evenodd/0/contracted)))
 
-(let ([configuration (λCon/Baseline~~>* (term (· ,example/evenodd/0/contracted)))]) 
-  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 3)))))
+;(let ([configuration (λCon/Baseline~~>* (term (· ,example/evenodd/0/contracted)))]) 
+;  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 3)))))
 
 
 
@@ -75,3 +76,19 @@
 
 ;(let ([configuration (λCon/Join~~>* (λCon/Subset~~>* (term (· ,example/evenodd/0/contracted))))]) 
 ;  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 3)))))
+
+
+
+
+;; # Success Reduction
+;; -------------------
+;; Optimization steps: 23
+;; Join Steps:          0
+;; Reduction steps:    77
+
+(traces Success-reduction (term (· ,example/evenodd/0/contracted)))
+
+(traces Join-reduction (λCon/Subset~~>* (term (· ,example/evenodd/0/contracted))))
+
+(let ([configuration (λCon/Join~~>* (λCon/Success~~>* (term (· ,example/evenodd/0/contracted))))]) 
+  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 3)))))

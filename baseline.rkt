@@ -337,12 +337,12 @@
 
 ;; Canonical? (non-reducable terms)
 ;; --------------------------------
-(define canonical?
+(define canonical?/Baseline
   (redex-match? λCon-Baseline T))
 
 ;; Reducible? (non-canonical terms)
 ;; --------------------------------
-(define reducible? 
+(define reducible?/Baseline
   (redex-match? λCon-Baseline Reducible))
 
 ;; λCon Reduction (λCon-->)
