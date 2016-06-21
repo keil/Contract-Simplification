@@ -488,18 +488,32 @@
 |#
 
 ;; Constraint Lookup
-;; ----------------
+;; -----------------
 (define-metafunction λCon
-  π : ς b -> κ
-  [(π ((b_0 ◃ κ) ς) b_0) κ]
-  [(π ((b_0 ◃ κ) ς) b_1) (π ς b_1)]
-  [(π any ...) (#t ∘ #t)])
+  π : ς b -> (κ ...)
+  [(π ((b ◃ κ) ς) b) (⊎ (κ) (π ς b))]
+  [(π ((b_0 ◃ κ) ς) b) (π ς b)]
+  [(π · b) ()])
 
+;; Least Upper Bound
+;; -----------------
+(define-metafunction λCon
+  ⊔ : ω ω -> ω
+  [(⊔ ω ω) ω]
+  [(⊔ (B_l0 ∘ B_l1) (B_r0 ∘ B_r1)) (,(and (term B_l0) (term B_r0)) ∘ ,(and (term B_l1) (term B_r1)))])
+  
 ;; Compute Solution
 ;; ----------------
 (define-metafunction λCon
   μ : ς b -> ω
-  [(μ ς b) (solve ς (π ς b))])
+  [(μ ς b) (LSol ς (π ς b))])
+
+;; Compute Least Solution
+;; ----------------------
+(define-metafunction λCon
+  LSol : ς (κ ...) -> ω
+  [(LSol ς (κ_0 κ_i ...)) (⊔ (solve ς κ_0) (LSol ς (κ_i ...)))]
+  [(LSol ς ()) (#t ∘ #t)])
 
 ;; Solve Constraint
 ;; ----------------

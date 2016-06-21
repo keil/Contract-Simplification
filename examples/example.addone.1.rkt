@@ -35,7 +35,7 @@
   example/addone/1/contracted
   (term ((λ f (λ x ((f 1) x))) ((λ x (λ y (if (or (string? x) (string? y)) (string-append x y) (+ x y)))) @ ♭ ((Number? → (Number? → Number?)) ∩ (String? → (String? → String?)))))))
 
-;(traces λCon-reduction (term (· (,example/addone/1/contracted 1))))
+(traces λCon-reduction (term (· (,example/addone/1/contracted 1))))
 
 
 

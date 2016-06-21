@@ -24,7 +24,7 @@
 
 (define 
   example/union/1
-  (term (· ((λ f ((λ z (f 1)) (f "1"))) ((λ x x) @ ♭ ((Any? → Number?) ∪ (Any? → String?)))))))
+  (term (· ((λ f ((λ z (f 1)) (f 1))) ((λ x x) @ ♭ ((Any? → Number?) ∪ (Any? → String?)))))))
 
 ;(traces λCon-reduction example/union/1)
 
@@ -35,4 +35,13 @@
   example/union/2
   (term (· ((λ f ((λ z (f "1")) (f 1))) ((λ x x) @ ♭ ((Any? → Number?) ∪ (Any? → String?)))))))
 
-(traces λCon-reduction example/union/2)
+;(traces λCon-reduction example/union/2)
+
+;; # 3
+;; ---
+
+(define 
+  example/union/3
+  (term (· ((λ f ((λ z (f 1)) (f "1"))) ((λ x x) @ ♭ ((Any? → Number?) ∪ (Any? → String?)))))))
+
+(traces λCon-reduction example/union/3)
