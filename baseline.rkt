@@ -39,12 +39,12 @@
   
   ;; Values
   (SVal
-   K (λ x S))
+   K (λ x ... S))
   
   ;; Non-Values
   (SNonVal
    x (blame ♭)
-   (TI TQ) (TCons TQ) (TAbs TI) (TAbs TVal)
+   (TI TQ ...) (TCons TQ ...) (TAbs TI ...) (TAbs TVal ...)
    (op TQ ...) (if TQ_0 TQ_1 TQ_2))
   
   ;; Source Terms
@@ -56,8 +56,10 @@
   
   ;; Values with False Contract
   (TCons K (TCons @ ι ⊥))
-  (TAbs (λ x S) (TAbs @ ι ⊥))
+  (TAbs (λ x ... S) (TAbs @ ι ⊥))
   (TVal SVal (TVal @ ι ⊥))
+  
+  (TNonQ TVal TI) ;; TODO
   
   ;; Terms with Immediate Contracts/ False
   (TI SNonVal (TI @ ι I) (TI @ ι ⊥))
@@ -76,24 +78,24 @@
   (Reducible
    
    ;; Terms containing a reducable term
-   (λ x Reducible) (Reducible M) (M Reducible) (op M ... Reducible N ...) (if M ... Reducible N ...)   (Reducible @ b C)
+   (λ x ... Reducible) (M ... Reducible N ...) (op M ... Reducible N ...) (if M ... Reducible N ...)   (Reducible @ b C)
    
    ;; Optimization
    ;; ------------
    
    ;; Delayed checkes of a delayed contract
-   ((in-hole VCtx (λ x M)) (M @ ι Q))
+   ((in-hole VCtx (λ x ... M)) (M @ ι Q))
    
    ;; Checkes of delayed contracts
    ((M @ ι Q) N) 
    
    ;; Imediate contracts on values
    ((in-hole VCtx K) @ ι I)
-   ((in-hole VCtx (λ x M)) @ ι I)
+   ((in-hole VCtx (λ x ... M)) @ ι I)
    ;((λ x M) @ ι I)
    
    ;; Contracts on return terms
-   (λ x (M @ ι C))
+   (λ x ... (M @ ι C))
    
    ;; True
    (M @ ι ⊤)
@@ -122,14 +124,14 @@
   
   ;; Baseline Reduction Context
   ;; --------------------------
-  ((F G H) hole (λ x F) (F M) (T F) (op T ... F M ...) (if T ... F M ...) (F @ b C))
+  ((F G H) hole (λ x ... F) (T ... F N ...) (op T ... F M ...) (if T ... F M ...) (F @ b C))
   
   ;; Assertion Context
   ;; -----------------
   (VCtx hole (VCtx @ ι ⊥))
   
   ;; TODO
-  (XCtx hole ((λ x XCtx) M))
+  (XCtx hole ((λ x ... XCtx) M))
   
   )
 
@@ -185,9 +187,9 @@
    ;; function contract (delayed intersection contract).
    
    (--> (ς
-         (in-hole F ((T_0 @ ι (C → D)) T_1)))
+         (in-hole F ((T_0 @ ι (C ..._0 → D)) T_1 ..._0)))
         (((ι ◃ (ι1 → ι2)) ς)
-         (in-hole F ((T_0 (T_1 @ ι1 C)) @ ι2 D)))
+         (in-hole F ((T_0 (T_1 @ ι1 C) ...) @ ι2 D)))
         "Unfold/D-Function"
         (fresh ι1 ι2))
    
@@ -203,12 +205,18 @@
    ;; Rule [Unroll] unrolles the contract of a contracted argument 
    ;; to all uses of the argument.
    
+   ;;(traces Baseline-reduction (term (· ((λ x y (+ x y)) (1 @ ♭1 (Number? → Number?)) (z @ ♭2 (Number? → Number?))))))
+   
    (--> (ς
-         (in-hole F ((in-hole XCtx (in-hole VCtx (λ x S))) (T @ ι Q))))
-        ;(in-hole F ((in-hole VCtx (λ x S)) (T @ ι Q)))) ;; TODO
+         ;(in-hole F ((in-hole XCtx (in-hole VCtx (λ x S))) (T @ ι Q))))
+        ;(in-hole F ((in-hole VCtx (λ x ... S)) TQ ...))) ;; TODO, need at least one T @ Q
+        (in-hole F ((in-hole VCtx (λ x ..._0 y z ..._1 S)) TNonQ ..._0 (T @ ι Q) TQ ..._1)))
         (ς
-         (in-hole F ((in-hole XCtx (λ x (unroll x Q ι S))) T)))
-        ;(in-hole F ((λ x (unroll x Q ι S)) T))) ;; todo
+         ;(in-hole F ((in-hole XCtx (λ x (unroll x Q ι S))) T)))
+        ;(in-hole F ((λ x (unroll-n x Q ι S)) T))) ;; todo
+        ;(in-hole F ((λ x ... (unroll-n (x T) ... S)) T ...))) ;; todo
+         ;(in-hole F ((λ x ... y z ... (unroll y Q ι S)) TNonQ ... T TQ ...))) ;; todo
+         (in-hole F ((λ x ... y z ... (unroll y Q ι S)) TNonQ ... T TQ ...))) ;; todo
         "Unroll")
    
    ;; Lower (down)
@@ -217,9 +225,9 @@
    ;; contract of the function's body.
    
    (--> (ς
-         (in-hole F (λ x (T @ ι C))))
+         (in-hole F (λ x ... (T @ ι C))))
         (ς
-         (in-hole F ((λ x T) @ ι (⊤ → C))))
+         (in-hole F ((λ x ... T) @ ι (⊤ → C))))
         "Lower")
    
    ;; Switch Order
@@ -284,6 +292,21 @@
  \___/|_||_|_| \___/_|_|
                         
 |#
+
+
+(define-metafunction λCon-Baseline
+  unwrap : T -> T
+  [(unwrap (T @ ι Q)) T]
+  [(unwrap any) any])
+
+
+;; TOOD
+(define-metafunction λCon-Baseline
+  unroll-n : (x T) ... any -> any
+  [(unroll-n (x_0 (T_0 @ b Q)) (x_i T_i) ... any) (unroll-n (x_i T_i) ... (unroll x_0 Q b any))]
+  [(unroll-n (x_0 T_0) (x_i T_i) ... any) (unroll-n (x_i T_i) ... any)]
+  [(unroll-n any) any])
+
 
 ;; Function unroll : x Q M -> N
 ;; ----------------------------

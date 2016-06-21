@@ -35,7 +35,7 @@
   example/addone/3/contracted
   (term ((λ f ((λ x ((f 1) x)) @ ♭0 (Positive? → Positive?))) ((λ x (λ y (if (or (string? x) (string? y)) (string-append x y) (+ x y)))) @ ♭1 ((Number? → (Number? → Number?)) ∩ (String? → (String? → String?)))))))
 
-(traces λCon-reduction (term (· (,example/addone/3/contracted 1))))
+;(traces λCon-reduction (term (· (,example/addone/3/contracted 1))))
 
 
 
@@ -53,16 +53,16 @@
 
 ;; # Subset Reduction
 ;; ------------------
-;; Optimization steps: 32
+;; Optimization steps: 28
 ;; Join Steps:          4
 ;; Reduction steps:    23
 
-;(traces Subset-reduction (term (· ,example/addone/3/contracted)))
+(traces Subset-reduction (term (· ,example/addone/3/contracted)))
 
 ;(traces Join-reduction (λCon/Subset~~>* (term (· ,example/addone/3/contracted))))
 
-;(let ([configuration (λCon/Join~~>* (λCon/Subset~~>* (term (· ,example/addone/3/contracted))))]) 
-;  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 1)))))
+(let ([configuration (λCon/Join~~>* (λCon/Subset~~>* (term (· ,example/addone/3/contracted))))]) 
+  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 1)))))
 
 
 

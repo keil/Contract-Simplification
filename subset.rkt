@@ -32,7 +32,7 @@
   ;; Function Body Context
   ;; ---------------------
   ;; Reduction Context without abstraction.
-  (BCtx hole (BCtx M) (T BCtx) (op T ... BCtx M ...) (BCtx @ b C))
+  (BCtx hole (T ... BCtx M ...) (op T ... BCtx M ...) (BCtx @ b C))
   
   ;; Assertion Context
   ;; -----------------
@@ -49,16 +49,16 @@
   ;; Values
   (SVal
    K (side-condition
-      (name _fundec (λ x S))
+      (name _fundec (λ x ... S))
       (not
-       (redex-match? λCon-Subset (λ x (in-hole BCtx (x @ ι I))) (term _fundec))
+       (redex-match? λCon-Subset (λ x ... y z ... (in-hole BCtx (y @ ι I))) (term _fundec))
        )
       ))
   
   ;; Non-Values
   (SNonVal
    x (blame ♭) ;; TODO
-   (TI TQ) (TCons TQ) (TAbs TI) (TAbs TVal)
+   (TI TQ ...) (TCons TQ ...) (TAbs TI ...) (TAbs TVal ...)
    (op TQ ...) (if TQ_0 TQ_1 TQ_2))
   
   ;; Source Terms
@@ -106,7 +106,7 @@
   (Reducible
    
    ;; Terms containing a reducable term
-   (λ x Reducible) (Reducible M) (M Reducible) (op M ... Reducible N ...) (if M ... Reducible N ...)   (Reducible @ b C)
+   (λ x Reducible) (M ... Reducible N ...) (op M ... Reducible N ...) (if M ... Reducible N ...)   (Reducible @ b C)
    
    ;; Subsets
    ;; -------
@@ -120,14 +120,14 @@
    ;; ------------
    
    ;; Delayed checkes of a delayed contract
-   ((in-hole VCtx (λ x M)) (M @ ι Q)) 
+   ((in-hole VCtx (λ x ... M)) L ... (M @ ι Q) N ...) ;; TODO 
    
    ;; Checkes of delayed contracts
-   ((M @ ι Q) N) 
+   ((M @ ι Q) N ...) 
    
    ;; Imediate contracts on values
    ((in-hole VCtx K) @ ι I)
-   ((in-hole VCtx (λ x M)) @ ι I)
+   ((in-hole VCtx (λ x ... M)) @ ι I)
    ;((λ x M) @ ι I)
    
    ;; Contracts on return terms
@@ -191,9 +191,9 @@
         (fresh ι1 ι2))
    
    (--> (ς
-         (in-hole F ((T_0 @ ι (Q ∩ R)) T_1)))
+         (in-hole F ((T_0 @ ι (Q ∩ R)) T_1 ...)))
         (((ι ◃ (ι1 ∩ ι2)) ς)
-         ((in-hole F ((T_0 @ ι1 Q) T_1)) ∥ (in-hole F ((T_0 @ ι2 R) T_1))))
+         ((in-hole F ((T_0 @ ι1 Q) T_1 ...)) ∥ (in-hole F ((T_0 @ ι2 R) T_1 ...))))
         "Unfold/D-Intersection"
         (fresh ι1 ι2))
    
@@ -203,11 +203,14 @@
    ;; on argument x and creates a new function contract.
    
    (--> (ς
-         (in-hole F (λ x (in-hole BCtx (x @ ι I)))))
+         (in-hole F (λ x ... y z ...  (in-hole BCtx (y @ ι I)))))
         (((ι ◃ (¬ ι1)) ς)
-         (in-hole F ((λ x (in-hole BCtx x)) @ ι1 (I → ⊤))))
+         (in-hole F ((λ x ... y z ... (in-hole BCtx y)) @ ι1 (lift (x ⊤) ... (y I) (z ⊤) ...)))) ;; ((fresh ⊤) ... I ⊤ ... → ⊤) TODO
         "Lift"
-        (fresh ι1))
+        (fresh ι1)
+        ;(where C ..._1 )
+        
+        )
    
    ;; Lower (down)
    ;; ------------
@@ -215,13 +218,13 @@
    ;; contract of the function's body.
    
    (--> (ς
-         (in-hole F (λ x (T @ ι C))))
+         (in-hole F (λ x ... (T @ ι C))))
         (ς
-         (in-hole F ((λ x T) @ ι (⊤ → C))))
+         (in-hole F ((λ x ... T) @ ι (⊤ → C))))
         "Lower"        
         (side-condition (canonical?/Subset (term (T @ ι C))))        
         (side-condition ; Do not lower argument contracts.
-         (not (redex-match? λCon-Subset (λ x (in-hole BCtx (x @ ι I))) (term (λ x (T @ ι C)))))))
+         (not (redex-match? λCon-Subset (λ x ... y z ... (in-hole BCtx (y @ ι I))) (term (λ x ... (T @ ι C)))))))
    
    ;; Blame
    ;; ---------------
@@ -229,9 +232,9 @@
    ;; Note: ⊥ mus remain in the source program.
    
    (--> (ς
-         (in-hole F (λ x (in-hole BCtx (T @ ι ⊥)))))
+         (in-hole F (λ x ... (in-hole BCtx (T @ ι ⊥)))))
         (ς
-         (in-hole F (λ x ((blame ♭) @ ι ⊥))))
+         (in-hole F (λ x ... ((blame ♭) @ ι ⊥))))
         "Blame"
         (side-condition (not (redex-match? λCon-Subset (blame ♭) (term T))))
         (where (blame ♭) (blame-of ι ς)))
@@ -340,6 +343,14 @@
         "Simplify/Union/2"
         (side-condition (term (⊑/ordinary D C))))
    ))
+
+;; TODO
+
+(define-metafunction λCon
+  lift : (x C) ... -> (C ... → ⊤)
+  [(lift (x C) ...) (C ... → ⊤)])
+;  [(lift ι ς) (root-of (parent-of ι ς) ς)])
+
 
 #|
   ___      _         _      _         ___ _                

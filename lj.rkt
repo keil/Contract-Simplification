@@ -20,7 +20,7 @@
   
   ;; Terms
   ;; -----
-  ((L M N) K x (λ x M) (M N) (op M ...) (if L M N))
+  ((L M N) K x (λ x ... M) (M N ...) (op M ...) (if L M N))
   
   ;; Constants 
   ;; ---------
@@ -48,14 +48,14 @@
   
   ;; Values
   ;; ------
-  ((U V W) K (λ x M))
+  ((U V W) K (λ x ... M))
   
   ;; False Values
   (false #f 0 "")
   
   ;; Evaluation Contexts
   ;; -------------------
-  (E hole (E N) (V E) (op V ... E M ...) (if E M N)))
+  (E hole (V ... E M ...) (op V ... E M ...) (if E M N)))
 
 #|
  ___        _         _   _          
@@ -72,8 +72,8 @@
         (in-hole E (δ op V ...))
         "δ")
    
-   (--> (in-hole E ((λ x M) V))
-        (in-hole E (subst x V M))
+   (--> (in-hole E ((λ x ... M) V ...))
+        (in-hole E (subst-n (x V) ... M))
         "β")
    
    (--> (in-hole E (if V M N))
@@ -98,9 +98,14 @@
 ;; Substitution (subst)
 ;; --------------------
 (define-metafunction λJ
+  subst-n : (x any) ... any -> any
+  [(subst-n (x_0 any_0) (x_i any_i) ... any) (subst-n (x_i any_i) ... (subst x_0 any_0 any))]
+  [(subst-n any) any])
+
+(define-metafunction λJ
   subst : x any any -> any
-  [(subst x any_1 (λ x any_2)) (λ x any_2)]
-  [(subst x any_1 (λ y any_2)) (λ y (subst x any_1 any_2))]
+  [(subst y any_1 (λ x ... y z ... any_2)) (λ x ... y z ... any_2)]
+  [(subst y any_1 (λ x ... any_2)) (λ x ... (subst y any_1 any_2))]
   [(subst x any x) any]
   [(subst x any y) y]
   [(subst x any_1 (any_2 ...)) ((subst x any_1 any_2) ...)]
@@ -119,8 +124,8 @@
 (define-metafunction λJ
   free? : x any -> boolean
   [(free? x x) #t] 
-  [(free? x (λ x M)) #f]
-  [(free? x (λ y M)) (free x M)]
+  [(free? y (λ x ... y z ... M)) #f]
+  [(free? y (λ x ... M)) (free y M)]
   [(free? x (any ...)) (or (free? x any) ...)]
   [(free? x any) #f])
 
@@ -128,8 +133,8 @@
 ;; ------------------------
 (define-metafunction λJ
   bound? : x any -> boolean
-  [(bound? x (λ x M)) #t]
-  [(bound? x (λ y M)) (bound? x M)]
+  [(bound? y (λ x ... y z ... M)) #t]
+  [(bound? y (λ x ... M)) (bound? y M)]
   [(bound? x (any ...)) (or (bound? x any) ...)]
   [(bound? x any) #f])
 

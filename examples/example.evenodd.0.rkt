@@ -86,9 +86,9 @@
 ;; Join Steps:          0
 ;; Reduction steps:    77
 
-(traces Success-reduction (term (· ,example/evenodd/0/contracted)))
+;(traces Success-reduction (term (· ,example/evenodd/0/contracted)))
 
-(traces Join-reduction (λCon/Subset~~>* (term (· ,example/evenodd/0/contracted))))
+;(traces Join-reduction (λCon/Subset~~>* (term (· ,example/evenodd/0/contracted))))
 
-(let ([configuration (λCon/Join~~>* (λCon/Success~~>* (term (· ,example/evenodd/0/contracted))))]) 
-  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 3)))))
+;(let ([configuration (λCon/Join~~>* (λCon/Success~~>* (term (· ,example/evenodd/0/contracted))))]) 
+;  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 3)))))

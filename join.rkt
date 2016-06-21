@@ -26,7 +26,7 @@
   ;; Source Terms
   ;; ------------
   ;; Terms without a contract on the outermost position.
-  (S K x (λ x T) (T T) (op T ...) (if T ...) (blame ♭))
+  (S K x (λ x ... T) (T T) (op T ...) (if T ...) (blame ♭))
   
   ;; Terms
   ;; -----
@@ -41,14 +41,14 @@
   ;; Traces
   ;; ------
   ;; Trace context.
-  (Traces hole (Traces ∥ Trace) (T ∥ Traces))
+  (Traces hole (Traces ∥ Trace) (M ∥ Traces))
   
   ;; Join Context
   ;; ------------
   ((F G H)
-   hole (λ x F) (F M) (M F) (op M ... F N ...) (if M ... F N ...) (F0 @ b C))
+   hole (λ x ... F) (F M) (M F) (op M ... F N ...) (if M ... F N ...) (F0 @ b C))
   ((F0 G0 H0) 
-   (λ x F) (F M) (M F) (op M ... F N ...) (if M ... F N ...) (F0 @ b C)))
+   (λ x ... F) (F M) (M F) (op M ... F N ...) (if M ... F N ...) (F0 @ b C)))
 
 #|
  ___        _         _   _          
@@ -116,7 +116,7 @@
 (define-metafunction λCon-Join
   ≡/Ctx : G H -> boolean
   [(≡/Ctx any any) #t]
-  [(≡/Ctx (λ x G) (λ x H)) (≡/Ctx G H)]
+  [(≡/Ctx (λ x ... G) (λ x ... H)) (≡/Ctx G H)]
   [(≡/Ctx (op T ... G M_n ...) (op T ... H N_n ...)) ,(and
                                                        (term (≡/Ctx G H))
                                                        (term (≡/Terms (M_n ...) (N_n ...))))]
@@ -148,7 +148,7 @@
   [(≡/Term any any) #t]
   [(≡/Term (blame ♭) N) #t]
   [(≡/Term M (blame ♭)) #t]
-  [(≡/Term (λ x M) (λ x N)) (≡/Term M N)]
+  [(≡/Term (λ x ... M) (λ x ... N)) (≡/Term M N)]
   [(≡/Term (op M_0 M_n ...) (op N_0 N_n ...)) ,(and
                                                 (term (≡/Term M_0 N_0))
                                                 (term (≡/Terms (M_n ...) (N_n ...))))]  

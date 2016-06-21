@@ -35,13 +35,13 @@
   ((C D) I Q (C ∪ D) (I ∩ C) ⊤ ⊥)
   
   ;; Contract Abstraction
-  (A (Λ x C))
+  (A (Λ x ... C))
   
   ; Immediate Contracts
   ((I J) (flat M) predefined)
   
   ; Delayed Contracts
-  ((Q R) (C → D) (x ↦ A) (Q ∩ R))
+  ((Q R) (C ... → D) (x ... ↦ A) (Q ∩ R))
   
   
   
@@ -109,9 +109,9 @@
         (side-condition (not (term (is-blame-state? ς)))))
    
    (--> (ς
-         (in-hole E ((λ x M) V)))
+         (in-hole E ((λ x ..._0 M) V ..._0)))
         (ς
-         (in-hole E (subst x V M)))
+         (in-hole E (subst-n (x V) ... M)))
         "β"
         (side-condition (not (term (is-blame-state? ς)))))
    
@@ -173,27 +173,27 @@
    
    ;; Delayed Contarcts
    (--> (ς
-         (in-hole E ((V @ ι (C → D)) W)))
+         (in-hole E ((V @ ι (C ... → D)) W ...)))
         (((ι ◃ (ι1 → ι2)) ς)
-         (in-hole E ((V (W @ ι1 C)) @ ι2 D)))
+         (in-hole E ((V (W @ ι1 C) ...) @ ι2 D)))
         "D-Function"
         (fresh ι1 ι2)
         (side-condition (not (term (is-blame-state? ς))))
         (side-condition (not (redex-match? λCon ⊤ (term D))))
-        (side-condition (not (redex-match? λCon ⊤ (term C))))
+        (side-condition (not (redex-match? λCon (⊤ ...) (term (C ...)))))
         )
    
    (--> (ς
-         (in-hole E ((V @ ι (x ↦ (Λ x C))) W)))
+         (in-hole E ((V @ ι (x ... ↦ (Λ x ... C))) W ...)))
         (ς
-         (in-hole E ((V W) @ ι (subst/ x W C))))
+         (in-hole E ((V W ...) @ ι (subst-n/ (x W) ... C))))
         "D-Dependent"
         (side-condition (not (term (is-blame-state? ς)))))
    
    (--> (ς
-         (in-hole E ((V @ ι (Q ∩ R)) W)))
+         (in-hole E ((V @ ι (Q ∩ R)) W ...)))
         (((ι ◃ (ι1 ∩ ι2)) ς)
-         (in-hole E (((V @ ι1 Q) @ ι2 R) W)))
+         (in-hole E (((V @ ι1 Q) @ ι2 R) W ...)))
         "D-Intersection"
         (fresh ι1 ι2)
         (side-condition (not (term (is-blame-state? ς)))))
@@ -225,17 +225,17 @@
    
    ;; C → ⊤/ ⊤ → C
    (--> (ς
-         (in-hole E ((V @ ι (C → ⊤)) W)))
+         (in-hole E ((V @ ι (C ... → ⊤)) W ...)))
         (((ι ◃ (¬ ι1)) ς)
-         (in-hole E (V (W @ ι1 C))))
+         (in-hole E (V (W @ ι1 C) ...)))
         "C → ⊤"
         (fresh ι1)
         (side-condition (not (term (is-blame-state? ς)))))
    
    (--> (ς
-         (in-hole E ((V @ ι (⊤ → C)) W)))
+         (in-hole E ((V @ ι (⊤ → C)) W ...)))
         (ς
-         (in-hole E ((V W) @ ι C)))
+         (in-hole E ((V W ...) @ ι C)))
         "⊤ → C"
         (side-condition (not (term (is-blame-state? ς)))))
    
@@ -557,6 +557,11 @@
 |___/\_,_|_.__/__/\__|_|\__|\_,_|\__|_\___/_||_|
                                                 
 |#
+
+(define-metafunction λJ
+  subst-n/ : (x any) ... any -> any
+  [(subst-n/ (x_0 any_0) (x_i any_i) ... any) (subst-n/ (x_i any_i) ... (subst/ x_0 any_0 any))]
+  [(subst-n/ any) any])
 
 (define-metafunction λCon
   subst/ : x any any -> any
