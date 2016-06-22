@@ -54,10 +54,10 @@
 
 ;; # Baseline Reduction
 ;; --------------------
-;; Optimization steps: 20
-;; Reduction steps:    77
+;; Optimization steps: 13
+;; Reduction steps:    68
 
-(traces Baseline-reduction (term (· ,example/evenodd/1/contracted)))
+;(traces Baseline-reduction (term (· ,example/evenodd/1/contracted)))
 
 ;(let ([configuration (λCon/Baseline~~>* (term (· ,example/evenodd/1/contracted)))]) 
 ;  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 3)))))
@@ -66,9 +66,9 @@
 
 ;; # Subset Reduction
 ;; ------------------
-;; Optimization steps: 22
+;; Optimization steps: 15
 ;; Join Steps:          0
-;; Reduction steps:    77
+;; Reduction steps:    68
 
 ;(traces Subset-reduction (term (· ,example/evenodd/1/contracted)))
 

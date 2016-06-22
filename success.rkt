@@ -33,21 +33,23 @@
   ;; Values
   (SVal
    K (side-condition
-      (name _fundec (λ x S))
+      (name _fundec (λ x ... S))
       (not
-       (redex-match? λCon-Subset (λ x (in-hole G (x @ ι I))) (term _fundec))
-       ;; Not correct, because x must be free in S
+       (redex-match? λCon-Subset (λ x ... y z ... (in-hole G (y @ ι I))) (term _fundec))
+       ;(redex-match? λCon-Subset (λ x ... y z ... (in-hole G ((y @ ι I) T ...))) (term _fundec))
+       ;; Ti x
+       ;; Not correct, because x must be free in S, correct ist term S ist not canonical if so
        )
       ))
   
   ;; Non-Values
   (SNonVal
-   x (blame ♭) ;; TODO
-   (TI TQ) (TCons TQ) (TAbs TI) (TAbs TVal)
-   (op TQ ...) (if TQ_0 TQ_1 TQ_2))
+   (blame ♭) ;; TODO
+   (TIx TQx ...) (TCons TQx ...) (TAbs TI ...) (TAbs TVal ...)
+   (op TQx ...) (if TQx_0 TQx_1 TQx_2))
   
   ;; Source Terms
-  (S SVal SNonVal)
+  (S SVal SNonVal x)
   
   ;; Terms
   ;; -----
@@ -59,6 +61,8 @@
       (side-condition 
        ((in-hole VCtx (TI @ ι_i (name _I I))) @ ι_r (name _J J))
        (not (or (term (⊑/naive _I _J)) (term (⊑/naive _J _I))))))
+  
+  (TIx TI x)
   
   ;; TODO. is it correct to have VCtx here?
   ;; dont think so, Actx must be correct , boy it shoudl only contain immediate contract
@@ -80,11 +84,16 @@
                 
                 ))))
   
+  (TQx TQ x)
+  
   ;; Canonical Terms (non-reducable terms)
-  (T TQ (T_0 ∥ T_1) ((blame ♭) @ ι ⊥)) ;; TODO
+  (T TQx (T_0 ∥ T_1) ((blame ♭) @ ι ⊥)) ;; TODO
   
   
   )
+
+;  (term ((λ f (λ x (f f x))) ((λ f x (if (= x 1) 1 (* x (f f (- x 1))))) @ ♭ (⊤ Natural? → Positive?)))))
+(redex-match λCon-Success (in-hole F (T @ ♭ C)) (term ((λ f (λ x (f f x))) ((λ f x (if (= x 1) 1 (* x (f f (- x 1))))) @ ♭ (⊤ Natural? → Positive?)))))
 
 #|
  ___        _         _   _          
@@ -111,9 +120,9 @@
    ;; on argument x and creates a new function contract.
    
    (--> (ς
-         (in-hole F (λ x (in-hole G (x @ ι I)))))
+         (in-hole F (λ x ... y z ... (in-hole G (y @ ι C)))))
         (((ι ◃ (¬ ι1)) ς)
-         (in-hole F ((λ x (in-hole G x)) @ ι1 (I → ⊤)))) ;; TODO C instead of I, only if not in an application
+         (in-hole F ((λ x ... y z ... (in-hole G y)) @ ι1 (build (x ⊤) ... (y C) (z ⊤) ... ⊤)))) ;; TODO C instead of I, only if not in an application
         "Lift"
         (fresh ι1)
         ;(side-condition (canonical?/Baseline (term (λ x (in-hole G (x @ ι C)))))))
@@ -130,9 +139,9 @@
         (ς
          (in-hole F (in-hole ACtx (T @ ♭1 (C → D)))))
         "Condense"
-        (side-condition (not (equal? (term (blame-of ι_0 ς)) (term (blame-of ι_1 ς)))))
+        ;(side-condition (not (equal? (term (blame-of ι_0 ς)) (term (blame-of ι_1 ς)))))
         ;; Side condition, i_o must be negative
-        (fresh ι2)
+        ;(fresh ι2)
         (fresh ♭1))
    
    ))

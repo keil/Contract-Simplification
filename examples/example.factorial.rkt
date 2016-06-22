@@ -72,7 +72,7 @@
 
 (traces Success-reduction (term (· ,example/factorial/0/contracted)))
 
-(traces Join-reduction (λCon/Subset~~>* (term (· ,example/factorial/0/contracted))))
+;(traces Join-reduction (λCon/Subset~~>* (term (· ,example/factorial/0/contracted))))
 
-(let ([configuration (λCon/Join~~>* (λCon/Success~~>* (term (· ,example/factorial/0/contracted))))]) 
-  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 5)))))
+;(let ([configuration (λCon/Join~~>* (λCon/Success~~>* (term (· ,example/factorial/0/contracted))))]) 
+;  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 5)))))

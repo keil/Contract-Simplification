@@ -205,7 +205,7 @@
    (--> (ς
          (in-hole F (λ x ... y z ...  (in-hole BCtx (y @ ι I)))))
         (((ι ◃ (¬ ι1)) ς)
-         (in-hole F ((λ x ... y z ... (in-hole BCtx y)) @ ι1 (lift (x ⊤) ... (y I) (z ⊤) ...)))) ;; ((fresh ⊤) ... I ⊤ ... → ⊤) TODO
+         (in-hole F ((λ x ... y z ... (in-hole BCtx y)) @ ι1 (build (x ⊤) ... (y I) (z ⊤) ... ⊤)))) ;; ((fresh ⊤) ... I ⊤ ... → ⊤) TODO
         "Lift"
         (fresh ι1)
         ;(where C ..._1 )
@@ -220,7 +220,7 @@
    (--> (ς
          (in-hole F (λ x ... (T @ ι C))))
         (ς
-         (in-hole F ((λ x ... T) @ ι (⊤ → C))))
+         (in-hole F ((λ x ... T) @ ι (build (x ⊤) ... C))))
         "Lower"        
         (side-condition (canonical?/Subset (term (T @ ι C))))        
         (side-condition ; Do not lower argument contracts.
@@ -344,12 +344,6 @@
         (side-condition (term (⊑/ordinary D C))))
    ))
 
-;; TODO
-
-(define-metafunction λCon
-  lift : (x C) ... -> (C ... → ⊤)
-  [(lift (x C) ...) (C ... → ⊤)])
-;  [(lift ι ς) (root-of (parent-of ι ς) ς)])
 
 
 #|

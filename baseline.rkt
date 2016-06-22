@@ -227,7 +227,7 @@
    (--> (ς
          (in-hole F (λ x ... (T @ ι C))))
         (ς
-         (in-hole F ((λ x ... T) @ ι (⊤ → C))))
+         (in-hole F ((λ x ... T) @ ι (build (x ⊤) ... C))))
         "Lower")
    
    ;; Switch Order
@@ -292,6 +292,19 @@
  \___/|_||_|_| \___/_|_|
                         
 |#
+
+
+;; TODO
+
+#|
+(define-metafunction λCon
+  lift : (x C) ... ->  Q
+  [(lift (x C) ...) (C ... → ⊤)])
+|#
+
+(define-metafunction λCon
+  build : (x C) ... D -> Q
+  [(build (x C) ... D) (C ... → D)])
 
 
 (define-metafunction λCon-Baseline

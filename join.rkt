@@ -26,7 +26,7 @@
   ;; Source Terms
   ;; ------------
   ;; Terms without a contract on the outermost position.
-  (S K x (λ x ... T) (T T) (op T ...) (if T ...) (blame ♭))
+  (S K x (λ x ... T) (T T ...) (op T ...) (if T ...) (blame ♭))
   
   ;; Terms
   ;; -----
