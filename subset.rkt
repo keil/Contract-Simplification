@@ -22,6 +22,9 @@
 
 (define-extended-language λCon-Subset λCon-Baseline
   
+  ;; TODO 
+  ;;((L M N) .... (M ∥ N))
+  
   ;; Contexts
   ;; ========
   
