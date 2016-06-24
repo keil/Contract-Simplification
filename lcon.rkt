@@ -58,7 +58,7 @@
   ((L M N) .... (M @ ♭ C) (V @ ♭ ι C) (blame ♭) (M @ ♭ ι C))
   
   ;; Contexts
-  (E .... (E @ ♭ C) (V @ ♭ ι (eval E)))
+  (E .... (E @ ♭ C) (E @ ♭ ι C) (V @ ♭ ι (eval E)))
   
   
   

@@ -123,7 +123,7 @@
   
   ;; Baseline Reduction Context
   ;; --------------------------
-  ((F G H) hole (λ x ... F) (T ... F N ...) (op T ... F M ...) (if T ... F M ...) (F @ ♭ ι C))
+  ((F G H) hole (λ x ... F) (T ... F N ...) (op T ... F M ...) (if T ... F M ...) (F @ ♭ C) (F @ ♭ ι C))
   
   ;; Value Context
   ;; -------------

@@ -93,7 +93,7 @@
   )
 
 ;  (term ((λ f (λ x (f f x))) ((λ f x (if (= x 1) 1 (* x (f f (- x 1))))) @ ♭ (⊤ Natural? → Positive?)))))
-(redex-match λCon-Success (in-hole F (T @ ♭ C)) (term ((λ f (λ x (f f x))) ((λ f x (if (= x 1) 1 (* x (f f (- x 1))))) @ ♭ (⊤ Natural? → Positive?)))))
+;(redex-match λCon-Success (in-hole F (T @ ♭ C)) (term ((λ f (λ x (f f x))) ((λ f x (if (= x 1) 1 (* x (f f (- x 1))))) @ ♭ (⊤ Natural? → Positive?)))))
 
 #|
  ___        _         _   _          

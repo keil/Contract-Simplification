@@ -46,9 +46,9 @@
   ;; Join Context
   ;; ------------
   ((F G H)
-   hole (λ x ... F) (M ... F N ...) (op M ... F N ...) (if M ... F N ...) (F0 @ ♭ ι C))
+   hole (λ x ... F) (M ... F N ...) (op M ... F N ...) (if M ... F N ...) (F0 @ ♭ C) (F0 @ ♭ ι C))
   ((F0 G0 H0) 
-   (λ x ... F) (M ... F N ...) (op M ... F N ...) (if M ... F N ...) (F0 @ ♭ ι C)))
+   (λ x ... F) (M ... F N ...) (op M ... F N ...) (if M ... F N ...) (F0 @ ♭ C) (F0 @ ♭ ι C)))
 
 #|
  ___        _         _   _          
