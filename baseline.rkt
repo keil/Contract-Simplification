@@ -26,7 +26,7 @@
   
   ;; Terms
   ;; -----
-  ((L M N) .... (M @ ι C))
+  ((L M N) .... (M @ ♭ ι C))
   
   
   
@@ -55,17 +55,17 @@
   ;; Terms with non-reducable contracts.
   
   ;; Values with False Contract
-  (TCons K (TCons @ ι ⊥))
-  (TAbs (λ x ... S) (TAbs @ ι ⊥))
-  (TVal SVal (TVal @ ι ⊥))
+  (TCons K (TCons @ ♭ ι ⊥))
+  (TAbs (λ x ... S) (TAbs @ ♭ ι ⊥))
+  (TVal SVal (TVal @ ♭ ι ⊥))
   
   (TNonQ TVal TI) ;; TODO
   
   ;; Terms with Immediate Contracts/ False
-  (TI SNonVal (TI @ ι I) (TI @ ι ⊥))
+  (TI SNonVal (TI @ ♭ ι I) (TI @ ♭ ι ⊥))
   
   ;; Terms with Delayed Contracts
-  (TQ TVal TI (TQ @ ι Q))
+  (TQ TVal TI (TQ @ ♭ ι Q))
   
   ;; Canonical Terms (non-reducable terms)
   (T TQ)
@@ -78,41 +78,40 @@
   (Reducible
    
    ;; Terms containing a reducable term
-   (λ x ... Reducible) (M ... Reducible N ...) (op M ... Reducible N ...) (if M ... Reducible N ...)   (Reducible @ b C)
+   (λ x ... Reducible) (M ... Reducible N ...) (op M ... Reducible N ...) (if M ... Reducible N ...) (Reducible @ ♭ ι C)
    
    ;; Optimization
    ;; ------------
    
    ;; Delayed checkes of a delayed contract
-   ((in-hole VCtx (λ x ... M)) (M @ ι Q))
+   ((in-hole VCtx (λ x ... M)) (M @ ♭ ι Q))
    
    ;; Checkes of delayed contracts
-   ((M @ ι Q) N) 
+   ((M @ ♭ ι Q) N) 
    
    ;; Imediate contracts on values
-   ((in-hole VCtx K) @ ι I)
-   ((in-hole VCtx (λ x ... M)) @ ι I)
-   ;((λ x M) @ ι I)
+   ((in-hole VCtx K) @ ♭ ι I)
+   ((in-hole VCtx (λ x ... M)) @ ♭ ι I)
    
    ;; Contracts on return terms
-   (λ x ... (M @ ι C))
+   (λ x ... (M @ ♭ ι C))
    
    ;; True
-   (M @ ι ⊤)
+   (M @ ♭ ι ⊤)
    
    
    ;; Restructuring
    ;; -------------
    
    ;; Intersection betenn immediate and delayed contract
-   (M @ ι (I ∩ C))
+   (M @ ♭ ι (I ∩ C))
    
    ;; Union contracts
-   (M @ ι (C ∪ D))
+   (M @ ♭ ι (C ∪ D))
    
    ;; Nested delayed contracts
-   ((M @ ι_0 Q) @ ι_1 I)
-   ((M @ ι_0 Q) @ ι_1 ⊥)
+   ((M @ ♭ ι_0 Q) @ ♭ ι_1 I)
+   ((M @ ♭ ι_0 Q) @ ♭ ι_1 ⊥)
    
    ;; Top-level assertions
    (M @ ♭ C))
@@ -124,16 +123,11 @@
   
   ;; Baseline Reduction Context
   ;; --------------------------
-  ((F G H) hole (λ x ... F) (T ... F N ...) (op T ... F M ...) (if T ... F M ...) (F @ b C))
+  ((F G H) hole (λ x ... F) (T ... F N ...) (op T ... F M ...) (if T ... F M ...) (F @ ♭ ι C))
   
-  ;; Assertion Context
-  ;; -----------------
-  (VCtx hole (VCtx @ ι ⊥))
-  
-  ;; TODO
-  (XCtx hole ((λ x ... XCtx) M))
-  
-  )
+  ;; Value Context
+  ;; -------------
+  (VCtx hole (VCtx @ ♭ ι ⊥)))
 
 
 #|
@@ -163,21 +157,21 @@
    (--> (ς
          (in-hole F (T @ ♭ C)))
         (((♭ ◃ ι) ς)
-         (in-hole F (T @ ι C)))
+         (in-hole F (T @ ♭ ι C)))
         "Unfold/Assert"
         (fresh ι))
    
    (--> (ς
-         (in-hole F (T @ ι (C ∪ D)))) 
+         (in-hole F (T @ ♭ ι (C ∪ D)))) 
         (((ι ◃ (ι1 ∩ ι2)) ς)
-         (in-hole F ((T @ ι1 C) @ ι2 D)))
+         (in-hole F ((T @ ♭ ι1 C) @ ♭ ι2 D)))
         "Unfold/Union"
         (fresh ι1 ι2))
    
    (--> (ς
-         (in-hole F (T @ ι (I ∩ C)))) 
+         (in-hole F (T @  ι (I ∩ C)))) 
         (((ι ◃ (ι1 ∩ ι2)) ς)
-         (in-hole F ((T @ ι1 I) @ ι2 C)))
+         (in-hole F ((T @ ♭ ι1 I) @ ♭ ι2 C)))
         "Unfold/Intersection"
         (fresh ι1 ι2))
    
@@ -187,16 +181,16 @@
    ;; function contract (delayed intersection contract).
    
    (--> (ς
-         (in-hole F ((T_0 @ ι (C ..._0 → D)) T_1 ..._0)))
+         (in-hole F ((T_0 @ ♭ ι (C ..._0 → D)) T_1 ..._0)))
         (((ι ◃ (ι1 → ι2)) ς)
-         (in-hole F ((T_0 (T_1 @ ι1 C) ...) @ ι2 D)))
+         (in-hole F ((T_0 (T_1 @ ♭ ι1 C) ...) @ ♭ ι2 D)))
         "Unfold/D-Function"
         (fresh ι1 ι2))
    
    (--> (ς
-         (in-hole F ((T_0 @ ι (Q ∩ R)) T_1)))
+         (in-hole F ((T_0 @ ♭ ι (Q ∩ R)) T_1 ...)))
         (((ι ◃ (ι1 ∩ ι2)) ς)
-         (in-hole F (((T_0 @ ι1 Q) @ ι2 R) T_1)))
+         (in-hole F (((T_0 @ ♭ ι1 Q) @ ♭ ι2 R) T_1 ...)))
         "Unfold/D-Intersection"
         (fresh ι1 ι2))
    
@@ -205,18 +199,10 @@
    ;; Rule [Unroll] unrolles the contract of a contracted argument 
    ;; to all uses of the argument.
    
-   ;;(traces Baseline-reduction (term (· ((λ x y (+ x y)) (1 @ ♭1 (Number? → Number?)) (z @ ♭2 (Number? → Number?))))))
-   
    (--> (ς
-         ;(in-hole F ((in-hole XCtx (in-hole VCtx (λ x S))) (T @ ι Q))))
-        ;(in-hole F ((in-hole VCtx (λ x ... S)) TQ ...))) ;; TODO, need at least one T @ Q
-        (in-hole F ((in-hole VCtx (λ x ..._0 y z ..._1 S)) TNonQ ..._0 (T @ ι Q) TQ ..._1)))
+         (in-hole F ((in-hole VCtx (λ x ..._0 y z ..._1 S)) TNonQ ..._0 (T @ ♭ ι Q) TQ ..._1)))
         (ς
-         ;(in-hole F ((in-hole XCtx (λ x (unroll x Q ι S))) T)))
-        ;(in-hole F ((λ x (unroll-n x Q ι S)) T))) ;; todo
-        ;(in-hole F ((λ x ... (unroll-n (x T) ... S)) T ...))) ;; todo
-         ;(in-hole F ((λ x ... y z ... (unroll y Q ι S)) TNonQ ... T TQ ...))) ;; todo
-         (in-hole F ((λ x ... y z ... (unroll y Q ι S)) TNonQ ... T TQ ...))) ;; todo
+         (in-hole F ((λ x ... y z ... (unroll y Q ♭ ι S)) TNonQ ... T TQ ...)))
         "Unroll")
    
    ;; Lower (down)
@@ -225,9 +211,9 @@
    ;; contract of the function's body.
    
    (--> (ς
-         (in-hole F (λ x ... (T @ ι C))))
+         (in-hole F (λ x ... (T @ ♭ ι C))))
         (ς
-         (in-hole F ((λ x ... T) @ ι (build (x ⊤) ... C))))
+         (in-hole F ((λ x ... T) @ ♭ ι (build (x ⊤) ... C))))
         "Lower")
    
    ;; Switch Order
@@ -236,15 +222,15 @@
    ;; can be unrolled.
    
    (--> (ς
-         (in-hole F ((T @ ι_0 Q) @ ι_1 I)))
+         (in-hole F ((T @ ♭ ι_0 Q) @ ♭ ι_1 I)))
         (ς
-         (in-hole F ((T @ ι_1 I) @ ι_0 Q)))
+         (in-hole F ((T @ ♭ ι_1 I) @ ♭ ι_0 Q)))
         "Reverse/I")
    
    (--> (ς
-         (in-hole F ((T @ ι_0 Q) @ ι_1 ⊥)))
+         (in-hole F ((T @ ♭ ι_0 Q) @ ♭ ι_1 ⊥)))
         (ς
-         (in-hole F ((T @ ι_1 ⊥) @ ι_0 Q)))
+         (in-hole F ((T @ ♭ ι_1 ⊥) @ ♭ ι_0 Q)))
         "Reverse/False")
    
    ;; Valid Contracts
@@ -252,7 +238,7 @@
    ;; Removes (term ⊤) contracts.
    
    (--> (ς
-         (in-hole F (T @ ι ⊤)))
+         (in-hole F (T @ ♭ ι ⊤)))
         (ς
          (in-hole F T))
         "Recude/True")
@@ -262,28 +248,40 @@
    ;; Evaluates predicates on values.
    
    (--> (ς
-         (in-hole F ((in-hole VCtx V) @ ι predefined)))
+         (in-hole F ((in-hole VCtx V) @ ♭ ι predefined)))
         (ς
-         (in-hole F ((in-hole VCtx V) @ ι (lookup predefined))))
+         (in-hole F ((in-hole VCtx V) @ ♭ ι (lookup predefined))))
         "Lookup")
    
    (--> (ς
-         (in-hole F ((in-hole VCtx V) @ ι (flat M))))
+         (in-hole F ((in-hole VCtx V) @ ♭ ι (flat M))))
         (ς
-         (in-hole F ((in-hole VCtx V) @ ι ⊤)))
+         (in-hole F ((in-hole VCtx V) @ ♭ ι ⊤)))
         "Verify/True"
         (where W (⇓/Term ,(car (apply-reduction-relation* λCon-reduction (term (· (M V)))))))
         (side-condition (not (false? (term W)))))
    
    (--> (ς
-         (in-hole F ((in-hole VCtx V) @ ι (flat M))))
+         (in-hole F ((in-hole VCtx V) @ ♭ ι (flat M))))
         (ς
-         (in-hole F ((in-hole VCtx V) @ ι ⊥)))
+         (in-hole F ((in-hole VCtx V) @ ♭ ι ⊥)))
         "Verify/False"
         (where W (⇓/Term ,(car (apply-reduction-relation* λCon-reduction (term (· (M V)))))))
         (side-condition (false? (term W))))
    
    ))
+
+#|
+ ___      _ _    _ 
+| _ )_  _(_) |__| |
+| _ \ || | | / _` |
+|___/\_,_|_|_\__,_|
+         
+|#
+
+(define-metafunction λCon
+  build : (x C) ... D -> Q
+  [(build (x C) ... D) (C ... → D)])
 
 #|
  _   _              _ _ 
@@ -293,57 +291,43 @@
                         
 |#
 
-
-;; TODO
-
-#|
-(define-metafunction λCon
-  lift : (x C) ... ->  Q
-  [(lift (x C) ...) (C ... → ⊤)])
-|#
-
-(define-metafunction λCon
-  build : (x C) ... D -> Q
-  [(build (x C) ... D) (C ... → D)])
-
-
-(define-metafunction λCon-Baseline
-  unwrap : T -> T
-  [(unwrap (T @ ι Q)) T]
-  [(unwrap any) any])
-
-
-;; TOOD
-(define-metafunction λCon-Baseline
-  unroll-n : (x T) ... any -> any
-  [(unroll-n (x_0 (T_0 @ b Q)) (x_i T_i) ... any) (unroll-n (x_i T_i) ... (unroll x_0 Q b any))]
-  [(unroll-n (x_0 T_0) (x_i T_i) ... any) (unroll-n (x_i T_i) ... any)]
-  [(unroll-n any) any])
-
-
 ;; Function unroll : x Q M -> N
 ;; ----------------------------
 ;; Unrolls a delayed contract Q of function x 
 ;; to all uses of x
 
 (define-metafunction λCon-Baseline
-  unroll : x Q b any -> any
+  unroll : x Q ♭ ι any -> any
   
   ;; Don't continue if x is bound λ's body
-  [(unroll x Q b (λ x M)) (λ x M)]
+  [(unroll y Q ♭ ι (λ x ... y z ... M)) (λ  x ... y z ... M)]
   
   ;; Continue unrollong on λ's body
-  [(unroll x Q b (λ y M)) (λ y (unroll x Q b M))]
+  [(unroll y Q ♭ ι (λ x ... M)) (λ x ... (unroll y Q ♭ ι M))]
   
   ;; Put contract to the usage of x
-  [(unroll x Q b x) (x @ b Q)]
+  [(unroll x Q ♭ ι x) (x @ ♭ ι Q)]
   
   ;; Continue unrollong on the structure of M
-  [(unroll x Q b (any ...)) ((unroll x Q b any) ...)]
+  [(unroll x Q ♭ ι (any ...)) ((unroll x Q ♭ ι any) ...)]
   
   ;; Return the target expression M if
   ;; none of the previous rules match
-  [(unroll x Q b any) any])
+  [(unroll x Q ♭ ι any) any])
+
+
+#|
+ _   _                          
+| | | |_ ___ __ ___ _ __ _ _ __ 
+| |_| | ' \ V  V / '_/ _` | '_ \
+ \___/|_||_\_/\_/|_| \__,_| .__/
+                          |_|   
+|#
+
+(define-metafunction λCon-Baseline
+  unwrap : T -> T
+  [(unwrap (T @ ♭ ι Q)) (unwrap T)]
+  [(unwrap any) any])
 
 #|
  ___            _ _         _                         _ 

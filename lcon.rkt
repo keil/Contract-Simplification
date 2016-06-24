@@ -52,13 +52,13 @@
   (blame +blame -blame)
   
   ;; Values
-  ((U V W) .... (V @ ι Q))
+  ((U V W) .... (V @ ♭ ι Q))
   
   ;; Terms
-  ((L M N) .... (M @ ♭ C) (V @ ι C) (blame ♭) (M @ ι C))
+  ((L M N) .... (M @ ♭ C) (V @ ♭ ι C) (blame ♭) (M @ ♭ ι C))
   
   ;; Contexts
-  (E .... (E @ b C) (V @ b (eval E)))
+  (E .... (E @ ♭ C) (V @ ♭ ι (eval E)))
   
   
   
@@ -135,47 +135,47 @@
    (--> (ς
          (in-hole E (V @ ♭ C)))
         (((♭ ◃ ι) ς)
-         (in-hole E (V @ ι C)))
+         (in-hole E (V @ ♭ ι C)))
         "Assert"
         (fresh ι)
         (side-condition (not (term (is-blame-state? ς)))))
    
    ;; Immediate Contarcts   
    (--> (ς
-         (in-hole E (V @ ι (flat M))))
+         (in-hole E (V @ ♭ ι (flat M))))
         (ς
-         (in-hole E (V @ ι (eval (M (∇ V))))))
+         (in-hole E (V @ ♭ ι (eval (M (∇ V))))))
         "Flat"
         (side-condition (not (term (is-blame-state? ς)))))
    
    (--> (ς
-         (in-hole E (V @ ι (eval W))))
+         (in-hole E (V @ ♭ ι (eval W))))
         (((ι ◃ (τ W)) ς)
          (in-hole E V))
         "Unit"
         (side-condition (not (term (is-blame-state? ς)))))
    
    (--> (ς 
-         (in-hole E (V @ ι (C ∪ D))))
+         (in-hole E (V @ ♭ ι (C ∪ D))))
         (((ι ◃ (ι1 ∪ ι2)) ς)
-         (in-hole E ((V @ ι1 C) @ ι2 D)))
+         (in-hole E ((V @ ♭ ι1 C) @ ♭ ι2 D)))
         "Union"
         (fresh ι1 ι2)
         (side-condition (not (term (is-blame-state? ς)))))
    
    (--> (ς
-         (in-hole E (V @ ι (I ∩ C))))
+         (in-hole E (V @ ♭ ι (I ∩ C))))
         (((ι ◃ (ι1 ∩ ι2)) ς)
-         (in-hole E ((V @ ι1 I) @ ι2 C)))
+         (in-hole E ((V @ ♭ ι1 I) @ ♭ ι2 C)))
         "Intersection"
         (fresh ι1 ι2)
         (side-condition (not (term (is-blame-state? ς)))))
    
    ;; Delayed Contarcts
    (--> (ς
-         (in-hole E ((V @ ι (C ... → D)) W ...)))
+         (in-hole E ((V @ ♭ ι (C ... → D)) W ...)))
         (((ι ◃ (ι1 → ι2)) ς)
-         (in-hole E ((V (W @ ι1 C) ...) @ ι2 D)))
+         (in-hole E ((V (W @ ♭ ι1 C) ...) @ ♭ ι2 D)))
         "D-Function"
         (fresh ι1 ι2)
         (side-condition (not (term (is-blame-state? ς))))
@@ -184,16 +184,16 @@
         )
    
    (--> (ς
-         (in-hole E ((V @ ι (x ... ↦ (Λ x ... C))) W ...)))
+         (in-hole E ((V @ ♭ ι (x ... ↦ (Λ x ... C))) W ...)))
         (ς
-         (in-hole E ((V W ...) @ ι (subst-n/ (x W) ... C))))
+         (in-hole E ((V W ...) @ ♭ ι (subst-n/ (x W) ... C))))
         "D-Dependent"
         (side-condition (not (term (is-blame-state? ς)))))
    
    (--> (ς
-         (in-hole E ((V @ ι (Q ∩ R)) W ...)))
+         (in-hole E ((V @ ♭ ι (Q ∩ R)) W ...)))
         (((ι ◃ (ι1 ∩ ι2)) ς)
-         (in-hole E (((V @ ι1 Q) @ ι2 R) W ...)))
+         (in-hole E (((V @ ♭ ι1 Q) @ ♭ ι2 R) W ...)))
         "D-Intersection"
         (fresh ι1 ι2)
         (side-condition (not (term (is-blame-state? ς)))))
@@ -210,14 +210,14 @@
    
    ;; ⊤/⊥
    (--> (ς
-         (in-hole E (V @ ι ⊤)))
+         (in-hole E (V @ ♭ ι ⊤)))
         (((ι ◃ (τ #t)) ς)
          (in-hole E V))
         "⊤"
         (side-condition (not (term (is-blame-state? ς)))))
    
    (--> (ς
-         (in-hole E (V @ ι ⊥)))
+         (in-hole E (V @ ♭ ι ⊥)))
         (((ι ◃ (τ #f)) ς)
          (in-hole E V))
         "⊥"
@@ -225,25 +225,25 @@
    
    ;; C → ⊤/ ⊤ → C
    (--> (ς
-         (in-hole E ((V @ ι (C ... → ⊤)) W ...)))
+         (in-hole E ((V @ ♭ ι (C ... → ⊤)) W ...)))
         (((ι ◃ (¬ ι1)) ς)
-         (in-hole E (V (W @ ι1 C) ...)))
+         (in-hole E (V (W @ ♭ ι1 C) ...)))
         "C → ⊤"
         (fresh ι1)
         (side-condition (not (term (is-blame-state? ς)))))
    
    (--> (ς
-         (in-hole E ((V @ ι (⊤ → C)) W ...)))
+         (in-hole E ((V @ ♭ ι (⊤ → C)) W ...)))
         (ς
-         (in-hole E ((V W ...) @ ι C)))
+         (in-hole E ((V W ...) @ ♭ ι C)))
         "⊤ → C"
         (side-condition (not (term (is-blame-state? ς)))))
    
    ;; Lookup
    (--> (ς
-         (in-hole E (V @ ι predefined)))
+         (in-hole E (V @ ♭ ι predefined)))
         (ς
-         (in-hole E (V @ ι (lookup predefined))))
+         (in-hole E (V @ ♭ ι (lookup predefined))))
         "Lookup"
         (side-condition (not (term (is-blame-state? ς)))))
    
@@ -298,19 +298,18 @@
 
 |#
 
-
 ;; Unwrap (∇)
 ;; ----------
 (define-metafunction λCon
   ∇ : V -> V
-  [(∇ (V @ ι Q)) (∇ V)]
+  [(∇ (V @ ♭ ι Q)) (∇ V)]
   [(∇ V) V])
 
 ;; Delta (δ/)
 ;; ----------
 (define-metafunction λCon
   δ/ : op V ... -> V
-  [(δ/ op U ... (V @ ι Q) W ...) (δ/ op U ... V W ...)]
+  [(δ/ op U ... (V @ ♭ ι Q) W ...) (δ/ op U ... V W ...)]
   [(δ/ op V ... ) (δ op V ...)])
 
 ;; Union (⊎)
@@ -501,7 +500,7 @@
   ⊔ : ω ω -> ω
   [(⊔ ω ω) ω]
   [(⊔ (B_l0 ∘ B_l1) (B_r0 ∘ B_r1)) (,(and (term B_l0) (term B_r0)) ∘ ,(and (term B_l1) (term B_r1)))])
-  
+
 ;; Compute Solution
 ;; ----------------
 (define-metafunction λCon
@@ -558,15 +557,15 @@
                                                 
 |#
 
-(define-metafunction λJ
+(define-metafunction λCon
   subst-n/ : (x any) ... any -> any
   [(subst-n/ (x_0 any_0) (x_i any_i) ... any) (subst-n/ (x_i any_i) ... (subst/ x_0 any_0 any))]
   [(subst-n/ any) any])
 
 (define-metafunction λCon
   subst/ : x any any -> any
-  [(subst/ x any (Λ x C)) (Λ x M)]
-  [(subst/ x any (Λ y C)) (Λ y (subst/ x any C))]
+  [(subst/ y any (Λ x ... y z ... C)) (Λ x ... y z ... C)]
+  [(subst/ y any (Λ x ... C)) (Λ x ... (subst/ y any C))]
   [(subst/ x any ...) (subst x any ...)])
 
 #|

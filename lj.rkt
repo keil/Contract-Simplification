@@ -118,7 +118,6 @@
   δ : op V ... -> V
   [(δ op V ...) ,(eval (term (op V ...)) namespace)])
 
-
 ;; Free Variables (free?)
 ;; ----------------------
 (define-metafunction λJ
