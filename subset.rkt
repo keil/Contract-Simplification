@@ -32,7 +32,7 @@
   ;; Function Body Context
   ;; ---------------------
   ;; Reduction Context without abstraction.
-  (BCtx hole (T ... BCtx M ...) (op T ... BCtx M ...) (BCtx @ b C))
+  (BCtx hole (T ... BCtx M ...) (op T ... BCtx M ...) (BCtx @ ♭ C) (BCtx @ ♭ ι C))
   
   ;; Assertion Context
   ;; -----------------
