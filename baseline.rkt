@@ -110,8 +110,8 @@
    (M @ ♭ ι (C ∪ D))
    
    ;; Nested delayed contracts
-   ((M @ ♭ ι_0 Q) @ ♭ ι_1 I)
-   ((M @ ♭ ι_0 Q) @ ♭ ι_1 ⊥)
+   ((M @ ♭_q ι_q Q) @ ♭_i ι_i I)
+   ((M @ ♭_q ι_q Q) @ ♭_i ι_i ⊥)
    
    ;; Top-level assertions
    (M @ ♭ C))
@@ -222,15 +222,15 @@
    ;; can be unrolled.
    
    (--> (ς
-         (in-hole F ((T @ ♭ ι_0 Q) @ ♭ ι_1 I)))
+         (in-hole F ((T @ ♭_q ι_q Q) @ ♭_I ι_i I)))
         (ς
-         (in-hole F ((T @ ♭ ι_1 I) @ ♭ ι_0 Q)))
+         (in-hole F ((T @ ♭_i ι_i I) @ ♭_q ι_q Q)))
         "Reverse/I")
    
    (--> (ς
-         (in-hole F ((T @ ♭ ι_0 Q) @ ♭ ι_1 ⊥)))
+         (in-hole F ((T @ ♭_q ι_q Q) @ ♭_I ι_i ⊥)))
         (ς
-         (in-hole F ((T @ ♭ ι_1 ⊥) @ ♭ ι_0 Q)))
+         (in-hole F ((T @ ♭_i ι_i ⊥) @ ♭_q ι_q Q)))
         "Reverse/False")
    
    ;; Valid Contracts
