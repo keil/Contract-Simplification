@@ -50,7 +50,7 @@
   (SVal
    K (side-condition
       (name _fundec (λ x ... S))
-      (not (redex-match? λCon-Subset (λ x ... y z ... (in-hole BCtx (y @ ι I))) (term _fundec)))))
+      (not (redex-match? λCon-Subset (λ x ... y z ... (in-hole BCtx (y @ ♭ ι I))) (term _fundec)))))
   
   ;; Non-Values
   (SNonVal
@@ -278,16 +278,16 @@
    (--> (ς
          (in-hole F (in-hole ACtx ((T @ ♭ ι_c (C_d → C_r)) @ ♭ ι_d (D_d → D_r)))))
         (((ι_c ◃ ι) ((ι_d ◃ ι) ς))
-         (in-hole F (in-hole ACtx (T @ ι (D_d → C_r)))))
+         (in-hole F (in-hole ACtx (T @ ♭ ι (D_d → C_r)))))
         "Condense/1"
         (side-condition (term (⊑/ordinary (C_d → C_r) (D_d → D_r))))
         (side-condition (equal? (term (blame-of ι_c ς)) (term (blame-of ι_d ς))))
         (fresh ι))
    
    (--> (ς
-         (in-hole F (in-hole ACtx ((T @ ι_c (C_d → C_r)) @ ι_d (D_d → D_r)))))
+         (in-hole F (in-hole ACtx ((T @ ♭ ι_c (C_d → C_r)) @ ♭ ι_d (D_d → D_r)))))
         (((ι_c ◃ ι) ((ι_d ◃ ι) ς))
-         (in-hole F (in-hole ACtx (T @ ι (C_d → D_r)))))
+         (in-hole F (in-hole ACtx (T @ ♭ ι (C_d → D_r)))))
         "Condense/2"
         (side-condition (term (⊑/ordinary (D_d → D_r) (C_d → C_r))))
         (side-condition (equal? (term (blame-of ι_c ς)) (term (blame-of ι_d ς))))

@@ -26,12 +26,12 @@
   ;; Source Terms
   ;; ------------
   ;; Terms without a contract on the outermost position.
-  (S K x (λ x ... T) (T T ...) (op T ...) (if T ...) (blame ♭))
+  (S K x (λ x ... T) (T ...) (op T ...) (if T ...) (blame ♭))
   
   ;; Terms
   ;; -----
   ;; Terms with non-reducable contracts.
-  (T S (T @ ι C))
+  (T S (T @ ♭ ι C))
   
   ;; Trace
   ;; -----
@@ -46,9 +46,9 @@
   ;; Join Context
   ;; ------------
   ((F G H)
-   hole (λ x ... F) (F M) (M F) (op M ... F N ...) (if M ... F N ...) (F0 @ b C))
+   hole (λ x ... F) (M ... F N ...) (op M ... F N ...) (if M ... F N ...) (F0 @ ♭ ι C))
   ((F0 G0 H0) 
-   (λ x ... F) (F M) (M F) (op M ... F N ...) (if M ... F N ...) (F0 @ b C)))
+   (λ x ... F) (M ... F N ...) (op M ... F N ...) (if M ... F N ...) (F0 @ ♭ ι C)))
 
 #|
  ___        _         _   _          
@@ -123,10 +123,14 @@
   [(≡/Ctx (if T ... G M_n ...) (op T ... H N_n ...)) ,(and
                                                        (term (≡/Ctx G H))
                                                        (term (≡/Terms (M_n ...) (N_n ...))))]
-  [(≡/Ctx (G M) (H N)) ,(and (term (≡/Ctx G H)) (term (≡/Term M N)))]
-  [(≡/Ctx (T G) (T H)) ,(term (≡/Ctx G H))]
-  [(≡/Ctx (G @ ι C) H) (≡/Ctx G H)]
-  [(≡/Ctx G (H @ ι C)) (≡/Ctx G H)]  
+  
+  [(≡/Ctx (T ... G M_n ...) (op T ... H N_n ...)) ,(and
+                                                    (term (≡/Ctx G H))
+                                                    (term (≡/Terms (M_n ...) (N_n ...))))]
+  [(≡/Ctx (G @ ♭ C) H) (≡/Ctx G H)]
+  [(≡/Ctx G (H @ ♭ C)) (≡/Ctx G H)]
+  [(≡/Ctx (G @ ♭ ι C) H) (≡/Ctx G H)]
+  [(≡/Ctx G (H @ ♭ ι C)) (≡/Ctx G H)]
   [(≡/Ctx any ... ) #f])
 
 ;; Term set equivalende
@@ -155,17 +159,20 @@
   [(≡/Term (if M_0 M_n ...) (if N_0 N_n ...)) ,(and
                                                 (term (≡/Term M_0 N_0))
                                                 (term (≡/Terms (M_n ...) (N_n ...))))]  
-  [(≡/Term (M_0 M_1) (N_0 N_1)) ,(and (term (≡/Term M_0 N_0)) (term (≡/Term M_1 N_1)))]
-  [(≡/Term (M @ ι C) N) (≡/Term M N)]
-  [(≡/Term M (N @ ι C)) (≡/Term M N)]
+  [(≡/Term (M_0 M_n ...) (N_0 N_n ...)) ,(and
+                                          (term (≡/Term M_0 N_0))
+                                          (term (≡/Terms (M_n ...) (N_n ...))))]
+  [(≡/Term (M @ ♭ C) N) (≡/Term M N)]
+  [(≡/Term M (N @ ♭ C)) (≡/Term M N)]
+  [(≡/Term (M @ ♭ ι C) N) (≡/Term M N)]
+  [(≡/Term M (N @ ♭ ι C)) (≡/Term M N)]
   [(≡/Term any ... ) #f])
-
 
 ;; Assertion Context Equivalence
 ;; -----------------------------
 (define-metafunction λCon-Subset
   ≡/ACtx : ACtx ACtx -> boolean
-  [(≡/ACtx (ACtx_0 @ ι C) (ACtx_1 @ ι C)) (≡/ACtx ACtx_0 ACtx_1)]
+  [(≡/ACtx (ACtx_0 @ ♭ ι C) (ACtx_1 @ ♭ ι C)) (≡/ACtx ACtx_0 ACtx_1)]
   [(≡/ACtx hole hole) #t] 
   [(≡/ACtx any ...) #f])
 
@@ -188,8 +195,8 @@
 ;; -------------
 (define-metafunction λCon-Subset
   \\ : ACtx ACtx -> ACtx
-  [(\\ (ACtx_0 @ ι C) ACtx) (\\ ACtx_0 ACtx) (side-condition (term (∈/ACtx C ACtx)))]
-  [(\\ (ACtx_0 @ ι C) ACtx) ((\\ ACtx_0 ACtx) @ ι C) (side-condition (not (term (∈/ACtx C ACtx))))]
+  [(\\ (ACtx_0 @ ♭ ι C) ACtx) (\\ ACtx_0 ACtx) (side-condition (term (∈/ACtx C ACtx)))]
+  [(\\ (ACtx_0 @ ♭ ι C) ACtx) ((\\ ACtx_0 ACtx) @ ♭ ι C) (side-condition (not (term (∈/ACtx C ACtx))))]
   [(\\ hole hole) hole]
   [(\\ hole ACtx) hole])
 
@@ -197,8 +204,8 @@
 ;; -------------------
 (define-metafunction λCon-Subset
   ∈/ACtx : C ACtx -> boolean
-  [(∈/ACtx C (ACtx @ ι C)) #t]
-  [(∈/ACtx C (ACtx @ ι D)) (∈/ACtx C ACtx)]
+  [(∈/ACtx C (ACtx @ ♭ ι C)) #t]
+  [(∈/ACtx C (ACtx @ ♭ ι D)) (∈/ACtx C ACtx)]
   [(∈/ACtx C hole) #f])  
 
 ;; Join Term
