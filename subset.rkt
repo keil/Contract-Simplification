@@ -226,17 +226,17 @@
         (where (blame ♭) (blame-of ι ς)))
    
    (--> (ς
-         (in-hole F (if T (in-hole BCtx (T @ ♭ ι ⊥)) M)))
+         (in-hole F (if T (in-hole BCtx (T_m @ ♭ ι ⊥)) N)))
         (ς
-         (in-hole F (if T ((blame ♭) @ ♭ ι ⊥) M)))
-        (side-condition (not (redex-match? λCon-Subset (blame ♭) (term T))))
+         (in-hole F (if T ((blame ♭) @ ♭ ι ⊥) N)))
+        (side-condition (not (redex-match? λCon-Subset (blame ♭) (term T_m))))
         "Blame/If/True")
    
    (--> (ς
-         (in-hole F (if T T_0 (in-hole BCtx (T @ ♭ ι ⊥)))))
+         (in-hole F (if T T_m (in-hole BCtx (T_n @ ♭ ι ⊥)))))
         (ς
-         (in-hole F (if T T_0 ((blame ♭) @ ♭ ι ⊥))))
-        (side-condition (not (redex-match? λCon-Subset (blame ♭) (term T))))
+         (in-hole F (if T T_m ((blame ♭) @ ♭ ι ⊥))))
+        (side-condition (not (redex-match? λCon-Subset (blame ♭) (term T_n))))
         "Blame/If/False")
    
    (--> (ς
