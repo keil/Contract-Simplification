@@ -611,7 +611,7 @@
   
   ;; Function Contract
   [(⊑/subject (C_0 ... → D_0) (C_1 ... → D_1)) ,(and (term (⊑/context-n (C_0 ...) (C_1 ...)))
-                                             (term (⊑/subject D_0 D_1)))]
+                                                     (term (⊑/subject D_0 D_1)))]
   
   ;; Dependent Contract
   [(⊑/subject (x ... → A_0) (x ... → A_1)) (⊑/subject A_0 A_1)]
