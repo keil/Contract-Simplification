@@ -68,7 +68,7 @@
   (TQ TVal TI (TQ @ ♭ ι Q))
   
   ;; Canonical Terms (non-reducable terms)
-  (T TQ)
+  (T TQ ((blame ♭) @ ♭ ι ⊥))
   
   
   
@@ -123,7 +123,7 @@
   
   ;; Baseline Reduction Context
   ;; --------------------------
-  ((F G H) hole (λ x ... F) (T ... F N ...) (op T ... F M ...) (if T ... F M ...) (F @ ♭ C) (F @ ♭ ι C))
+  ((F G H) hole (λ x ... F) (T ... F N ...) (op T ... F N ...) (if T ... F N ...) (F @ ♭ C) (F @ ♭ ι C))
   
   ;; Value Context
   ;; -------------

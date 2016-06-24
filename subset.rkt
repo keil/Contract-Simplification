@@ -54,9 +54,9 @@
   
   ;; Non-Values
   (SNonVal
-   x (blame ♭) ;; TODO
+   x (blame ♭)
    (TI TQ ...) (TCons TQ ...) (TAbs TI ...) (TAbs TVal ...)
-   (op TQ ...) (if TQ_0 TQ_1 TQ_2))
+   (op TQ ...) (if TQ_0 T_1 T_2)) ;; TODO
   
   ;; Source Terms
   (S SVal SNonVal)
@@ -86,7 +86,7 @@
              (and (term (⊑/ordinary _R _Q)) (equal? (term ♭_q) (term ♭_r)))))))
   
   ;; Canonical Terms (non-reducable terms)
-  (T TQ (T_0 ∥ T_1) ((blame ♭) @ ♭ ι ⊥)) ;; TODO
+  (T TQ (T_0 ∥ T_1) ((blame ♭) @ ♭ ι ⊥))
   
   
   
@@ -230,14 +230,18 @@
         (ς
          (in-hole F (if T ((blame ♭) @ ♭ ι ⊥) N)))
         (side-condition (not (redex-match? λCon-Subset (blame ♭) (term T_m))))
-        "Blame/If/True")
+        "Blame/If/True"
+        (side-condition (not (redex-match? λCon-Subset (blame ♭) (term T_m))))
+        (where (blame ♭) (blame-of ι ς)))
    
    (--> (ς
          (in-hole F (if T T_m (in-hole BCtx (T_n @ ♭ ι ⊥)))))
         (ς
          (in-hole F (if T T_m ((blame ♭) @ ♭ ι ⊥))))
         (side-condition (not (redex-match? λCon-Subset (blame ♭) (term T_n))))
-        "Blame/If/False")
+        "Blame/If/False"
+        (side-condition (not (redex-match? λCon-Subset (blame ♭) (term T_n))))
+        (where (blame ♭) (blame-of ι ς)))
    
    (--> (ς
          (in-hole F (if T ((blame ♭) @ ♭ ι ⊥) ((blame ♭) @ ♭ ι ⊥))))
