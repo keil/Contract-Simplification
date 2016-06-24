@@ -24,13 +24,16 @@
   
   ;; TODO 
   ;;((L M N) .... (M ∥ N))
+  (O M (O_l ∥ O_r))
+  (P hole (P ∥ O) (T ∥ P))
   
   ;; Contexts
   ;; ========
   
   ;; Baseline Reduction Context
   ;; --------------------------
-  ((F G H) .... (F ∥ N) (T ∥ F))
+  ;((F G H) .... (F ∥ N) (T ∥ F))
+  ((F G H) .... (F ∥ O) (T ∥ F))
   
   ;; Function Body Context
   ;; ---------------------
@@ -89,7 +92,9 @@
              (and (term (⊑/ordinary _R _Q)) (equal? (term ♭_q) (term ♭_r)))))))
   
   ;; Canonical Terms (non-reducable terms)
-  (T TQ (T_0 ∥ T_1) ((blame ♭) @ ♭ ι ⊥))
+  (T TQ ((blame ♭) @ ♭ ι ⊥))
+  
+  ;; (T_0 ∥ T_1);; TODO
   
   
   
@@ -169,6 +174,15 @@
    Baseline-reduction
    λCon-Subset
    #:domain (ς any)
+   ;;#:arrow -->
+   
+   #|(--> (ς_m
+         (in-hole P M)
+         (ς_T
+          (in-hole P T))
+         "Baseline"
+         (fresh ι1 ι2))) |#
+   
    
    ;; Unfold
    ;; ------
@@ -176,16 +190,16 @@
    ;; union or intersection contract.
    
    (--> (ς
-         (in-hole F (T @ ♭ ι (C ∪ D))))
+         (in-hole P (in-hole F (T @ ♭ ι (C ∪ D)))))
         (((ι ◃ (ι1 ∪ ι2)) ς)
-         ((in-hole F (T @ ♭ ι1 C)) ∥ (in-hole F (T @ ♭ ι2 D))))
+         (in-hole P ((in-hole F (T @ ♭ ι1 C)) ∥ (in-hole F (T @ ♭ ι2 D)))))
         "Unfold/Union"
         (fresh ι1 ι2))
    
    (--> (ς
-         (in-hole F ((T_0 @ ♭ ι (Q ∩ R)) T_1 ...)))
+         (in-hole P (in-hole F ((T_0 @ ♭ ι (Q ∩ R)) T_1 ...))))
         (((ι ◃ (ι1 ∩ ι2)) ς)
-         ((in-hole F ((T_0 @ ♭ ι1 Q) T_1 ...)) ∥ (in-hole F ((T_0 @ ♭ ι2 R) T_1 ...))))
+         (in-hole P ((in-hole F ((T_0 @ ♭ ι1 Q) T_1 ...)) ∥ (in-hole F ((T_0 @ ♭ ι2 R) T_1 ...)))))
         "Unfold/D-Intersection"
         (fresh ι1 ι2))
    
@@ -195,9 +209,9 @@
    ;; on argument x and creates a new function contract.
    
    (--> (ς
-         (in-hole F (λ x ... y z ...  (in-hole BCtx (y @ ♭ ι I)))))
+         (in-hole P (in-hole F (λ x ... y z ...  (in-hole BCtx (y @ ♭ ι I))))))
         (((ι ◃ (¬ ι1)) ς)
-         (in-hole F ((λ x ... y z ... (in-hole BCtx y)) @ ♭ ι1 (build (x ⊤) ... (y I) (z ⊤) ... ⊤))))
+         (in-hole P (in-hole F ((λ x ... y z ... (in-hole BCtx y)) @ ♭ ι1 (build (x ⊤) ... (y I) (z ⊤) ... ⊤)))))
         "Lift"
         (fresh ι1))
    
@@ -207,9 +221,9 @@
    ;; contract of the function's body.
    
    (--> (ς
-         (in-hole F (λ x ... (T @ ♭ ι C))))
+         (in-hole P (in-hole F (λ x ... (T @ ♭ ι C)))))
         (ς
-         (in-hole F ((λ x ... T) @ ♭ ι (build (x ⊤) ... C))))
+         (in-hole P (in-hole F ((λ x ... T) @ ♭ ι (build (x ⊤) ... C)))))
         "Lower"        
         (side-condition (canonical?/Subset (term (T @ ♭ ι C))))        
         (side-condition ; Do not lower argument contracts.
@@ -221,41 +235,41 @@
    ;; Note: ⊥ mus remain in the source program.
    
    (--> (ς
-         (in-hole F (λ x ... (in-hole BCtx (T @ ♭ ι ⊥)))))
+         (in-hole P (in-hole F (λ x ... (in-hole BCtx (T @ ♭ ι ⊥))))))
         (ς
-         (in-hole F (λ x ... ((blame ♭) @ ♭ ι ⊥))))
+         (in-hole P (in-hole F (λ x ... ((blame ♭) @ ♭ ι ⊥)))))
         "Blame"
         (side-condition (not (redex-match? λCon-Subset (blame ♭) (term T))))
         (where (blame ♭) (blame-of ι ς)))
    
    (--> (ς
-         (in-hole F (if T (in-hole BCtx (T_m @ ♭ ι ⊥)) N)))
+         (in-hole P (in-hole F (if T (in-hole BCtx (T_m @ ♭ ι ⊥)) N))))
         (ς
-         (in-hole F (if T ((blame ♭) @ ♭ ι ⊥) N)))
+         (in-hole P (in-hole F (if T ((blame ♭) @ ♭ ι ⊥) N))))
         (side-condition (not (redex-match? λCon-Subset (blame ♭) (term T_m))))
         "Blame/If/True"
         (side-condition (not (redex-match? λCon-Subset (blame ♭) (term T_m))))
         (where (blame ♭) (blame-of ι ς)))
    
    (--> (ς
-         (in-hole F (if T T_m (in-hole BCtx (T_n @ ♭ ι ⊥)))))
+         (in-hole P (in-hole F (if T T_m (in-hole BCtx (T_n @ ♭ ι ⊥))))))
         (ς
-         (in-hole F (if T T_m ((blame ♭) @ ♭ ι ⊥))))
+         (in-hole P (in-hole F (if T T_m ((blame ♭) @ ♭ ι ⊥)))))
         (side-condition (not (redex-match? λCon-Subset (blame ♭) (term T_n))))
         "Blame/If/False"
         (side-condition (not (redex-match? λCon-Subset (blame ♭) (term T_n))))
         (where (blame ♭) (blame-of ι ς)))
    
    (--> (ς
-         (in-hole F (if T ((blame ♭) @ ♭ ι ⊥) ((blame ♭) @ ♭ ι ⊥))))
+         (in-hole P (in-hole F (if T ((blame ♭) @ ♭ ι ⊥) ((blame ♭) @ ♭ ι ⊥)))))
         (ς
-         (in-hole F ((blame ♭) @ ♭ ι ⊥)))
+         (in-hole P (in-hole F ((blame ♭) @ ♭ ι ⊥))))
         "Blame/If")
    
    (--> (ς
-         (T @ ♭ ι ⊥))
+         (in-hole P (T @ ♭ ι ⊥)))
         (ς
-         (blame ♭))
+         (in-hole P (blame ♭)))
         "Blame/Global"
         (side-condition (not (redex-match? λCon-Subset (blame ♭) (term T))))
         (where (blame ♭) (blame-of ι ς)))
@@ -265,16 +279,16 @@
    ;; Removes contracts based on already checked contarcts.
    
    (--> (ς
-         (in-hole F ((in-hole ACtx (T @ ♭_c ι_c C)) @ ♭_d ι_d D)))
+         (in-hole P (in-hole F ((in-hole ACtx (T @ ♭_c ι_c C)) @ ♭_d ι_d D))))
         (ς
-         (in-hole F (in-hole ACtx (T @ ♭_c ι_c C))))
+         (in-hole P (in-hole F (in-hole ACtx (T @ ♭_c ι_c C)))))
         "Subset/Inner"
         (side-condition (term (⊑/naive C D))))
    
    (--> (ς
-         (in-hole F ((in-hole ACtx (T @ ♭_c ι_c C)) @ ♭_d ι_d D)))
+         (in-hole P (in-hole F ((in-hole ACtx (T @ ♭_c ι_c C)) @ ♭_d ι_d D))))
         (ς
-         (in-hole F (in-hole ACtx (T @ ♭_d ι_d D))))
+         (in-hole P (in-hole F (in-hole ACtx (T @ ♭_d ι_d D)))))
         "Subset/Outer"
         (side-condition (term (⊑/naive D C))))
    
@@ -283,18 +297,18 @@
    ;; Removes contracts based on already checked contarcts.
    
    (--> (ς
-         (in-hole F (in-hole ACtx ((T @ ♭ ι_c (C_d → C_r)) @ ♭ ι_d (D_d → D_r)))))
+         (in-hole P (in-hole F (in-hole ACtx ((T @ ♭ ι_c (C_d → C_r)) @ ♭ ι_d (D_d → D_r))))))
         (((ι_c ◃ ι) ((ι_d ◃ ι) ς))
-         (in-hole F (in-hole ACtx (T @ ♭ ι (D_d → C_r)))))
+         (in-hole P (in-hole F (in-hole ACtx (T @ ♭ ι (D_d → C_r))))))
         "Condense/1"
         (side-condition (term (⊑/ordinary (C_d → C_r) (D_d → D_r))))
         (side-condition (equal? (term (blame-of ι_c ς)) (term (blame-of ι_d ς))))
         (fresh ι))
    
    (--> (ς
-         (in-hole F (in-hole ACtx ((T @ ♭ ι_c (C_d → C_r)) @ ♭ ι_d (D_d → D_r)))))
+         (in-hole P (in-hole F (in-hole ACtx ((T @ ♭ ι_c (C_d → C_r)) @ ♭ ι_d (D_d → D_r))))))
         (((ι_c ◃ ι) ((ι_d ◃ ι) ς))
-         (in-hole F (in-hole ACtx (T @ ♭ ι (C_d → D_r)))))
+         (in-hole P (in-hole F (in-hole ACtx (T @ ♭ ι (C_d → D_r))))))
         "Condense/2"
         (side-condition (term (⊑/ordinary (D_d → D_r) (C_d → C_r))))
         (side-condition (equal? (term (blame-of ι_c ς)) (term (blame-of ι_d ς))))
@@ -306,32 +320,40 @@
    ;; at assertion time. 
    
    (--> (ς
-         (in-hole F (T @ ♭ (C ∩ D))))
+         (in-hole P (in-hole F (T @ ♭ (C ∩ D)))))
         (ς
-         (in-hole F (T @ ♭ C)))
+         (in-hole P (in-hole F (T @ ♭ C))))
         "Simplify/Intersection/1"
         (side-condition (term (⊑/ordinary C D))))
    
    (--> (ς
-         (in-hole F (T @ ♭ (C ∩ D))))
+         (in-hole P (in-hole F (T @ ♭ (C ∩ D)))))
         (ς
-         (in-hole F (T @ ♭ D)))
+         (in-hole P (in-hole F (T @ ♭ D))))
         "Simplify/Intersection/2"
         (side-condition (term (⊑/ordinary D C))))
    
    (--> (ς
-         (in-hole F (T @ ♭ (C ∪ D))))
+         (in-hole P (in-hole F (T @ ♭ (C ∪ D)))))
         (ς
-         (in-hole F (T @ ♭ D)))
+         (in-hole P (in-hole F (T @ ♭ D))))
         "Simplify/Union/1"
         (side-condition (term (⊑/ordinary C D))))
    
    (--> (ς
-         (in-hole F (T @ ♭ (C ∪ D))))
+         (in-hole P (in-hole F (T @ ♭ (C ∪ D)))))
         (ς
-         (in-hole F (T @ ♭ C)))
+         (in-hole P (in-hole F (T @ ♭ C))))
         "Simplify/Union/2"
         (side-condition (term (⊑/ordinary D C))))
+   
+   with
+   [(--> (name _MM (ς
+          (in-hole P M)))
+         (name _NN (ς
+          (in-hole P N))))
+    (-->> _MM _NN)]
+   
    ))
 
 #|
