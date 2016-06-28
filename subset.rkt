@@ -21,22 +21,18 @@
 |#
 
 (define-extended-language λCon-Subset λCon-Baseline
-
-      ;; TODO 
-  ;;((L M N) .... (M ∥ N))
+  
+  ;; Observations
+  ;; ------------
   (OM M (OM_l ∥ OM_r))
-  
   (OT T (OT_l ∥ OT_r))
-  
-  (P hole (P ∥ OM) (OT ∥ P))
   
   ;; Contexts
   ;; ========
   
-  ;; Baseline Reduction Context
-  ;; --------------------------
-  ;((F G H) .... (F ∥ N) (T ∥ F))
-  ;((F G H) .... (F ∥ O) (T ∥ F))
+  ;; Parallel Observations
+  ;; ---------------------
+  (P .... (P ∥ OM) (OT ∥ P))
   
   ;; Function Body Context
   ;; ---------------------
@@ -96,10 +92,6 @@
   
   ;; Canonical Terms (non-reducable terms)
   (T TQ ((blame ♭) @ ♭ ι ⊥))
-  
-  ;; (T_0 ∥ T_1);; TODO
-  
-  
   
   ;; Reducable terms (non-cannonical terms)
   ;; ======================================
@@ -177,15 +169,6 @@
    Baseline-reduction
    λCon-Subset
    #:domain (ς any)
-   ;;#:arrow -->
-   
-   #|(--> (ς_m
-         (in-hole P M)
-         (ς_T
-          (in-hole P T))
-         "Baseline"
-         (fresh ι1 ι2))) |#
-   
    
    ;; Unfold
    ;; ------
@@ -350,15 +333,6 @@
          (in-hole P (in-hole F (T @ ♭ C))))
         "Simplify/Union/2"
         (side-condition (term (⊑/ordinary D C))))
-   
-   #|
-   with
-   [(--> (name _MM (ς
-          (in-hole P M)))
-         (name _NN (ς
-          (in-hole P N))))
-    (-->> _MM _NN)] |#
-   
    ))
 
 #|

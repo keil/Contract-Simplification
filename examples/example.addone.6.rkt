@@ -72,8 +72,8 @@
 
 ;(traces Join-reduction (λCon/Subset~~>* (term (· ,example/addone/6/contracted))))
 
-(let ([configuration (λCon/Join~~>* (λCon/Subset~~>* (term (· ,example/addone/6/contracted))))]) 
-  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 1)))))
+;(let ([configuration (λCon/Join~~>* (λCon/Subset~~>* (term (· ,example/addone/6/contracted))))]) 
+;  (traces λCon-reduction (term ((⇓/State ,configuration) ((⇓/Term ,configuration) 1)))))
 
 
 

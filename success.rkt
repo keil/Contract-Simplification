@@ -90,6 +90,8 @@
   (T TQx (T_0 ∥ T_1) ((blame ♭) @ ι ⊥)) ;; TODO
   
   
+  (X hole (op T ... X M ...) (if T ... X M ...) (SNonVal X))
+  
   )
 
 ;  (term ((λ f (λ x (f f x))) ((λ f x (if (= x 1) 1 (* x (f f (- x 1))))) @ ♭ (⊤ Natural? → Positive?)))))
@@ -120,12 +122,19 @@
    ;; on argument x and creates a new function contract.
    
    (--> (ς
-         (in-hole F (λ x ... y z ... (in-hole G (y @ ι C)))))
+         (in-hole F (λ x ... y z ... (in-hole G (y @ ♭ ι I)))))
         (((ι ◃ (¬ ι1)) ς)
-         (in-hole F ((λ x ... y z ... (in-hole G y)) @ ι1 (build (x ⊤) ... (y C) (z ⊤) ... ⊤)))) ;; TODO C instead of I, only if not in an application
+         (in-hole F ((λ x ... y z ... (in-hole G y)) @ ♭ ι1 (build (x ⊤) ... (y I) (z ⊤) ... ⊤)))) 
         "Lift"
+        (fresh ι1))
+   
+   (--> (ς
+         (in-hole F (λ x ... y z ... (in-hole X (y @ ♭ ι Q)))))
+        (((ι ◃ (¬ ι1)) ς)
+         (in-hole F ((λ x ... y z ... (in-hole X y)) @ ♭ ι1 (build (x ⊤) ... (y Q) (z ⊤) ... ⊤))))
+        "Lift/Q"
         (fresh ι1)
-        ;(side-condition (canonical?/Baseline (term (λ x (in-hole G (x @ ι C)))))))
+        ;(side-condition (canonical?/Subset (term (λ x ... y z ... (in-hole G (y @ ι C))))))
         )
    
    (--> (ς

@@ -36,7 +36,7 @@
   example/addone/0/contracted
   (term ((λ f (λ x ((f 1) x))) ((λ x (λ y (+ x y))) @ ♭ (Number? → (Number? → Number?))))))
 
-(traces λCon-reduction (term (· (,example/addone/0/contracted, 1))))
+;(traces λCon-reduction (term (· (,example/addone/0/contracted, 1))))
 
 
 
@@ -74,7 +74,7 @@
 ;; Join Steps:          0
 ;; Reduction steps:    17
 
-;(traces Success-reduction (term (· ,example/addone/0/contracted)))
+(traces Success-reduction (term (· ,example/addone/0/contracted)))
 
 ;(traces Join-reduction (λCon/Subset~~>* (term (· ,example/addone/0/contracted))))
 

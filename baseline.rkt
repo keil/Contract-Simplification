@@ -21,11 +21,6 @@
 
 (define-extended-language λCon-Baseline λCon
   
-    ;; TODO 
-  ;;((L M N) .... (M ∥ N))
-  ;(O M (O_l ∥ O_r))
-  (P hole)
-  
   ;; Syntax Extensions
   ;; =================
   
@@ -125,6 +120,9 @@
   
   ;; Contexts
   ;; ========
+  
+  ;; Observations
+  (P hole)
   
   ;; Baseline Reduction Context
   ;; --------------------------
