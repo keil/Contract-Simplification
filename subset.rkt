@@ -22,11 +22,6 @@
 
 (define-extended-language λCon-Subset λCon-Baseline
   
-  ;; TODO 
-  ;;((L M N) .... (M ∥ N))
-  (O M (O_l ∥ O_r))
-  (P hole (P ∥ O) (T ∥ P))
-  
   ;; Contexts
   ;; ========
   
@@ -347,12 +342,13 @@
         "Simplify/Union/2"
         (side-condition (term (⊑/ordinary D C))))
    
+   #|
    with
    [(--> (name _MM (ς
           (in-hole P M)))
          (name _NN (ς
           (in-hole P N))))
-    (-->> _MM _NN)]
+    (-->> _MM _NN)] |#
    
    ))
 

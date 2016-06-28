@@ -36,7 +36,7 @@
   example/addone/0/contracted
   (term ((λ f (λ x ((f 1) x))) ((λ x (λ y (+ x y))) @ ♭ (Number? → (Number? → Number?))))))
 
-;(traces λCon-reduction (term (· (,example/addone/0/contracted, 1))))
+(traces λCon-reduction (term (· (,example/addone/0/contracted, 1))))
 
 
 

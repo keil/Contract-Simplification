@@ -21,6 +21,11 @@
 
 (define-extended-language λCon-Baseline λCon
   
+    ;; TODO 
+  ;;((L M N) .... (M ∥ N))
+  (O M (O_l ∥ O_r))
+  (P hole (P ∥ O) (T ∥ P))
+  
   ;; Syntax Extensions
   ;; =================
   
@@ -155,23 +160,23 @@
    ;; union/intersection contract (all immediate).
    
    (--> (ς
-         (in-hole F (T @ ♭ C)))
+         (in-hole P (in-hole F (T @ ♭ C))))
         (((♭ ◃ ι) ς)
-         (in-hole F (T @ ♭ ι C)))
+         (in-hole P (in-hole F (T @ ♭ ι C))))
         "Unfold/Assert"
         (fresh ι))
    
    (--> (ς
-         (in-hole F (T @ ♭ ι (C ∪ D)))) 
+         (in-hole P (in-hole F (T @ ♭ ι (C ∪ D)))))
         (((ι ◃ (ι1 ∩ ι2)) ς)
-         (in-hole F ((T @ ♭ ι1 C) @ ♭ ι2 D)))
+         (in-hole P (in-hole F ((T @ ♭ ι1 C) @ ♭ ι2 D))))
         "Unfold/Union"
         (fresh ι1 ι2))
    
    (--> (ς
-         (in-hole F (T @  ι (I ∩ C)))) 
+         (in-hole P (in-hole F (T @  ι (I ∩ C)))))
         (((ι ◃ (ι1 ∩ ι2)) ς)
-         (in-hole F ((T @ ♭ ι1 I) @ ♭ ι2 C)))
+         (in-hole P (in-hole F ((T @ ♭ ι1 I) @ ♭ ι2 C))))
         "Unfold/Intersection"
         (fresh ι1 ι2))
    
@@ -181,16 +186,16 @@
    ;; function contract (delayed intersection contract).
    
    (--> (ς
-         (in-hole F ((T_0 @ ♭ ι (C ..._0 → D)) T_1 ..._0)))
+         (in-hole P (in-hole F ((T_0 @ ♭ ι (C ..._0 → D)) T_1 ..._0))))
         (((ι ◃ (ι1 → ι2)) ς)
-         (in-hole F ((T_0 (T_1 @ ♭ ι1 C) ...) @ ♭ ι2 D)))
+         (in-hole P (in-hole F ((T_0 (T_1 @ ♭ ι1 C) ...) @ ♭ ι2 D))))
         "Unfold/D-Function"
         (fresh ι1 ι2))
    
    (--> (ς
-         (in-hole F ((T_0 @ ♭ ι (Q ∩ R)) T_1 ...)))
+         (in-hole P (in-hole F ((T_0 @ ♭ ι (Q ∩ R)) T_1 ...))))
         (((ι ◃ (ι1 ∩ ι2)) ς)
-         (in-hole F (((T_0 @ ♭ ι1 Q) @ ♭ ι2 R) T_1 ...)))
+         (in-hole P (in-hole F (((T_0 @ ♭ ι1 Q) @ ♭ ι2 R) T_1 ...))))
         "Unfold/D-Intersection"
         (fresh ι1 ι2))
    
@@ -200,9 +205,9 @@
    ;; to all uses of the argument.
    
    (--> (ς
-         (in-hole F ((in-hole VCtx (λ x ..._0 y z ..._1 S)) TNonQ ..._0 (T @ ♭ ι Q) TQ ..._1)))
+         (in-hole P (in-hole F ((in-hole VCtx (λ x ..._0 y z ..._1 S)) TNonQ ..._0 (T @ ♭ ι Q) TQ ..._1))))
         (ς
-         (in-hole F ((λ x ... y z ... (unroll y Q ♭ ι S)) TNonQ ... T TQ ...)))
+         (in-hole P (in-hole F ((λ x ... y z ... (unroll y Q ♭ ι S)) TNonQ ... T TQ ...))))
         "Unroll")
    
    ;; Lower (down)
@@ -211,9 +216,9 @@
    ;; contract of the function's body.
    
    (--> (ς
-         (in-hole F (λ x ... (T @ ♭ ι C))))
+         (in-hole P (in-hole F (λ x ... (T @ ♭ ι C)))))
         (ς
-         (in-hole F ((λ x ... T) @ ♭ ι (build (x ⊤) ... C))))
+         (in-hole P (in-hole F ((λ x ... T) @ ♭ ι (build (x ⊤) ... C)))))
         "Lower")
    
    ;; Switch Order
@@ -222,15 +227,15 @@
    ;; can be unrolled.
    
    (--> (ς
-         (in-hole F ((T @ ♭_q ι_q Q) @ ♭_I ι_i I)))
+         (in-hole P (in-hole F ((T @ ♭_q ι_q Q) @ ♭_I ι_i I))))
         (ς
-         (in-hole F ((T @ ♭_i ι_i I) @ ♭_q ι_q Q)))
+         (in-hole P (in-hole F ((T @ ♭_i ι_i I) @ ♭_q ι_q Q))))
         "Reverse/I")
    
    (--> (ς
-         (in-hole F ((T @ ♭_q ι_q Q) @ ♭_I ι_i ⊥)))
+         (in-hole P (in-hole F ((T @ ♭_q ι_q Q) @ ♭_I ι_i ⊥))))
         (ς
-         (in-hole F ((T @ ♭_i ι_i ⊥) @ ♭_q ι_q Q)))
+         (in-hole P (in-hole F ((T @ ♭_i ι_i ⊥) @ ♭_q ι_q Q))))
         "Reverse/False")
    
    ;; Valid Contracts
@@ -238,9 +243,9 @@
    ;; Removes (term ⊤) contracts.
    
    (--> (ς
-         (in-hole F (T @ ♭ ι ⊤)))
+         (in-hole P (in-hole F (T @ ♭ ι ⊤))))
         (ς
-         (in-hole F T))
+         (in-hole P (in-hole F T)))
         "Recude/True")
    
    ;; Predicate Verification
@@ -248,23 +253,23 @@
    ;; Evaluates predicates on values.
    
    (--> (ς
-         (in-hole F ((in-hole VCtx V) @ ♭ ι predefined)))
+         (in-hole P (in-hole F ((in-hole VCtx V) @ ♭ ι predefined))))
         (ς
-         (in-hole F ((in-hole VCtx V) @ ♭ ι (lookup predefined))))
+         (in-hole P (in-hole F ((in-hole VCtx V) @ ♭ ι (lookup predefined)))))
         "Lookup")
    
    (--> (ς
-         (in-hole F ((in-hole VCtx V) @ ♭ ι (flat M))))
+         (in-hole P (in-hole F ((in-hole VCtx V) @ ♭ ι (flat M)))))
         (ς
-         (in-hole F ((in-hole VCtx V) @ ♭ ι ⊤)))
+         (in-hole P (in-hole F ((in-hole VCtx V) @ ♭ ι ⊤))))
         "Verify/True"
         (where W (⇓/Term ,(car (apply-reduction-relation* λCon-reduction (term (· (M V)))))))
         (side-condition (not (false? (term W)))))
    
    (--> (ς
-         (in-hole F ((in-hole VCtx V) @ ♭ ι (flat M))))
+         (in-hole P (in-hole F ((in-hole VCtx V) @ ♭ ι (flat M)))))
         (ς
-         (in-hole F ((in-hole VCtx V) @ ♭ ι ⊥)))
+         (in-hole P (in-hole F ((in-hole VCtx V) @ ♭ ι ⊥))))
         "Verify/False"
         (where W (⇓/Term ,(car (apply-reduction-relation* λCon-reduction (term (· (M V)))))))
         (side-condition (false? (term W))))
