@@ -23,8 +23,8 @@
   
     ;; TODO 
   ;;((L M N) .... (M ∥ N))
-  (O M (O_l ∥ O_r))
-  (P hole (P ∥ O) (T ∥ P))
+  ;(O M (O_l ∥ O_r))
+  (P hole)
   
   ;; Syntax Extensions
   ;; =================

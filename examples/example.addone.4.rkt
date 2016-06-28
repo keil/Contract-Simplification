@@ -17,13 +17,13 @@
 
 ;; # λJ (Reduction without contracts)
 ;; ----------------------------------
-;; Reduction steps: 10
+;; Reduction steps: 12
 
 (define 
   example/addone/4
-  (term ((λ f (λ x ((f 1) x))) (λ x (λ y (if (or (string? x) (string? y)) (string-append x y) (+ x y)))))))
+  (term ((λ f (λ x ((if (string? x) (f "1") (f 1)) x))) (λ x (λ y (if (or (string? x) (string? y)) (string-append x y) (+ x y)))))))
 
-;(traces λCon-reduction (term (· (,example/addone/4 1))))
+(traces λCon-reduction (term (· (,example/addone/4 1))))
 
 
 
@@ -37,11 +37,11 @@
 
 ;(traces λCon-reduction (term (· (,example/addone/4/contracted 1))))
 
-;; Make another version that contains the second application in if
+
 
 ;; # Baseline Reduction
 ;; --------------------
-;; Optimization steps: 32
+;; Optimization steps: 23
 ;; Reduction steps:    58
 
 ;(traces Baseline-reduction (term (· ,example/addone/4/contracted)))
@@ -53,11 +53,11 @@
 
 ;; # Subset Reduction
 ;; ------------------
-;; Optimization steps: xx
-;; Join Steps:         xx
-;; Reduction steps:    xx
+;; Optimization steps: 34
+;; Join Steps:         11
+;; Reduction steps:    47
 
-(traces Subset-reduction (term (· ,example/addone/4/contracted)))
+;(traces Subset-reduction (term (· ,example/addone/4/contracted)))
 
 ;(traces Join-reduction (λCon/Subset~~>* (term (· ,example/addone/4/contracted))))
 

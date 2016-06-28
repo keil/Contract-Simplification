@@ -43,6 +43,8 @@
   ;; Trace context.
   (Traces hole (Traces ∥ Trace) (M ∥ Traces))
   
+  
+  
   ;; Join Context
   ;; ------------
   ((F G H)
@@ -117,16 +119,15 @@
   ≡/Ctx : G H -> boolean
   [(≡/Ctx any any) #t]
   [(≡/Ctx (λ x ... G) (λ x ... H)) (≡/Ctx G H)]
-  [(≡/Ctx (op T ... G M_n ...) (op T ... H N_n ...)) ,(and
-                                                       (term (≡/Ctx G H))
-                                                       (term (≡/Terms (M_n ...) (N_n ...))))]
-  [(≡/Ctx (if T ... G M_n ...) (op T ... H N_n ...)) ,(and
-                                                       (term (≡/Ctx G H))
-                                                       (term (≡/Terms (M_n ...) (N_n ...))))]
-  
-  [(≡/Ctx (T ... G M_n ...) (op T ... H N_n ...)) ,(and
-                                                    (term (≡/Ctx G H))
-                                                    (term (≡/Terms (M_n ...) (N_n ...))))]
+  [(≡/Ctx (op T ... G M ...) (op T ... H N ...)) ,(and
+                                                   (term (≡/Ctx G H))
+                                                   (term (≡/Terms (M ...) (N ...))))]
+  [(≡/Ctx (if T ... G M ...) (if T ... H N ...)) ,(and
+                                                   (term (≡/Ctx G H))
+                                                   (term (≡/Terms (M ...) (N ...))))]
+  [(≡/Ctx (T ... G M ...) (T ... H N ...)) ,(and
+                                             (term (≡/Ctx G H))
+                                             (term (≡/Terms (M ...) (N ...))))]
   [(≡/Ctx (G @ ♭ C) H) (≡/Ctx G H)]
   [(≡/Ctx G (H @ ♭ C)) (≡/Ctx G H)]
   [(≡/Ctx (G @ ♭ ι C) H) (≡/Ctx G H)]
@@ -150,22 +151,20 @@
 (define-metafunction λCon-Join
   ≡/Term : M N -> boolean
   [(≡/Term any any) #t]
+  
   [(≡/Term (blame ♭) N) #t]
   [(≡/Term M (blame ♭)) #t]
+  
   [(≡/Term (λ x ... M) (λ x ... N)) (≡/Term M N)]
-  [(≡/Term (op M_0 M_n ...) (op N_0 N_n ...)) ,(and
-                                                (term (≡/Term M_0 N_0))
-                                                (term (≡/Terms (M_n ...) (N_n ...))))]  
-  [(≡/Term (if M_0 M_n ...) (if N_0 N_n ...)) ,(and
-                                                (term (≡/Term M_0 N_0))
-                                                (term (≡/Terms (M_n ...) (N_n ...))))]  
-  [(≡/Term (M_0 M_n ...) (N_0 N_n ...)) ,(and
-                                          (term (≡/Term M_0 N_0))
-                                          (term (≡/Terms (M_n ...) (N_n ...))))]
+  [(≡/Term (op M ...) (op N ...)) (≡/Terms (M ...) (N ...))]  
+  [(≡/Term (if M ...) (if N ...)) (≡/Terms (M ...) (N ...))]
+  [(≡/Term (M ...) (N ...)) (≡/Terms (M ...) (N ...))]
+  
   [(≡/Term (M @ ♭ C) N) (≡/Term M N)]
   [(≡/Term M (N @ ♭ C)) (≡/Term M N)]
   [(≡/Term (M @ ♭ ι C) N) (≡/Term M N)]
   [(≡/Term M (N @ ♭ ι C)) (≡/Term M N)]
+  
   [(≡/Term any ... ) #f])
 
 ;; Assertion Context Equivalence
@@ -212,8 +211,8 @@
 ;; ---------
 (define-metafunction λCon-Subset
   ⊔/Term : T T -> T
-  [(⊔/Term (blame ♭) T) T]
-  [(⊔/Term T (blame ♭)) T])
+  [(⊔/Term (blame ♭) S) S]
+  [(⊔/Term S (blame ♭)) S])
 
 #|
  ___            _ _         _                         _ 

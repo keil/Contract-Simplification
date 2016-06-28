@@ -21,6 +21,14 @@
 |#
 
 (define-extended-language λCon-Subset λCon-Baseline
+
+      ;; TODO 
+  ;;((L M N) .... (M ∥ N))
+  (OM M (OM_l ∥ OM_r))
+  
+  (OT T (OT_l ∥ OT_r))
+  
+  (P hole (P ∥ OM) (OT ∥ P))
   
   ;; Contexts
   ;; ========
@@ -28,7 +36,7 @@
   ;; Baseline Reduction Context
   ;; --------------------------
   ;((F G H) .... (F ∥ N) (T ∥ F))
-  ((F G H) .... (F ∥ O) (T ∥ F))
+  ;((F G H) .... (F ∥ O) (T ∥ F))
   
   ;; Function Body Context
   ;; ---------------------
@@ -285,7 +293,8 @@
         (ς
          (in-hole P (in-hole F (in-hole ACtx (T @ ♭_d ι_d D)))))
         "Subset/Outer"
-        (side-condition (term (⊑/naive D C))))
+        (side-condition (term (⊑/naive D C)))
+        (side-condition (not (term (⊑/naive C D)))))
    
    ;; Condense 
    ;; ---------------
